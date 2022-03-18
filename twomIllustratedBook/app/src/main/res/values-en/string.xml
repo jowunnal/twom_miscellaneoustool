@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">twomIllustratedBook</string>
+    <string name="kooii">kooii</string>
+    <string name="donguri">donguri</string>
+    <string name="pig_leaf">pig_leaf</string>
+    <string name="pig_angry">pig_angry</string>
+    <string name="bulldozerjr">bulldozerjr</string>
+    <string name="bulldozer">bulldozer</string>
+    <string name="bulldozerbro">bulldozerbro</string>
+    <string name="channel_name">channel_name</string>
+    <string name="channel_description">channel_description</string>
+    <string name="test_AppId">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="test_UnitId">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="my_AppId">ca-app-pub-3630394418001517~2743030483</string>
+    <string name="my_UnitId">ca-app-pub-3630394418001517/9336358991</string>
+</resources>

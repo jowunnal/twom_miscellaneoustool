@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navi_main"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.jinproject.twomillustratedbook.Fragment.Home"
+        android:label="BookHome"
+        tools:layout="@layout/home">
+        <action
+            android:id="@+id/action_homeFragment_to_bookType"
+            app:destination="@id/bookType" />
+        <action
+            android:id="@+id/action_homeFragment_to_dropListMaps"
+            app:destination="@id/dropListMaps" />
+        <action
+            android:id="@+id/action_homeFragment_to_alarm"
+            app:destination="@id/alarm" />
+        <action
+            android:id="@+id/action_homeFragment_to_myInfo"
+            app:destination="@id/myInfo" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/bookMain"
+        android:name="com.jinproject.twomillustratedbook.Fragment.Book"
+        android:label="BookMain"
+        tools:layout="@layout/book"/>
+    <fragment
+        android:id="@+id/dropList"
+        android:name="com.jinproject.twomillustratedbook.Fragment.DropList"
+        android:label="DropList" />
+    <fragment
+        android:id="@+id/dropListMaps"
+        android:name="com.jinproject.twomillustratedbook.Fragment.DropListMaps"
+        android:label="droplistmap"
+        tools:layout="@layout/droplistmap" >
+        <action
+            android:id="@+id/action_dropListMaps_to_dropList"
+            app:destination="@id/dropList" />
+    </fragment>
+    <fragment
+        android:id="@+id/alarm"
+        android:name="com.jinproject.twomillustratedbook.Fragment.Alarm"
+        android:label="alarm"
+        tools:layout="@layout/alarm" />
+    <fragment
+        android:id="@+id/myInfo"
+        android:name="com.jinproject.twomillustratedbook.Fragment.MyInfo"
+        android:label="myinfo"
+        tools:layout="@layout/myinfo" />
+    <fragment
+        android:id="@+id/bookType"
+        android:name="com.jinproject.twomillustratedbook.Fragment.BookType"
+        android:label="book_type"
+        tools:layout="@layout/book_type" >
+        <action
+            android:id="@+id/action_bookType_to_bookMain"
+            app:destination="@id/bookMain" />
+    </fragment>
+
+</navigation>
