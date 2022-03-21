@@ -1,10 +1,6 @@
 package com.jinproject.twomillustratedbook.Fragment
 
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -12,13 +8,9 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.jinproject.twomillustratedbook.Adapter.HomeAdapter
 import com.jinproject.twomillustratedbook.Item.HomeItem
-import com.jinproject.twomillustratedbook.Item.WService
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.HomeBinding
 import com.jinproject.twomillustratedbook.listener.OnItemClickListener
-import android.annotation.TargetApi
-
-
 
 
 class Home : Fragment() {

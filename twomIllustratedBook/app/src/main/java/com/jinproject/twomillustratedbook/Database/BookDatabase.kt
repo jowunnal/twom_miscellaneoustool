@@ -42,7 +42,7 @@ abstract class BookDatabase : RoomDatabase() {
         }
 
         fun getInstance(context: Context) : BookDatabase {
-            return bookInstance ?: synchronized(BookDatabase::class){
+            return bookInstance ?: synchronized(BookDatabase::class){ //syncronized()는 클래스파일에 멀티스레드가 접근하지못하도록 하기위해 사용
                 val instance = Room.databaseBuilder(context.applicationContext,
                 BookDatabase::class.java, "book_Database").createFromAsset("database/db_twom.db")
                     .addMigrations(MIGRATION_2_3,MIGRATION_3_4).build()

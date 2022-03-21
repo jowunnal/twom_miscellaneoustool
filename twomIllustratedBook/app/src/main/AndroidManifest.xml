@@ -24,9 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".Item.AlarmReceiver" android:enabled="true" android:exported="false"/>
-        <service android:name=".Item.AlarmService"></service>
-        <service android:name=".Item.WService"/>
+        <receiver android:name=".Receiver.AlarmReceiver" android:enabled="true" android:exported="false"/>
+        <service android:name=".Service.AlarmService"></service>
+        <service android:name=".Service.WService"/>
     </application>
 
 </manifest>

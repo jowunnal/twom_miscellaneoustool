@@ -1,6 +1,5 @@
 package com.jinproject.twomillustratedbook.Fragment
 
-import android.annotation.TargetApi
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -25,6 +24,9 @@ import com.jinproject.twomillustratedbook.Database.BookApplication
 import com.jinproject.twomillustratedbook.Database.Entity.Timer
 import com.jinproject.twomillustratedbook.Item.*
 import com.jinproject.twomillustratedbook.R
+import com.jinproject.twomillustratedbook.Service.AlarmService
+import com.jinproject.twomillustratedbook.Service.WService
+import com.jinproject.twomillustratedbook.ViewModel.AlarmModel
 import com.jinproject.twomillustratedbook.databinding.AlarmBinding
 import com.jinproject.twomillustratedbook.listener.OnItemClickListener
 import java.util.*
@@ -33,7 +35,7 @@ import kotlin.collections.ArrayList
 class Alarm : Fragment() {
     var _binding:AlarmBinding ?=null
     val binding get() = _binding!!
-    val timeModel:AlarmModel by viewModels()
+    val timeModel: AlarmModel by viewModels()
     val bossModel: BookViewModel by activityViewModels(){ BookViewModelFactory((activity?.application as BookApplication).repository) }
     lateinit var adapter:AlarmAdapter
     lateinit var timerSharedPref:SharedPreferences
@@ -143,22 +145,27 @@ class Alarm : Fragment() {
                         startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE)
                     } else {
                         if(listToWservice.isNotEmpty()){
-                            requireActivity().startService(Intent(activity,WService::class.java).apply { putExtra("list",listToWservice) })
+                            requireActivity().startService(Intent(activity, WService::class.java).apply { putExtra("list",listToWservice) })
+                        }
+                        else{
+                            requireActivity().startService(Intent(activity, WService::class.java))
                         }
                     }
                 }
             }
             else{
                 timerSharedPref.edit().putBoolean("flag",false).apply()
-                requireActivity().stopService(Intent(activity,WService::class.java))
+                requireActivity().stopService(Intent(activity, WService::class.java))
             }
 
         }
 
+        // 타이머가 등록된것이 있는지없는지 데이터베이스를 observer 로 구독하여 변동이생기면 뷰를 갱신함
         bossModel.timer.observe(viewLifecycleOwner, Observer {
             adapter.setItems(it)
             adapter.notifyDataSetChanged()
-            if(adapter.itemCount==0){ requireActivity().stopService(Intent(requireActivity(),AlarmService::class.java))}
+            if(adapter.itemCount==0){ requireActivity().stopService(Intent(requireActivity(),
+                AlarmService::class.java))}
 
             listToWservice.clear()
             for(item in it){
@@ -184,10 +191,10 @@ class Alarm : Fragment() {
                 }
             })
             if(listToWservice.isNotEmpty()){ //비어잇는게 아니면 백그라운드상에 동작하도록 서비스시작
-                requireActivity().startService(Intent(activity,WService::class.java).apply { putExtra("list",listToWservice) })
+                requireActivity().startService(Intent(activity, WService::class.java).apply { putExtra("list",listToWservice) })
             }
-            else{ // 비어잇으면=등록된 overlay가 없는것임으로 서비스중지
-                requireActivity().stopService(Intent(activity,WService::class.java))
+            else{ // 비어잇으면(등록된타이머가없으면) 현재시간만 계속 출력하도록 함
+                requireActivity().startService(Intent(activity, WService::class.java))
             }
         })
 
