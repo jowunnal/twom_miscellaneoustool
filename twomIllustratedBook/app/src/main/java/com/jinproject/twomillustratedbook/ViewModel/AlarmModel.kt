@@ -22,8 +22,9 @@ class AlarmModel(application: Application) : AndroidViewModel(application){
         val nowTime=getTime.split(":")
         count-=(Integer.parseInt(nowTime[0])*3600+Integer.parseInt(nowTime[1])*60)
 
-        makeAlarm((count-300)*1000, AlarmItem(item.name,item.imgName,item.code,item.gtime))
-        makeAlarm(count*1000, AlarmItem(item.name,item.imgName,item.code+300,item.gtime))
+        makeAlarm(10*1000, AlarmItem(item.name,item.imgName,item.code,item.gtime))
+        makeAlarm(20*1000, AlarmItem(item.name,item.imgName,item.code+300,item.gtime))
+
         Toast.makeText(getApplication(),"알람설정완료",Toast.LENGTH_LONG).show()
     }
 
@@ -38,6 +39,7 @@ class AlarmModel(application: Application) : AndroidViewModel(application){
         notifyIntentImmediately.putExtra("msg",item.name)
         notifyIntentImmediately.putExtra("img",item.imgName)
         notifyIntentImmediately.putExtra("code",item.code)
+        notifyIntentImmediately.putExtra("gtime",item.gtime)
         val notifyPendingIntent = PendingIntent.getBroadcast(app,item.code,notifyIntentImmediately,PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         alarmManager.setAlarmClock(AlarmManager.AlarmClockInfo(System.currentTimeMillis()+count,notifyPendingIntent), notifyPendingIntent)
     }

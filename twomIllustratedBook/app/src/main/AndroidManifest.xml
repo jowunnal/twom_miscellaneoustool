@@ -27,6 +27,7 @@
         <receiver android:name=".Receiver.AlarmReceiver" android:enabled="true" android:exported="false"/>
         <service android:name=".Service.AlarmService"></service>
         <service android:name=".Service.WService"/>
+        <service android:name=".Service.ReAlarmService"/>
     </application>
 
 </manifest>

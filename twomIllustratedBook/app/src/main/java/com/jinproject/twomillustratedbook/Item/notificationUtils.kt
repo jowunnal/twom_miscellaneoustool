@@ -1,5 +1,6 @@
 package com.jinproject.twomillustratedbook.Item
 
+import android.app.AlarmManager
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -11,10 +12,19 @@ import androidx.core.graphics.drawable.toBitmap
 import com.jinproject.twomillustratedbook.Fragment.Alarm
 import com.jinproject.twomillustratedbook.MainActivity.MainActivity
 import com.jinproject.twomillustratedbook.R
+import com.jinproject.twomillustratedbook.Receiver.AlarmReceiver
+import com.jinproject.twomillustratedbook.Service.ReAlarmService
 
-fun NotificationManager.sendNotification(message:String,img:String,code:Int,applicationContext: Context){
+fun NotificationManager.sendNotification(message:String,img:String,code:Int,applicationContext: Context,gtime:Int){
     val contentIntent= Intent(applicationContext,MainActivity::class.java)
-    val pendingIntent=PendingIntent.getActivity(applicationContext,code+600,contentIntent,PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+    val alarmIntent=Intent(applicationContext, ReAlarmService::class.java).apply {
+        putExtra("msg",message)
+        putExtra("img",img)
+        putExtra("code",code)
+        putExtra("gtime",gtime)
+    }
+    val alarmPendingIntent=PendingIntent.getService(applicationContext,code,alarmIntent,PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+    val pendingIntent=PendingIntent.getActivity(applicationContext,code,contentIntent,PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
     val res=applicationContext.resources.getIdentifier(img,"drawable",applicationContext.packageName)
     val builder= NotificationCompat.Builder(applicationContext,"TwomBossAlarm")
         .setSmallIcon(res)
@@ -27,8 +37,10 @@ fun NotificationManager.sendNotification(message:String,img:String,code:Int,appl
         builder.setContentText("띵동~ <"+message+"> 젠타임 5분전 입니다.")
     }else{
         builder.setContentText("띵동~ <"+message+"> 젠타임 입니다.")
+        builder.addAction(R.drawable.img_add_alarm,"알람생성",alarmPendingIntent)
     }
     notify(code,builder.build())
+
 }
 
 fun NotificationManager.cancelNotification(){
