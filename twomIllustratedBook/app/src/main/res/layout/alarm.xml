@@ -7,6 +7,14 @@
     tools:context="com.jinproject.twomillustratedbook.Fragment.Alarm">
 
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/alarm_selectedList"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/overlay_onoff"
         style="?attr/materialButtonOutlinedStyle"
@@ -92,33 +100,6 @@
         app:layout_constraintVertical_bias="0.269"
         app:strokeColor="@color/black"
         app:strokeWidth="2dp" />
-
-    <Spinner
-        android:id="@+id/spinnerMons"
-        android:layout_width="177dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/timer_start"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Spinner
-        android:id="@+id/spinnerType"
-        android:layout_width="177dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/timer_input"
-        app:layout_constraintEnd_toStartOf="@+id/spinnerMons"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView"

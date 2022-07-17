@@ -18,8 +18,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jinproject.twomillustratedbook.Adapter.AlarmAdapter
+import com.jinproject.twomillustratedbook.Adapter.AlarmSelectedAdapter
 import com.jinproject.twomillustratedbook.Database.BookApplication
 import com.jinproject.twomillustratedbook.Database.Entity.Timer
 import com.jinproject.twomillustratedbook.Item.*
@@ -37,7 +39,8 @@ class Alarm : Fragment() {
     val binding get() = _binding!!
     val timeModel: AlarmModel by viewModels()
     val bossModel: BookViewModel by activityViewModels(){ BookViewModelFactory((activity?.application as BookApplication).repository) }
-    lateinit var adapter:AlarmAdapter
+    val adapter:AlarmAdapter by lazy { AlarmAdapter() }
+    val selectedAdapter by lazy{AlarmSelectedAdapter()}
     lateinit var timerSharedPref:SharedPreferences
     private val ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 404
     private var listToWservice=ArrayList<Timer>()
@@ -62,47 +65,27 @@ class Alarm : Fragment() {
 
         timerSharedPref=requireActivity().getSharedPreferences("TimerSharedPref", Context.MODE_PRIVATE)
         binding.alarmRecyclerView.layoutManager=LinearLayoutManager(requireActivity(),LinearLayoutManager.VERTICAL,false)
-        adapter= AlarmAdapter()
         binding.alarmRecyclerView.adapter=adapter
         val alarmDialog=Dialog(requireActivity())
         alarmDialog.setContentView(R.layout.alarm_currentlist_dialog)
 
-
-        binding.spinnerType.adapter=ArrayAdapter<String>(requireActivity(),R.layout.support_simple_spinner_dropdown_item, // 보스타입지정 spinner
-            ArrayList<String>().apply {
-                add("네임드")
-                add("보스")
-                add("대형보스")})
+        binding.alarmSelectedList.adapter=selectedAdapter
+        binding.alarmSelectedList.layoutManager=GridLayoutManager(requireActivity(),2,GridLayoutManager.HORIZONTAL,false)
+        val selectedBossList=requireActivity().getSharedPreferences("bossList",Context.MODE_PRIVATE)
+        val boss=selectedBossList.getStringSet("boss", mutableSetOf(""))
+        val list=ArrayList<String>()
+        list.addAll(boss!!)
+        selectedAdapter.setItems(list)
+        selectedAdapter.notifyDataSetChanged()
 
         val cal= Calendar.getInstance()
         val alarmItem=ArrayList<AlarmItem>() // 보스몹들의 개체값들을 가져와서 리스트에 담음
 
-        binding.spinnerType.setSelection(timerSharedPref.getInt("lastSelectedSpinnerType",0))
-        binding.spinnerType.onItemSelectedListener=object :AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                var bossType=""
-                when(p2){
-                    0->bossType="named"
-                    1->bossType="boss"
-                    2->bossType="bigboss"
-                }
-                bossModel.getNameSp(bossType).observe(viewLifecycleOwner, Observer{// 지정된 보스타입에따른 보스몹리스트
-                    val list=ArrayList<String>()
-                    alarmItem.clear()
-                    for(v in it){
-                        list.add(v.mons_name)
-                        alarmItem.add(AlarmItem(v.mons_name,v.mons_imgName,v.mons_Id,v.mons_gtime))
-                    }
-                    val nameSpAdapter=ArrayAdapter(requireActivity(), R.layout.support_simple_spinner_dropdown_item,list)
-                    binding.spinnerMons.adapter=nameSpAdapter
-                })
-                timerSharedPref.edit().putInt("lastSelectedSpinnerType",binding.spinnerType.selectedItemPosition).apply()
-                timerSharedPref.edit().putInt("lastSelectedSpinnerMons",binding.spinnerMons.selectedItemPosition).apply()
-            }
+        selectedAdapter.setOnItemClickListener(object : OnItemClickListener{
+            override fun OnHomeItemClick(v: View, pos: Int) {
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
             }
-        }
+        })
 
         binding.timerInput.setOnClickListener { // dialog 불러오기
             val picker=MyTimePicker()
