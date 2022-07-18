@@ -45,7 +45,11 @@
         android:id="@+id/alarm"
         android:name="com.jinproject.twomillustratedbook.Fragment.Alarm"
         android:label="alarm"
-        tools:layout="@layout/alarm" />
+        tools:layout="@layout/alarm" >
+        <action
+            android:id="@+id/action_alarm_to_timer"
+            app:destination="@id/timer" />
+    </fragment>
     <fragment
         android:id="@+id/myInfo"
         android:name="com.jinproject.twomillustratedbook.Fragment.MyInfo"
@@ -60,5 +64,10 @@
             android:id="@+id/action_bookType_to_bookMain"
             app:destination="@id/bookMain" />
     </fragment>
+    <fragment
+        android:id="@+id/timer"
+        android:name="com.jinproject.twomillustratedbook.Fragment.Timer"
+        android:label="alarm_user_select"
+        tools:layout="@layout/alarm_user_select" />
 
 </navigation>

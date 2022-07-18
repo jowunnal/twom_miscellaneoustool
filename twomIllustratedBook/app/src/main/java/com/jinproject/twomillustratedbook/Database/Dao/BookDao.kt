@@ -22,6 +22,9 @@ interface BookDao {
     @Query("select * from DropListMonster where DropListMonster.mons_type like:inputData")
     fun getNamedSp(inputData:String) : LiveData<List<DropListMonster>>
 
+    @Query("select * from DropListMonster where mons_name like :inputData")
+    suspend fun getMonsInfo(inputData:String):DropListMonster
+
     @Query("update Timer set timer_day= :day,timer_hour= :hour, timer_min= :min,timer_sec=:sec, timer_statue= :statue where timer_name like:name")
     suspend fun setTimer(day:Int,hour:Int,min:Int,sec:Int,name:String,statue:Int)
 
@@ -45,7 +48,5 @@ interface BookDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(bookEntity: BookEntity)
-
-
 
 }

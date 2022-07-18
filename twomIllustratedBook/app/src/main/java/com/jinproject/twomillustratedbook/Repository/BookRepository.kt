@@ -18,6 +18,7 @@ class BookRepository(private val bookDao: BookDao) {
     suspend fun setTimer(day:Int,hour:Int, min:Int,sec:Int, name:String,statue:Int) {bookDao.setTimer(day,hour, min,sec, name,statue)}
     val timer:LiveData<List<Timer>> =bookDao.getTimer()
     suspend fun setOta(ota:Int,name:String) = bookDao.setOta(ota,name)
+    suspend fun getMonsInfo(inputData:String)=bookDao.getMonsInfo(inputData)
    /* fun getBossSp()=bookDao.getBossSp()
     fun getBigBossSp()=bookDao.getBigBossSp()*/
 

@@ -10,8 +10,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/alarm_selectedList"
         android:layout_width="0dp"
-        android:layout_height="120dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/timer_input"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,12 +27,11 @@
         android:text="화면상단에 타이머출력\nON/OFF"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/overlay_add"
-        app:layout_constraintVertical_bias="0.027"
         app:strokeColor="@color/black"
         app:strokeWidth="2dp" />
 
@@ -43,12 +44,11 @@
         android:text="화면상단에 타이머출력\n몬스터해제하기"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/overlay_onoff"
         app:layout_constraintEnd_toStartOf="@+id/overlay_add"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.269"
+        app:layout_constraintTop_toBottomOf="@+id/timer_input"
         app:strokeColor="@color/black"
         app:strokeWidth="2dp" />
 
@@ -58,16 +58,15 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="3dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="16dp"
         android:text="컷타임 입력하기"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/overlay_delete"
         app:layout_constraintEnd_toStartOf="@+id/overlay_onoff"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.183"
+        app:layout_constraintTop_toBottomOf="@+id/alarm_selectedList"
         app:strokeColor="@color/black"
         app:strokeWidth="2dp" />
 
@@ -76,13 +75,16 @@
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
         android:text="타이머 시작하기"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/overlay_add"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.183"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/timer_input"
+        app:layout_constraintTop_toBottomOf="@+id/alarm_selectedList"
         app:strokeColor="@color/black"
         app:strokeWidth="2dp" />
 
@@ -91,13 +93,14 @@
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:layout_marginEnd="8dp"
         android:text="화면상단에 타이머출력\n몬스터등록하기"
+        android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/overlay_onoff"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.269"
+        app:layout_constraintStart_toEndOf="@+id/overlay_delete"
+        app:layout_constraintTop_toBottomOf="@+id/timer_start"
         app:strokeColor="@color/black"
         app:strokeWidth="2dp" />
 
@@ -105,15 +108,15 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="현재 진행중인 알람내역"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/alarmRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.523"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/overlay_onoff"
-        app:layout_constraintVertical_bias="0.031" />
+        app:layout_constraintTop_toBottomOf="@+id/overlay_onoff" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/alarmRecyclerView"
