@@ -1,7 +1,6 @@
 package com.jinproject.twomillustratedbook.Fragment
 
 import android.app.Dialog
-import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -11,11 +10,8 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.*
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -40,11 +36,10 @@ import com.jinproject.twomillustratedbook.listener.OnBossNameClickedListener
 import com.jinproject.twomillustratedbook.listener.OnItemClickListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.properties.Delegates
 
 class Alarm : Fragment() {
     var _binding:AlarmBinding ?=null
@@ -57,7 +52,7 @@ class Alarm : Fragment() {
     lateinit var timerSharedPref:SharedPreferences
     private val ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 404
     private var listToWservice=ArrayList<Timer>()
-    lateinit var monster:DropListMonster
+    private lateinit var monster:DropListMonster
     lateinit var alarmItem:AlarmItem
     lateinit var navController:NavController
     var day:Int=0
@@ -89,7 +84,7 @@ class Alarm : Fragment() {
         binding.alarmSelectedList.adapter=selectedAdapter
         binding.alarmSelectedList.layoutManager=GridLayoutManager(requireActivity(),4,GridLayoutManager.VERTICAL,false)
         val selectedBossList=requireActivity().getSharedPreferences("bossList",Context.MODE_PRIVATE)
-        val boss=selectedBossList.getStringSet("boss", mutableSetOf(""))
+        val boss=selectedBossList.getStringSet("boss", mutableSetOf("불도저"))
         val list=ArrayList<String>()
         list.addAll(boss!!)
         selectedAdapter.setItems(list)
@@ -136,31 +131,41 @@ class Alarm : Fragment() {
         }
 
         binding.timerStart.setOnClickListener { // dialog에넣은 시,분값 과 데이터베이스에있는 젠타임으로 타이머설정하고, 젠타임계산해서 데이터베이스에저장
-            day=cal.get(Calendar.DAY_OF_WEEK)
-            var hour=cal.get(Calendar.HOUR_OF_DAY)+((monster.mons_gtime/60)/60)
-            var min=cal.get(Calendar.MINUTE)+((monster.mons_gtime/60)%60)
-            var sec=cal.get(Calendar.SECOND)+((monster.mons_gtime%60))
-            while(sec>=60){
-                min+=1
-                sec-=60
+            try {
+                day = cal.get(Calendar.DAY_OF_WEEK)
+                var hour = cal.get(Calendar.HOUR_OF_DAY) + ((monster.mons_gtime / 60) / 60)
+                var min = cal.get(Calendar.MINUTE) + ((monster.mons_gtime / 60) % 60)
+                var sec = cal.get(Calendar.SECOND) + ((monster.mons_gtime % 60))
+                while (sec >= 60) {
+                    min += 1
+                    sec -= 60
+                }
+                while (min >= 60) {
+                    hour += 1
+                    min -= 60
+                }
+                while (hour >= 24) {
+                    hour -= 24
+                    day += 1
+                }
+                timeModel.setAlarm(
+                    cal.get(Calendar.HOUR_OF_DAY),
+                    cal.get(Calendar.MINUTE),
+                    alarmItem
+                )
+                bossModel.setTimer(day, hour, min, sec, monster.mons_name, 1)
+            }catch (e:kotlin.UninitializedPropertyAccessException){
+                Toast.makeText(requireActivity(),"먼저 보스를 선택해주세요!",Toast.LENGTH_LONG).show()
             }
-            while(min>=60){
-                hour+=1
-                min-=60
-            }
-            while(hour>=24){
-                hour-=24
-                day+=1
-            }
-            timeModel.setAlarm(cal.get(Calendar.HOUR_OF_DAY),cal.get(Calendar.MINUTE),alarmItem)
-            bossModel.setTimer(day,hour,min,sec,monster.mons_name,1)
         }
-
         binding.overlayAdd.setOnClickListener {
-            getSettingDrawOverlays(1,monster.mons_name)
+            try{getSettingDrawOverlays(1,monster.mons_name)}catch (e:UninitializedPropertyAccessException){
+                Toast.makeText(requireActivity(),"먼저 보스를 선택해주세요!",Toast.LENGTH_LONG).show()}
         }
         binding.overlayDelete.setOnClickListener {
-            getSettingDrawOverlays(0,monster.mons_name)
+            try{getSettingDrawOverlays(0,monster.mons_name)}catch (e:UninitializedPropertyAccessException){
+                Toast.makeText(requireActivity(),"먼저 보스를 선택해주세요!",Toast.LENGTH_LONG).show()
+            }
         }
 
         binding.overlayOnoff.setOnClickListener{
