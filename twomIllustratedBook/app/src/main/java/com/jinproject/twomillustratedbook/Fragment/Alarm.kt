@@ -229,7 +229,10 @@ class Alarm : Fragment() {
         })
         setHasOptionsMenu(true)
 
-        
+        val db:DatabaseReference=FirebaseDatabase.getInstance().reference
+        /*binding.button.setOnClickListener {
+            db.child("user").child("name").setValue("jinho")
+        }*/
 
     }
 
