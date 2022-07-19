@@ -21,6 +21,7 @@ import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectBinding
 import java.util.*
 import kotlin.collections.ArrayList
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.jinproject.twomillustratedbook.Adapter.AlarmSelectedAdapter
 import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectedItemBinding
@@ -118,6 +119,10 @@ class Timer : Fragment() {
             }
 
         })
+
+        binding.alarmUserSelectBack.setOnClickListener {
+            Navigation.findNavController(view).popBackStack()
+        }
     }
     fun showBossList(pref:SharedPreferences){
         val list=ArrayList<String>()

@@ -227,6 +227,7 @@ class Alarm : Fragment() {
                 alarmDialog.show()
             }
         })
+
         setHasOptionsMenu(true)
 
         val db:DatabaseReference=FirebaseDatabase.getInstance().reference
