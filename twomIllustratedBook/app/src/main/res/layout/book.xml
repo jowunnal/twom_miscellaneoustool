@@ -17,7 +17,6 @@
         android:layout_marginTop="15dp"
         android:text=" 아이템이름                            스텟"
         android:textSize="18dp"
-        android:textStyle="bold"
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"

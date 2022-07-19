@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.Toast
@@ -20,6 +21,8 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.jinproject.twomillustratedbook.Adapter.AlarmAdapter
 import com.jinproject.twomillustratedbook.Adapter.AlarmSelectedAdapter
 import com.jinproject.twomillustratedbook.Database.BookApplication
@@ -34,9 +37,7 @@ import com.jinproject.twomillustratedbook.databinding.AlarmBinding
 import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectedItemBinding
 import com.jinproject.twomillustratedbook.listener.OnBossNameClickedListener
 import com.jinproject.twomillustratedbook.listener.OnItemClickListener
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
@@ -82,7 +83,7 @@ class Alarm : Fragment() {
         alarmDialog.setContentView(R.layout.alarm_currentlist_dialog)
 
         binding.alarmSelectedList.adapter=selectedAdapter
-        binding.alarmSelectedList.layoutManager=GridLayoutManager(requireActivity(),4,GridLayoutManager.VERTICAL,false)
+        binding.alarmSelectedList.layoutManager=GridLayoutManager(requireActivity(),2,GridLayoutManager.VERTICAL,false)
         val selectedBossList=requireActivity().getSharedPreferences("bossList",Context.MODE_PRIVATE)
         val boss=selectedBossList.getStringSet("boss", mutableSetOf("불도저"))
         val list=ArrayList<String>()
@@ -116,7 +117,12 @@ class Alarm : Fragment() {
                         Toast.makeText(requireActivity(),"동시에 2개이상을 선택할수 없습니다. 해제후 다시선택해주세요", Toast.LENGTH_LONG).show()
                     }
                 }
-
+                binding.alarmUserSelectedItemSwitch.setOnCheckedChangeListener { button, b ->
+                    when(b){
+                        true->getSettingDrawOverlays(1,binding.alarmUserSelectedItem.text.toString())
+                        false->getSettingDrawOverlays(0,binding.alarmUserSelectedItem.text.toString())
+                    }
+                }
             }
         })
 
@@ -157,39 +163,6 @@ class Alarm : Fragment() {
             }catch (e:kotlin.UninitializedPropertyAccessException){
                 Toast.makeText(requireActivity(),"먼저 보스를 선택해주세요!",Toast.LENGTH_LONG).show()
             }
-        }
-        binding.overlayAdd.setOnClickListener {
-            try{getSettingDrawOverlays(1,monster.mons_name)}catch (e:UninitializedPropertyAccessException){
-                Toast.makeText(requireActivity(),"먼저 보스를 선택해주세요!",Toast.LENGTH_LONG).show()}
-        }
-        binding.overlayDelete.setOnClickListener {
-            try{getSettingDrawOverlays(0,monster.mons_name)}catch (e:UninitializedPropertyAccessException){
-                Toast.makeText(requireActivity(),"먼저 보스를 선택해주세요!",Toast.LENGTH_LONG).show()
-            }
-        }
-
-        binding.overlayOnoff.setOnClickListener{
-            if(!timerSharedPref.getBoolean("flag",false)){
-                timerSharedPref.edit().putBoolean("flag",true).apply()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {   // 마시멜로우 이상일 경우
-                    if (!Settings.canDrawOverlays(requireActivity())) { // 다른앱 위에 그리기 체크
-                        val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:"+requireActivity().packageName))
-                        startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE)
-                    } else {
-                        if(listToWservice.isNotEmpty()){
-                            requireActivity().startService(Intent(activity, WService::class.java).apply { putExtra("list",listToWservice) })
-                        }
-                        else{
-                            requireActivity().startService(Intent(activity, WService::class.java))
-                        }
-                    }
-                }
-            }
-            else{
-                timerSharedPref.edit().putBoolean("flag",false).apply()
-                requireActivity().stopService(Intent(activity, WService::class.java))
-            }
-
         }
 
         // 타이머가 등록된것이 있는지없는지 데이터베이스를 observer 로 구독하여 변동이생기면 뷰를 갱신함
@@ -240,10 +213,14 @@ class Alarm : Fragment() {
                     bossModel.setTimer(0,0,0,0,item.name,0)
                     var code=0
 
-                    code=monster.mons_Id
-                    timeModel.clearAlarm(code)
-                    timeModel.clearAlarm(code+300)
-                    alarmDialog.cancel()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        withContext(Dispatchers.IO){code=bossModel.getMonsInfo(item.name).mons_Id}
+                        timeModel.clearAlarm(code)
+                        timeModel.clearAlarm(code+300)
+                        alarmDialog.cancel()
+                    }
+                    Log.d("test",code.toString())
+
                 }
                 alarmDialog.setCanceledOnTouchOutside(true)
                 alarmDialog.setCancelable(true)
@@ -251,6 +228,12 @@ class Alarm : Fragment() {
             }
         })
         setHasOptionsMenu(true)
+
+        val db:DatabaseReference=FirebaseDatabase.getInstance().reference
+        /*binding.button.setOnClickListener {
+            db.child("user").child("name").setValue("jinho")
+        }*/
+
     }
 
 
@@ -274,6 +257,28 @@ class Alarm : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.icon_fix->navController.navigate(R.id.action_alarm_to_timer)
+
+            R.id.icon_addTime->if(!timerSharedPref.getBoolean("flag",false)){
+                timerSharedPref.edit().putBoolean("flag",true).apply()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {   // 마시멜로우 이상일 경우
+                    if (!Settings.canDrawOverlays(requireActivity())) { // 다른앱 위에 그리기 체크
+                        val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:"+requireActivity().packageName))
+                        startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE)
+                    } else {
+                        if(listToWservice.isNotEmpty()){
+                            requireActivity().startService(Intent(activity, WService::class.java).apply { putExtra("list",listToWservice) })
+                        }
+                        else{
+                            requireActivity().startService(Intent(activity, WService::class.java))
+                        }
+                    }
+                }
+            }
+            else{
+                timerSharedPref.edit().putBoolean("flag",false).apply()
+                requireActivity().stopService(Intent(activity, WService::class.java))
+            }
+
         }
         return super.onOptionsItemSelected(item)
     }
