@@ -54,10 +54,10 @@ class Home : Fragment() {
         adapter=HomeAdapter()
         binding.homeContainer.adapter=adapter
         val items = ArrayList<HomeItem>()
-        items.add(HomeItem(R.drawable.kooii,"도감"))
-        items.add(HomeItem(R.drawable.donguri,"드랍탬"))
-        items.add(HomeItem(R.drawable.bulldozer,"알람"))
-        items.add(HomeItem(R.drawable.bulldozerbro,"패치노트&사용법"))
+        items.add(HomeItem(R.drawable.book_icon,"도감"))
+        items.add(HomeItem(R.drawable.drop_icon,"드랍탬"))
+        items.add(HomeItem(R.drawable.alarm_icon2,"알람"))
+        items.add(HomeItem(R.drawable.note_icon,"패치노트&사용법"))
         adapter.addItems(items)
         adapter.notifyDataSetChanged()
     }

@@ -50,7 +50,6 @@ class Timer : Fragment() {
                 add("보스")
                 add("대형보스")})
 
-        val cal= Calendar.getInstance()
         val alarmItem=ArrayList<AlarmItem>() // 보스몹들의 개체값들을 가져와서 리스트에 담음
 
         timerSharedPref=requireActivity().getSharedPreferences("TimerSharedPref", Context.MODE_PRIVATE)

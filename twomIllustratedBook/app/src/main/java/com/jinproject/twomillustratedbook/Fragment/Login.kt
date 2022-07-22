@@ -1,15 +1,17 @@
 package com.jinproject.twomillustratedbook.Fragment
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.messaging.FirebaseMessaging
 import com.jinproject.twomillustratedbook.Item.Room
-import com.jinproject.twomillustratedbook.Item.User
+import com.jinproject.twomillustratedbook.Item.TimerItem
 import com.jinproject.twomillustratedbook.databinding.AlarmLoginBinding
 
 class Login:Fragment() {
@@ -28,24 +30,36 @@ class Login:Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val db=FirebaseDatabase.getInstance().reference
-        val room= Room("","")
-
+        val room= Room("","", arrayListOf(TimerItem("보스",1,12,50,30)))
+        val loginPreference=requireActivity().getSharedPreferences("login",Context.MODE_PRIVATE)
+        var logFlag=false
         binding.buttonLogin.setOnClickListener {
             db.child("RoomList").get().addOnSuccessListener {
-                for(data in it.children.iterator()){
-                    if(binding.etId==data.child("roomId").value){
+                for(data in it.children){
+                    if(binding.etId.text.toString()==data.child("roomId").value && binding.etPw.text.toString()==data.child("roomPw").value){
                         room.roomId=binding.etId.text.toString()
                         room.roomPw=binding.etPw.text.toString()
+                        loginPreference.edit().putString("id",binding.etId.text.toString()).apply()
+                        loginPreference.edit().putString("pw",binding.etPw.text.toString()).apply()
+                        loginPreference.edit().putString("key",data.key).apply()
+                        Toast.makeText(requireActivity(),"로그인 완료",Toast.LENGTH_LONG).show()
+                        logFlag=true
+                        Navigation.findNavController(view).popBackStack()
+                        continue
                     }
                 }
+                if(!logFlag){
+                Toast.makeText(requireActivity(),"아이디또는 패스워드가 일치하지 않습니다.",Toast.LENGTH_LONG).show() }
             }
         }
 
         binding.buttonSign.setOnClickListener {
             db.child("RoomList").get().addOnSuccessListener {
-                var flagExist=false
-                for(data in it.children.iterator()){
-                    if(binding.etId==data.child("roomId").value){
+                var flagExist=true
+                for(data in it.children){
+                    if(binding.etId.text.toString()==data.child("roomId").value){
+                        flagExist=false
+
                         continue
                     }
                     else{
@@ -53,9 +67,11 @@ class Login:Fragment() {
                     }
                 }
                 if(flagExist){
-                    db.child("RoomList").setValue(Room(binding.etId.text.toString(),binding.etPw.text.toString()))
+                    val key=db.child("RoomList").push().key
+                    db.child("RoomList").child(key!!).setValue(Room(binding.etId.text.toString(),binding.etPw.text.toString(),null))
+                    Toast.makeText(requireActivity(),"등록이 완료되었습니다. 로그인버튼을 눌러주세요",Toast.LENGTH_SHORT).show()
                 }else{
-                    Toast.makeText(requireActivity(),"이미 존재하는 아이디 입니다. 다시입력해주세요.",Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireActivity(),"이미 존재하는 아이디 입니다. 다시입력해주세요.",Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.Toast
@@ -30,6 +29,7 @@ import com.jinproject.twomillustratedbook.Database.Entity.DropListMonster
 import com.jinproject.twomillustratedbook.Database.Entity.Timer
 import com.jinproject.twomillustratedbook.Item.*
 import com.jinproject.twomillustratedbook.R
+import com.jinproject.twomillustratedbook.Service.AlarmServerService
 import com.jinproject.twomillustratedbook.Service.AlarmService
 import com.jinproject.twomillustratedbook.Service.WService
 import com.jinproject.twomillustratedbook.ViewModel.AlarmModel
@@ -38,7 +38,6 @@ import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectedItemBindi
 import com.jinproject.twomillustratedbook.listener.OnBossNameClickedListener
 import com.jinproject.twomillustratedbook.listener.OnItemClickListener
 import kotlinx.coroutines.*
-import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -56,6 +55,7 @@ class Alarm : Fragment() {
     private lateinit var monster:DropListMonster
     lateinit var alarmItem:AlarmItem
     lateinit var navController:NavController
+    private var serverBossList=ArrayList<TimerItem>()
     var day:Int=0
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -169,6 +169,10 @@ class Alarm : Fragment() {
         bossModel.timer.observe(viewLifecycleOwner, Observer {
             adapter.setItems(it)
             adapter.notifyDataSetChanged()
+            serverBossList.clear()
+            for(data in it){
+                serverBossList.add(TimerItem(data.timer_name,data.timer_day,data.timer_hour,data.timer_min,data.timer_sec))
+            }
             if(adapter.itemCount==0){ requireActivity().stopService(Intent(requireActivity(),
                 AlarmService::class.java))}
 
@@ -219,7 +223,6 @@ class Alarm : Fragment() {
                         timeModel.clearAlarm(code+300)
                         alarmDialog.cancel()
                     }
-                    Log.d("test",code.toString())
 
                 }
                 alarmDialog.setCanceledOnTouchOutside(true)
@@ -229,11 +232,25 @@ class Alarm : Fragment() {
         })
 
         setHasOptionsMenu(true)
+        val loginPreference=requireActivity().getSharedPreferences("login",Context.MODE_PRIVATE)
+        binding.button.setOnClickListener {
+            val db:DatabaseReference=FirebaseDatabase.getInstance().reference
 
-        val db:DatabaseReference=FirebaseDatabase.getInstance().reference
-        /*binding.button.setOnClickListener {
-            db.child("user").child("name").setValue("jinho")
-        }*/
+            try {
+                val id=loginPreference.getString("id","")!!
+                val pw=loginPreference.getString("pw","")!!
+                val key=loginPreference.getString("key","")!!
+
+                db.child("RoomList").child(key).setValue(Room(id,pw,serverBossList))
+                requireActivity().startService(Intent(activity,AlarmServerService::class.java))
+            }catch (e:kotlin.UninitializedPropertyAccessException){
+                Toast.makeText(requireActivity(),"먼저 보스를 선택해주세요!",Toast.LENGTH_LONG).show()
+            }
+
+        }
+        binding.button2.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_alarm_to_login)
+        }
 
     }
 

@@ -28,14 +28,14 @@ class ReAlarmService : LifecycleService() {
             intent.getStringExtra("img")!!,
            intent.getIntExtra("code", 0)-300,
            gtime))
-        Log.d("test",intent.getIntExtra("code",0).toString())
+
         makeAlarm(alarmManager,application,20*1000,AlarmItem(
             intent.getStringExtra("msg")!!,
             intent.getStringExtra("img")!!,
             intent.getIntExtra("code",0),
             gtime))
 
-        Log.d("test",intent.getIntExtra("code",0).toString())
+
         val cal = Calendar.getInstance()
         var day=cal.get(Calendar.DAY_OF_WEEK)
         var hour=cal.get(Calendar.HOUR_OF_DAY)+((gtime/60)/60)

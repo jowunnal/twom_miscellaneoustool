@@ -49,6 +49,9 @@
         <action
             android:id="@+id/action_alarm_to_timer"
             app:destination="@id/timer" />
+        <action
+            android:id="@+id/action_alarm_to_login"
+            app:destination="@id/login" />
     </fragment>
     <fragment
         android:id="@+id/myInfo"
@@ -69,5 +72,10 @@
         android:name="com.jinproject.twomillustratedbook.Fragment.Timer"
         android:label="alarm_user_select"
         tools:layout="@layout/alarm_user_select" />
+    <fragment
+        android:id="@+id/login"
+        android:name="com.jinproject.twomillustratedbook.Fragment.Login"
+        android:label="alarm_login"
+        tools:layout="@layout/alarm_login" />
 
 </navigation>
