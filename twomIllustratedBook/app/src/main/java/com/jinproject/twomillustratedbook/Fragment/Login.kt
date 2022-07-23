@@ -30,18 +30,17 @@ class Login:Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val db=FirebaseDatabase.getInstance().reference
-        val room= Room("","", arrayListOf(TimerItem("보스",1,12,50,30)))
+
         val loginPreference=requireActivity().getSharedPreferences("login",Context.MODE_PRIVATE)
         var logFlag=false
         binding.buttonLogin.setOnClickListener {
             db.child("RoomList").get().addOnSuccessListener {
                 for(data in it.children){
                     if(binding.etId.text.toString()==data.child("roomId").value && binding.etPw.text.toString()==data.child("roomPw").value){
-                        room.roomId=binding.etId.text.toString()
-                        room.roomPw=binding.etPw.text.toString()
                         loginPreference.edit().putString("id",binding.etId.text.toString()).apply()
                         loginPreference.edit().putString("pw",binding.etPw.text.toString()).apply()
                         loginPreference.edit().putString("key",data.key).apply()
+                        loginPreference.edit().putString("authorityCode",binding.etCode.text.toString()).apply()
                         Toast.makeText(requireActivity(),"로그인 완료",Toast.LENGTH_LONG).show()
                         logFlag=true
                         Navigation.findNavController(view).popBackStack()
@@ -68,12 +67,15 @@ class Login:Fragment() {
                 }
                 if(flagExist){
                     val key=db.child("RoomList").push().key
-                    db.child("RoomList").child(key!!).setValue(Room(binding.etId.text.toString(),binding.etPw.text.toString(),null))
+                    db.child("RoomList").child(key!!).setValue(Room(binding.etId.text.toString(),binding.etPw.text.toString(),null,binding.etCode.text.toString()))
                     Toast.makeText(requireActivity(),"등록이 완료되었습니다. 로그인버튼을 눌러주세요",Toast.LENGTH_SHORT).show()
                 }else{
                     Toast.makeText(requireActivity(),"이미 존재하는 아이디 입니다. 다시입력해주세요.",Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+        binding.buttonBack.setOnClickListener {
+            Navigation.findNavController(view).popBackStack()
         }
     }
 }

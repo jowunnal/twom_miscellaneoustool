@@ -7,6 +7,21 @@
     tools:context="com.jinproject.twomillustratedbook.Fragment.Login">
 
     <EditText
+        android:id="@+id/et_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="100dp"
+        android:ems="10"
+        android:hint="권한코드 입력"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_pw" />
+
+    <EditText
         android:id="@+id/et_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -38,22 +53,32 @@
         android:id="@+id/button_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="102dp"
-        android:layout_marginTop="83dp"
-        android:layout_marginEnd="26dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="36dp"
         android:text="로그인"
         app:layout_constraintEnd_toStartOf="@+id/button_sign"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_pw" />
+        app:layout_constraintTop_toBottomOf="@+id/et_code" />
 
     <Button
         android:id="@+id/button_sign"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="82dp"
-        android:layout_marginEnd="106dp"
-        android:text="회원가입"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="37dp"
+        android:text="방 생성"
+        app:layout_constraintEnd_toStartOf="@+id/button_back"
+        app:layout_constraintTop_toBottomOf="@+id/et_code" />
+
+    <Button
+        android:id="@+id/button_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="35dp"
+        android:text="뒤로가기"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_pw" />
+        app:layout_constraintTop_toBottomOf="@+id/et_code" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,7 +28,7 @@ interface BookDao {
     @Query("update Timer set timer_day= :day,timer_hour= :hour, timer_min= :min,timer_sec=:sec, timer_statue= :statue where timer_name like:name")
     suspend fun setTimer(day:Int,hour:Int,min:Int,sec:Int,name:String,statue:Int)
 
-    @Query("select * from Timer where timer_statue<>0")
+    @Query("select * from Timer where timer_statue!=0")
     fun getTimer():LiveData<List<Timer>>
 
     @Query("update Timer set timer_ota=:ota where timer_name like :name")

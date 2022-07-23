@@ -18,12 +18,15 @@ class AlarmModel(application: Application) : AndroidViewModel(application){
 
     fun setAlarm(h:Int,m:Int,item: AlarmItem){
         var count=(h*3600+m*60)+item.gtime
-        val getTime=SimpleDateFormat("HH:mm").format(Date(System.currentTimeMillis())) // simpledateformat의 hh는0-11, HH는0-23 이다.
+        val getTime=SimpleDateFormat("HH:mm:ss").format(Date(System.currentTimeMillis())) // simpledateformat의 hh는0-11, HH는0-23 이다.
         val nowTime=getTime.split(":")
-        count-=(Integer.parseInt(nowTime[0])*3600+Integer.parseInt(nowTime[1])*60)
+        count-=(Integer.parseInt(nowTime[0])*3600+Integer.parseInt(nowTime[1])*60+Integer.parseInt(nowTime[2]))
 
-        makeAlarm(10*1000, AlarmItem(item.name,item.imgName,item.code,item.gtime))
-        makeAlarm(20*1000, AlarmItem(item.name,item.imgName,item.code+300,item.gtime))
+        val timerSharedPreferences=app.getSharedPreferences("TimerSharedPref",Context.MODE_PRIVATE)
+        val first=timerSharedPreferences.getInt("first",5)
+        val last=timerSharedPreferences.getInt("last",0)
+        makeAlarm((count-first*60)*1000, AlarmItem(item.name,item.imgName,item.code,item.gtime))
+        makeAlarm((count-last*60)*1000, AlarmItem(item.name,item.imgName,item.code+300,item.gtime))
 
         Toast.makeText(getApplication(),"알람설정완료",Toast.LENGTH_LONG).show()
     }

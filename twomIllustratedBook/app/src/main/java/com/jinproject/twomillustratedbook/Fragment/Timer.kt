@@ -4,12 +4,14 @@ import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.jinproject.twomillustratedbook.Database.BookApplication
@@ -83,7 +85,7 @@ class Timer : Fragment() {
 
         binding.alarmUserSelectAdd.setOnClickListener{
             val bossList=ArrayList<String>()
-            bossList.addAll(selectedBossList.getStringSet("boss", mutableSetOf(""))!!)
+            bossList.addAll(selectedBossList.getStringSet("boss", mutableSetOf("불도저"))!!)
             bossList.add(binding.spinnerMons.selectedItem.toString())
             selectedBossList.edit().putStringSet("boss",bossList.toSet()).apply()
             showBossList(selectedBossList)
@@ -122,6 +124,28 @@ class Timer : Fragment() {
         binding.alarmUserSelectBack.setOnClickListener {
             Navigation.findNavController(view).popBackStack()
         }
+
+        binding.alarmRemainMin.maxValue=5
+        binding.alarmRemainMin.minValue=0
+        binding.alarmRemainSec.maxValue=9
+        binding.alarmRemainSec.minValue=0
+
+        val timerSharedPreferences=requireActivity().getSharedPreferences("TimerSharedPref",Context.MODE_PRIVATE)
+        binding.alarmRemainFirst.setOnClickListener {
+            val first=binding.alarmRemainMin.value.toString()
+            val last=binding.alarmRemainSec.value.toString()
+            val fl:String=first+last
+            timerSharedPreferences.edit().putInt("first",Integer.parseInt(fl)).apply()
+            Toast.makeText(requireActivity(),"첫 알람이 "+fl+" 분 후 마다 울리도록 세팅되었습니다.",Toast.LENGTH_SHORT).show()
+        }
+        binding.alarmRemainLast.setOnClickListener {
+            val first=binding.alarmRemainMin.value.toString()
+            val last=binding.alarmRemainSec.value.toString()
+            val fl:String=first+last
+            timerSharedPreferences.edit().putInt("last",Integer.parseInt(fl)).apply()
+            Toast.makeText(requireActivity(),"마지막 알람이 "+fl+" 분 후 마다 울리도록 세팅되었습니다.",Toast.LENGTH_SHORT).show()
+        }
+
     }
     fun showBossList(pref:SharedPreferences){
         val list=ArrayList<String>()

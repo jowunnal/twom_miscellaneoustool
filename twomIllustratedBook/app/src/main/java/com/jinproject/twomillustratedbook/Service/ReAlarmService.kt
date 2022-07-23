@@ -15,6 +15,7 @@ import com.jinproject.twomillustratedbook.Receiver.AlarmReceiver
 import com.jinproject.twomillustratedbook.Repository.BookRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.*
 
 class ReAlarmService : LifecycleService() {
@@ -23,13 +24,16 @@ class ReAlarmService : LifecycleService() {
         val alarmManager: AlarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val gtime=intent?.getIntExtra("gtime",0)!!
 
-        makeAlarm(alarmManager,application,10*1000,AlarmItem(
+        val timerSharedPreferences=applicationContext.getSharedPreferences("TimerSharedPref",Context.MODE_PRIVATE)
+        val first=timerSharedPreferences.getInt("first",5)
+        val last=timerSharedPreferences.getInt("last",0)
+        makeAlarm(alarmManager,application,(gtime-first*60)*1000,AlarmItem(
             intent.getStringExtra("msg")!!,
             intent.getStringExtra("img")!!,
            intent.getIntExtra("code", 0)-300,
            gtime))
 
-        makeAlarm(alarmManager,application,20*1000,AlarmItem(
+        makeAlarm(alarmManager,application,(gtime-last*60)*1000,AlarmItem(
             intent.getStringExtra("msg")!!,
             intent.getStringExtra("img")!!,
             intent.getIntExtra("code",0),

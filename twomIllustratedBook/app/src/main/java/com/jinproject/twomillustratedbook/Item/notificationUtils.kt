@@ -23,6 +23,9 @@ fun NotificationManager.sendNotification(message:String,img:String,code:Int,appl
         putExtra("code",code)
         putExtra("gtime",gtime)
     }
+    val timerSharedPreferences=applicationContext.getSharedPreferences("TimerSharedPref",Context.MODE_PRIVATE)
+    val first=timerSharedPreferences.getInt("first",300)
+    val last=timerSharedPreferences.getInt("last",0)
     val alarmPendingIntent=PendingIntent.getService(applicationContext,code,alarmIntent,PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
     val pendingIntent=PendingIntent.getActivity(applicationContext,code,contentIntent,PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
     val res=applicationContext.resources.getIdentifier(img,"drawable",applicationContext.packageName)
@@ -34,9 +37,9 @@ fun NotificationManager.sendNotification(message:String,img:String,code:Int,appl
         .setAutoCancel(true)
         .setLargeIcon(BitmapFactory.decodeResource(applicationContext.resources,res))
     if(code<300){
-        builder.setContentText("띵동~ <"+message+"> 젠타임 5분전 입니다.")
+        builder.setContentText("띵동~ <"+message+"> 젠타임"+first+"분전 입니다.")
     }else{
-        builder.setContentText("띵동~ <"+message+"> 젠타임 입니다.")
+        builder.setContentText("띵동~ <"+message+"> 젠타임"+last+"분전 입니다.")
         builder.addAction(R.drawable.img_add_alarm,"알람생성",alarmPendingIntent)
     }
     notify(code,builder.build())

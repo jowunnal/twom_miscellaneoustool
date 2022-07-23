@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.Toast
@@ -20,6 +21,16 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.OnUserEarnedRewardListener
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.rewarded.RewardItem
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.jinproject.twomillustratedbook.Adapter.AlarmAdapter
@@ -30,7 +41,6 @@ import com.jinproject.twomillustratedbook.Database.Entity.Timer
 import com.jinproject.twomillustratedbook.Item.*
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.Service.AlarmServerService
-import com.jinproject.twomillustratedbook.Service.AlarmService
 import com.jinproject.twomillustratedbook.Service.WService
 import com.jinproject.twomillustratedbook.ViewModel.AlarmModel
 import com.jinproject.twomillustratedbook.databinding.AlarmBinding
@@ -56,6 +66,8 @@ class Alarm : Fragment() {
     lateinit var alarmItem:AlarmItem
     lateinit var navController:NavController
     private var serverBossList=ArrayList<TimerItem>()
+    private var mRewardedAd: RewardedAd? = null
+
     var day:Int=0
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -102,19 +114,16 @@ class Alarm : Fragment() {
                 when (clickable) {
                     -1 -> {
                         clickable=pos
-                        binding.alarmUserSelectedItem.setTextColor(Color.RED)
                         CoroutineScope(Dispatchers.IO).launch {
                             monster=bossModel.getMonsInfo(selectedAdapter.getItem(pos))
                             alarmItem=AlarmItem(monster.mons_name,monster.mons_imgName,monster.mons_Id,monster.mons_gtime)
                         }
-
                     }
                     pos -> {
-                        binding.alarmUserSelectedItem.setTextColor(Color.BLACK)
                         clickable=-1
                     }
                     else -> {
-                        Toast.makeText(requireActivity(),"동시에 2개이상을 선택할수 없습니다. 해제후 다시선택해주세요", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireActivity(),"동시에 2개이상을 선택할수 없습니다. 해제후 다시선택해주세요", Toast.LENGTH_SHORT).show()
                     }
                 }
                 binding.alarmUserSelectedItemSwitch.setOnCheckedChangeListener { button, b ->
@@ -123,6 +132,7 @@ class Alarm : Fragment() {
                         false->getSettingDrawOverlays(0,binding.alarmUserSelectedItem.text.toString())
                     }
                 }
+
             }
         })
 
@@ -135,8 +145,48 @@ class Alarm : Fragment() {
             }
             picker.show(requireActivity().supportFragmentManager,"timePicker")
         }
+        var adRequest = AdRequest.Builder().build()
 
+        RewardedAd.load(requireActivity(),"ca-app-pub-3630394418001517/7487969905", adRequest, object : RewardedAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                mRewardedAd = null
+            }
+
+            override fun onAdLoaded(rewardedAd: RewardedAd) {
+                mRewardedAd = rewardedAd
+            }
+        })
+        mRewardedAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
+            override fun onAdClicked() {
+                // Called when a click is recorded for an ad.
+            }
+
+            override fun onAdDismissedFullScreenContent() {
+                // Called when ad is dismissed.
+                // Set the ad reference to null so you don't show the ad a second time.
+                mRewardedAd=null
+            }
+
+            override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                // Called when ad fails to show.
+                mRewardedAd=null
+            }
+
+            override fun onAdImpression() {
+                // Called when an impression is recorded for an ad.
+            }
+
+            override fun onAdShowedFullScreenContent() {
+                // Called when ad is shown.
+            }
+        }
         binding.timerStart.setOnClickListener { // dialog에넣은 시,분값 과 데이터베이스에있는 젠타임으로 타이머설정하고, 젠타임계산해서 데이터베이스에저장
+            mRewardedAd?.show(requireActivity(), OnUserEarnedRewardListener() {
+                fun onUserEarnedReward(rewardItem: RewardItem) {
+                    var rewardAmount = rewardItem.amount
+                    var rewardType = rewardItem.type
+                }
+            })
             try {
                 day = cal.get(Calendar.DAY_OF_WEEK)
                 var hour = cal.get(Calendar.HOUR_OF_DAY) + ((monster.mons_gtime / 60) / 60)
@@ -161,7 +211,7 @@ class Alarm : Fragment() {
                 )
                 bossModel.setTimer(day, hour, min, sec, monster.mons_name, 1)
             }catch (e:kotlin.UninitializedPropertyAccessException){
-                Toast.makeText(requireActivity(),"먼저 보스를 선택해주세요!",Toast.LENGTH_LONG).show()
+                Toast.makeText(requireActivity(),"먼저 보스를 선택해주세요!",Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -173,8 +223,6 @@ class Alarm : Fragment() {
             for(data in it){
                 serverBossList.add(TimerItem(data.timer_name,data.timer_day,data.timer_hour,data.timer_min,data.timer_sec))
             }
-            if(adapter.itemCount==0){ requireActivity().stopService(Intent(requireActivity(),
-                AlarmService::class.java))}
 
             listToWservice.clear()
             for(item in it){
@@ -233,25 +281,47 @@ class Alarm : Fragment() {
 
         setHasOptionsMenu(true)
         val loginPreference=requireActivity().getSharedPreferences("login",Context.MODE_PRIVATE)
-        binding.button.setOnClickListener {
-            val db:DatabaseReference=FirebaseDatabase.getInstance().reference
+        binding.serverOutput.setOnClickListener {
 
+            val db:DatabaseReference=FirebaseDatabase.getInstance().reference
             try {
                 val id=loginPreference.getString("id","")!!
                 val pw=loginPreference.getString("pw","")!!
                 val key=loginPreference.getString("key","")!!
-
-                db.child("RoomList").child(key).setValue(Room(id,pw,serverBossList))
-                requireActivity().startService(Intent(activity,AlarmServerService::class.java))
+                val authorityCode=loginPreference.getString("authorityCode","")
+                db.child("RoomList").child(key).get().addOnSuccessListener {
+                    if(it.child("authorityCode").value==authorityCode){
+                        db.child("RoomList").child(key).setValue(Room(id,pw,serverBossList,authorityCode))
+                        Toast.makeText(requireActivity(),"서버에 등록이 완료되었습니다.",Toast.LENGTH_SHORT).show()
+                    }else{
+                        Toast.makeText(requireActivity(),"등록 권한이 없습니다.",Toast.LENGTH_SHORT).show()
+                    }
+                }
             }catch (e:kotlin.UninitializedPropertyAccessException){
-                Toast.makeText(requireActivity(),"먼저 보스를 선택해주세요!",Toast.LENGTH_LONG).show()
+                Toast.makeText(requireActivity(),"먼저 보스를 선택해주세요!",Toast.LENGTH_SHORT).show()
             }
 
         }
-        binding.button2.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_alarm_to_login)
+        binding.serverOnoff.setOnClickListener {
+            when(loginPreference.getBoolean("statue",false)){
+                false->{
+                    requireActivity().startService(Intent(activity,AlarmServerService::class.java))
+                    loginPreference.edit().putBoolean("statue",true).apply()
+                    binding.serverStatueTv.text="서버상태: "+when(loginPreference.getBoolean("statue",false)){false->"오프라인" true->"온라인"}+
+                            "/로그인ID: "+loginPreference.getString("id","")
+                    Toast.makeText(requireActivity(),"서버로부터 데이터를 받기 시작합니다.",Toast.LENGTH_SHORT).show()
+                }
+                true->{
+                    requireActivity().stopService(Intent(activity,AlarmServerService::class.java))
+                    loginPreference.edit().putBoolean("statue",false).apply()
+                    binding.serverStatueTv.text="서버상태: "+when(loginPreference.getBoolean("statue",false)){false->"오프라인" true->"온라인"}+
+                            "/로그인ID: "+loginPreference.getString("id","")
+                    Toast.makeText(requireActivity(),"서버로부터 데이터를 받지 않습니다.",Toast.LENGTH_SHORT).show()
+                }
+            }
         }
-
+        binding.serverStatueTv.text="서버상태: "+when(loginPreference.getBoolean("statue",false)){false->"오프라인" true->"온라인"}+
+                "/로그인ID: "+loginPreference.getString("id","")
     }
 
 
@@ -296,6 +366,7 @@ class Alarm : Fragment() {
                 timerSharedPref.edit().putBoolean("flag",false).apply()
                 requireActivity().stopService(Intent(activity, WService::class.java))
             }
+            R.id.icon_login->navController.navigate(R.id.action_alarm_to_login)
 
         }
         return super.onOptionsItemSelected(item)

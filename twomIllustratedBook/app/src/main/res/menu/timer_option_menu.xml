@@ -11,4 +11,9 @@
         android:icon="@drawable/alarm_small_icon"
         app:showAsAction="always"
         android:title="설정"/>
+    <item
+        android:id="@+id/icon_login"
+        android:icon="@drawable/icon_login"
+        app:showAsAction="always"
+        android:title="로그인"/>
 </menu>
