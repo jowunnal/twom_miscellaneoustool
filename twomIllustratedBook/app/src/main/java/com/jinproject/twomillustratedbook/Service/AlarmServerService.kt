@@ -34,6 +34,7 @@ class AlarmServerService :LifecycleService() {
         super.onStartCommand(intent, flags, startId)
         val db = FirebaseDatabase.getInstance().reference
         val loginPreference=applicationContext.getSharedPreferences("login",Context.MODE_PRIVATE)
+
         db.child("RoomList").child(loginPreference.getString("key","")!!).addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 val alarmManager: AlarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -49,7 +50,6 @@ class AlarmServerService :LifecycleService() {
                     if(count>0){
                         lifecycleScope.launch(Dispatchers.IO){
                             monster= withContext(Dispatchers.IO) { repository.getMonsInfo(value.name) }
-                            Log.d("test","b: "+monster.mons_name)
                             val timerSharedPreferences=applicationContext.getSharedPreferences("TimerSharedPref",Context.MODE_PRIVATE)
                             val first=timerSharedPreferences.getInt("first",5)
                             val last=timerSharedPreferences.getInt("last",0)
@@ -64,8 +64,6 @@ class AlarmServerService :LifecycleService() {
                                 monster.mons_imgName,
                                 monster.mons_Id+300,
                                 monster.mons_gtime))
-                            //Log.d("test","보스: "+monster.mons_name)
-                            //Log.d("test","boss : "+value.name)
                             repository.setTimer(value.day,value.hour,value.min,value.sec,value.name,1)
                         }
                     }

@@ -17,7 +17,7 @@
         android:theme="@style/Theme.TwomIllustratedBook">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/my_AppId"/>
+            android:value="@string/test_AppId"/>
         <activity android:name="com.jinproject.twomillustratedbook.MainActivity.MainActivity"
             android:exported="true">
             <intent-filter>

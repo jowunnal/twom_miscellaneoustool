@@ -1,9 +1,6 @@
 package com.jinproject.twomillustratedbook.Item
 
-
 import androidx.lifecycle.*
-import com.jinproject.twomillustratedbook.Database.Entity.BookContentEntity
-import com.jinproject.twomillustratedbook.Database.Entity.BookEntity
 import com.jinproject.twomillustratedbook.Database.Entity.DropListMonster
 import com.jinproject.twomillustratedbook.Database.Entity.Timer
 import com.jinproject.twomillustratedbook.Repository.BookRepository
@@ -30,7 +27,10 @@ class BookViewModel(private val repository: BookRepository) : ViewModel() {
     fun getBigBossSp()=repository.getBigBossSp()*/
 
 }
-class BookViewModelFactory(private val repositorys:BookRepository) : ViewModelProvider.Factory{
+
+
+class BookViewModelFactory(private val repositorys:BookRepository) : ViewModelProvider.Factory {
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(BookViewModel::class.java)){
             @Suppress("UNCHECKED_CAST")

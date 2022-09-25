@@ -180,13 +180,38 @@ class Alarm : Fragment() {
                 // Called when ad is shown.
             }
         }
-        binding.timerStart.setOnClickListener { // dialog에넣은 시,분값 과 데이터베이스에있는 젠타임으로 타이머설정하고, 젠타임계산해서 데이터베이스에저장
+
+        fun showRewaredAd(mRewardedAd:RewardedAd?){
             mRewardedAd?.show(requireActivity(), OnUserEarnedRewardListener() {
                 fun onUserEarnedReward(rewardItem: RewardItem) {
                     var rewardAmount = rewardItem.amount
                     var rewardType = rewardItem.type
                 }
             })
+        }
+
+        fun calcTime(cal:Calendar,monster:DropListMonster):TimerItem{ // 일,시,분,초의 넘어가는 일,시,분,초의 값을 계산
+            var day = cal.get(Calendar.DAY_OF_WEEK)
+            var hour = cal.get(Calendar.HOUR_OF_DAY) + ((monster.mons_gtime / 60) / 60)
+            var min = cal.get(Calendar.MINUTE) + ((monster.mons_gtime / 60) % 60)
+            var sec = cal.get(Calendar.SECOND) + ((monster.mons_gtime % 60))
+            while (sec >= 60) {
+                min += 1
+                sec -= 60
+            }
+            while (min >= 60) {
+                hour += 1
+                min -= 60
+            }
+            while (hour >= 24) {
+                hour -= 24
+                day += 1
+            }
+            return TimerItem(monster.mons_name,day,hour,min,sec)
+        }
+
+        binding.timerStart.setOnClickListener { // dialog에넣은 시,분값 과 데이터베이스에있는 젠타임으로 타이머설정하고, 젠타임계산해서 데이터베이스에저장
+            showRewaredAd(mRewardedAd)
             try {
                 day = cal.get(Calendar.DAY_OF_WEEK)
                 var hour = cal.get(Calendar.HOUR_OF_DAY) + ((monster.mons_gtime / 60) / 60)
@@ -264,14 +289,12 @@ class Alarm : Fragment() {
                 alarmDialog.findViewById<Button>(R.id.alarm_delete).setOnClickListener {
                     bossModel.setTimer(0,0,0,0,item.name,0)
                     var code=0
-
                     CoroutineScope(Dispatchers.Main).launch {
                         withContext(Dispatchers.IO){code=bossModel.getMonsInfo(item.name).mons_Id}
                         timeModel.clearAlarm(code)
                         timeModel.clearAlarm(code+300)
                         alarmDialog.cancel()
                     }
-
                 }
                 alarmDialog.setCanceledOnTouchOutside(true)
                 alarmDialog.setCancelable(true)

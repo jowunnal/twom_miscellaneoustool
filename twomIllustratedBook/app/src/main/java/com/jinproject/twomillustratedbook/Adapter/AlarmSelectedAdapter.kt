@@ -2,6 +2,7 @@ package com.jinproject.twomillustratedbook.Adapter
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,7 @@ import kotlin.properties.Delegates
 class AlarmSelectedAdapter : RecyclerView.Adapter<AlarmSelectedAdapter.ViewHolder>(), OnBossNameClickedListener {
     private val items=ArrayList<String>()
     private val checkList=ArrayList<CheckStatue>()
-    private val selectedList=ArrayList<CheckStatue>()
+    private lateinit var selectedList:ArrayList<CheckStatue>
     private var selectedStatue=-1
     private var mlistener:OnBossNameClickedListener ?= null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmSelectedAdapter.ViewHolder {
@@ -59,7 +60,9 @@ class AlarmSelectedAdapter : RecyclerView.Adapter<AlarmSelectedAdapter.ViewHolde
             }
             if(pos>=selectedList.size){
                 selectedList.add(pos,CheckStatue(false))
+                Log.d("test",pos.toString())
             }
+
 
             if(selectedList[pos].statue){
                 binding.alarmUserSelectedItem.setTextColor(Color.RED)
