@@ -2,33 +2,29 @@ package com.jinproject.twomillustratedbook.Database.Entity
 
 import android.os.Parcel
 import android.os.Parcelable
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 
-@Entity
-data class Timer(var timer_name:String, var timer_day:Int, var timer_hour:Int, var timer_min:Int, var timer_sec:Int,
-                 @PrimaryKey var timer_id:Int, var timer_statue:Int, var timer_ota:Int) : Parcelable {
+@Entity(foreignKeys = [ForeignKey(entity = Monster::class, parentColumns = arrayOf("monsName"), childColumns = arrayOf("timerMonsName"))], indices = [Index("timerMonsName")])
+data class Timer(@PrimaryKey var timerId:Int, var day:Int, var hour:Int, var min:Int, var sec:Int,
+                  var ota:Int,var timerMonsName:String,) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString().toString(),
         parcel.readInt(),
         parcel.readInt(),
         parcel.readInt(),
         parcel.readInt(),
         parcel.readInt(),
         parcel.readInt(),
-        parcel.readInt()) {
+        parcel.readString().toString()) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(timer_name)
-        parcel.writeInt(timer_day)
-        parcel.writeInt(timer_hour)
-        parcel.writeInt(timer_min)
-        parcel.writeInt(timer_sec)
-        parcel.writeInt(timer_id)
-        parcel.writeInt(timer_statue)
-        parcel.writeInt(timer_ota)
+        parcel.writeString(timerMonsName)
+        parcel.writeInt(day)
+        parcel.writeInt(hour)
+        parcel.writeInt(min)
+        parcel.writeInt(sec)
+        parcel.writeInt(timerId)
+        parcel.writeInt(ota)
     }
 
     override fun describeContents(): Int {
