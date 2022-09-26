@@ -58,7 +58,7 @@ class ReAlarmService : LifecycleService() {
             day+=1
         }
         val repository= BookRepository(BookDatabase.getInstance(applicationContext).bookDao())
-        lifecycleScope.launch(Dispatchers.IO){repository.setTimer(day,hour,min,sec,intent.getStringExtra("msg")!!,1)}
+        lifecycleScope.launch(Dispatchers.IO){repository.setTimer(day,hour,min,sec,intent.getStringExtra("msg")!!)}
         return START_STICKY
     }
     override fun onBind(intent: Intent): IBinder? {

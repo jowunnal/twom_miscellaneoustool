@@ -6,13 +6,12 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.database.*
 import com.jinproject.twomillustratedbook.Database.BookDatabase
-import com.jinproject.twomillustratedbook.Database.Entity.DropListMonster
+import com.jinproject.twomillustratedbook.Database.Entity.Monster
 import com.jinproject.twomillustratedbook.Item.AlarmItem
 import com.jinproject.twomillustratedbook.Item.Room
 import com.jinproject.twomillustratedbook.Receiver.AlarmReceiver
@@ -25,7 +24,7 @@ import java.util.*
 
 
 class AlarmServerService :LifecycleService() {
-    lateinit var monster:DropListMonster
+    lateinit var monster:Monster
     override fun onCreate() {
         super.onCreate()
     }
@@ -54,17 +53,17 @@ class AlarmServerService :LifecycleService() {
                             val first=timerSharedPreferences.getInt("first",5)
                             val last=timerSharedPreferences.getInt("last",0)
                             makeAlarm(alarmManager,application,(count-first*60)*1000,AlarmItem(
-                                monster.mons_name,
-                                monster.mons_imgName,
-                                monster.mons_Id,
-                                monster.mons_gtime))
+                                monster.monsName,
+                                monster.monsImgName,
+                                monster.monsName.toInt(),
+                                monster.monsGtime))
 
                             makeAlarm(alarmManager,application,(count-last*60)*1000,AlarmItem(
-                                monster.mons_name,
-                                monster.mons_imgName,
-                                monster.mons_Id+300,
-                                monster.mons_gtime))
-                            repository.setTimer(value.day,value.hour,value.min,value.sec,value.name,1)
+                                monster.monsName,
+                                monster.monsImgName,
+                                monster.monsName.toInt()+300,
+                                monster.monsGtime))
+                            repository.setTimer(value.day,value.hour,value.min,value.sec,value.name)
                         }
                     }
                 }}catch (e:NullPointerException){

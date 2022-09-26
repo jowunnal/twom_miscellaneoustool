@@ -27,7 +27,7 @@ class AlarmService : LifecycleService() {
         super.onStartCommand(intent, flags, startId)
         val repository=BookRepository(BookDatabase.getInstance(applicationContext).bookDao())
         val name=intent!!.getStringExtra("name")!!
-        lifecycleScope.launch(Dispatchers.IO){repository.setTimer(0,0,0,0,name,0)}
+        lifecycleScope.launch(Dispatchers.IO){repository.setTimer(0,0,0,0,name)}
         return START_STICKY
     }
 

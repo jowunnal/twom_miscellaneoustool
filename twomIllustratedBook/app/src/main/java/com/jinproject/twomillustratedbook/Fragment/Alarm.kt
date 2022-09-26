@@ -4,12 +4,10 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.Toast
@@ -26,8 +24,6 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.OnUserEarnedRewardListener
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
@@ -36,7 +32,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.jinproject.twomillustratedbook.Adapter.AlarmAdapter
 import com.jinproject.twomillustratedbook.Adapter.AlarmSelectedAdapter
 import com.jinproject.twomillustratedbook.Database.BookApplication
-import com.jinproject.twomillustratedbook.Database.Entity.DropListMonster
+import com.jinproject.twomillustratedbook.Database.Entity.Monster
 import com.jinproject.twomillustratedbook.Database.Entity.Timer
 import com.jinproject.twomillustratedbook.Item.*
 import com.jinproject.twomillustratedbook.R
@@ -62,7 +58,7 @@ class Alarm : Fragment() {
     lateinit var timerSharedPref:SharedPreferences
     private val ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 404
     private var listToWservice=ArrayList<Timer>()
-    private lateinit var monster:DropListMonster
+    private lateinit var monster:Monster
     lateinit var alarmItem:AlarmItem
     lateinit var navController:NavController
     private var serverBossList=ArrayList<TimerItem>()
@@ -116,7 +112,7 @@ class Alarm : Fragment() {
                         clickable=pos
                         CoroutineScope(Dispatchers.IO).launch {
                             monster=bossModel.getMonsInfo(selectedAdapter.getItem(pos))
-                            alarmItem=AlarmItem(monster.mons_name,monster.mons_imgName,monster.mons_Id,monster.mons_gtime)
+                            alarmItem=AlarmItem(monster.monsName,monster.monsImgName,monster.monsName.toInt(),monster.monsGtime)
                         }
                     }
                     pos -> {
@@ -190,11 +186,11 @@ class Alarm : Fragment() {
             })
         }
 
-        fun calcTime(cal:Calendar,monster:DropListMonster):TimerItem{ // 일,시,분,초의 넘어가는 일,시,분,초의 값을 계산
+        fun calcTime(cal:Calendar,monster:Monster):TimerItem{ // 일,시,분,초의 넘어가는 일,시,분,초의 값을 계산
             var day = cal.get(Calendar.DAY_OF_WEEK)
-            var hour = cal.get(Calendar.HOUR_OF_DAY) + ((monster.mons_gtime / 60) / 60)
-            var min = cal.get(Calendar.MINUTE) + ((monster.mons_gtime / 60) % 60)
-            var sec = cal.get(Calendar.SECOND) + ((monster.mons_gtime % 60))
+            var hour = cal.get(Calendar.HOUR_OF_DAY) + ((monster.monsGtime / 60) / 60)
+            var min = cal.get(Calendar.MINUTE) + ((monster.monsGtime / 60) % 60)
+            var sec = cal.get(Calendar.SECOND) + ((monster.monsGtime % 60))
             while (sec >= 60) {
                 min += 1
                 sec -= 60
@@ -207,16 +203,16 @@ class Alarm : Fragment() {
                 hour -= 24
                 day += 1
             }
-            return TimerItem(monster.mons_name,day,hour,min,sec)
+            return TimerItem(monster.monsName,day,hour,min,sec)
         }
 
         binding.timerStart.setOnClickListener { // dialog에넣은 시,분값 과 데이터베이스에있는 젠타임으로 타이머설정하고, 젠타임계산해서 데이터베이스에저장
             showRewaredAd(mRewardedAd)
             try {
                 day = cal.get(Calendar.DAY_OF_WEEK)
-                var hour = cal.get(Calendar.HOUR_OF_DAY) + ((monster.mons_gtime / 60) / 60)
-                var min = cal.get(Calendar.MINUTE) + ((monster.mons_gtime / 60) % 60)
-                var sec = cal.get(Calendar.SECOND) + ((monster.mons_gtime % 60))
+                var hour = cal.get(Calendar.HOUR_OF_DAY) + ((monster.monsGtime / 60) / 60)
+                var min = cal.get(Calendar.MINUTE) + ((monster.monsGtime / 60) % 60)
+                var sec = cal.get(Calendar.SECOND) + ((monster.monsGtime % 60))
                 while (sec >= 60) {
                     min += 1
                     sec -= 60
@@ -234,7 +230,7 @@ class Alarm : Fragment() {
                     cal.get(Calendar.MINUTE),
                     alarmItem
                 )
-                bossModel.setTimer(day, hour, min, sec, monster.mons_name, 1)
+                bossModel.setTimer(day, hour, min, sec, monster.monsName, 1)
             }catch (e:kotlin.UninitializedPropertyAccessException){
                 Toast.makeText(requireActivity(),"먼저 보스를 선택해주세요!",Toast.LENGTH_SHORT).show()
             }
@@ -246,30 +242,30 @@ class Alarm : Fragment() {
             adapter.notifyDataSetChanged()
             serverBossList.clear()
             for(data in it){
-                serverBossList.add(TimerItem(data.timer_name,data.timer_day,data.timer_hour,data.timer_min,data.timer_sec))
+                serverBossList.add(TimerItem(data.timerMonsName,data.day,data.hour,data.min,data.sec))
             }
 
             listToWservice.clear()
             for(item in it){
-                if(item.timer_ota==1){
+                if(item.ota==1){
                     listToWservice.add(item)
                 }
             }
             Collections.sort(listToWservice, object :Comparator<Timer>{ // 일-시-분-초 순으로 정렬
                 override fun compare(p0: Timer?, p1: Timer?): Int {
-                    if(p0!!.timer_day.compareTo(p1!!.timer_day)==0){
-                        if(p0.timer_hour.compareTo(p1.timer_hour)==0){
-                            if(p0.timer_min.compareTo(p1.timer_min)==0){
-                                if(p0.timer_sec.compareTo(p1.timer_sec)==0){
-                                    return p0.timer_name.compareTo(p1.timer_name)
+                    if(p0!!.day.compareTo(p1!!.day)==0){
+                        if(p0.hour.compareTo(p1.hour)==0){
+                            if(p0.min.compareTo(p1.min)==0){
+                                if(p0.sec.compareTo(p1.sec)==0){
+                                    return p0.timerMonsName.compareTo(p1.timerMonsName)
                                 }
-                                return p0.timer_sec.compareTo(p1.timer_sec)
+                                return p0.sec.compareTo(p1.sec)
                             }
-                            return p0.timer_min.compareTo(p1.timer_min)
+                            return p0.min.compareTo(p1.min)
                         }
-                        return p0.timer_hour.compareTo(p1.timer_hour)
+                        return p0.hour.compareTo(p1.hour)
                     }
-                    return p0.timer_day.compareTo(p1.timer_day)
+                    return p0.day.compareTo(p1.day)
                 }
             })
             if(listToWservice.isNotEmpty()){ //비어잇는게 아니면 백그라운드상에 동작하도록 서비스시작
@@ -290,7 +286,7 @@ class Alarm : Fragment() {
                     bossModel.setTimer(0,0,0,0,item.name,0)
                     var code=0
                     CoroutineScope(Dispatchers.Main).launch {
-                        withContext(Dispatchers.IO){code=bossModel.getMonsInfo(item.name).mons_Id}
+                        withContext(Dispatchers.IO){code=bossModel.getMonsInfo(item.name).monsName.toInt()}
                         timeModel.clearAlarm(code)
                         timeModel.clearAlarm(code+300)
                         alarmDialog.cancel()

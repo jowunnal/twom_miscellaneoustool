@@ -35,7 +35,7 @@ class AlarmAdapter :RecyclerView.Adapter<AlarmAdapter.ViewHolder>() ,OnItemClick
     fun setItems(items:List<Timer>){
         this.items.clear()
         for(item in items){
-            this.items.add(TimerItem(item.timer_name,item.timer_day,item.timer_hour,item.timer_min,item.timer_sec))
+            this.items.add(TimerItem(item.timerMonsName,item.day,item.hour,item.min,item.sec))
         }
         Collections.sort(this.items, object :Comparator<TimerItem>{
             override fun compare(p0: TimerItem?, p1: TimerItem?): Int {

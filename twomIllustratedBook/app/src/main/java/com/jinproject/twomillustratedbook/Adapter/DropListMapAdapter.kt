@@ -68,6 +68,8 @@ class DropListMapAdapter(val context: Context) : RecyclerView.Adapter<DropListMa
                 "이슬롯의 신전" -> imgName="mutated_shurun"
                 "루나프" -> imgName="sephia"
                 "비탄의제단" -> imgName="illust"
+                "모르포시즈 뿌리" -> imgName="aiyo_protector"
+                "모르포시즈 정원" -> imgName="soul_rich"
             }
             val res=context.resources.getIdentifier(imgName,"drawable",context.packageName)
             binding.dropMapImg.setImageResource(res)

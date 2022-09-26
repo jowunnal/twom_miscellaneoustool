@@ -69,7 +69,7 @@ class WService : LifecycleService() {
             var strOta=""
             var myday=""
             for(item in list) {
-                when(item.timer_day){
+                when(item.day){
                     1->myday="일"
                     2->myday="월"
                     3->myday="화"
@@ -78,7 +78,7 @@ class WService : LifecycleService() {
                     6->myday="금"
                     7->myday="토"
                 }
-                strOta+=item.timer_name+" ("+myday+") "+item.timer_hour+":"+item.timer_min+":"+item.timer_sec+"\n"
+                strOta+=item.timerMonsName+" ("+myday+") "+item.hour+":"+item.min+":"+item.sec+"\n"
             }
             mView?.findViewById<TextView>(R.id.tv_onOtherApps)?.text = strOta
         }

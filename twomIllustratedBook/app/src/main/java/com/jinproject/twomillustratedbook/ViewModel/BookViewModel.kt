@@ -1,7 +1,7 @@
 package com.jinproject.twomillustratedbook.Item
 
 import androidx.lifecycle.*
-import com.jinproject.twomillustratedbook.Database.Entity.DropListMonster
+import com.jinproject.twomillustratedbook.Database.Entity.Monster
 import com.jinproject.twomillustratedbook.Database.Entity.Timer
 import com.jinproject.twomillustratedbook.Repository.BookRepository
 import kotlinx.coroutines.Dispatchers
@@ -16,10 +16,10 @@ class BookViewModel(private val repository: BookRepository) : ViewModel() {
     val droplistMaps:LiveData<List<String>> = repository.maps
     fun inputData(data:String) = repository.inputdata(data)
     fun getNameSp(inputData:String) = repository.getNameSp(inputData)
-    fun setTimer(day:Int,hour:Int,min:Int,sec:Int,name:String,statue:Int)=viewModelScope.launch(Dispatchers.IO){repository.setTimer(day,hour, min,sec, name,statue)}
+    fun setTimer(day:Int,hour:Int,min:Int,sec:Int,name:String,statue:Int)=viewModelScope.launch(Dispatchers.IO){repository.setTimer(day,hour, min,sec, name)}
     val timer:LiveData<List<Timer>> = repository.timer
     fun setOta(ota:Int,name:String) = viewModelScope.launch(Dispatchers.IO) {  repository.setOta(ota,name)}
-    suspend fun getMonsInfo(inputData: String):DropListMonster{
+    suspend fun getMonsInfo(inputData: String):Monster{
         val info=viewModelScope.async(Dispatchers.IO){repository.getMonsInfo(inputData) }
         return info.await()
     }

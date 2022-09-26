@@ -68,8 +68,8 @@ class Timer : Fragment() {
                     val list=ArrayList<String>()
                     alarmItem.clear()
                     for(v in it){
-                        list.add(v.mons_name)
-                        alarmItem.add(AlarmItem(v.mons_name,v.mons_imgName,v.mons_Id,v.mons_gtime))
+                        list.add(v.monsName)
+                        alarmItem.add(AlarmItem(v.monsName,v.monsImgName,v.monsName.toInt(),v.monsGtime))
                     }
                     val nameSpAdapter= ArrayAdapter(requireActivity(), R.layout.support_simple_spinner_dropdown_item,list)
                     binding.spinnerMons.adapter=nameSpAdapter

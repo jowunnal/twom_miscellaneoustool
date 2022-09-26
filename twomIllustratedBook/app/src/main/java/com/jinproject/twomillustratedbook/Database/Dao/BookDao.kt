@@ -1,37 +1,39 @@
 package com.jinproject.twomillustratedbook.Database.Dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.jinproject.twomillustratedbook.Database.Entity.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BookDao {
-    @Query("select * from BookEntity inner join BookContentEntity on BookEntity.id = BookContentEntity.bookId where item_type like:data")
-    fun getContent(data:String): LiveData<Map<BookEntity, List<BookContentEntity>>>
+    @RewriteQueriesToDropUnusedColumns
+    @Query("select * from Book inner join RegisterItemToBook on Book.bookId = RegisterItemToBook.rlBookId join Item on Item.itemName = RegisterItemToBook.rlItemName where Item.itemType like:data")
+    fun getContent(data:String): LiveData<Map<Book, List<RegisterItemToBook>>>
 
-    @Query("select * from DropListMonster inner join DropListItems on DropListMonster.mons_Id=DropListItems.monsId inner join DropListMaps on DropListMonster.mons_Id=DropListMaps.map_monsId where DropListMaps.map_name like:data")
-    fun getMonster(data :String) : LiveData<Map<DropListMonster, List<DropListItems>>>
+    @RewriteQueriesToDropUnusedColumns
+    @Query("select * from Monster inner join MonsDropItem on Monster.monsName = MonsDropItem.mdMonsName join MonsLiveAtMap on Monster.monsName = MonsLiveAtMap.mlMonsName where MonsLiveAtMap.mlMapName like:data")
+    fun getMonster(data :String) : LiveData<Map<Monster, List<MonsDropItem>>>
 
-    @Query("select distinct map_name from DropListMaps")
+    @Query("select distinct mapName from Map")
     fun getMaps() : LiveData<List<String>>
 
-    @Query("select * from DropListMonster where DropListMonster.mons_type like:inputData")
-    fun getNamedSp(inputData:String) : LiveData<List<DropListMonster>>
+    @Query("select * from Monster where Monster.monsType like:inputData")
+    fun getNamedSp(inputData:String) : LiveData<List<Monster>>
 
-    @Query("select * from DropListMonster where mons_name like :inputData")
-    suspend fun getMonsInfo(inputData:String):DropListMonster
+    @Query("select * from Monster where Monster.monsName like :inputData")
+    suspend fun getMonsInfo(inputData:String):Monster
 
-    @Query("update Timer set timer_day= :day,timer_hour= :hour, timer_min= :min,timer_sec=:sec, timer_statue= :statue where timer_name like:name")
-    suspend fun setTimer(day:Int,hour:Int,min:Int,sec:Int,name:String,statue:Int)
+    @Query("update Timer set day= :day,hour= :hour, min= :min,sec=:sec where timerMonsName like:name")
+    suspend fun setTimer(day:Int,hour:Int,min:Int,sec:Int,name:String)
 
-    @Query("select * from Timer where timer_statue!=0")
+    @Query("select * from Timer")
     fun getTimer():LiveData<List<Timer>>
 
-    @Query("update Timer set timer_ota=:ota where timer_name like :name")
+    @Query("delete from Timer where Timer.timerMonsName like :name")
+    suspend fun deleteTimer(name:String)
+
+    @Query("update Timer set ota=:ota where timerMonsName like :name")
     suspend fun setOta(ota:Int,name:String)
 
     /*@Query("select DropListMonster.mons_name from DropListMonster where DropListMonster.mons_type='boss'")
@@ -39,14 +41,5 @@ interface BookDao {
 
     @Query("select DropListMonster.mons_name from DropListMonster where DropListMonster.mons_type='bigboss'")
     fun getBigBossSp() : Map<String,Int>*/
-
-    @Query("delete from BookEntity")
-    suspend fun deleteAll()
-
-    @Query("select * from BookEntity")
-    fun getAll(): Flow<List<BookEntity>>
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(bookEntity: BookEntity)
 
 }

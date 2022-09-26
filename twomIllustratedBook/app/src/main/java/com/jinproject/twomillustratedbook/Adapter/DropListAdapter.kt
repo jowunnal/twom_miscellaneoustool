@@ -6,13 +6,13 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.jinproject.twomillustratedbook.Database.Entity.DropListItems
-import com.jinproject.twomillustratedbook.Database.Entity.DropListMonster
+import com.jinproject.twomillustratedbook.Database.Entity.MonsDropItem
+import com.jinproject.twomillustratedbook.Database.Entity.Monster
 import com.jinproject.twomillustratedbook.databinding.DropItemBinding
 
 class DropListAdapter(val context: Context) : RecyclerView.Adapter<DropListAdapter.ViewHolder>(),Filterable {
-    var items=ArrayList<HashMap<DropListMonster,List<DropListItems>>>()
-    var items_unfiltered=ArrayList<HashMap<DropListMonster,List<DropListItems>>>()
+    var items=ArrayList<HashMap<Monster,List<MonsDropItem>>>()
+    var items_unfiltered=ArrayList<HashMap<Monster,List<MonsDropItem>>>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater=LayoutInflater.from(parent.context)
@@ -28,10 +28,10 @@ class DropListAdapter(val context: Context) : RecyclerView.Adapter<DropListAdapt
         return items.size
     }
 
-    fun setItems(item :Map<DropListMonster,List<DropListItems>>){
+    fun setItems(item :Map<Monster,List<MonsDropItem>>){
         val keys=item.keys
         for(key in keys){
-            var map=HashMap<DropListMonster,List<DropListItems>>()
+            var map=HashMap<Monster,List<MonsDropItem>>()
             map.put(key,item.getValue(key))
             items.add(map)
         }
@@ -39,20 +39,20 @@ class DropListAdapter(val context: Context) : RecyclerView.Adapter<DropListAdapt
     }
 
     inner class ViewHolder(private val binding: DropItemBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(item : Map<DropListMonster,List<DropListItems>>){
+        fun bind(item : Map<Monster,List<MonsDropItem>>){
             var contents=""
             for(key in item.keys){
                 for(value in item.getValue(key)){
-                    contents+=value.item_name
+                    contents+=value.mdItemName
                     if(item.getValue(key)[item.getValue(key).lastIndex]!=value){
                         contents+=", "
                     }
                 }
             }
             binding.dropContent.text=contents
-            binding.dropName.text=item.keys.elementAt(0).mons_name
-            binding.dropLevel.text=item.keys.elementAt(0).mons_level.toString()
-            binding.dropImg.setImageResource(context.resources.getIdentifier(item.keys.elementAt(0).mons_imgName,"drawable",context.packageName))
+            binding.dropName.text=item.keys.elementAt(0).monsName
+            binding.dropLevel.text=item.keys.elementAt(0).monsLevel.toString()
+            binding.dropImg.setImageResource(context.resources.getIdentifier(item.keys.elementAt(0).monsImgName,"drawable",context.packageName))
         }
     }
 
@@ -63,20 +63,20 @@ class DropListAdapter(val context: Context) : RecyclerView.Adapter<DropListAdapt
                     items=items_unfiltered
                 }
                 else{
-                    var items_filtering=ArrayList<HashMap<DropListMonster,List<DropListItems>>>()
+                    var items_filtering=ArrayList<HashMap<Monster,List<MonsDropItem>>>()
                     var filterflag=false
                     for(item in items_unfiltered){
                         for(key in item.keys){
-                            if(key.mons_name==p0.toString()){
+                            if(key.monsName==p0.toString()){
                                 filterflag=true
                             }
                             for(value in item.getValue(key)){
-                                if(value.item_name.contains(p0.toString())){
+                                if(value.mdItemName.contains(p0.toString())){
                                     filterflag=true
                                 }
                             }
                             if(filterflag){
-                                var map=HashMap<DropListMonster,List<DropListItems>>()
+                                var map=HashMap<Monster,List<MonsDropItem>>()
                                 map.put(key,item.getValue(key))
                                 items_filtering.add(map)
                                 filterflag=false
@@ -91,7 +91,7 @@ class DropListAdapter(val context: Context) : RecyclerView.Adapter<DropListAdapt
             }
 
             override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
-                items=p1!!.values as ArrayList<HashMap<DropListMonster,List<DropListItems>>>
+                items=p1!!.values as ArrayList<HashMap<Monster,List<MonsDropItem>>>
                 notifyDataSetChanged()
             }
 
