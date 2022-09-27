@@ -18,7 +18,7 @@ import kotlin.properties.Delegates
 class AlarmSelectedAdapter : RecyclerView.Adapter<AlarmSelectedAdapter.ViewHolder>(), OnBossNameClickedListener {
     private val items=ArrayList<String>()
     private val checkList=ArrayList<CheckStatue>()
-    private lateinit var selectedList:ArrayList<CheckStatue>
+    private var selectedList:ArrayList<CheckStatue> = arrayListOf()
     private var selectedStatue=-1
     private var mlistener:OnBossNameClickedListener ?= null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmSelectedAdapter.ViewHolder {
