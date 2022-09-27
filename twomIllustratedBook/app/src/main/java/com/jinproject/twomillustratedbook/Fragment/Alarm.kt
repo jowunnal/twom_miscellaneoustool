@@ -39,6 +39,7 @@ import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.Service.AlarmServerService
 import com.jinproject.twomillustratedbook.Service.WService
 import com.jinproject.twomillustratedbook.ViewModel.AlarmModel
+import com.jinproject.twomillustratedbook.ViewModel.AlarmPresenter
 import com.jinproject.twomillustratedbook.databinding.AlarmBinding
 import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectedItemBinding
 import com.jinproject.twomillustratedbook.listener.OnBossNameClickedListener
@@ -46,6 +47,7 @@ import com.jinproject.twomillustratedbook.listener.OnItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
@@ -53,7 +55,7 @@ class Alarm : Fragment() {
     var _binding:AlarmBinding ?=null
     val binding get() = _binding!!
     val timeModel: AlarmModel by viewModels()
-    val bossModel: BookViewModel by viewModels()
+    val bossModel: BookViewModel by activityViewModels()
     val adapter:AlarmAdapter by lazy { AlarmAdapter() }
     val selectedAdapter by lazy{AlarmSelectedAdapter()}
     private var clickable=-1
@@ -65,6 +67,7 @@ class Alarm : Fragment() {
     lateinit var navController:NavController
     private var serverBossList=ArrayList<TimerItem>()
     private var mRewardedAd: RewardedAd? = null
+    @Inject lateinit var alarmPresenter: AlarmPresenter
 
     var day:Int=0
     override fun onCreateView(
@@ -114,7 +117,7 @@ class Alarm : Fragment() {
                         clickable=pos
                         CoroutineScope(Dispatchers.IO).launch {
                             monster=bossModel.getMonsInfo(selectedAdapter.getItem(pos))
-                            alarmItem=AlarmItem(monster.monsName,monster.monsImgName,monster.monsName.toInt(),monster.monsGtime)
+                            alarmItem=AlarmItem(monster.monsName,monster.monsImgName,alarmPresenter.getMonsterCode(monster.monsName),monster.monsGtime)
                         }
                     }
                     pos -> {
@@ -288,7 +291,7 @@ class Alarm : Fragment() {
                     bossModel.setTimer(0,0,0,0,item.name,0)
                     var code=0
                     CoroutineScope(Dispatchers.Main).launch {
-                        withContext(Dispatchers.IO){code=bossModel.getMonsInfo(item.name).monsName.toInt()}
+                        withContext(Dispatchers.IO){code=alarmPresenter.getMonsterCode(bossModel.getMonsInfo(item.name).monsName)}
                         timeModel.clearAlarm(code)
                         timeModel.clearAlarm(code+300)
                         alarmDialog.cancel()
