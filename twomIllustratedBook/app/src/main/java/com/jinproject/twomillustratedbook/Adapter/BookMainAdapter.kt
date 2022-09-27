@@ -49,7 +49,7 @@ class BookMainAdapter : RecyclerView.Adapter<BookMainAdapter.BookViewHolder>() ,
             for(key in keys){
                 val value=item1.getValue(key)
                 for(v in value){ // key에대한 value값이 다중값이기때문에 각값을 뽑아 \n을 사용하여 구분하여 tv에 넣음
-                    str+=v.rlItemName + if(v.rlItemCount==1){""} else {" * "+v.rlItemCount}
+                    str+=if(v.rlItemEnchant!=0){"+${v.rlItemEnchant} "} else {""}+v.rlItemName + if(v.rlItemCount==1){""} else {" * "+v.rlItemCount}
                     if(value[value.lastIndex]!=v){
                         str+="\n"
                     }
@@ -62,6 +62,7 @@ class BookMainAdapter : RecyclerView.Adapter<BookMainAdapter.BookViewHolder>() ,
             var flagCnt=false
 
             val v =keys.elementAt(0)
+
 
             if(v.hp!=0.0){ strStat+="체력: "+v.hp.toString()
                 flagCnt=true}
