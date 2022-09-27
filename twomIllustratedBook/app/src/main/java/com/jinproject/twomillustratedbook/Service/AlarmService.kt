@@ -1,23 +1,19 @@
 package com.jinproject.twomillustratedbook.Service
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.*
-import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.jinproject.twomillustratedbook.Database.BookDatabase
-import com.jinproject.twomillustratedbook.MainActivity.MainActivity
-import com.jinproject.twomillustratedbook.R
-import com.jinproject.twomillustratedbook.Repository.BookRepository
+import com.jinproject.twomillustratedbook.Repository.BookRepositoryImpl
+import com.jinproject.twomillustratedbook.Repository.BookRepositoryModule
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class AlarmService : LifecycleService() {
-
+    @Inject lateinit var repository:BookRepositoryImpl
     override fun onCreate() {
         super.onCreate()
 
@@ -25,7 +21,6 @@ class AlarmService : LifecycleService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        val repository=BookRepository(BookDatabase.getInstance(applicationContext).bookDao())
         val name=intent!!.getStringExtra("name")!!
         lifecycleScope.launch(Dispatchers.IO){repository.setTimer(0,0,0,0,name)}
         return START_STICKY

@@ -9,12 +9,16 @@ import android.widget.Toast
 import androidx.lifecycle.*
 import com.jinproject.twomillustratedbook.Item.AlarmItem
 import com.jinproject.twomillustratedbook.Receiver.AlarmReceiver
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class AlarmModel(application: Application) : AndroidViewModel(application){
-    private val alarmManager:AlarmManager = application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    private val app=application
+@HiltViewModel
+class AlarmModel @Inject constructor(@ApplicationContext private val context: Context) : ViewModel(){
+    private val alarmManager:AlarmManager = context.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    private val app=context.applicationContext
 
     fun setAlarm(h:Int,m:Int,item: AlarmItem){
         var count=(h*3600+m*60)+item.gtime
@@ -28,7 +32,7 @@ class AlarmModel(application: Application) : AndroidViewModel(application){
         makeAlarm((count-first*60)*1000, AlarmItem(item.name,item.imgName,item.code,item.gtime))
         makeAlarm((count-last*60)*1000, AlarmItem(item.name,item.imgName,item.code+300,item.gtime))
 
-        Toast.makeText(getApplication(),"알람설정완료",Toast.LENGTH_LONG).show()
+        Toast.makeText(app,"알람설정완료",Toast.LENGTH_LONG).show()
     }
 
     fun clearAlarm(code:Int){

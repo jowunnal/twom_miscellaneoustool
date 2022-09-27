@@ -3,41 +3,42 @@ package com.jinproject.twomillustratedbook.Service
 import android.app.AlarmManager
 import android.app.Application
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.widget.Toast
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.database.*
-import com.jinproject.twomillustratedbook.Database.BookDatabase
 import com.jinproject.twomillustratedbook.Database.Entity.Monster
 import com.jinproject.twomillustratedbook.Item.AlarmItem
 import com.jinproject.twomillustratedbook.Item.Room
 import com.jinproject.twomillustratedbook.Receiver.AlarmReceiver
-import com.jinproject.twomillustratedbook.Repository.BookRepository
+import com.jinproject.twomillustratedbook.Repository.BookRepositoryImpl
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class AlarmServerService :LifecycleService() {
     lateinit var monster:Monster
-    override fun onCreate() {
+    @Inject lateinit var repository:BookRepositoryImpl
+        override fun onCreate() {
         super.onCreate()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         val db = FirebaseDatabase.getInstance().reference
-        val loginPreference=applicationContext.getSharedPreferences("login",Context.MODE_PRIVATE)
+        val loginPreference=applicationContext.getSharedPreferences("login", MODE_PRIVATE)
 
         db.child("RoomList").child(loginPreference.getString("key","")!!).addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                val alarmManager: AlarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                val repository= BookRepository(BookDatabase.getInstance(applicationContext).bookDao())
+                val alarmManager: AlarmManager = applicationContext.getSystemService(ALARM_SERVICE) as AlarmManager
+
                 val type= object : GenericTypeIndicator<Room>(){}
                 val data=snapshot.getValue(type)
 
@@ -45,11 +46,13 @@ class AlarmServerService :LifecycleService() {
                     var count=value.hour*3600+value.min*60+value.sec
                     val getTime= SimpleDateFormat("HH:mm:ss").format(Date(System.currentTimeMillis())) // simpledateformat의 hh는0-11, HH는0-23 이다.
                     val nowTime=getTime.split(":")
-                    count-=(java.lang.Integer.parseInt(nowTime[0])*3600+ java.lang.Integer.parseInt(nowTime[1])*60+Integer.parseInt(nowTime[2]))
+                    count-=(Integer.parseInt(nowTime[0])*3600+ Integer.parseInt(nowTime[1])*60+Integer.parseInt(nowTime[2]))
                     if(count>0){
                         lifecycleScope.launch(Dispatchers.IO){
                             monster= withContext(Dispatchers.IO) { repository.getMonsInfo(value.name) }
-                            val timerSharedPreferences=applicationContext.getSharedPreferences("TimerSharedPref",Context.MODE_PRIVATE)
+                            val timerSharedPreferences=applicationContext.getSharedPreferences("TimerSharedPref",
+                                MODE_PRIVATE
+                            )
                             val first=timerSharedPreferences.getInt("first",5)
                             val last=timerSharedPreferences.getInt("last",0)
                             makeAlarm(alarmManager,application,(count-first*60)*1000,AlarmItem(
@@ -84,7 +87,7 @@ class AlarmServerService :LifecycleService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        applicationContext.getSharedPreferences("login",Context.MODE_PRIVATE).edit().putBoolean("statue",false).apply()
+        applicationContext.getSharedPreferences("login", MODE_PRIVATE).edit().putBoolean("statue",false).apply()
     }
 
     private fun makeAlarm(alarmManager: AlarmManager, app: Application, count:Int, item: AlarmItem){

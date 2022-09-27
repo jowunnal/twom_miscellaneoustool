@@ -13,7 +13,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.jinproject.twomillustratedbook.Item.Room
 import com.jinproject.twomillustratedbook.Item.TimerItem
 import com.jinproject.twomillustratedbook.databinding.AlarmLoginBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class Login:Fragment() {
     var _binding:AlarmLoginBinding ?= null
     val binding get() = _binding!!

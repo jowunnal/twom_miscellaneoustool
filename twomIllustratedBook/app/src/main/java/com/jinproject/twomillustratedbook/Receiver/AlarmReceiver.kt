@@ -12,7 +12,9 @@ import android.os.Build
 import com.jinproject.twomillustratedbook.Item.sendNotification
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.Service.AlarmService
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(p0: Context?, p1: Intent?) {

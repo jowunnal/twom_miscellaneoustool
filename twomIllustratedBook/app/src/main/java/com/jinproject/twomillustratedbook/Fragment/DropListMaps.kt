@@ -6,21 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jinproject.twomillustratedbook.Adapter.DropListMapAdapter
 import com.jinproject.twomillustratedbook.Database.BookApplication
 import com.jinproject.twomillustratedbook.Item.BookViewModel
-import com.jinproject.twomillustratedbook.Item.BookViewModelFactory
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.DroplistmapBinding
 import com.jinproject.twomillustratedbook.listener.OnItemClickListener
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DropListMaps : Fragment() {
     var _binding:DroplistmapBinding ?=null
     val binding get()=_binding!!
-    val model:BookViewModel by activityViewModels(){BookViewModelFactory((activity?.application as BookApplication).repository)}
+    val model:BookViewModel by viewModels()
     lateinit var adapter: DropListMapAdapter
     override fun onCreateView(
         inflater: LayoutInflater,

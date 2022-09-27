@@ -15,19 +15,4 @@ import com.jinproject.twomillustratedbook.Database.Entity.Map
     version = 5,  exportSchema = true)
 abstract class BookDatabase : RoomDatabase() {
     abstract fun bookDao() : BookDao
-
-    companion object{
-        @Volatile
-        private var bookInstance : BookDatabase ?= null
-
-        fun getInstance(context: Context) : BookDatabase {
-            return bookInstance ?: synchronized(BookDatabase::class){ //syncronized()는 클래스파일에 멀티스레드가 접근하지못하도록 하기위해 사용
-                val instance = Room.databaseBuilder(context.applicationContext,
-                BookDatabase::class.java, "book_Database").createFromAsset("database/db_twom_2.db")
-                    .addMigrations().fallbackToDestructiveMigration().build()
-                bookInstance=instance
-                instance
-            }
-        }
-    }
 }

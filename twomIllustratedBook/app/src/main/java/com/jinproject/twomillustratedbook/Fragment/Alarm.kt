@@ -43,15 +43,17 @@ import com.jinproject.twomillustratedbook.databinding.AlarmBinding
 import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectedItemBinding
 import com.jinproject.twomillustratedbook.listener.OnBossNameClickedListener
 import com.jinproject.twomillustratedbook.listener.OnItemClickListener
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.collections.ArrayList
 
+@AndroidEntryPoint
 class Alarm : Fragment() {
     var _binding:AlarmBinding ?=null
     val binding get() = _binding!!
     val timeModel: AlarmModel by viewModels()
-    val bossModel: BookViewModel by activityViewModels(){ BookViewModelFactory((activity?.application as BookApplication).repository) }
+    val bossModel: BookViewModel by viewModels()
     val adapter:AlarmAdapter by lazy { AlarmAdapter() }
     val selectedAdapter by lazy{AlarmSelectedAdapter()}
     private var clickable=-1

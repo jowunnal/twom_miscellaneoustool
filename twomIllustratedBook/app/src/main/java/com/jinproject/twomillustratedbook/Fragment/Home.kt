@@ -11,8 +11,10 @@ import com.jinproject.twomillustratedbook.Item.HomeItem
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.HomeBinding
 import com.jinproject.twomillustratedbook.listener.OnItemClickListener
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class Home : Fragment() {
     var _binding : HomeBinding ?= null
     val binding get() = _binding!!

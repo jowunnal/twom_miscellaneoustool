@@ -9,9 +9,11 @@ import android.widget.NumberPicker
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.jinproject.twomillustratedbook.R
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
 
+@AndroidEntryPoint
 class MyTimePicker : DialogFragment() {
     private lateinit var myView:View
     private lateinit var hour:NumberPicker

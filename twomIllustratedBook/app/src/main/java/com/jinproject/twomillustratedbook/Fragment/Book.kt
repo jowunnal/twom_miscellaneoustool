@@ -7,21 +7,24 @@ import android.text.InputType
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jinproject.twomillustratedbook.Adapter.BookMainAdapter
 import com.jinproject.twomillustratedbook.Database.BookApplication
 import com.jinproject.twomillustratedbook.Item.BookViewModel
-import com.jinproject.twomillustratedbook.Item.BookViewModelFactory
 import com.jinproject.twomillustratedbook.R
+import com.jinproject.twomillustratedbook.Repository.BookRepositoryImpl
 import com.jinproject.twomillustratedbook.databinding.BookBinding
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class Book : Fragment() {
     var _binding : BookBinding ?=null
     val binding get() = _binding!!
-    val model:BookViewModel by activityViewModels(){BookViewModelFactory((activity?.application as BookApplication).repository)}
-
+    val model:BookViewModel by viewModels()
     lateinit var adapter :BookMainAdapter
 
     override fun onCreateView(

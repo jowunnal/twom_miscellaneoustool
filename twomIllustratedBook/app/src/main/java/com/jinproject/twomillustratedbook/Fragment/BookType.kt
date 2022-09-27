@@ -6,21 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jinproject.twomillustratedbook.Adapter.BookTypeAdapter
 import com.jinproject.twomillustratedbook.Database.BookApplication
 import com.jinproject.twomillustratedbook.Item.BookViewModel
-import com.jinproject.twomillustratedbook.Item.BookViewModelFactory
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.BookTypeBinding
 import com.jinproject.twomillustratedbook.listener.OnItemClickListener
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class BookType : Fragment() {
     var _binding:BookTypeBinding ?=null
     val binding get() = _binding!!
     lateinit var adapter:BookTypeAdapter
-    val model:BookViewModel by activityViewModels(){ BookViewModelFactory((activity?.application as BookApplication).repository) }
+    val model:BookViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

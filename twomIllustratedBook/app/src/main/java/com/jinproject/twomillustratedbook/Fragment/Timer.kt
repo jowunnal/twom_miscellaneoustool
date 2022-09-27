@@ -14,10 +14,10 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.jinproject.twomillustratedbook.Database.BookApplication
 import com.jinproject.twomillustratedbook.Item.AlarmItem
 import com.jinproject.twomillustratedbook.Item.BookViewModel
-import com.jinproject.twomillustratedbook.Item.BookViewModelFactory
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectBinding
 import java.util.*
@@ -28,13 +28,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.jinproject.twomillustratedbook.Adapter.AlarmSelectedAdapter
 import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectedItemBinding
 import com.jinproject.twomillustratedbook.listener.OnBossNameClickedListener
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class Timer : Fragment() {
     var _binding:AlarmUserSelectBinding ?= null
     val binding get()=_binding!!
     lateinit var timerSharedPref: SharedPreferences
     val adapter:AlarmSelectedAdapter by lazy{AlarmSelectedAdapter()}
-    val bossModel: BookViewModel by activityViewModels(){ BookViewModelFactory((activity?.application as BookApplication).repository) }
+    val bossModel: BookViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

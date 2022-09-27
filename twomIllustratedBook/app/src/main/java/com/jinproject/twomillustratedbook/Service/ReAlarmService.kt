@@ -6,19 +6,22 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
-import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.jinproject.twomillustratedbook.Database.BookDatabase
 import com.jinproject.twomillustratedbook.Item.AlarmItem
 import com.jinproject.twomillustratedbook.Receiver.AlarmReceiver
-import com.jinproject.twomillustratedbook.Repository.BookRepository
+import com.jinproject.twomillustratedbook.Repository.BookRepositoryImpl
+import com.jinproject.twomillustratedbook.Repository.BookRepositoryModule
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ReAlarmService : LifecycleService() {
+    @Inject lateinit var repository: BookRepositoryImpl
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         val alarmManager: AlarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -57,7 +60,6 @@ class ReAlarmService : LifecycleService() {
             hour-=24
             day+=1
         }
-        val repository= BookRepository(BookDatabase.getInstance(applicationContext).bookDao())
         lifecycleScope.launch(Dispatchers.IO){repository.setTimer(day,hour,min,sec,intent.getStringExtra("msg")!!)}
         return START_STICKY
     }
