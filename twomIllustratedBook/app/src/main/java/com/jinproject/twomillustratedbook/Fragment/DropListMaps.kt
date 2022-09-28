@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class DropListMaps : Fragment() {
     var _binding:DroplistmapBinding ?=null
     val binding get()=_binding!!
-    val model:BookViewModel by viewModels()
+    val model:BookViewModel by activityViewModels()
     lateinit var adapter: DropListMapAdapter
     override fun onCreateView(
         inflater: LayoutInflater,

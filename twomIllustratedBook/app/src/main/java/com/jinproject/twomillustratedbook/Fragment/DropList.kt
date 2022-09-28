@@ -21,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class DropList : Fragment() {
     var _binding : DropBinding?=null
     val binding get()=_binding!!
-    val model:BookViewModel by viewModels()
+    val model:BookViewModel by activityViewModels()
     lateinit var dropListAdapter: DropListAdapter
     override fun onCreateView(
         inflater: LayoutInflater,

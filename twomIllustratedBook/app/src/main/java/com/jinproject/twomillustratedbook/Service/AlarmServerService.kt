@@ -14,6 +14,8 @@ import com.jinproject.twomillustratedbook.Item.AlarmItem
 import com.jinproject.twomillustratedbook.Item.Room
 import com.jinproject.twomillustratedbook.Receiver.AlarmReceiver
 import com.jinproject.twomillustratedbook.Repository.BookRepositoryImpl
+import com.jinproject.twomillustratedbook.ViewModel.AlarmModel
+import com.jinproject.twomillustratedbook.ViewModel.AlarmPresenter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +27,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class AlarmServerService :LifecycleService() {
     lateinit var monster:Monster
+    @Inject lateinit var alarmPresenter: AlarmPresenter
     @Inject lateinit var repository:BookRepositoryImpl
         override fun onCreate() {
         super.onCreate()
@@ -58,13 +61,13 @@ class AlarmServerService :LifecycleService() {
                             makeAlarm(alarmManager,application,(count-first*60)*1000,AlarmItem(
                                 monster.monsName,
                                 monster.monsImgName,
-                                monster.monsName.toInt(),
+                                alarmPresenter.getMonsterCode(monster.monsName),
                                 monster.monsGtime))
 
                             makeAlarm(alarmManager,application,(count-last*60)*1000,AlarmItem(
                                 monster.monsName,
                                 monster.monsImgName,
-                                monster.monsName.toInt()+300,
+                                alarmPresenter.getMonsterCode(monster.monsName)+300,
                                 monster.monsGtime))
                             repository.setTimer(value.day,value.hour,value.min,value.sec,value.name)
                         }

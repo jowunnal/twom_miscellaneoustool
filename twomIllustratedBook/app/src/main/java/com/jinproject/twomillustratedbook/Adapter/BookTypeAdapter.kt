@@ -42,9 +42,17 @@ class BookTypeAdapter(val context:Context) : RecyclerView.Adapter<BookTypeAdapte
                     imgName = "weapons"
                     itemName="무기류"
                 }
+                "Armors"->{
+                    imgName="armors"
+                    itemName="방어구류"
+                }
                 "costumes"-> {
                     imgName = "costumes"
                     itemName="코스튬류"
+                }
+                "skill"->{
+                    imgName = "skills"
+                    itemName="스킬류"
                 }
             }
             val res=context.resources.getIdentifier(imgName,"drawable",context.packageName)

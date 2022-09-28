@@ -50,4 +50,6 @@ class AlarmModel @Inject constructor(@ApplicationContext private val context: Co
         val notifyPendingIntent = PendingIntent.getBroadcast(app,item.code,notifyIntentImmediately,PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         alarmManager.setAlarmClock(AlarmManager.AlarmClockInfo(System.currentTimeMillis()+count,notifyPendingIntent), notifyPendingIntent)
     }
+
+
 }

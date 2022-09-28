@@ -26,9 +26,12 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.jinproject.twomillustratedbook.Adapter.AlarmSelectedAdapter
+import com.jinproject.twomillustratedbook.ViewModel.AlarmModel
+import com.jinproject.twomillustratedbook.ViewModel.AlarmPresenter
 import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectedItemBinding
 import com.jinproject.twomillustratedbook.listener.OnBossNameClickedListener
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class Timer : Fragment() {
@@ -36,7 +39,9 @@ class Timer : Fragment() {
     val binding get()=_binding!!
     lateinit var timerSharedPref: SharedPreferences
     val adapter:AlarmSelectedAdapter by lazy{AlarmSelectedAdapter()}
-    val bossModel: BookViewModel by viewModels()
+    val bossModel: BookViewModel by activityViewModels()
+    val alarmModel:AlarmModel by viewModels()
+    @Inject lateinit var alarmPresenter: AlarmPresenter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -71,7 +76,7 @@ class Timer : Fragment() {
                     alarmItem.clear()
                     for(v in it){
                         list.add(v.monsName)
-                        alarmItem.add(AlarmItem(v.monsName,v.monsImgName,v.monsName.toInt(),v.monsGtime))
+                        alarmItem.add(AlarmItem(v.monsName,v.monsImgName,alarmPresenter.getMonsterCode(v.monsName),v.monsGtime))
                     }
                     val nameSpAdapter= ArrayAdapter(requireActivity(), R.layout.support_simple_spinner_dropdown_item,list)
                     binding.spinnerMons.adapter=nameSpAdapter
@@ -155,4 +160,5 @@ class Timer : Fragment() {
         adapter.setItems(list)
         adapter.notifyDataSetChanged()
     }
+
 }

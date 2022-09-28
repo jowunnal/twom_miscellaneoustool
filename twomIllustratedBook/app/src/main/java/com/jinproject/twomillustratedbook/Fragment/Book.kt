@@ -24,7 +24,7 @@ import javax.inject.Inject
 class Book : Fragment() {
     var _binding : BookBinding ?=null
     val binding get() = _binding!!
-    val model:BookViewModel by viewModels()
+    val model:BookViewModel by activityViewModels()
     lateinit var adapter :BookMainAdapter
 
     override fun onCreateView(

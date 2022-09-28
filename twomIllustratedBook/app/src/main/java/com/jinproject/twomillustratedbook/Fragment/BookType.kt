@@ -22,7 +22,7 @@ class BookType : Fragment() {
     var _binding:BookTypeBinding ?=null
     val binding get() = _binding!!
     lateinit var adapter:BookTypeAdapter
-    val model:BookViewModel by viewModels()
+    val model:BookViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,7 +41,9 @@ class BookType : Fragment() {
         var list=ArrayList<String>().apply {
             add("miscellaneous")
             add("weapons")
+            add("Armors")
             add("costumes")
+            add("skill")
         }
         adapter.setItem(list)
         adapter.setOnItemClickListener(object:OnItemClickListener{
