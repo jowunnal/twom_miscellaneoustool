@@ -1,5 +1,8 @@
-package com.example.example_kakaologinapi.repository
+package com.jinproject.twomillustratedbook.Repository
 
+import com.jinproject.twomillustratedbook.Database.BookDatabase
+import com.jinproject.twomillustratedbook.Database.Dao.BookDao
+import com.jinproject.twomillustratedbook.Database.Dao.LoginDao
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -10,9 +13,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule{
+object RepositoryModule{
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindRepository(userRepositoryImpl:UserRepositoryImpl):UserRepository
+    fun bindRepository(loginDao: LoginDao):UserRepositoryImpl{
+        return UserRepositoryImpl(loginDao)
+    }
 }

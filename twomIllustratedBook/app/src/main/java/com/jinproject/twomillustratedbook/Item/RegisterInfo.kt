@@ -1,4 +1,4 @@
-package com.example.example_kakaologinapi.item
+package com.jinproject.twomillustratedbook.Item
 
 import androidx.databinding.ObservableField
 

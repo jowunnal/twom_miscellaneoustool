@@ -1,21 +1,23 @@
-package com.example.example_kakaologinapi.viewModel
+package com.jinproject.twomillustratedbook.ViewModel
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.viewModelScope
-import com.example.example_kakaologinapi.database.User
-import com.example.example_kakaologinapi.item.RegisterInfo
-import com.example.example_kakaologinapi.repository.UserRepositoryImpl
+import com.jinproject.twomillustratedbook.Item.RegisterInfo
+import com.jinproject.twomillustratedbook.Item.User
+import com.jinproject.twomillustratedbook.Repository.UserRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor(private val app:Application, private val repository: UserRepositoryImpl) :
-    ManageMemberViewModel(app, repository) {
+class RegisterViewModel @Inject constructor(@ApplicationContext private val context:Context, private val repository: UserRepositoryImpl) :
+    ManageMemberViewModel(context, repository) {
     val info by lazy{ RegisterInfo(ObservableField(""),ObservableField(""),ObservableField(""),ObservableField("")) }
 
     suspend fun registerUser():Boolean{
@@ -38,7 +40,7 @@ class RegisterViewModel @Inject constructor(private val app:Application, private
     }
 
     fun deleteUser(id:String,pw:String){
-        viewModelScope.launch(Dispatchers.IO) { repository.deleteUser(User(id,"jinho",pw)) }
+        viewModelScope.launch(Dispatchers.IO) { repository.deleteUser(User()) }
     }
 
     private fun checkRegisterInfoIsCorrect(inputString: String, pattern:String, text:String):String{

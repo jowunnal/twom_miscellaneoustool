@@ -7,6 +7,7 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.ads.*
 import com.jinproject.twomillustratedbook.Database.BookApplication
 import com.jinproject.twomillustratedbook.Item.BookViewModel
@@ -57,6 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         var NavHostFragment= supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         navController=NavHostFragment.navController
+        binding.bottomNavigationView.setupWithNavController(navController)
     }
 
 

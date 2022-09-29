@@ -1,7 +1,7 @@
-package com.example.example_kakaologinapi.database
+package com.jinproject.twomillustratedbook.Database.Dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.jinproject.twomillustratedbook.Item.User
 
 
 @Dao

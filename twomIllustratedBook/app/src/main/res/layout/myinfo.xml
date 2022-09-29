@@ -6,26 +6,6 @@
     android:layout_height="wrap_content"
     tools:context="com.jinproject.twomillustratedbook.Fragment.MyInfo">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_info"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="이메일:어쩌고저쩌고"
-                android:textSize="17sp" />
-        </LinearLayout>
-    </ScrollView>
+    
 
 </androidx.constraintlayout.widget.ConstraintLayout>

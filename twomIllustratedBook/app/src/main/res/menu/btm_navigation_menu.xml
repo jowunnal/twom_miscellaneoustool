@@ -1,4 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/homeFragment"
+        android:title="home"
+        android:enabled="true"
+        android:icon="@drawable/icon_home"
+        app:showAsAction="always"
+        />
+    <item android:id="@+id/bookType"
+        android:title="bookType"
+        android:enabled="true"
+        android:icon="@drawable/icon_bottmnavi_search"
+        app:showAsAction="always"
+        />
+    <item android:id="@+id/alarm"
+        android:title="alarm"
+        android:enabled="true"
+        android:icon="@drawable/icon_alarm"
+        app:showAsAction="always"
+        />
+    <item android:id="@+id/myInfo"
+        android:title="info"
+        android:enabled="true"
+        android:icon="@drawable/icon_info"
+        app:showAsAction="always"
+        />
 </menu>

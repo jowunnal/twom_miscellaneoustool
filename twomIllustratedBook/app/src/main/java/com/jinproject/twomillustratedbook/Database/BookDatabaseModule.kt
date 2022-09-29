@@ -3,6 +3,7 @@ package com.jinproject.twomillustratedbook.Database
 import android.content.Context
 import androidx.room.Room
 import com.jinproject.twomillustratedbook.Database.Dao.BookDao
+import com.jinproject.twomillustratedbook.Database.Dao.LoginDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,6 +19,12 @@ object BookDatabaseModule {
     @Singleton
     fun provideBookDao(bookdDatabase: BookDatabase):BookDao{
         return bookdDatabase.bookDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserDao(bookDatabase: BookDatabase):LoginDao{
+        return bookDatabase.loginDao()
     }
 
     @Provides

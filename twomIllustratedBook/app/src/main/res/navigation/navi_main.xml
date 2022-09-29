@@ -49,15 +49,16 @@
         <action
             android:id="@+id/action_alarm_to_timer"
             app:destination="@id/timer" />
-        <action
-            android:id="@+id/action_alarm_to_login"
-            app:destination="@id/login" />
     </fragment>
     <fragment
         android:id="@+id/myInfo"
         android:name="com.jinproject.twomillustratedbook.Fragment.MyInfo"
         android:label="myinfo"
-        tools:layout="@layout/myinfo" />
+        tools:layout="@layout/myinfo" >
+        <action
+            android:id="@+id/action_myInfo_to_login"
+            app:destination="@id/login" />
+    </fragment>
     <fragment
         android:id="@+id/bookType"
         android:name="com.jinproject.twomillustratedbook.Fragment.BookType"

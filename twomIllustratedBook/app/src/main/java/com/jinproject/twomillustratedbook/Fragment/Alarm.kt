@@ -322,7 +322,6 @@ class Alarm : Fragment() {
                 timerSharedPref.edit().putBoolean("flag",false).apply()
                 requireActivity().stopService(Intent(activity, WService::class.java))
             }
-            R.id.icon_login->navController.navigate(R.id.action_alarm_to_login)
 
         }
         return super.onOptionsItemSelected(item)
