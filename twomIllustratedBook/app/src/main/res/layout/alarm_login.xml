@@ -7,7 +7,7 @@
     <data>
         <variable
             name="loginViewModel"
-            type="com.jinproject.twomillustratedbook.ViewModel.LoginViewModel" />
+            type="com.jinproject.twomillustratedbook.viewModel.LoginViewModel" />
         <variable
             name="navigation"
             type="androidx.navigation.NavController" />
@@ -103,7 +103,7 @@
             app:strokeWidth="1dp"
             app:strokeColor="#BCBCBC"
             app:cornerRadius="15dp"
-            android:onClick="@{()->navigation.navigate(@id/action_loginFragment_to_register)}"
+            android:onClick="@{}"
             app:layout_constraintBottom_toTopOf="@+id/button2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
