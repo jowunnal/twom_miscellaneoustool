@@ -1,4 +1,4 @@
-package com.jinproject.twomillustratedbook.ViewModel
+package com.jinproject.twomillustratedbook.viewModel
 
 class AlarmPresenter {
     fun getMonsterCode(monsName:String):Int{

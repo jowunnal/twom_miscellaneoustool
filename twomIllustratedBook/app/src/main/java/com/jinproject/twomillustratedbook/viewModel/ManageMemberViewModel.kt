@@ -1,5 +1,4 @@
-package com.jinproject.twomillustratedbook.ViewModel
-import android.app.Application
+package com.jinproject.twomillustratedbook.viewModel
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.LiveData

@@ -1,6 +1,5 @@
-package com.jinproject.twomillustratedbook.ViewModel
+package com.jinproject.twomillustratedbook.viewModel
 
-import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.databinding.ObservableField

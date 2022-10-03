@@ -15,6 +15,12 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object RepositoryModule{
 
+    @Singleton
+    @Provides
+    fun bindBookRepository(bookDao: BookDao) : BookRepositoryImpl{
+        return BookRepositoryImpl(bookDao)
+    }
+
     @Provides
     @Singleton
     fun bindRepository(loginDao: LoginDao):UserRepositoryImpl{

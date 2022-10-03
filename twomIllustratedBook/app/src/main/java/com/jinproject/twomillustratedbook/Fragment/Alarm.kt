@@ -31,15 +31,13 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.jinproject.twomillustratedbook.Adapter.AlarmAdapter
 import com.jinproject.twomillustratedbook.Adapter.AlarmSelectedAdapter
-import com.jinproject.twomillustratedbook.Database.BookApplication
-import com.jinproject.twomillustratedbook.Database.Entity.Monster
 import com.jinproject.twomillustratedbook.Database.Entity.Timer
 import com.jinproject.twomillustratedbook.Item.*
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.Service.AlarmServerService
 import com.jinproject.twomillustratedbook.Service.WService
-import com.jinproject.twomillustratedbook.ViewModel.AlarmModel
-import com.jinproject.twomillustratedbook.ViewModel.AlarmPresenter
+import com.jinproject.twomillustratedbook.viewModel.AlarmModel
+import com.jinproject.twomillustratedbook.viewModel.AlarmPresenter
 import com.jinproject.twomillustratedbook.databinding.AlarmBinding
 import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectedItemBinding
 import com.jinproject.twomillustratedbook.listener.OnBossNameClickedListener
@@ -302,6 +300,8 @@ class Alarm : Fragment() {
         when(item.itemId){
             R.id.icon_fix->navController.navigate(R.id.action_alarm_to_timer)
 
+            R.id.icon_login->navController.navigate(R.id.action_alarm_to_login)
+
             R.id.icon_addTime->if(!timerSharedPref.getBoolean("flag",false)){
                 timerSharedPref.edit().putBoolean("flag",true).apply()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {   // 마시멜로우 이상일 경우
@@ -322,6 +322,7 @@ class Alarm : Fragment() {
                 timerSharedPref.edit().putBoolean("flag",false).apply()
                 requireActivity().stopService(Intent(activity, WService::class.java))
             }
+
 
         }
         return super.onOptionsItemSelected(item)

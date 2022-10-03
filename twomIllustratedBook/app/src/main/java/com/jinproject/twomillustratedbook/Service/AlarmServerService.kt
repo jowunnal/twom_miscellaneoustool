@@ -14,8 +14,7 @@ import com.jinproject.twomillustratedbook.Item.AlarmItem
 import com.jinproject.twomillustratedbook.Item.Room
 import com.jinproject.twomillustratedbook.Receiver.AlarmReceiver
 import com.jinproject.twomillustratedbook.Repository.BookRepositoryImpl
-import com.jinproject.twomillustratedbook.ViewModel.AlarmModel
-import com.jinproject.twomillustratedbook.ViewModel.AlarmPresenter
+import com.jinproject.twomillustratedbook.viewModel.AlarmPresenter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

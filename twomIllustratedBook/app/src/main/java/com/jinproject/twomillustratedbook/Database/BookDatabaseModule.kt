@@ -23,7 +23,7 @@ object BookDatabaseModule {
 
     @Provides
     @Singleton
-    fun provideUserDao(bookDatabase: BookDatabase):LoginDao{
+    fun provideLoginDao(bookDatabase: BookDatabase):LoginDao{
         return bookDatabase.loginDao()
     }
 
@@ -31,7 +31,7 @@ object BookDatabaseModule {
     @Singleton
     fun provideBookDatabaseInstance(@ApplicationContext context:Context):BookDatabase{
         return Room.databaseBuilder(context,BookDatabase::class.java,"BookDatabase")
-            .createFromAsset("database/db_twom_2.db")
+            .createFromAsset("database/db_twom_2.db").fallbackToDestructiveMigration()
             .build()
     }
 

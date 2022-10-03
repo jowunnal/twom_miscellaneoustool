@@ -1,7 +1,5 @@
-package com.jinproject.twomillustratedbook.ViewModel
-import android.app.Application
+package com.jinproject.twomillustratedbook.viewModel
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
 import com.jinproject.twomillustratedbook.Repository.UserRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
