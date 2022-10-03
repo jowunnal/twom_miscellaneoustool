@@ -5,12 +5,13 @@
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        app:cardCornerRadius="5dp"
         app:cardElevation="5dp"
         app:cardUseCompatPadding="true"
-        app:cardCornerRadius="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -20,8 +21,8 @@
             android:layout_width="390dp"
             android:layout_height="132dp"
             android:layout_marginBottom="25dp"
-            app:srcCompat="@drawable/weapons"
-            android:contentDescription="TODO" />
+            android:contentDescription="TODO"
+            app:srcCompat="@drawable/weapons" />
 
         <TextView
             android:id="@+id/textView4"
@@ -29,6 +30,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:text="이름"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

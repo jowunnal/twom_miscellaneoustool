@@ -8,21 +8,27 @@
 
     <Spinner
         android:id="@+id/spinnerMons"
-        android:layout_width="177dp"
+        android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="28dp"
+        app:layout_constraintBottom_toTopOf="@+id/alarm_user_select_back"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/spinnerType"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/alarm_remain_last"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="28dp"
         android:text="마지막알람 선택"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/alarm_remain_sec"
         app:layout_constraintTop_toBottomOf="@+id/alarm_remain_first" />
 
     <Button
@@ -32,16 +38,21 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginBottom="40dp"
         android:text="뒤로가기"
+        app:layout_constraintBottom_toTopOf="@+id/alarm_user_select_recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/alarm_user_select_add"
         app:layout_constraintTop_toBottomOf="@+id/spinnerMons" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/alarm_user_select_recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="190dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/alarm_remain_min"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/alarm_user_select_add" />
 
@@ -51,6 +62,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
         android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/alarm_remain_sec"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/alarm_user_select_recyclerView" />
 
@@ -58,17 +71,22 @@
         android:id="@+id/alarm_remain_first"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="56dp"
+        android:layout_marginEnd="28dp"
         android:text="첫알람 선택"
+        app:layout_constraintBottom_toTopOf="@+id/alarm_remain_last"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/alarm_remain_sec"
         app:layout_constraintTop_toBottomOf="@+id/alarm_user_select_recyclerView" />
 
     <NumberPicker
         android:id="@+id/alarm_remain_sec"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/alarm_remain_last"
         app:layout_constraintStart_toEndOf="@+id/alarm_remain_min"
         app:layout_constraintTop_toBottomOf="@+id/alarm_user_select_recyclerView" />
 
@@ -79,18 +97,21 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="28dp"
         android:text="추가하기"
+        app:layout_constraintBottom_toTopOf="@+id/alarm_user_select_recyclerView"
         app:layout_constraintEnd_toStartOf="@+id/alarm_user_select_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerType" />
 
     <Spinner
         android:id="@+id/spinnerType"
-        android:layout_width="177dp"
+        android:layout_width="0dp"
         android:layout_height="48dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.073"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="28dp"
+        app:layout_constraintBottom_toTopOf="@+id/alarm_user_select_add"
+        app:layout_constraintEnd_toStartOf="@+id/spinnerMons"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
