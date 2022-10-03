@@ -18,9 +18,6 @@
         <action
             android:id="@+id/action_homeFragment_to_alarm"
             app:destination="@id/alarm" />
-        <action
-            android:id="@+id/action_homeFragment_to_myInfo"
-            app:destination="@id/myInfo" />
 
     </fragment>
     <fragment
@@ -49,14 +46,8 @@
         <action
             android:id="@+id/action_alarm_to_timer"
             app:destination="@id/timer" />
-    </fragment>
-    <fragment
-        android:id="@+id/myInfo"
-        android:name="com.jinproject.twomillustratedbook.Fragment.MyInfo"
-        android:label="myinfo"
-        tools:layout="@layout/myinfo" >
         <action
-            android:id="@+id/action_myInfo_to_login"
+            android:id="@+id/action_alarm_to_login"
             app:destination="@id/login" />
     </fragment>
     <fragment
