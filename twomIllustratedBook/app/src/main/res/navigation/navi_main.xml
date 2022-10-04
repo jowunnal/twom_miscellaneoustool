@@ -68,6 +68,15 @@
         android:id="@+id/login"
         android:name="com.jinproject.twomillustratedbook.Fragment.Login"
         android:label="alarm_login"
-        tools:layout="@layout/alarm_login" />
+        tools:layout="@layout/alarm_login" >
+        <action
+            android:id="@+id/action_login_to_register"
+            app:destination="@id/register" />
+    </fragment>
+    <fragment
+        android:id="@+id/register"
+        android:name="com.jinproject.twomillustratedbook.Fragment.Register"
+        android:label="alarm_register"
+        tools:layout="@layout/alarm_register" />
 
 </navigation>
