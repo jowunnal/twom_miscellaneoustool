@@ -1,7 +1,5 @@
 package com.jinproject.twomillustratedbook.Repository
 
-import com.jinproject.twomillustratedbook.Database.BookDatabase
-import com.jinproject.twomillustratedbook.Database.Dao.BookDao
 import com.jinproject.twomillustratedbook.Database.Dao.LoginDao
 import com.jinproject.twomillustratedbook.Item.User
 import javax.inject.Inject

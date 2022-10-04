@@ -1,28 +1,33 @@
 package com.jinproject.twomillustratedbook.Repository
 
-import com.jinproject.twomillustratedbook.Database.BookDatabase
-import com.jinproject.twomillustratedbook.Database.Dao.BookDao
+import com.jinproject.twomillustratedbook.Database.Dao.CollectionDao
+import com.jinproject.twomillustratedbook.Database.Dao.DropListDao
 import com.jinproject.twomillustratedbook.Database.Dao.LoginDao
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RepositoryModule{
+abstract class RepositoryModule{
 
     @Singleton
-    @Provides
-    fun bindBookRepository(bookDao: BookDao) : BookRepositoryImpl{
-        return BookRepositoryImpl(bookDao)
-    }
+    @Binds
+    abstract fun bindDropListRepository(dropListRepositoryImpl: DropListRepositoryImpl) : DropListRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindCollectionRepository(collectionRepositoryImpl: CollectionRepositoryImpl):CollectionRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindTimerRepository(timerRepositoryImpl: TimerRepositoryImpl) : TimerRepository
 
     @Provides
-    @Singleton
+    @Binds
     fun bindRepository(loginDao: LoginDao):UserRepositoryImpl{
         return UserRepositoryImpl(loginDao)
     }

@@ -3,9 +3,7 @@ import android.content.Intent
 import android.os.*
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
-import com.jinproject.twomillustratedbook.Database.BookDatabase
-import com.jinproject.twomillustratedbook.Repository.BookRepositoryImpl
-import com.jinproject.twomillustratedbook.Repository.BookRepositoryModule
+import com.jinproject.twomillustratedbook.Repository.DropListRepositoryImpl
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,7 +11,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AlarmService : LifecycleService() {
-    @Inject lateinit var repository:BookRepositoryImpl
+    @Inject lateinit var repository:DropListRepositoryImpl
     override fun onCreate() {
         super.onCreate()
 

@@ -2,8 +2,10 @@ package com.jinproject.twomillustratedbook.Database
 
 import android.content.Context
 import androidx.room.Room
-import com.jinproject.twomillustratedbook.Database.Dao.BookDao
+import com.jinproject.twomillustratedbook.Database.Dao.CollectionDao
+import com.jinproject.twomillustratedbook.Database.Dao.DropListDao
 import com.jinproject.twomillustratedbook.Database.Dao.LoginDao
+import com.jinproject.twomillustratedbook.Database.Dao.TimerDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,14 +19,25 @@ object BookDatabaseModule {
 
     @Provides
     @Singleton
-    fun provideBookDao(bookdDatabase: BookDatabase):BookDao{
-        return bookdDatabase.bookDao()
+    fun provideCollectionDao(bookdDatabase: BookDatabase):CollectionDao{
+        return bookdDatabase.getCollectionDao()
+    }
+    @Provides
+    @Singleton
+    fun provideDropListDao(bookdDatabase: BookDatabase):DropListDao{
+        return bookdDatabase.getDropListDao()
     }
 
     @Provides
     @Singleton
     fun provideLoginDao(bookDatabase: BookDatabase):LoginDao{
-        return bookDatabase.loginDao()
+        return bookDatabase.getLoginDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideTimerDao(bookdDatabase: BookDatabase):TimerDao{
+        return bookdDatabase.getTimerDao()
     }
 
     @Provides

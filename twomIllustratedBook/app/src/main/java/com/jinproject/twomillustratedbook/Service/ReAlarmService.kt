@@ -8,11 +8,9 @@ import android.content.Intent
 import android.os.IBinder
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
-import com.jinproject.twomillustratedbook.Database.BookDatabase
 import com.jinproject.twomillustratedbook.Item.AlarmItem
 import com.jinproject.twomillustratedbook.Receiver.AlarmReceiver
-import com.jinproject.twomillustratedbook.Repository.BookRepositoryImpl
-import com.jinproject.twomillustratedbook.Repository.BookRepositoryModule
+import com.jinproject.twomillustratedbook.Repository.DropListRepositoryImpl
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +19,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ReAlarmService : LifecycleService() {
-    @Inject lateinit var repository: BookRepositoryImpl
+    @Inject lateinit var repository: DropListRepositoryImpl
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         val alarmManager: AlarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
