@@ -5,32 +5,19 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jinproject.twomillustratedbook.Adapter.DropListAdapter
-import com.jinproject.twomillustratedbook.Database.BookApplication
-import com.jinproject.twomillustratedbook.Item.BookViewModel
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.DropBinding
+import com.jinproject.twomillustratedbook.viewModel.BookViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DropList : Fragment() {
-    var _binding : DropBinding?=null
-    val binding get()=_binding!!
-    val model:BookViewModel by activityViewModels()
+class DropList : BindFragment<DropBinding>(R.layout.drop,false) {
+    val model: BookViewModel by activityViewModels()
     lateinit var dropListAdapter: DropListAdapter
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding=DropBinding.inflate(inflater,container,false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,10 +54,5 @@ class DropList : Fragment() {
 
         })
         super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onDestroyView() {
-        _binding=null
-        super.onDestroyView()
     }
 }

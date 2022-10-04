@@ -9,17 +9,16 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.ads.*
-import com.jinproject.twomillustratedbook.Database.BookApplication
-import com.jinproject.twomillustratedbook.Item.BookViewModel
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.ActivityMainBinding
+import com.jinproject.twomillustratedbook.viewModel.BookViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var navController: NavController
-    val model:BookViewModel by viewModels()
+    val model: BookViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

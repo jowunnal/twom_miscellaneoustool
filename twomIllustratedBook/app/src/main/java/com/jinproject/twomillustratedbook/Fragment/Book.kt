@@ -4,46 +4,32 @@ import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.text.InputType
-import android.view.*
-import androidx.fragment.app.Fragment
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jinproject.twomillustratedbook.Adapter.BookMainAdapter
-import com.jinproject.twomillustratedbook.Database.BookApplication
-import com.jinproject.twomillustratedbook.Item.BookViewModel
 import com.jinproject.twomillustratedbook.R
-import com.jinproject.twomillustratedbook.Repository.BookRepositoryImpl
 import com.jinproject.twomillustratedbook.databinding.BookBinding
+import com.jinproject.twomillustratedbook.viewModel.BookViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class Book : Fragment() {
-    var _binding : BookBinding ?=null
-    val binding get() = _binding!!
-    val model:BookViewModel by activityViewModels()
-    lateinit var adapter :BookMainAdapter
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding=BookBinding.inflate(inflater,container,false)
-        return binding.root
-    }
+class Book : BindFragment<BookBinding>(R.layout.book,false) {
+    val bookViewModel: BookViewModel by activityViewModels()
+    val adapter :BookMainAdapter by lazy{BookMainAdapter()}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.recyclerView.layoutManager=LinearLayoutManager(activity, RecyclerView.VERTICAL,false)
-        adapter= BookMainAdapter()
         binding.recyclerView.adapter=adapter
+        binding.bookViewModel=bookViewModel
 
-        model.content(model.dataItemType).observe(viewLifecycleOwner, Observer {
+        bookViewModel.content(bookViewModel.dataItemType).observe(viewLifecycleOwner, Observer {
             adapter.setContentItem(it)
             adapter.notifyDataSetChanged()
         })
@@ -71,10 +57,5 @@ class Book : Fragment() {
             }
         })
         super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onDestroyView() {
-        _binding=null
-        super.onDestroyView()
     }
 }

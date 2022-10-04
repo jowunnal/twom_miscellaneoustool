@@ -2,33 +2,17 @@ package com.jinproject.twomillustratedbook.Fragment
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.recyclerview.widget.GridLayoutManager
-import com.jinproject.twomillustratedbook.Adapter.HomeAdapter
-import com.jinproject.twomillustratedbook.Item.HomeItem
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.HomeBinding
-import com.jinproject.twomillustratedbook.listener.OnItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
-class Home : Fragment() {
-    var _binding : HomeBinding ?= null
-    val binding get() = _binding!!
+class Home : BindFragment<HomeBinding>(R.layout.home,true){
+
     lateinit var navController : NavController
 //    lateinit var adapter : HomeAdapter
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        _binding= HomeBinding.inflate(inflater,container,false);
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,7 +44,6 @@ class Home : Fragment() {
                 "-10) 만들어진 숫자는 '분' 단위 이며, 첫알람선택과 마지막알람선택 버튼을 클릭하여, 원하는 두가지의 알람간격을 설정 할수있습니다. (미등록시 기존의 5분,0분전 의간격으로 설정)\n\n\n"+
                 "화면의 기기마다 잘리는 이슈가 해결되지 않았습니다. 추후 수정될 예정입니다.\n추가적인 개선사항 및 피드백은 메일 혹은 리뷰를통해 남겨주시면 반영해보도록 하겠습니다.\n"
 
-        initRecyclerView()
         /*adapter.setItemClickListener(object: OnItemClickListener{
             override fun OnHomeItemClick(v: View, pos: Int) {
                 when(pos){
@@ -77,21 +60,16 @@ class Home : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    private fun initRecyclerView(){
-        //binding.homeContainer.layoutManager=GridLayoutManager(activity,2)
-        //adapter=HomeAdapter()
-        //binding.homeContainer.adapter=adapter
+    /*private fun initRecyclerView(){
+        binding.homeContainer.layoutManager=GridLayoutManager(activity,2)
+        adapter=HomeAdapter()
+        binding.homeContainer.adapter=adapter
         val items = ArrayList<HomeItem>()
         items.add(HomeItem(R.drawable.book_icon,"도감"))
         items.add(HomeItem(R.drawable.drop_icon,"드랍탬"))
         items.add(HomeItem(R.drawable.alarm_icon2,"알람"))
         items.add(HomeItem(R.drawable.note_icon,"패치노트&사용법"))
-//        adapter.addItems(items)
- //       adapter.notifyDataSetChanged()
-    }
-
-    override fun onDestroyView() {
-        _binding=null
-        super.onDestroyView()
-    }
+        adapter.addItems(items)
+        adapter.notifyDataSetChanged()
+    }*/
 }

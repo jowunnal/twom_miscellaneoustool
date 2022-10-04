@@ -11,7 +11,6 @@ import android.provider.Settings
 import android.view.*
 import android.widget.Button
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -36,12 +35,12 @@ import com.jinproject.twomillustratedbook.Item.*
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.Service.AlarmServerService
 import com.jinproject.twomillustratedbook.Service.WService
-import com.jinproject.twomillustratedbook.viewModel.AlarmModel
-import com.jinproject.twomillustratedbook.viewModel.AlarmPresenter
+import com.jinproject.twomillustratedbook.viewModel.AlarmViewModel
 import com.jinproject.twomillustratedbook.databinding.AlarmBinding
 import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectedItemBinding
 import com.jinproject.twomillustratedbook.listener.OnBossNameClickedListener
 import com.jinproject.twomillustratedbook.listener.OnItemClickListener
+import com.jinproject.twomillustratedbook.viewModel.BookViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import java.util.*
@@ -49,10 +48,8 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
-class Alarm : Fragment() {
-    var _binding:AlarmBinding ?=null
-    val binding get() = _binding!!
-    val timeModel: AlarmModel by viewModels()
+class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
+    val timeModel: AlarmViewModel by viewModels()
     val bossModel: BookViewModel by activityViewModels()
     val adapter:AlarmAdapter by lazy { AlarmAdapter() }
     val selectedAdapter by lazy{AlarmSelectedAdapter()}
@@ -65,20 +62,6 @@ class Alarm : Fragment() {
     @Inject lateinit var alarmPresenter: AlarmPresenter
 
     var day:Int=0
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {   // 마시멜로우 이상일 경우
-            if (!Settings.canDrawOverlays(requireActivity())) { // 다른앱 위에 그리기 체크
-                val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:"+requireActivity().packageName))
-                startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE)
-            }
-        }
-        _binding=AlarmBinding.inflate(inflater,container,false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -326,10 +309,5 @@ class Alarm : Fragment() {
 
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onDestroyView() {
-        _binding=null
-        super.onDestroyView()
     }
 }

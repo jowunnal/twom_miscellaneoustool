@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.jinproject.twomillustratedbook.Fragment.Register">
+    <data>
+        <variable
+            name="registerViewModel"
+            type="com.jinproject.twomillustratedbook.viewModel.RegisterViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/registerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:text="회원가입"
+            android:textColor="#6E6C6C"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/etName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:helperText="@{registerViewModel.info.r_Name}"
+            app:helperTextTextColor="#00BCD4"
+            app:layout_constraintBottom_toTopOf="@+id/etPW"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv1"
+            app:startIconDrawable="@drawable/icon_info">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="방 이름"
+                android:inputType="textPersonName"
+                android:onTextChanged="@{registerViewModel.checkIdIsCorrect}"
+                android:text="@={registerViewModel.user.userId}"
+                android:textColor="#6E6C6C" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etPW"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:helperText="@{registerViewModel.info.r_Pw}"
+            app:passwordToggleEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etName"
+            app:layout_constraintBottom_toTopOf="@id/etPWCheck"
+            app:startIconDrawable="@drawable/icon_password"
+            app:helperTextTextColor="#00BCD4">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextPW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="20"
+                android:hint="비밀번호"
+                android:inputType="textPassword"
+                android:onTextChanged="@{registerViewModel.checkPwIsCorrect}"
+                android:text="@={registerViewModel.user.userPw}"
+                android:textColor="#6E6C6C" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etPWCheck"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:helperText="@{registerViewModel.info.r_PwDouble}"
+            app:helperTextTextColor="#00BCD4"
+            app:layout_constraintBottom_toTopOf="@+id/etAuthority"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etPW"
+            app:passwordToggleEnabled="true"
+            app:startIconDrawable="@drawable/icon_password">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextPWCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="20"
+                android:hint="비밀번호 확인"
+                android:inputType="textPassword"
+                android:onTextChanged="@{registerViewModel.checkPwDoubleIsCorrect}"
+                android:text="@{registerViewModel.user.userPw}"
+                android:textColor="#6E6C6C" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_signUP"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="250dp"
+            android:text="가입하기"
+            android:textColor="#6E6C6C"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etAuthority" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etAuthority"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:helperText="@{registerViewModel.info.r_Authority}"
+            app:helperTextTextColor="#00BCD4"
+            app:layout_constraintBottom_toTopOf="@+id/btn_signUP"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etPWCheck"
+            app:startIconDrawable="@drawable/icon_authority">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextAuthority"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="권한코드"
+                android:inputType="textPersonName"
+                android:onTextChanged="@{registerViewModel.checkAuthorityIsCorrect}"
+                android:text="@={registerViewModel.user.userAuthority}"
+                android:textColor="#6E6C6C" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

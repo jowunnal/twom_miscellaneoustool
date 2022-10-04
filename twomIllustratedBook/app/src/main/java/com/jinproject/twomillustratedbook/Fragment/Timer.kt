@@ -4,18 +4,14 @@ import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.jinproject.twomillustratedbook.Item.AlarmItem
-import com.jinproject.twomillustratedbook.Item.BookViewModel
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectBinding
 import kotlin.collections.ArrayList
@@ -23,30 +19,20 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.jinproject.twomillustratedbook.Adapter.AlarmSelectedAdapter
-import com.jinproject.twomillustratedbook.viewModel.AlarmModel
-import com.jinproject.twomillustratedbook.viewModel.AlarmPresenter
+import com.jinproject.twomillustratedbook.viewModel.AlarmViewModel
 import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectedItemBinding
 import com.jinproject.twomillustratedbook.listener.OnBossNameClickedListener
+import com.jinproject.twomillustratedbook.viewModel.BookViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class Timer : Fragment() {
-    var _binding:AlarmUserSelectBinding ?= null
-    val binding get()=_binding!!
+class Timer : BindFragment<AlarmUserSelectBinding>(R.layout.alarm_user_select,false) {
     lateinit var timerSharedPref: SharedPreferences
     val adapter:AlarmSelectedAdapter by lazy{AlarmSelectedAdapter()}
     val bossModel: BookViewModel by activityViewModels()
-    val alarmModel:AlarmModel by viewModels()
+    val alarmModel:AlarmViewModel by viewModels()
     @Inject lateinit var alarmPresenter: AlarmPresenter
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding=AlarmUserSelectBinding.inflate(inflater,container,false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
