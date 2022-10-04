@@ -50,17 +50,18 @@ class RegisterViewModel @Inject constructor(@ApplicationContext private val cont
         return txt
     }
 
-    val checkNameIsCorrect = fun(inputString:String){
-        info.r_Name.set(checkRegisterInfoIsCorrect(inputString,"[^0-9a-zA-Zㄱ-힣_]","특수문자는 (_)를 제외하고 입력될 수 없습니다."))
-    }
-
     val checkIdIsCorrect = fun(inputString:String){
-        info.r_Id.set(checkRegisterInfoIsCorrect(inputString,"[^0-9a-zA-Zㄱ-힣]","특수문자는 입력될수 없습니다."))
+        info.r_Name.set(checkRegisterInfoIsCorrect(inputString,"[^0-9a-zA-Zㄱ-힣]","특수문자는 입력될수 없습니다."))
     }
 
     val checkPwIsCorrect = fun(inputString: String){
         info.r_Pw.set(checkRegisterInfoIsCorrect(inputString,"[^0-9a-zA-Zㄱ-힣!@#*]","영대소문자,숫자,특수문자(!,@,#,*)만 가능합니다."))
+    }
 
+    val checkAuthorityIsCorrect = fun(inputString:String){
+        if(inputString.isNotEmpty()){
+            info.r_Pw.set(checkRegisterInfoIsCorrect(inputString,"[^0-9a-zA-Zㄱ-힣!@#*]","영대소문자,숫자,특수문자(!,@,#,*)만 가능합니다."))
+        }
     }
 
     val checkPwDoubleIsCorrect = fun(inputString: String){
