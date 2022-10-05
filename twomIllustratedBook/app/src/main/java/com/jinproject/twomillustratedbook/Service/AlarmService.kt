@@ -4,6 +4,7 @@ import android.os.*
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.jinproject.twomillustratedbook.Repository.DropListRepositoryImpl
+import com.jinproject.twomillustratedbook.Repository.TimerRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -11,7 +12,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AlarmService : LifecycleService() {
-    @Inject lateinit var repository:DropListRepositoryImpl
+    @Inject lateinit var repository:TimerRepository
     override fun onCreate() {
         super.onCreate()
 

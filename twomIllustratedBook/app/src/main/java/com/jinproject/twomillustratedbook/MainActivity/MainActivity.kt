@@ -11,14 +11,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.ads.*
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.ActivityMainBinding
-import com.jinproject.twomillustratedbook.viewModel.BookViewModel
+import com.jinproject.twomillustratedbook.viewModel.DropListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var navController: NavController
-    val model: BookViewModel by viewModels()
+    val model: DropListViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

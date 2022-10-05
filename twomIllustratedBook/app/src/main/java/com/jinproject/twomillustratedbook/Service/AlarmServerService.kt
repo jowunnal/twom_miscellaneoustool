@@ -13,7 +13,10 @@ import com.jinproject.twomillustratedbook.Database.Entity.Monster
 import com.jinproject.twomillustratedbook.Item.AlarmItem
 import com.jinproject.twomillustratedbook.Item.Room
 import com.jinproject.twomillustratedbook.Receiver.AlarmReceiver
+import com.jinproject.twomillustratedbook.Repository.DropListRepository
 import com.jinproject.twomillustratedbook.Repository.DropListRepositoryImpl
+import com.jinproject.twomillustratedbook.Repository.TimerRepository
+import com.jinproject.twomillustratedbook.utils.getMonsterCode
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,8 +28,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class AlarmServerService :LifecycleService() {
     lateinit var monster:Monster
-    @Inject lateinit var alarmPresenter: AlarmPresenter
-    @Inject lateinit var repository:DropListRepositoryImpl
+    @Inject lateinit var timerRepository:TimerRepository
+    @Inject lateinit var dropListRepository: DropListRepository
         override fun onCreate() {
         super.onCreate()
     }
@@ -50,7 +53,7 @@ class AlarmServerService :LifecycleService() {
                     count-=(Integer.parseInt(nowTime[0])*3600+ Integer.parseInt(nowTime[1])*60+Integer.parseInt(nowTime[2]))
                     if(count>0){
                         lifecycleScope.launch(Dispatchers.IO){
-                            monster= withContext(Dispatchers.IO) { repository.getMonsInfo(value.name) }
+                            monster= withContext(Dispatchers.IO) { dropListRepository.getMonsInfo(value.name) }
                             val timerSharedPreferences=applicationContext.getSharedPreferences("TimerSharedPref",
                                 MODE_PRIVATE
                             )
@@ -59,15 +62,15 @@ class AlarmServerService :LifecycleService() {
                             makeAlarm(alarmManager,application,(count-first*60)*1000,AlarmItem(
                                 monster.monsName,
                                 monster.monsImgName,
-                                alarmPresenter.getMonsterCode(monster.monsName),
+                                getMonsterCode(monster.monsName),
                                 monster.monsGtime))
 
                             makeAlarm(alarmManager,application,(count-last*60)*1000,AlarmItem(
                                 monster.monsName,
                                 monster.monsImgName,
-                                alarmPresenter.getMonsterCode(monster.monsName)+300,
+                                getMonsterCode(monster.monsName)+300,
                                 monster.monsGtime))
-                            repository.setTimer(value.day,value.hour,value.min,value.sec,value.name)
+                            timerRepository.setTimer(value.day,value.hour,value.min,value.sec,value.name)
                         }
                     }
                 }}catch (e:NullPointerException){
