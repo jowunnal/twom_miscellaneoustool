@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.jinproject.twomillustratedbook.Database.Entity.Monster
 import com.jinproject.twomillustratedbook.Item.AlarmItem
 import com.jinproject.twomillustratedbook.Item.TimerItem
+import com.jinproject.twomillustratedbook.Repository.DropListRepository
 import com.jinproject.twomillustratedbook.Repository.DropListRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -17,19 +18,17 @@ import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class BookViewModel @Inject constructor(private val repository: DropListRepositoryImpl, @ApplicationContext private val context:Context) : ViewModel() {
+class DropListViewModel @Inject constructor(private val repository: DropListRepository, @ApplicationContext private val context:Context) : ViewModel() {
     var data_map=""
     var dataItemType=""
     var alarmItem = AlarmItem()
     private var clickable = -1
     lateinit var monster:Monster
-    fun content(data:String) = repository.bookList(data)
+
     val droplistMaps = repository.getMaps()
     fun inputData(data:String) = repository.inputdata(data)
     fun getNameSp(inputData:String) = repository.getNameSp(inputData)
-    fun setTimer(timerItem: TimerItem)=viewModelScope.launch(Dispatchers.IO){repository.setTimer(timerItem.day,timerItem.hour,timerItem.min,timerItem.sec,timerItem.name)}
-    val timer = repository.getTimer()
-    fun setOta(ota:Int,name:String) = viewModelScope.launch(Dispatchers.IO) {  repository.setOta(ota,name)}
+
     suspend fun getMonsInfo(inputData: String):Monster{
         val info=viewModelScope.async(Dispatchers.IO){repository.getMonsInfo(inputData) }
         return info.await()
