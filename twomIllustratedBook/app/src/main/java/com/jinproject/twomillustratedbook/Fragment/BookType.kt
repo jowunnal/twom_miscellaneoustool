@@ -9,12 +9,12 @@ import com.jinproject.twomillustratedbook.Adapter.BookTypeAdapter
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.BookTypeBinding
 import com.jinproject.twomillustratedbook.listener.OnItemClickListener
-import com.jinproject.twomillustratedbook.viewModel.BookViewModel
+import com.jinproject.twomillustratedbook.viewModel.DropListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class BookType : BindFragment<BookTypeBinding>(R.layout.book_type,true) {
-    val bookViewModel: BookViewModel by activityViewModels()
+    val bookViewModel: DropListViewModel by activityViewModels()
     val adapter:BookTypeAdapter by lazy{BookTypeAdapter(requireActivity())}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -22,7 +22,7 @@ class BookType : BindFragment<BookTypeBinding>(R.layout.book_type,true) {
 
         binding.bookTypeRecyclerView.layoutManager=LinearLayoutManager(requireActivity(),LinearLayoutManager.VERTICAL,false)
         binding.bookTypeRecyclerView.adapter=adapter
-        binding.bookViewModel=bookViewModel
+        binding.dropListViewModel=bookViewModel
 
         var list=ArrayList<String>().apply {
             add("miscellaneous")

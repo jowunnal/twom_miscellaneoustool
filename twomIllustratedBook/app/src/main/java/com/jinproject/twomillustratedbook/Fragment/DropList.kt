@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.jinproject.twomillustratedbook.Adapter.DropListAdapter
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.DropBinding
-import com.jinproject.twomillustratedbook.viewModel.BookViewModel
+import com.jinproject.twomillustratedbook.viewModel.DropListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DropList : BindFragment<DropBinding>(R.layout.drop,false) {
-    val model: BookViewModel by activityViewModels()
+    val dropListViewModel: DropListViewModel by activityViewModels()
     lateinit var dropListAdapter: DropListAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -27,8 +27,9 @@ class DropList : BindFragment<DropBinding>(R.layout.drop,false) {
         binding.DropRecyclerView.layoutManager=LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
         dropListAdapter= DropListAdapter(requireActivity())
         binding.DropRecyclerView.adapter=dropListAdapter
+        binding.dropListViewModel=dropListViewModel
 
-        model.inputData(model.data_map).observe(viewLifecycleOwner, Observer {
+        dropListViewModel.inputData(dropListViewModel.data_map).observe(viewLifecycleOwner, Observer {
             dropListAdapter.setItems(it)
             dropListAdapter.notifyDataSetChanged()
         })

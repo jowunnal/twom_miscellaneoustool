@@ -75,6 +75,25 @@
         <entry key="..\:/jin_project/twomIllustratedBook/app/src/main/res/menu/btm_navigation_menu.xml" value="0.274609375" />
         <entry key="..\:/jin_project/twomIllustratedBook/app/src/main/res/menu/home_menu.xml" value="0.36614583333333334" />
         <entry key="..\:/jin_project/twomIllustratedBook/app/src/main/res/menu/timer_option_menu.xml" value="0.36614583333333334" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/alarm.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/alarm_currentlist_dialog.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/alarm_custom_dialog.xml" value="0.15520833333333334" />
+        <entry key="app/src/main/res/layout/alarm_item.xml" value="0.15520833333333334" />
+        <entry key="app/src/main/res/layout/alarm_login.xml" value="0.15520833333333334" />
+        <entry key="app/src/main/res/layout/alarm_register.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/alarm_server.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/alarm_user_select.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/book.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/book_type.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/book_type_item.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/drop.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/drop_item.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/droplistmap.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/droplistmap_item.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/home.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/home_item.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/myinfo.xml" value="0.3098958333333333" />
       </map>
     </option>
   </component>

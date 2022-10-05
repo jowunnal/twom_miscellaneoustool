@@ -12,8 +12,6 @@ import androidx.navigation.Navigation
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.AlarmRegisterBinding
-import com.jinproject.twomillustratedbook.utils.NavigationVisabilityUtil
-import com.jinproject.twomillustratedbook.utils.setBottomNavigationVisability
 import com.jinproject.twomillustratedbook.viewModel.RegisterViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers

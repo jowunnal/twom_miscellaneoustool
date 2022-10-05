@@ -22,7 +22,8 @@ import com.jinproject.twomillustratedbook.Adapter.AlarmSelectedAdapter
 import com.jinproject.twomillustratedbook.viewModel.AlarmViewModel
 import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectedItemBinding
 import com.jinproject.twomillustratedbook.listener.OnBossNameClickedListener
-import com.jinproject.twomillustratedbook.viewModel.BookViewModel
+import com.jinproject.twomillustratedbook.utils.getMonsterCode
+import com.jinproject.twomillustratedbook.viewModel.DropListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -30,12 +31,12 @@ import javax.inject.Inject
 class Timer : BindFragment<AlarmUserSelectBinding>(R.layout.alarm_user_select,false) {
     lateinit var timerSharedPref: SharedPreferences
     val adapter:AlarmSelectedAdapter by lazy{AlarmSelectedAdapter()}
-    val bossModel: BookViewModel by activityViewModels()
+    val bossModel: DropListViewModel by activityViewModels()
     val alarmModel:AlarmViewModel by viewModels()
-    @Inject lateinit var alarmPresenter: AlarmPresenter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.alarmViewModel=alarmModel
         binding.spinnerType.adapter= ArrayAdapter<String>(requireActivity(), R.layout.support_simple_spinner_dropdown_item, // 보스타입지정 spinner
             ArrayList<String>().apply {
                 add("네임드")
@@ -59,7 +60,7 @@ class Timer : BindFragment<AlarmUserSelectBinding>(R.layout.alarm_user_select,fa
                     alarmItem.clear()
                     for(v in it){
                         list.add(v.monsName)
-                        alarmItem.add(AlarmItem(v.monsName,v.monsImgName,alarmPresenter.getMonsterCode(v.monsName),v.monsGtime))
+                        alarmItem.add(AlarmItem(v.monsName,v.monsImgName,getMonsterCode(v.monsName),v.monsGtime))
                     }
                     val nameSpAdapter= ArrayAdapter(requireActivity(), R.layout.support_simple_spinner_dropdown_item,list)
                     binding.spinnerMons.adapter=nameSpAdapter

@@ -5,8 +5,8 @@
     tools:context="Fragment.Book">
     <data>
         <variable
-            name="bookViewModel"
-            type="com.jinproject.twomillustratedbook.viewModel.BookViewModel" />
+            name="dropListViewModel"
+            type="com.jinproject.twomillustratedbook.viewModel.DropListViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

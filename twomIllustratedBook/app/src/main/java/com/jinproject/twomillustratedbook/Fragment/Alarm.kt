@@ -40,7 +40,12 @@ import com.jinproject.twomillustratedbook.databinding.AlarmBinding
 import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectedItemBinding
 import com.jinproject.twomillustratedbook.listener.OnBossNameClickedListener
 import com.jinproject.twomillustratedbook.listener.OnItemClickListener
-import com.jinproject.twomillustratedbook.viewModel.BookViewModel
+import com.jinproject.twomillustratedbook.utils.calculateTimer
+import com.jinproject.twomillustratedbook.utils.getMonsterCode
+import com.jinproject.twomillustratedbook.utils.sortTimerList
+import com.jinproject.twomillustratedbook.viewModel.CollectionViewModel
+import com.jinproject.twomillustratedbook.viewModel.DropListViewModel
+import com.jinproject.twomillustratedbook.viewModel.TimerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import java.util.*
@@ -49,8 +54,10 @@ import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
-    val timeModel: AlarmViewModel by viewModels()
-    val bossModel: BookViewModel by activityViewModels()
+    val alarmViewModel: AlarmViewModel by viewModels()
+    val timerViewModel: TimerViewModel by viewModels()
+    val collectionViewModel : CollectionViewModel by activityViewModels()
+    val dropListViewModel: DropListViewModel by activityViewModels()
     val adapter:AlarmAdapter by lazy { AlarmAdapter() }
     val selectedAdapter by lazy{AlarmSelectedAdapter()}
     lateinit var timerSharedPref:SharedPreferences
@@ -59,13 +66,13 @@ class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
     lateinit var navController:NavController
     private var serverBossList=ArrayList<TimerItem>()
     private var mRewardedAd: RewardedAd? = null
-    @Inject lateinit var alarmPresenter: AlarmPresenter
 
     var day:Int=0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.alarmViewModel=alarmViewModel
         navController=Navigation.findNavController(view)
         timerSharedPref=requireActivity().getSharedPreferences("TimerSharedPref", Context.MODE_PRIVATE)
         binding.alarmRecyclerView.layoutManager=LinearLayoutManager(requireActivity(),LinearLayoutManager.VERTICAL,false)
@@ -90,7 +97,7 @@ class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
                 pos: Int,
                 binding: AlarmUserSelectedItemBinding
             ) {
-                bossModel.checkIsClickedBoss(pos,selectedAdapter.getItem(pos))
+                dropListViewModel.checkIsClickedBoss(pos,selectedAdapter.getItem(pos))
                 binding.alarmUserSelectedItemSwitch.setOnCheckedChangeListener { _, b ->
                     when(b){
                         true->getSettingDrawOverlays(1,binding.alarmUserSelectedItem.text.toString())
@@ -158,19 +165,19 @@ class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
         binding.timerStart.setOnClickListener { // dialog에넣은 시,분값 과 데이터베이스에있는 젠타임으로 타이머설정하고, 젠타임계산해서 데이터베이스에저장
             showRewaredAd(mRewardedAd)
             try {
-                timeModel.setAlarm(
+                alarmViewModel.setAlarm(
                     cal.get(Calendar.HOUR_OF_DAY),
                     cal.get(Calendar.MINUTE),
-                    bossModel.alarmItem
+                    dropListViewModel.alarmItem
                 )
-                bossModel.setTimer(bossModel.calculateTimer(cal))
+                timerViewModel.setTimer(calculateTimer(cal,dropListViewModel.monster))
             }catch (e:kotlin.UninitializedPropertyAccessException){
                 Toast.makeText(requireActivity(),"먼저 보스를 선택해주세요!",Toast.LENGTH_SHORT).show()
             }
         }
 
         // 타이머가 등록된것이 있는지없는지 데이터베이스를 observer 로 구독하여 변동이생기면 뷰를 갱신함
-        bossModel.timer.observe(viewLifecycleOwner, Observer {
+        timerViewModel.timer.observe(viewLifecycleOwner, Observer {
             adapter.setItems(it)
             adapter.notifyDataSetChanged()
             serverBossList.clear()
@@ -184,7 +191,7 @@ class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
                     listToWservice.add(item)
                 }
             }
-            bossModel.sortTimerList(listToWservice)
+            sortTimerList(listToWservice)
             if(listToWservice.isNotEmpty()){ //비어잇는게 아니면 백그라운드상에 동작하도록 서비스시작
                 requireActivity().startService(Intent(activity, WService::class.java).apply { putExtra("list",listToWservice) })
             }
@@ -201,12 +208,12 @@ class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
                     alarmDialog.cancel()
                 }
                 alarmDialog.findViewById<Button>(R.id.alarm_delete).setOnClickListener {
-                    bossModel.setTimer(bossModel.calculateTimer(cal))
+                    timerViewModel.setTimer(calculateTimer(cal,dropListViewModel.monster))
                     var code=0
                     CoroutineScope(Dispatchers.Main).launch {
-                        withContext(Dispatchers.IO){code=alarmPresenter.getMonsterCode(bossModel.getMonsInfo(item.name).monsName)}
-                        timeModel.clearAlarm(code)
-                        timeModel.clearAlarm(code+300)
+                        withContext(Dispatchers.IO){code=getMonsterCode(dropListViewModel.getMonsInfo(item.name).monsName)}
+                        alarmViewModel.clearAlarm(code)
+                        alarmViewModel.clearAlarm(code+300)
                         alarmDialog.cancel()
                     }
                 }
@@ -269,7 +276,7 @@ class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
                 startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE)
             }
             else{
-                bossModel.setOta(ota,mons_name)
+                timerViewModel.setOta(ota,mons_name)
             }
         }
     }

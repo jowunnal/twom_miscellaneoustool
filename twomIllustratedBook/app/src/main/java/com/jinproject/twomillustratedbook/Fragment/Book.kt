@@ -14,12 +14,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jinproject.twomillustratedbook.Adapter.BookMainAdapter
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.BookBinding
-import com.jinproject.twomillustratedbook.viewModel.BookViewModel
+import com.jinproject.twomillustratedbook.viewModel.CollectionViewModel
+import com.jinproject.twomillustratedbook.viewModel.DropListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class Book : BindFragment<BookBinding>(R.layout.book,false) {
-    val bookViewModel: BookViewModel by activityViewModels()
+    val collectionViewModel: CollectionViewModel by activityViewModels()
+    val dropListViewModel : DropListViewModel by activityViewModels()
     val adapter :BookMainAdapter by lazy{BookMainAdapter()}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -27,9 +29,9 @@ class Book : BindFragment<BookBinding>(R.layout.book,false) {
 
         binding.recyclerView.layoutManager=LinearLayoutManager(activity, RecyclerView.VERTICAL,false)
         binding.recyclerView.adapter=adapter
-        binding.bookViewModel=bookViewModel
+        binding.dropListViewModel=dropListViewModel
 
-        bookViewModel.content(bookViewModel.dataItemType).observe(viewLifecycleOwner, Observer {
+        collectionViewModel.content(dropListViewModel.dataItemType).observe(viewLifecycleOwner, Observer {
             adapter.setContentItem(it)
             adapter.notifyDataSetChanged()
         })
