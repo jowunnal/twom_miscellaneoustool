@@ -8,15 +8,16 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule{
+abstract class RepositoryModule(){
 
     @Singleton
     @Binds
-    abstract fun bindDropListRepository(dropListRepositoryImpl: DropListRepositoryImpl) : DropListRepository
+    abstract fun bindDropListRepository (dropListRepositoryImpl: DropListRepositoryImpl) : DropListRepository
 
     @Singleton
     @Binds
@@ -26,9 +27,4 @@ abstract class RepositoryModule{
     @Binds
     abstract fun bindTimerRepository(timerRepositoryImpl: TimerRepositoryImpl) : TimerRepository
 
-    @Provides
-    @Binds
-    fun bindRepository(loginDao: LoginDao):UserRepositoryImpl{
-        return UserRepositoryImpl(loginDao)
-    }
 }
