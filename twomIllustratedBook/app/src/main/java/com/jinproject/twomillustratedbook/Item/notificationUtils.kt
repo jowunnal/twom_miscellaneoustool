@@ -1,4 +1,4 @@
-package com.jinproject.twomillustratedbook.utils
+package com.jinproject.twomillustratedbook.Item
 
 import android.app.AlarmManager
 import android.app.NotificationManager
