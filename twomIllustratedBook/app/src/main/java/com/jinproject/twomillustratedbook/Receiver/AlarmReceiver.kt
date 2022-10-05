@@ -9,9 +9,9 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
-import com.jinproject.twomillustratedbook.Item.sendNotification
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.Service.AlarmService
+import com.jinproject.twomillustratedbook.utils.sendNotification
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
