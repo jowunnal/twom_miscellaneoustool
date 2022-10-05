@@ -33,7 +33,7 @@ class AlarmSelectedAdapter : RecyclerView.Adapter<AlarmSelectedAdapter.ViewHolde
         holder.bind(items[position],position)
     }
 
-    fun setItems(items:ArrayList<String>){
+    fun setItems(items:List<String>){
         this.items.clear()
         this.items.addAll(items)
     }

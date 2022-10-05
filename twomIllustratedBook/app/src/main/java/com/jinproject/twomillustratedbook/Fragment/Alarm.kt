@@ -35,7 +35,6 @@ import com.jinproject.twomillustratedbook.Item.*
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.Service.AlarmServerService
 import com.jinproject.twomillustratedbook.Service.WService
-import com.jinproject.twomillustratedbook.viewModel.AlarmViewModel
 import com.jinproject.twomillustratedbook.databinding.AlarmBinding
 import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectedItemBinding
 import com.jinproject.twomillustratedbook.listener.OnBossNameClickedListener
@@ -43,9 +42,7 @@ import com.jinproject.twomillustratedbook.listener.OnItemClickListener
 import com.jinproject.twomillustratedbook.utils.calculateTimer
 import com.jinproject.twomillustratedbook.utils.getMonsterCode
 import com.jinproject.twomillustratedbook.utils.sortTimerList
-import com.jinproject.twomillustratedbook.viewModel.CollectionViewModel
-import com.jinproject.twomillustratedbook.viewModel.DropListViewModel
-import com.jinproject.twomillustratedbook.viewModel.TimerViewModel
+import com.jinproject.twomillustratedbook.viewModel.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import java.util.*
@@ -56,40 +53,36 @@ import kotlin.collections.ArrayList
 class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
     val alarmViewModel: AlarmViewModel by viewModels()
     val timerViewModel: TimerViewModel by viewModels()
-    val collectionViewModel : CollectionViewModel by activityViewModels()
+    val serverManageViewModel : ServerManageViewModel by viewModels()
     val dropListViewModel: DropListViewModel by activityViewModels()
     val adapter:AlarmAdapter by lazy { AlarmAdapter() }
     val selectedAdapter by lazy{AlarmSelectedAdapter()}
     lateinit var timerSharedPref:SharedPreferences
     private val ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 404
-    private var listToWservice=ArrayList<Timer>()
     lateinit var navController:NavController
-    private var serverBossList=ArrayList<TimerItem>()
     private var mRewardedAd: RewardedAd? = null
-
-    var day:Int=0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setHasOptionsMenu(true)
+        val cal= Calendar.getInstance()
 
         binding.alarmViewModel=alarmViewModel
         navController=Navigation.findNavController(view)
         timerSharedPref=requireActivity().getSharedPreferences("TimerSharedPref", Context.MODE_PRIVATE)
         binding.alarmRecyclerView.layoutManager=LinearLayoutManager(requireActivity(),LinearLayoutManager.VERTICAL,false)
         binding.alarmRecyclerView.adapter=adapter
+
         val alarmDialog=Dialog(requireActivity())
         alarmDialog.setContentView(R.layout.alarm_currentlist_dialog)
 
         binding.alarmSelectedList.adapter=selectedAdapter
         binding.alarmSelectedList.layoutManager=GridLayoutManager(requireActivity(),2,GridLayoutManager.VERTICAL,false)
-        val selectedBossList=requireActivity().getSharedPreferences("bossList",Context.MODE_PRIVATE)
-        val boss=selectedBossList.getStringSet("boss", mutableSetOf("불도저"))
-        val list=ArrayList<String>()
-        list.addAll(boss!!)
-        selectedAdapter.setItems(list)
-        selectedAdapter.notifyDataSetChanged()
-        setHasOptionsMenu(true)
-        val cal= Calendar.getInstance()
+        alarmViewModel.selectedBossList.observe(viewLifecycleOwner,Observer{
+            selectedAdapter.setItems(it)
+            selectedAdapter.notifyDataSetChanged()
+        })
 
         selectedAdapter.setClickListener(object : OnBossNameClickedListener{
             override fun setOnItemClickListener(
@@ -117,9 +110,8 @@ class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
             }
             picker.show(requireActivity().supportFragmentManager,"timePicker")
         }
-        var adRequest = AdRequest.Builder().build()
 
-        RewardedAd.load(requireActivity(),"ca-app-pub-3630394418001517/7487969905", adRequest, object : RewardedAdLoadCallback() {
+        RewardedAd.load(requireActivity(),"ca-app-pub-3630394418001517/7487969905", AdRequest.Builder().build(), object : RewardedAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 mRewardedAd = null
             }
@@ -180,24 +172,9 @@ class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
         timerViewModel.timer.observe(viewLifecycleOwner, Observer {
             adapter.setItems(it)
             adapter.notifyDataSetChanged()
-            serverBossList.clear()
-            for(data in it){
-                serverBossList.add(TimerItem(data.timerMonsName,data.day,data.hour,data.min,data.sec))
-            }
 
-            listToWservice.clear()
-            for(item in it){
-                if(item.ota==1){
-                    listToWservice.add(item)
-                }
-            }
-            sortTimerList(listToWservice)
-            if(listToWservice.isNotEmpty()){ //비어잇는게 아니면 백그라운드상에 동작하도록 서비스시작
-                requireActivity().startService(Intent(activity, WService::class.java).apply { putExtra("list",listToWservice) })
-            }
-            else{ // 비어잇으면(등록된타이머가없으면) 현재시간만 계속 출력하도록 함
-                requireActivity().startService(Intent(activity, WService::class.java))
-            }
+            serverManageViewModel.setServerBossList(it)
+            serverManageViewModel.setTimerOtaList(it)
         })
 
 
@@ -224,60 +201,30 @@ class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
         })
 
 
-        val loginPreference=requireActivity().getSharedPreferences("login",Context.MODE_PRIVATE)
+
         binding.serverOutput.setOnClickListener {
-
-            val db:DatabaseReference=FirebaseDatabase.getInstance().reference
-            try {
-                val id=loginPreference.getString("id","")!!
-                val pw=loginPreference.getString("pw","")!!
-                val key=loginPreference.getString("key","")!!
-                val authorityCode=loginPreference.getString("authorityCode","")
-                db.child("RoomList").child(key).get().addOnSuccessListener {
-                    if(it.child("authorityCode").value==authorityCode){
-                        db.child("RoomList").child(key).setValue(Room(id,pw,serverBossList,authorityCode))
-                        Toast.makeText(requireActivity(),"서버에 등록이 완료되었습니다.",Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(requireActivity(),"등록 권한이 없습니다.",Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }catch (e:kotlin.UninitializedPropertyAccessException){
-                Toast.makeText(requireActivity(),"먼저 보스를 선택해주세요!",Toast.LENGTH_SHORT).show()
-            }
-
+            serverManageViewModel.setServerOutput()
         }
+
         binding.serverOnoff.setOnClickListener {
-            when(loginPreference.getBoolean("statue",false)){
-                false->{
-                    requireActivity().startService(Intent(activity,AlarmServerService::class.java))
-                    loginPreference.edit().putBoolean("statue",true).apply()
-                    binding.serverStatueTv.text="서버상태: "+when(loginPreference.getBoolean("statue",false)){false->"오프라인" true->"온라인"}+
-                            "/로그인ID: "+loginPreference.getString("id","")
-                    Toast.makeText(requireActivity(),"서버로부터 데이터를 받기 시작합니다.",Toast.LENGTH_SHORT).show()
-                }
-                true->{
-                    requireActivity().stopService(Intent(activity,AlarmServerService::class.java))
-                    loginPreference.edit().putBoolean("statue",false).apply()
-                    binding.serverStatueTv.text="서버상태: "+when(loginPreference.getBoolean("statue",false)){false->"오프라인" true->"온라인"}+
-                            "/로그인ID: "+loginPreference.getString("id","")
-                    Toast.makeText(requireActivity(),"서버로부터 데이터를 받지 않습니다.",Toast.LENGTH_SHORT).show()
-                }
-            }
+            binding.serverStatueTv.text=serverManageViewModel.setServerOnOff()
         }
-        binding.serverStatueTv.text="서버상태: "+when(loginPreference.getBoolean("statue",false)){false->"오프라인" true->"온라인"}+
-                "/로그인ID: "+loginPreference.getString("id","")
     }
 
 
     fun getSettingDrawOverlays(ota:Int,mons_name:String){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {   // 마시멜로우 이상일 경우
-            if (!Settings.canDrawOverlays(requireActivity())) {              // 다른앱 위에 그리기 체크
-                val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:"+requireActivity().packageName))
-                startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE)
-            }
-            else{
-                timerViewModel.setOta(ota,mons_name)
-            }
+        if(checkAuthorityDrawOverlays())
+            timerViewModel.setOta(ota,mons_name)
+    }
+
+    fun checkAuthorityDrawOverlays():Boolean{ // 다른앱 위에 그리기 체크 : true = 권한있음 , false = 권한없음
+        if (!Settings.canDrawOverlays(requireActivity())) {
+            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:"+requireActivity().packageName))
+            startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE)
+            return false
+        }
+        else{
+            return true
         }
     }
 
@@ -294,17 +241,12 @@ class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
 
             R.id.icon_addTime->if(!timerSharedPref.getBoolean("flag",false)){
                 timerSharedPref.edit().putBoolean("flag",true).apply()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {   // 마시멜로우 이상일 경우
-                    if (!Settings.canDrawOverlays(requireActivity())) { // 다른앱 위에 그리기 체크
-                        val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:"+requireActivity().packageName))
-                        startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE)
-                    } else {
-                        if(listToWservice.isNotEmpty()){
-                            requireActivity().startService(Intent(activity, WService::class.java).apply { putExtra("list",listToWservice) })
-                        }
-                        else{
-                            requireActivity().startService(Intent(activity, WService::class.java))
-                        }
+                if (!checkAuthorityDrawOverlays()) {
+                    if(serverManageViewModel.listToWservice.isNotEmpty()){
+                        requireActivity().startService(Intent(activity, WService::class.java).apply { putExtra("list",serverManageViewModel.listToWservice) })
+                    }
+                    else{
+                        requireActivity().startService(Intent(activity, WService::class.java))
                     }
                 }
             }
