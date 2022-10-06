@@ -9,7 +9,7 @@
             name="loginViewModel"
             type="com.jinproject.twomillustratedbook.viewModel.LoginViewModel" />
         <variable
-            name="navigation"
+            name="navController"
             type="androidx.navigation.NavController" />
         <import type="com.jinproject.twomillustratedbook.R"/>
     </data>
@@ -21,7 +21,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:id="@+id/et_id"
+            android:id="@+id/login_et_id"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -30,13 +30,13 @@
             android:ems="10"
             android:inputType="textPersonName"
             app:startIconDrawable="@drawable/icon_identity"
-            app:layout_constraintBottom_toTopOf="@+id/et_pw"
+            app:layout_constraintBottom_toTopOf="@+id/login_et_pw"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" >
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextID"
-                android:text="@={loginViewModel.user.userId}"
+                android:id="@+id/login_editTextID"
+                android:text="@={loginViewModel.roomInfo.userName}"
                 android:hint="아이디"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -44,7 +44,31 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:id="@+id/et_pw"
+            android:id="@+id/login_et_pw"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            app:passwordToggleEnabled="true"
+            app:startIconDrawable="@drawable/icon_password"
+            app:layout_constraintBottom_toTopOf="@+id/login_et_authority"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_et_id" >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/login_editTextPW"
+                android:text="@={loginViewModel.roomInfo.userPw}"
+                android:hint="비밀번호"
+                android:inputType="textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/login_et_authority"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -56,39 +80,40 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_id" >
+            app:layout_constraintTop_toBottomOf="@+id/login_et_pw" >
+
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextPW"
-                android:text="@={loginViewModel.user.userPw}"
-                android:hint="비밀번호"
-                android:inputType="textPassword"
+                android:id="@+id/login_editTextAuthority"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:hint="권한코드"
+                android:inputType="textPassword"
+                android:text="@={loginViewModel.roomInfo.userAuthority}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:id="@+id/button_Login"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="8dp"
+            android:onClick="@{()->loginViewModel.loginUser()}"
             android:text="로그인"
             android:textColor="#6E6C6C"
             android:textStyle="bold"
-            app:strokeWidth="1dp"
-            app:strokeColor="#BCBCBC"
             app:cornerRadius="15dp"
-            android:onClick="@{()->loginViewModel.loginUser()}"
-            app:layout_constraintBottom_toTopOf="@+id/button_Register"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_pw"
             app:icon="@drawable/icon_login_account"
             app:iconGravity="textStart"
             app:iconTint="@color/black"
-            app:iconTintMode="multiply"/>
+            app:iconTintMode="multiply"
+            app:layout_constraintBottom_toTopOf="@+id/button_Register"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_et_authority"
+            app:strokeColor="#BCBCBC"
+            app:strokeWidth="1dp" />
 
         <com.google.android.material.button.MaterialButton
             style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -103,7 +128,7 @@
             app:strokeWidth="1dp"
             app:strokeColor="#BCBCBC"
             app:cornerRadius="15dp"
-            android:onClick="@{()->navigation.navigate(R.id.action_login_to_register)}"
+            android:onClick="@{()->navController.navigate(R.id.action_login_to_register)}"
             app:layout_constraintBottom_toTopOf="@+id/button2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

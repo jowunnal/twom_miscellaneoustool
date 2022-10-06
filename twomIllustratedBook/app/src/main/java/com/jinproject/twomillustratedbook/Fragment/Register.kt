@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -25,7 +26,7 @@ class Register : BindFragment<AlarmRegisterBinding>(R.layout.alarm_register,fals
         super.onViewCreated(view, savedInstanceState)
         binding.registerViewModel=registerViewModel
         binding.lifecycleOwner=viewLifecycleOwner
-
+        var checkErrorFlag=false
         binding.btnSignUP.setOnClickListener {
             if(binding.editTextName.text.isNullOrEmpty()|| binding.editTextPW.text.isNullOrEmpty() || binding.editTextPWCheck.text.isNullOrEmpty()){
                 Toast.makeText(requireActivity(),"아이디,비밀번호,비밀번호 확인은 반드시 입력해주세요.",Toast.LENGTH_SHORT).show()
@@ -38,13 +39,15 @@ class Register : BindFragment<AlarmRegisterBinding>(R.layout.alarm_register,fals
                 Toast.makeText(requireActivity(),"비밀번호가 일치하지 않습니다.",Toast.LENGTH_SHORT).show()
             }
             else{
-                lifecycleScope.launch(Dispatchers.Main) {
-                    val result= registerViewModel.registerUser()
-                    if(result) {
-                        Navigation.findNavController(view).popBackStack()
-                    }
-                }
+                checkErrorFlag=true
             }
         }
+        registerViewModel.logFlag.observe(viewLifecycleOwner,Observer{
+            if(it and checkErrorFlag){
+                Navigation.findNavController(view).popBackStack()
+                registerViewModel.mutableLogFlag.value=false
+            }
+        })
+
     }
 }

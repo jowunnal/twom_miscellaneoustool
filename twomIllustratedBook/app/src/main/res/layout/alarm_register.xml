@@ -52,7 +52,7 @@
                 android:hint="방 이름"
                 android:inputType="textPersonName"
                 android:onTextChanged="@{registerViewModel.checkIdIsCorrect}"
-                android:text="@={registerViewModel.user.userId}"
+                android:text="@={registerViewModel.roomInfo.userName}"
                 android:textColor="#6E6C6C" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,7 +81,7 @@
                 android:hint="비밀번호"
                 android:inputType="textPassword"
                 android:onTextChanged="@{registerViewModel.checkPwIsCorrect}"
-                android:text="@={registerViewModel.user.userPw}"
+                android:text="@={registerViewModel.roomInfo.userPw}"
                 android:textColor="#6E6C6C" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -110,7 +110,7 @@
                 android:hint="비밀번호 확인"
                 android:inputType="textPassword"
                 android:onTextChanged="@{registerViewModel.checkPwDoubleIsCorrect}"
-                android:text="@{registerViewModel.user.userPw}"
+                android:text="@{registerViewModel.roomInfo.userPw}"
                 android:textColor="#6E6C6C" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -125,6 +125,7 @@
             android:layout_marginBottom="250dp"
             android:text="가입하기"
             android:textColor="#6E6C6C"
+            android:onClickListener="@{()->registerViewModel.registerUser()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -156,7 +157,7 @@
                 android:hint="권한코드"
                 android:inputType="textPersonName"
                 android:onTextChanged="@{registerViewModel.checkAuthorityIsCorrect}"
-                android:text="@={registerViewModel.user.userAuthority}"
+                android:text="@={registerViewModel.roomInfo.userAuthority}"
                 android:textColor="#6E6C6C" />
         </com.google.android.material.textfield.TextInputLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
