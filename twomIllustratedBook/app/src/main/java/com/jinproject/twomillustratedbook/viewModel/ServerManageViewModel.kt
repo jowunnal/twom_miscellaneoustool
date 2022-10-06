@@ -1,6 +1,5 @@
 package com.jinproject.twomillustratedbook.viewModel
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
@@ -26,6 +25,7 @@ class ServerManageViewModel @Inject constructor(@ApplicationContext private val 
     private val loginPw=loginPreference.getString("pw","")!!
     private val key=loginPreference.getString("key","")!!
     private val authorityCode=loginPreference.getString("authorityCode","")
+    val serverStatue = "서버상태: ${loginPreference.getBoolean("statue",false)} / 로그인ID: $loginId"
 
     fun setServerBossList(timerList : List<Timer>){
         serverBossList.clear()
@@ -52,7 +52,6 @@ class ServerManageViewModel @Inject constructor(@ApplicationContext private val 
     }
 
     fun setServerOutput(){
-
         val db: DatabaseReference = FirebaseDatabase.getInstance().reference
         try {
             db.child("RoomList").child(key).get().addOnSuccessListener {
@@ -74,13 +73,13 @@ class ServerManageViewModel @Inject constructor(@ApplicationContext private val 
                 context.startService(Intent(context, AlarmServerService::class.java))
                 loginPreference.edit().putBoolean("statue",true).apply()
                 Toast.makeText(context,"서버로부터 데이터를 받기 시작합니다.",Toast.LENGTH_SHORT).show()
-                "오프라인"
+                "온라인"
             }
             true->{
                 context.stopService(Intent(context, AlarmServerService::class.java))
                 loginPreference.edit().putBoolean("statue",false).apply()
                 Toast.makeText(context,"서버로부터 데이터를 받지 않습니다.",Toast.LENGTH_SHORT).show()
-                "온라인"
+                "오프라인"
             }
         }
         return "서버상태: $serverStatue /로그인ID: $loginId"

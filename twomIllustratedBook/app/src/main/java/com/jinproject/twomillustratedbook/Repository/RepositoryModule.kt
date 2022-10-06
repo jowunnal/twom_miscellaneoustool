@@ -1,14 +1,9 @@
 package com.jinproject.twomillustratedbook.Repository
 
-import com.jinproject.twomillustratedbook.Database.Dao.CollectionDao
-import com.jinproject.twomillustratedbook.Database.Dao.DropListDao
-import com.jinproject.twomillustratedbook.Database.Dao.LoginDao
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Inject
 import javax.inject.Singleton
 
 @Module
