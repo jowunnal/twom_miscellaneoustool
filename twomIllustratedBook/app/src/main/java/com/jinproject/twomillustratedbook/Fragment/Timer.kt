@@ -37,6 +37,7 @@ class Timer : BindFragment<AlarmUserSelectBinding>(R.layout.alarm_user_select,fa
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.alarmViewModel=alarmModel
+        binding.dropListViewModel=bossModel
         binding.spinnerType.adapter= ArrayAdapter<String>(requireActivity(), R.layout.support_simple_spinner_dropdown_item, // 보스타입지정 spinner
             ArrayList<String>().apply {
                 add("네임드")
@@ -75,12 +76,17 @@ class Timer : BindFragment<AlarmUserSelectBinding>(R.layout.alarm_user_select,fa
         val selectedBossList=requireActivity().getSharedPreferences("bossList",Context.MODE_PRIVATE)
 
         binding.alarmUserSelectAdd.setOnClickListener{
-            val bossList=ArrayList<String>()
-            bossList.addAll(selectedBossList.getStringSet("boss", mutableSetOf("불도저"))!!)
-            bossList.add(binding.spinnerMons.selectedItem.toString())
-            selectedBossList.edit().putStringSet("boss",bossList.toSet()).apply()
-            showBossList(selectedBossList)
+            bossModel.setBossList()
+            bossModel.getBossList()
         }
+
+        bossModel.selectedBossList.observe(viewLifecycleOwner,Observer{
+            if(it!=null){
+                adapter.setItems(it)
+                adapter.notifyDataSetChanged()
+            }
+        })
+
         binding.alarmUserSelectRecyclerView.adapter=adapter
         binding.alarmUserSelectRecyclerView.layoutManager=GridLayoutManager(requireActivity(),2,GridLayoutManager.HORIZONTAL,false)
         showBossList(selectedBossList)

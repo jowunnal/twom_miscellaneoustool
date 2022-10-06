@@ -5,7 +5,7 @@ import android.os.Parcelable
 import androidx.room.*
 
 @Entity(foreignKeys = [ForeignKey(entity = Monster::class, parentColumns = arrayOf("monsName"), childColumns = arrayOf("timerMonsName"))], indices = [Index("timerMonsName")])
-data class Timer(@PrimaryKey var timerId:Int, var day:Int, var hour:Int, var min:Int, var sec:Int,
+data class Timer(@PrimaryKey(autoGenerate = true) var timerId:Int, var day:Int, var hour:Int, var min:Int, var sec:Int,
                   var ota:Int,var timerMonsName:String,) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
