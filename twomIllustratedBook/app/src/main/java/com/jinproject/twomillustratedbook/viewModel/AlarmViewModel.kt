@@ -18,7 +18,7 @@ import javax.inject.Inject
 class AlarmViewModel @Inject constructor(@ApplicationContext private val context: Context) : ViewModel(){
     private val alarmManager:AlarmManager = context.applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     private val app=context.applicationContext
-    lateinit var selectedBossList: MutableLiveData<List<String>>
+
 
     fun setAlarm(h:Int,m:Int,item: AlarmItem){
         var count=(h*3600+m*60)+item.gtime
@@ -51,9 +51,7 @@ class AlarmViewModel @Inject constructor(@ApplicationContext private val context
         alarmManager.setAlarmClock(AlarmManager.AlarmClockInfo(System.currentTimeMillis()+count,notifyPendingIntent), notifyPendingIntent)
     }
 
-    fun getBossList(){
-        selectedBossList.postValue(context.getSharedPreferences("bossList",Context.MODE_PRIVATE).getStringSet("boss", mutableSetOf("불도저"))!!.toList())
-    }
+
 
 
 }

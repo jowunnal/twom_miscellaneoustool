@@ -7,6 +7,9 @@
         <variable
             name="alarmViewModel"
             type="com.jinproject.twomillustratedbook.viewModel.AlarmViewModel" />
+        <variable
+            name="serverManageViewModel"
+            type="com.jinproject.twomillustratedbook.viewModel.ServerManageViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -137,7 +140,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="6dp"
             android:layout_marginBottom="8dp"
-            android:text="TextView"
+            android:text="@{serverManageViewModel.serverStatue}"
             app:layout_constraintBottom_toTopOf="@+id/alarm_selectedList"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

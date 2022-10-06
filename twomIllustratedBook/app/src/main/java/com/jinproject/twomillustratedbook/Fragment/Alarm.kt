@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.Toast
@@ -57,6 +58,8 @@ class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
     val dropListViewModel: DropListViewModel by activityViewModels()
     val adapter:AlarmAdapter by lazy { AlarmAdapter() }
     val selectedAdapter by lazy{AlarmSelectedAdapter()}
+    val cal: Calendar by lazy { Calendar.getInstance() }
+    val alarmDialog by lazy { Dialog(requireActivity()) }
     lateinit var timerSharedPref:SharedPreferences
     private val ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 404
     lateinit var navController:NavController
@@ -66,22 +69,22 @@ class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
         super.onViewCreated(view, savedInstanceState)
 
         setHasOptionsMenu(true)
-        val cal= Calendar.getInstance()
 
+        binding.serverManageViewModel=serverManageViewModel
         binding.alarmViewModel=alarmViewModel
         navController=Navigation.findNavController(view)
         timerSharedPref=requireActivity().getSharedPreferences("TimerSharedPref", Context.MODE_PRIVATE)
         binding.alarmRecyclerView.layoutManager=LinearLayoutManager(requireActivity(),LinearLayoutManager.VERTICAL,false)
         binding.alarmRecyclerView.adapter=adapter
-
-        val alarmDialog=Dialog(requireActivity())
         alarmDialog.setContentView(R.layout.alarm_currentlist_dialog)
-
         binding.alarmSelectedList.adapter=selectedAdapter
         binding.alarmSelectedList.layoutManager=GridLayoutManager(requireActivity(),2,GridLayoutManager.VERTICAL,false)
-        alarmViewModel.selectedBossList.observe(viewLifecycleOwner,Observer{
-            selectedAdapter.setItems(it)
-            selectedAdapter.notifyDataSetChanged()
+
+        dropListViewModel.selectedBossList.observe(viewLifecycleOwner,Observer{
+            if(it!=null){
+                selectedAdapter.setItems(it)
+                selectedAdapter.notifyDataSetChanged()
+            }
         })
 
         selectedAdapter.setClickListener(object : OnBossNameClickedListener{
@@ -90,11 +93,13 @@ class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
                 pos: Int,
                 binding: AlarmUserSelectedItemBinding
             ) {
-                dropListViewModel.checkIsClickedBoss(pos,selectedAdapter.getItem(pos))
-                binding.alarmUserSelectedItemSwitch.setOnCheckedChangeListener { _, b ->
-                    when(b){
-                        true->getSettingDrawOverlays(1,binding.alarmUserSelectedItem.text.toString())
-                        false->getSettingDrawOverlays(0,binding.alarmUserSelectedItem.text.toString())
+                CoroutineScope(Dispatchers.Main).launch {
+                    dropListViewModel.checkIsClickedBoss(pos,selectedAdapter.getItem(pos))
+                    binding.alarmUserSelectedItemSwitch.setOnCheckedChangeListener { _, b ->
+                        when(b){
+                            true->getSettingDrawOverlays(1,binding.alarmUserSelectedItem.text.toString())
+                            false->getSettingDrawOverlays(0,binding.alarmUserSelectedItem.text.toString())
+                        }
                     }
                 }
             }
@@ -162,6 +167,7 @@ class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
                     cal.get(Calendar.MINUTE),
                     dropListViewModel.alarmItem
                 )
+                timerViewModel.deleteTimer(dropListViewModel.monster.monsName)
                 timerViewModel.setTimer(calculateTimer(cal,dropListViewModel.monster))
             }catch (e:kotlin.UninitializedPropertyAccessException){
                 Toast.makeText(requireActivity(),"먼저 보스를 선택해주세요!",Toast.LENGTH_SHORT).show()
@@ -172,6 +178,7 @@ class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
         timerViewModel.timer.observe(viewLifecycleOwner, Observer {
             adapter.setItems(it)
             adapter.notifyDataSetChanged()
+            Log.d("test",it.toString())
 
             serverManageViewModel.setServerBossList(it)
             serverManageViewModel.setTimerOtaList(it)
@@ -185,7 +192,7 @@ class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
                     alarmDialog.cancel()
                 }
                 alarmDialog.findViewById<Button>(R.id.alarm_delete).setOnClickListener {
-                    timerViewModel.setTimer(calculateTimer(cal,dropListViewModel.monster))
+                    timerViewModel.deleteTimer(item.name)
                     var code=0
                     CoroutineScope(Dispatchers.Main).launch {
                         withContext(Dispatchers.IO){code=getMonsterCode(dropListViewModel.getMonsInfo(item.name).monsName)}
@@ -241,7 +248,7 @@ class Alarm : BindFragment<AlarmBinding>(R.layout.alarm,true){
 
             R.id.icon_addTime->if(!timerSharedPref.getBoolean("flag",false)){
                 timerSharedPref.edit().putBoolean("flag",true).apply()
-                if (!checkAuthorityDrawOverlays()) {
+                if (checkAuthorityDrawOverlays()) {
                     if(serverManageViewModel.listToWservice.isNotEmpty()){
                         requireActivity().startService(Intent(activity, WService::class.java).apply { putExtra("list",serverManageViewModel.listToWservice) })
                     }
