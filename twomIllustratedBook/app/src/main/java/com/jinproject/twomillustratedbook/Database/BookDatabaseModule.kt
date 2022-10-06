@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.jinproject.twomillustratedbook.Database.Dao.CollectionDao
 import com.jinproject.twomillustratedbook.Database.Dao.DropListDao
-import com.jinproject.twomillustratedbook.Database.Dao.LoginDao
 import com.jinproject.twomillustratedbook.Database.Dao.TimerDao
 import dagger.Module
 import dagger.Provides
@@ -26,12 +25,6 @@ object BookDatabaseModule {
     @Singleton
     fun provideDropListDao(bookdDatabase: BookDatabase):DropListDao{
         return bookdDatabase.getDropListDao()
-    }
-
-    @Provides
-    @Singleton
-    fun provideLoginDao(bookDatabase: BookDatabase):LoginDao{
-        return bookDatabase.getLoginDao()
     }
 
     @Provides
