@@ -6,32 +6,23 @@
     app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.jinproject.twomillustratedbook.Fragment.Home"
+        android:name="com.jinproject.twomillustratedbook.ui.screen.home.Home"
         android:label="BookHome"
         tools:layout="@layout/home">
-        <action
-            android:id="@+id/action_homeFragment_to_bookType"
-            app:destination="@id/bookType" />
         <action
             android:id="@+id/action_homeFragment_to_dropListMaps"
             app:destination="@id/dropListMaps" />
         <action
             android:id="@+id/action_homeFragment_to_alarm"
             app:destination="@id/alarm" />
+        <action
+            android:id="@+id/action_homeFragment_to_collectionCategory"
+            app:destination="@id/collectionCategory" />
 
     </fragment>
     <fragment
-        android:id="@+id/bookMain"
-        android:name="com.jinproject.twomillustratedbook.Fragment.Book"
-        android:label="BookMain"
-        tools:layout="@layout/book"/>
-    <fragment
-        android:id="@+id/dropList"
-        android:name="com.jinproject.twomillustratedbook.Fragment.DropList"
-        android:label="DropList" />
-    <fragment
         android:id="@+id/dropListMaps"
-        android:name="com.jinproject.twomillustratedbook.Fragment.DropListMaps"
+        android:name="com.jinproject.twomillustratedbook.ui.screen.droplist.map.DropListMaps"
         android:label="droplistmap"
         tools:layout="@layout/droplistmap" >
         <action
@@ -40,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/alarm"
-        android:name="com.jinproject.twomillustratedbook.Fragment.Alarm"
+        android:name="com.jinproject.twomillustratedbook.ui.Fragment.Alarm"
         android:label="alarm"
         tools:layout="@layout/alarm" >
         <action
@@ -51,22 +42,33 @@
             app:destination="@id/login" />
     </fragment>
     <fragment
-        android:id="@+id/bookType"
-        android:name="com.jinproject.twomillustratedbook.Fragment.BookType"
-        android:label="book_type"
-        tools:layout="@layout/book_type" >
+        android:id="@+id/collectionCategory"
+        android:name="com.jinproject.twomillustratedbook.ui.screen.collection.category.CollectionCategory"
+        android:label="collection_category"
+        tools:layout="@layout/collection_category" >
         <action
-            android:id="@+id/action_bookType_to_bookMain"
-            app:destination="@id/bookMain" />
+            android:id="@+id/action_collectionCategory_to_collectionList"
+            app:destination="@id/collectionList" />
+    </fragment>
+    <fragment
+        android:id="@+id/collectionList"
+        android:name="com.jinproject.twomillustratedbook.ui.screen.collection.item.CollectionList"
+        android:label="Collection_list"
+        tools:layout="@layout/collection_list">
+        <argument
+            android:name="category"
+            app:argType="string"
+            android:defaultValue=""
+            />
     </fragment>
     <fragment
         android:id="@+id/timer"
-        android:name="com.jinproject.twomillustratedbook.Fragment.Timer"
+        android:name="com.jinproject.twomillustratedbook.ui.Fragment.Timer"
         android:label="alarm_user_select"
         tools:layout="@layout/alarm_user_select" />
     <fragment
         android:id="@+id/login"
-        android:name="com.jinproject.twomillustratedbook.Fragment.Login"
+        android:name="com.jinproject.twomillustratedbook.ui.Fragment.Login"
         android:label="alarm_login"
         tools:layout="@layout/alarm_login" >
         <action
@@ -75,8 +77,18 @@
     </fragment>
     <fragment
         android:id="@+id/register"
-        android:name="com.jinproject.twomillustratedbook.Fragment.Register"
+        android:name="com.jinproject.twomillustratedbook.ui.Fragment.Register"
         android:label="alarm_register"
         tools:layout="@layout/alarm_register" />
+    <fragment
+        android:id="@+id/dropList"
+        android:name="com.jinproject.twomillustratedbook.ui.screen.droplist.monster.DropListMonster"
+        android:label="drop"
+        tools:layout="@layout/drop">
+        <argument
+            android:name="mapName"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
 
 </navigation>
