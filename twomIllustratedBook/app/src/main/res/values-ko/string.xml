@@ -15,4 +15,6 @@
     <string name="my_AppId">ca-app-pub-3630394418001517~2743030483</string>
     <string name="my_UnitId">ca-app-pub-3630394418001517/9336358991</string>
     <string name="my_fullAppId">ca-app-pub-3630394418001517/8637400041</string>
+    <string name="아이템이름">아이템이름</string>
+    <string name="스텟">스텟</string>
 </resources>

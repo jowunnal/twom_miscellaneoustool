@@ -7,7 +7,7 @@
         android:icon="@drawable/icon_home"
         app:showAsAction="always"
         />
-    <item android:id="@+id/bookType"
+    <item android:id="@+id/collectionCategory"
         android:title="bookType"
         android:enabled="true"
         android:icon="@drawable/icon_bottmnavi_search"
