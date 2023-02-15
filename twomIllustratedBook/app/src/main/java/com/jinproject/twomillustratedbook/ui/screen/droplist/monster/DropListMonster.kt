@@ -25,7 +25,10 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class DropListMonster : BaseFragment<DropBinding>() {
     private val dropListViewModel: DropListViewModel by viewModels()
-    @Inject lateinit var dropListAdapter: DropListAdapter
+    val dropListAdapter: DropListAdapter by lazy { DropListAdapter(
+        context = requireActivity(),
+        getMonsterItem = dropListViewModel::itemListToSingleString
+    ) }
     private val navArgs: DropListMonsterArgs by navArgs()
 
     override fun getViewDataBinding(): DropBinding = DropBinding.inflate(layoutInflater)
@@ -34,6 +37,7 @@ class DropListMonster : BaseFragment<DropBinding>() {
 
     override fun initState() {
         with(binding) {
+            lifecycleOwner = viewLifecycleOwner
             DropRecyclerView.layoutManager =
                 LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
             DropRecyclerView.adapter = dropListAdapter

@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.jinproject.twomillustratedbook.domain.Item.AlarmItem
 import com.jinproject.twomillustratedbook.data.repository.DropListRepository
 import com.jinproject.twomillustratedbook.data.Entity.Monster
+import com.jinproject.twomillustratedbook.ui.screen.droplist.monster.item.ItemState
 import com.jinproject.twomillustratedbook.ui.screen.droplist.monster.item.MonsterState
 import com.jinproject.twomillustratedbook.utils.getMonsterCode
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -50,8 +51,18 @@ class DropListViewModel @Inject constructor(
             Log.d("test", "exception : ${e.message}\n ${e.printStackTrace()}")
         }.launchIn(viewModelScope)
 
+    fun itemListToSingleString(itemList: List<ItemState>): String {
+        var contents = ""
+        itemList.forEachIndexed { index, item ->
+            contents += if (itemList.lastIndex != index) "${item.name}, " else item.name
+        }
+        return contents
+    }
 
-    var dataItemType = ""
+
+
+
+
     var alarmItem = AlarmItem.getInitValue()
     private var clickable = -1
     lateinit var monster: Monster
@@ -61,8 +72,6 @@ class DropListViewModel @Inject constructor(
         selectedBossListSharedPref.getStringSet("boss", null)?.toList() ?: emptyList()
     )
     var selectedBossItem = ""
-
-    val droplistMaps = repository.getMaps()
 
     fun getNameSp(inputData: String) = repository.getNameSp(inputData)
 
