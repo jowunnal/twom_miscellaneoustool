@@ -6,6 +6,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.core.view.doOnAttach
+import androidx.core.view.doOnDetach
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.jinproject.twomillustratedbook.databinding.DropItemBinding
 import com.jinproject.twomillustratedbook.ui.screen.droplist.monster.item.ItemState
@@ -13,7 +17,7 @@ import com.jinproject.twomillustratedbook.ui.screen.droplist.monster.item.Monste
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 
-class DropListAdapter @Inject constructor(@ActivityContext val context: Context) :
+class DropListAdapter (private val context: Context,private val getMonsterItem: (List<ItemState>) -> String) :
     RecyclerView.Adapter<DropListAdapter.ViewHolder>(), Filterable {
 
     var items = ArrayList<MonsterState>()
@@ -33,35 +37,36 @@ class DropListAdapter @Inject constructor(@ActivityContext val context: Context)
         return items.size
     }
 
-    fun setItems(item: List<MonsterState>) {
+    fun setItems(items: List<MonsterState>) {
         this.items.clear()
-        this.items.addAll(item)
-        itemsUnfiltered = items
+        this.items.addAll(items)
+
+        itemsUnfiltered = this.items
     }
 
     inner class ViewHolder(private val binding: DropItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        private var lifecycleOwner: LifecycleOwner? = null
 
-        @SuppressLint("DiscouragedApi")
-        fun bind(monster: MonsterState) {
-
-            binding.dropContent.text = itemListToSingleString(monster.item)
-            binding.dropName.text = monster.name
-            binding.dropLevel.text = monster.level.toString()
-            binding.dropImg.setImageResource(
-                context.resources.getIdentifier(
-                    monster.imgName, "drawable", context.packageName
-                )
-            )
-        }
-
-        private fun itemListToSingleString(itemList: List<ItemState>): String {
-            var contents = ""
-            itemList.forEachIndexed { index, item ->
-                contents += if (itemList.lastIndex != index) "${item.name}, " else item.name
+        init {
+            binding.dropItem.minWidth =
+                context.applicationContext.resources.displayMetrics.widthPixels
+            itemView.doOnAttach {
+                lifecycleOwner = itemView.findViewTreeLifecycleOwner()
             }
-            return contents
+            itemView.doOnDetach {
+                lifecycleOwner = null
+            }
         }
+
+        fun bind(monster: MonsterState) {
+            binding.lifecycleOwner = lifecycleOwner
+            binding.activityContext = context
+            binding.monster = monster
+
+            binding.dropContent.text = getMonsterItem(monster.item)
+        }
+
     }
 
     override fun getFilter(): Filter {
@@ -72,8 +77,12 @@ class DropListAdapter @Inject constructor(@ActivityContext val context: Context)
                 } else {
                     val itemsFiltering = ArrayList<MonsterState>()
                     itemsUnfiltered.forEach { monster ->
-                        if (monster.name == p0.toString() || monster.item.contains(ItemState(name = p0.toString(), count = 0)))
+                        if (monster.name == p0.toString())
                             itemsFiltering.add(monster)
+                        monster.item.forEach { itemState ->
+                            if(itemState.name.contains(p0.toString()))
+                                itemsFiltering.add(monster)
+                        }
                     }
                     itemsFiltering
                 }

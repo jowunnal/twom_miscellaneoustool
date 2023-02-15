@@ -32,6 +32,7 @@ class DropListMaps : BaseFragment<DroplistmapBinding>() {
 
     override fun initState() {
         with(binding) {
+            lifecycleOwner = viewLifecycleOwner
             mapRecyclerView.layoutManager =
                 LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
             mapRecyclerView.adapter = adapter
