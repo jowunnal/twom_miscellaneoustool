@@ -11,7 +11,7 @@ import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.jinproject.twomillustratedbook.databinding.CollectionCategoryItemBinding
 import com.jinproject.twomillustratedbook.domain.model.Category
-import com.jinproject.twomillustratedbook.listener.OnItemClickListener
+import com.jinproject.twomillustratedbook.ui.listener.OnItemClickListener
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 

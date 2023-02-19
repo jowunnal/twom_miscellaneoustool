@@ -1,7 +1,7 @@
 package com.jinproject.twomillustratedbook.domain.model
 
-import com.jinproject.twomillustratedbook.data.Entity.Book
-import com.jinproject.twomillustratedbook.data.Entity.RegisterItemToBook
+import com.jinproject.twomillustratedbook.data.database.Entity.Book
+import com.jinproject.twomillustratedbook.data.database.Entity.RegisterItemToBook
 import com.jinproject.twomillustratedbook.ui.screen.collection.item.item.CollectionState
 import com.jinproject.twomillustratedbook.ui.screen.collection.item.item.StatState
 

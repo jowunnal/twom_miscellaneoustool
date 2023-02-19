@@ -1,7 +1,7 @@
 package com.jinproject.twomillustratedbook.domain.model
 
-import com.jinproject.twomillustratedbook.data.Entity.MonsDropItem
-import com.jinproject.twomillustratedbook.data.Entity.RegisterItemToBook
+import com.jinproject.twomillustratedbook.data.database.Entity.MonsDropItem
+import com.jinproject.twomillustratedbook.data.database.Entity.RegisterItemToBook
 import com.jinproject.twomillustratedbook.ui.screen.collection.item.item.CollectionItemState
 import com.jinproject.twomillustratedbook.ui.screen.droplist.monster.item.ItemState
 

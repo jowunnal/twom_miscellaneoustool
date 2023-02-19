@@ -3,8 +3,8 @@ package com.jinproject.twomillustratedbook.data.database.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.RewriteQueriesToDropUnusedColumns
-import com.jinproject.twomillustratedbook.data.Entity.Book
-import com.jinproject.twomillustratedbook.data.Entity.RegisterItemToBook
+import com.jinproject.twomillustratedbook.data.database.Entity.Book
+import com.jinproject.twomillustratedbook.data.database.Entity.RegisterItemToBook
 import kotlinx.coroutines.flow.Flow
 
 @Dao

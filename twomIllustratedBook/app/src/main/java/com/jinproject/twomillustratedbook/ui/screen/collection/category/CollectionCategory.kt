@@ -6,7 +6,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jinproject.twomillustratedbook.databinding.CollectionCategoryBinding
 import com.jinproject.twomillustratedbook.domain.model.Category
-import com.jinproject.twomillustratedbook.listener.OnItemClickListener
+import com.jinproject.twomillustratedbook.ui.listener.OnItemClickListener
 import com.jinproject.twomillustratedbook.ui.base.BaseFragment
 import com.jinproject.twomillustratedbook.ui.screen.droplist.monster.DropListViewModel
 import dagger.hilt.android.AndroidEntryPoint

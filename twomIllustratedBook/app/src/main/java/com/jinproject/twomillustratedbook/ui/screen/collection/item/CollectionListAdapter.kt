@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.jinproject.twomillustratedbook.data.Entity.Book
-import com.jinproject.twomillustratedbook.data.Entity.RegisterItemToBook
+import com.jinproject.twomillustratedbook.data.database.Entity.Book
+import com.jinproject.twomillustratedbook.data.database.Entity.RegisterItemToBook
 import com.jinproject.twomillustratedbook.databinding.CollectionListItemBinding
 import com.jinproject.twomillustratedbook.ui.screen.collection.item.item.CollectionState
 import dagger.hilt.android.qualifiers.ActivityContext
@@ -85,7 +85,7 @@ class CollectionListAdapter @Inject constructor(@ActivityContext private val con
         ): String =
             if (stat != 0.0) {
                 if (isPercentValue)
-                    "$statName: $stat%\n"
+                    "${statName.replace("퍼센트","")}: $stat%\n"
                 else
                     "$statName: $stat\n"
             } else
@@ -103,11 +103,11 @@ class CollectionListAdapter @Inject constructor(@ActivityContext private val con
 
                     itemsUnfiltered.forEach { collectionState ->
                         collectionState.stats.forEach { statState ->
-                            if (statState.name == p0.toString() && statState.value != 0.0)
+                            if (statState.name.contains(p0.toString()) && statState.value != 0.0)
                                 contentItemsFiltering.add(collectionState)
                         }
                         collectionState.items.forEach { itemState ->
-                            if (itemState.name == p0.toString())
+                            if (itemState.name.contains(p0.toString()))
                                 contentItemsFiltering.add(collectionState)
                         }
                     }
