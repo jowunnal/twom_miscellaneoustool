@@ -2,11 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.jinproject.twomillustratedbook.Fragment.Register">
+    tools:context="com.jinproject.twomillustratedbook.ui.Fragment.Register">
     <data>
         <variable
             name="registerViewModel"
-            type="com.jinproject.twomillustratedbook.viewModel.RegisterViewModel" />
+            type="com.jinproject.twomillustratedbook.ui.viewModel.RegisterViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/registerContainer"

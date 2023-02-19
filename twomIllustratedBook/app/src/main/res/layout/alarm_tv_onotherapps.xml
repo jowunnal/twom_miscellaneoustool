@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.jinproject.twomillustratedbook.Item.MyTextViewInAlarm
+    <com.jinproject.twomillustratedbook.domain.Item.MyTextViewInAlarm
         android:id="@+id/tv_currentTimes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <com.jinproject.twomillustratedbook.Item.MyTextViewInAlarm
+    <com.jinproject.twomillustratedbook.domain.Item.MyTextViewInAlarm
         android:id="@+id/tv_onOtherApps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

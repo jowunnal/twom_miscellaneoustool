@@ -19,7 +19,7 @@
         android:icon="@drawable/icon_droplist"
         app:showAsAction="always"
         />
-    <item android:id="@+id/alarm"
+    <item android:id="@+id/navigationFragment"
         android:title="alarm"
         android:enabled="true"
         android:icon="@drawable/icon_alarm"

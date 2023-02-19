@@ -2,14 +2,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.jinproject.twomillustratedbook.Fragment.Timer">
+    tools:context="com.jinproject.twomillustratedbook.ui.Fragment.Timer">
     <data>
         <variable
             name="alarmViewModel"
-            type="com.jinproject.twomillustratedbook.viewModel.AlarmViewModel" />
+            type="com.jinproject.twomillustratedbook.ui.screen.alarm.AlarmViewModel" />
         <variable
             name="dropListViewModel"
-            type="com.jinproject.twomillustratedbook.viewModel.DropListViewModel" />
+            type="com.jinproject.twomillustratedbook.ui.screen.droplist.monster.DropListViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

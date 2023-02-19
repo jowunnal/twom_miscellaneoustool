@@ -5,32 +5,24 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.jinproject.twomillustratedbook.ui.screen.alarm.item.AlarmItem
-import com.jinproject.twomillustratedbook.R
-import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectBinding
-import kotlin.collections.ArrayList
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
-import com.jinproject.twomillustratedbook.ui.Adapter.AlarmSelectedAdapter
-import com.jinproject.twomillustratedbook.ui.screen.alarm.AlarmViewModel
-import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectedItemBinding
-import com.jinproject.twomillustratedbook.ui.listener.OnBossNameClickedListener
+import com.jinproject.twomillustratedbook.R
+import com.jinproject.twomillustratedbook.databinding.AlarmUserSelectBinding
 import com.jinproject.twomillustratedbook.ui.base.BaseFragment
-import com.jinproject.twomillustratedbook.utils.getMonsterCode
+import com.jinproject.twomillustratedbook.ui.screen.alarm.AlarmViewModel
+import com.jinproject.twomillustratedbook.ui.screen.alarm.item.AlarmItem
 import com.jinproject.twomillustratedbook.ui.screen.droplist.monster.DropListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class Timer : BaseFragment<AlarmUserSelectBinding>() {
     lateinit var timerSharedPref: SharedPreferences
-    val adapter: AlarmSelectedAdapter by lazy{ AlarmSelectedAdapter() }
     val bossModel: DropListViewModel by activityViewModels()
     val alarmModel: AlarmViewModel by viewModels()
 
@@ -84,7 +76,7 @@ class Timer : BaseFragment<AlarmUserSelectBinding>() {
             bossModel.setBossList()
             bossModel.getBossList()
         }
-
+/*
         bossModel.selectedBossList.observe(viewLifecycleOwner,Observer{
             if(it!=null){
                 adapter.setItems(it)
@@ -94,9 +86,10 @@ class Timer : BaseFragment<AlarmUserSelectBinding>() {
 
         binding.alarmUserSelectRecyclerView.adapter=adapter
         binding.alarmUserSelectRecyclerView.layoutManager=GridLayoutManager(requireActivity(),2,GridLayoutManager.HORIZONTAL,false)
-        showBossList(selectedBossList)
+        showBossList(selectedBossList)*/
 
         val alarmDialog= Dialog(requireActivity())
+        /*
         alarmDialog.setContentView(R.layout.alarm_currentlist_dialog)
         adapter.setClickListener(object : OnBossNameClickedListener {
             override fun setOnItemClickListener(
@@ -121,7 +114,7 @@ class Timer : BaseFragment<AlarmUserSelectBinding>() {
                 alarmDialog.show()
             }
 
-        })
+        })*/
 
         binding.alarmUserSelectBack.setOnClickListener {
             Navigation.findNavController(view).popBackStack()
@@ -149,11 +142,12 @@ class Timer : BaseFragment<AlarmUserSelectBinding>() {
         }
 
     }
+    /*
     fun showBossList(pref:SharedPreferences){
         val list=ArrayList<String>()
         list.addAll(pref.getStringSet("boss", mutableSetOf(""))!!)
         adapter.setItems(list)
         adapter.notifyDataSetChanged()
-    }
+    }*/
 
 }
