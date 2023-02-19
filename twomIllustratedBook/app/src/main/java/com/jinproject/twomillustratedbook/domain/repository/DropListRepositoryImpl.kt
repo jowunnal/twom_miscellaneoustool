@@ -5,6 +5,7 @@ import com.jinproject.twomillustratedbook.data.repository.DropListRepository
 import com.jinproject.twomillustratedbook.domain.model.ItemModel
 import com.jinproject.twomillustratedbook.domain.model.MapModel
 import com.jinproject.twomillustratedbook.domain.model.MonsterModel
+import com.jinproject.twomillustratedbook.domain.model.MonsterType
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -25,7 +26,7 @@ class DropListRepositoryImpl @Inject constructor(private val dropListDao: DropLi
                     level = monster.key.monsLevel,
                     genTime = monster.key.monsGtime,
                     imgName = monster.key.monsImgName,
-                    type = monster.key.monsType,
+                    type = MonsterType.findByStoredName(monster.key.monsType),
                     item = monster.value.map { item ->
                         ItemModel.fromMonsDropItemToDomain(item)
                     }
@@ -33,7 +34,14 @@ class DropListRepositoryImpl @Inject constructor(private val dropListDao: DropLi
             }
         }
 
-    override fun getNameSp(inputData: String) = dropListDao.getNamedSp(inputData)
-    override suspend fun getMonsInfo(inputData: String) = dropListDao.getMonsInfo(inputData)
+    override fun getMonsterByType(monsterType: MonsterType) =
+        dropListDao.getMonsterByType(monsterType.storedName).map { response ->
+            response.map { monster -> MonsterModel.fromMonsterResponse(monster) }
+        }
+
+    override fun getMonsInfo(monsterName: String) =
+        dropListDao.getMonsInfo(monsterName).map { response ->
+            MonsterModel.fromMonsterResponse(response)
+        }
 
 }

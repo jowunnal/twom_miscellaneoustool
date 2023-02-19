@@ -13,11 +13,11 @@
             android:id="@+id/action_homeFragment_to_dropListMaps"
             app:destination="@id/dropListMaps" />
         <action
-            android:id="@+id/action_homeFragment_to_alarm"
-            app:destination="@id/alarm" />
-        <action
             android:id="@+id/action_homeFragment_to_collectionCategory"
             app:destination="@id/collectionCategory" />
+        <action
+            android:id="@+id/action_homeFragment_to_navigationFragment"
+            app:destination="@id/navigationFragment" />
 
     </fragment>
     <fragment
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/alarm"
-        android:name="com.jinproject.twomillustratedbook.ui.Fragment.Alarm"
+        android:name="com.jinproject.twomillustratedbook.ui.screen.alarm.Alarm"
         android:label="alarm"
         tools:layout="@layout/alarm" >
         <action
@@ -90,5 +90,9 @@
             app:argType="string"
             android:defaultValue=""/>
     </fragment>
+    <fragment
+        android:id="@+id/navigationFragment"
+        android:name="com.jinproject.twomillustratedbook.ui.screen.compose.navigation.NavigationFragment"
+        android:label="NavigationFragment" />
 
 </navigation>

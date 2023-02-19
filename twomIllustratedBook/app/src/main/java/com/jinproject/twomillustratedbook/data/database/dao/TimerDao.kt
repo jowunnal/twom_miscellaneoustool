@@ -1,10 +1,9 @@
-package com.jinproject.twomillustratedbook.Database.Dao
+package com.jinproject.twomillustratedbook.data.database.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Query
-import com.jinproject.twomillustratedbook.Database.Entity.Timer
+import com.jinproject.twomillustratedbook.data.database.Entity.Timer
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TimerDao {
@@ -13,10 +12,10 @@ interface TimerDao {
     suspend fun setTimer(day:Int,hour:Int,min:Int,sec:Int,name:String)
 
     @Query("select * from Timer")
-    fun getTimer(): LiveData<List<Timer>>
+    fun getTimer(): Flow<List<Timer>>
 
     @Query("delete from Timer where Timer.timerMonsName like :name")
-    fun deleteTimer(name:String)
+    suspend fun deleteTimer(name:String)
 
     @Query("update Timer set ota=:ota where timerMonsName like :name")
     suspend fun setOta(ota:Int,name:String)

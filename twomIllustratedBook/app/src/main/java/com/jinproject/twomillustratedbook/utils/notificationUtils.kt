@@ -1,22 +1,17 @@
 package com.jinproject.twomillustratedbook.utils
 
-import android.app.AlarmManager
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.NotificationCompat
-import androidx.core.graphics.drawable.toBitmap
-import com.jinproject.twomillustratedbook.Fragment.Alarm
-import com.jinproject.twomillustratedbook.MainActivity.MainActivity
+import com.jinproject.twomillustratedbook.ui.MainActivity
 import com.jinproject.twomillustratedbook.R
-import com.jinproject.twomillustratedbook.Receiver.AlarmReceiver
-import com.jinproject.twomillustratedbook.Service.ReAlarmService
+import com.jinproject.twomillustratedbook.ui.Service.ReAlarmService
 
 fun NotificationManager.sendNotification(message:String,img:String,code:Int,applicationContext: Context,gtime:Int){
-    val contentIntent= Intent(applicationContext,MainActivity::class.java)
+    val contentIntent= Intent(applicationContext, MainActivity::class.java)
     val alarmIntent=Intent(applicationContext, ReAlarmService::class.java).apply {
         putExtra("msg",message)
         putExtra("img",img)

@@ -3,11 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.jinproject.twomillustratedbook.Fragment.Login">
+    tools:context="com.jinproject.twomillustratedbook.ui.Fragment.Login">
     <data>
         <variable
             name="loginViewModel"
-            type="com.jinproject.twomillustratedbook.viewModel.LoginViewModel" />
+            type="com.jinproject.twomillustratedbook.ui.viewModel.LoginViewModel" />
         <variable
             name="navController"
             type="androidx.navigation.NavController" />

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "com.jinproject.twomillustratedbook";
+option java_multiple_files = true;
+
+message TimerPreferences {
+  int32 interval_first_timer_setting = 1;
+  int32 interval_second_timer_setting = 2;
+  string recently_selected_boss_classified = 3;
+  string recently_selected_boss_name = 4;
+  repeated string frequently_used_boss_list = 5;
+}

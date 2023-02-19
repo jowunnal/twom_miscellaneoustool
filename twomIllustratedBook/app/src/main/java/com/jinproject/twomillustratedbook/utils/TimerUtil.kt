@@ -1,11 +1,11 @@
 package com.jinproject.twomillustratedbook.utils
 
-import com.jinproject.twomillustratedbook.Database.Entity.Monster
-import com.jinproject.twomillustratedbook.Database.Entity.Timer
-import com.jinproject.twomillustratedbook.Item.TimerItem
+import com.jinproject.twomillustratedbook.data.database.Entity.Monster
+import com.jinproject.twomillustratedbook.data.database.Entity.Timer
+import com.jinproject.twomillustratedbook.domain.Item.TimerItem
 import java.util.*
 
-fun calculateTimer(cal: Calendar,monster:Monster): TimerItem { // 일,시,분,초의 넘어가는 일,시,분,초의 값을 계산
+fun calculateTimer(cal: Calendar,monster: Monster): TimerItem { // 일,시,분,초의 넘어가는 일,시,분,초의 값을 계산
     var day = cal.get(Calendar.DAY_OF_WEEK)
     var hour = cal.get(Calendar.HOUR_OF_DAY) + ((monster.monsGtime / 60) / 60)
     var min = cal.get(Calendar.MINUTE) + ((monster.monsGtime / 60) % 60)
