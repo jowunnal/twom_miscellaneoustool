@@ -14,6 +14,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -89,6 +90,9 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
                                 }
                             })
                         }
+                    }
+                    android.R.id.home -> {
+                        findNavController().popBackStack()
                     }
                 }
                 return true

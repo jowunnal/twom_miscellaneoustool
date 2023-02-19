@@ -1,5 +1,6 @@
 package com.jinproject.twomillustratedbook.domain.model
 
+import com.jinproject.twomillustratedbook.data.database.Entity.Map
 import com.jinproject.twomillustratedbook.ui.screen.droplist.map.item.MapState
 
 data class MapModel(
@@ -13,7 +14,7 @@ data class MapModel(
     )
 
     companion object {
-        fun fromResponse(map: com.jinproject.twomillustratedbook.data.Entity.Map) = MapModel(
+        fun fromResponse(map: Map) = MapModel(
             name = map.mapName,
             imgName = map.mapImgName
         )
