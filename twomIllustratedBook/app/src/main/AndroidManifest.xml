@@ -2,14 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.jinproject.twomillustratedbook"
-    android:versionName="illustratedBook1"
-    android:versionCode="1">
-    <uses-permission android:name="android.permission.INTERNET"/>
+    android:versionCode="1"
+    android:versionName="illustratedBook1">
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+
     <application
-        android:name=".Database.BookApplication"
+        android:name=".data.database.BookApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_main"
         android:label="@string/app_name"
@@ -18,19 +20,27 @@
         android:theme="@style/Theme.TwomIllustratedBook">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/test_AppId"/>
-        <activity android:name="com.jinproject.twomillustratedbook.MainActivity.MainActivity"
+            android:value="@string/test_AppId" />
+
+        <activity
+            android:name="com.jinproject.twomillustratedbook.ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".Receiver.AlarmReceiver" android:enabled="true" android:exported="false"/>
-        <service android:name=".Service.AlarmService"/>
-        <service android:name=".Service.WService"/>
-        <service android:name=".Service.ReAlarmService"/>
-        <service android:name=".Service.AlarmServerService"/>
+
+        <receiver
+            android:name=".ui.Receiver.AlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <service android:name=".ui.Service.AlarmService" />
+        <service android:name=".ui.Service.WService" />
+        <service android:name=".ui.Service.ReAlarmService" />
+        <service android:name=".ui.Service.AlarmServerService" />
     </application>
 
 </manifest>

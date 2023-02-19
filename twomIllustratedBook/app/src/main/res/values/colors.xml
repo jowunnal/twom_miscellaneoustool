@@ -10,4 +10,5 @@
     <color name="grass">#D6F7AC</color>
     <color name="white_gray">#EAEAEA</color>
     <color name="home_font_color">#79BFC8</color>
+    <color name="primary">#FF7FD182</color>
 </resources>
