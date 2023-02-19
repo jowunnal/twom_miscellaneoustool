@@ -6,9 +6,9 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jinproject.twomillustratedbook.domain.Item.AlarmItem
+import com.jinproject.twomillustratedbook.ui.screen.alarm.item.AlarmItem
 import com.jinproject.twomillustratedbook.data.repository.DropListRepository
-import com.jinproject.twomillustratedbook.data.Entity.Monster
+import com.jinproject.twomillustratedbook.data.database.Entity.Monster
 import com.jinproject.twomillustratedbook.ui.screen.droplist.monster.item.ItemState
 import com.jinproject.twomillustratedbook.ui.screen.droplist.monster.item.MonsterState
 import com.jinproject.twomillustratedbook.utils.getMonsterCode
@@ -62,9 +62,7 @@ class DropListViewModel @Inject constructor(
 
 
 
-
-    var alarmItem = AlarmItem.getInitValue()
-    private var clickable = -1
+    /*리펙토링중*/
     lateinit var monster: Monster
     private var selectedBossListSharedPref =
         context.getSharedPreferences("bossList", Context.MODE_PRIVATE)
@@ -73,13 +71,7 @@ class DropListViewModel @Inject constructor(
     )
     var selectedBossItem = ""
 
-    fun getNameSp(inputData: String) = repository.getNameSp(inputData)
-
-    suspend fun getMonsInfo(inputData: String): Monster {
-        val info = viewModelScope.async(Dispatchers.IO) { repository.getMonsInfo(inputData) }
-        return info.await()
-    }
-
+    /*
     suspend fun checkIsClickedBoss(pos: Int, inputData: String) {
         when (clickable) {
             -1 -> {
@@ -103,7 +95,7 @@ class DropListViewModel @Inject constructor(
                 ).show()
             }
         }
-    }
+    }*/
 
     fun getBossList() {
         viewModelScope.launch(Dispatchers.Main) {

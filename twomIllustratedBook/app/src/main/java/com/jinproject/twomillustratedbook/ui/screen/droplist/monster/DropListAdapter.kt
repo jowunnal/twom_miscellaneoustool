@@ -64,7 +64,7 @@ class DropListAdapter (private val context: Context,private val getMonsterItem: 
             binding.activityContext = context
             binding.monster = monster
 
-            binding.dropContent.text = getMonsterItem(monster.item)
+            binding.dropContent.text = getMonsterItem(monster.item ?: emptyList())
         }
 
     }
@@ -77,9 +77,9 @@ class DropListAdapter (private val context: Context,private val getMonsterItem: 
                 } else {
                     val itemsFiltering = ArrayList<MonsterState>()
                     itemsUnfiltered.forEach { monster ->
-                        if (monster.name == p0.toString())
+                        if (monster.name.contains(p0.toString()))
                             itemsFiltering.add(monster)
-                        monster.item.forEach { itemState ->
+                        monster.item?.forEach { itemState ->
                             if(itemState.name.contains(p0.toString()))
                                 itemsFiltering.add(monster)
                         }

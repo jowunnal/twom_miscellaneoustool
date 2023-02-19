@@ -4,14 +4,11 @@ import android.annotation.SuppressLint
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jinproject.twomillustratedbook.databinding.DroplistmapBinding
-import com.jinproject.twomillustratedbook.listener.OnItemClickListener
+import com.jinproject.twomillustratedbook.ui.listener.OnItemClickListener
 import com.jinproject.twomillustratedbook.ui.base.BaseFragment
 import com.jinproject.twomillustratedbook.ui.screen.droplist.monster.DropListViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,11 +47,11 @@ class DropListMaps : BaseFragment<DroplistmapBinding>() {
     @SuppressLint("NotifyDataSetChanged")
     override fun subScribeUi() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                dropListMapViewModel.mapState.collectLatest { mapList ->
-                    adapter.setItems(mapList)
-                    adapter.notifyDataSetChanged()
-                }
+            dropListMapViewModel.mapState
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle,Lifecycle.State.STARTED)
+                .collectLatest { mapList ->
+                adapter.setItems(mapList)
+                adapter.notifyDataSetChanged()
             }
         }
     }

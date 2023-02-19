@@ -8,7 +8,7 @@ data class MonsterState(
     val genTime: Int,
     val imgName: String,
     val type: MonsterType,
-    val item: List<ItemState>
+    val item: List<ItemState>?
 ) {
     companion object {
         fun getInitValue() = MonsterState(
