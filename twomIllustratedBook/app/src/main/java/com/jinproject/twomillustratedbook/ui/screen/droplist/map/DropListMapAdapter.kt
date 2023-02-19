@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jinproject.twomillustratedbook.databinding.DroplistmapItemBinding
-import com.jinproject.twomillustratedbook.listener.OnItemClickListener
+import com.jinproject.twomillustratedbook.ui.listener.OnItemClickListener
 import com.jinproject.twomillustratedbook.ui.screen.droplist.map.item.MapState
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
@@ -30,7 +30,8 @@ class DropListMapAdapter @Inject constructor(@ActivityContext val context: Conte
     }
 
     fun setItems(item: List<MapState>) {
-        items.addAll(item)
+        this.items.clear()
+        this.items.addAll(item)
     }
 
     fun getItem(pos: Int): String {

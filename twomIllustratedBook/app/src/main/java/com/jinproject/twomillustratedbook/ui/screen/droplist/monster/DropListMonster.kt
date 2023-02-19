@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jinproject.twomillustratedbook.R
@@ -85,6 +86,9 @@ class DropListMonster : BaseFragment<DropBinding>() {
                                 }
                             })
                         }
+                    }
+                    android.R.id.home -> {
+                        findNavController().popBackStack()
                     }
                 }
                 return true

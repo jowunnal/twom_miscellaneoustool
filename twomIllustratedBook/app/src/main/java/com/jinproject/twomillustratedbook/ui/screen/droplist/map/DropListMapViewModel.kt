@@ -21,7 +21,7 @@ class DropListMapViewModel @Inject constructor(
 
     private fun getDropListMapList() = dropListRepository.getMaps().onEach { mapModelList ->
         _mapState.emit(
-            mapModelList.map { mapModel -> mapModel.toMapState() }.sortedWith(compareBy{mapState -> mapState.name})
+            mapModelList.map { mapModel -> mapModel.toMapState() }
         )
     }.catch {
 
