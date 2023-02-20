@@ -21,6 +21,7 @@ import com.google.android.gms.ads.OnUserEarnedRewardListener
 import com.google.android.gms.ads.rewarded.RewardItem
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.TwomIllustratedBookTheme
@@ -29,6 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class NavigationFragment : Fragment() {
     private var mRewardedAd: RewardedAd? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,8 +49,15 @@ class NavigationFragment : Fragment() {
     @Composable
     private fun Content() {
         NavigationGraph(
-            navController = rememberNavController()
+            navController = rememberNavController(),
+            changeVisibilityBottomNavigationBar = { bool -> changeVisibilityBottomNavigationBar(bool) }
         )
+    }
+
+    private fun changeVisibilityBottomNavigationBar(bottomNavigationBarVisibility: Boolean) {
+        requireActivity()
+            .findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+            .visibility = if (bottomNavigationBarVisibility) View.VISIBLE else View.GONE
     }
 
     private fun loadRewardedAd() {

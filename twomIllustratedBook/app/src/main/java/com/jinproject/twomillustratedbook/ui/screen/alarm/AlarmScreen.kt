@@ -9,26 +9,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.android.gms.ads.AdError
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.rewarded.RewardItem
-import com.google.android.gms.ads.rewarded.RewardedAd
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
-import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.domain.model.MonsterType
 import com.jinproject.twomillustratedbook.domain.model.WeekModel
+import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
 import com.jinproject.twomillustratedbook.ui.screen.alarm.component.AlarmBottomSheetContent
 import com.jinproject.twomillustratedbook.ui.screen.alarm.component.AlarmTopAppBar
 import com.jinproject.twomillustratedbook.ui.screen.alarm.component.BossSelection
 import com.jinproject.twomillustratedbook.ui.screen.alarm.component.InProgressTimerList
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimeState
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimerState
+import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultLayout
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.HorizontalDivider
-import com.jinproject.twomillustratedbook.ui.screen.compose.component.SnackBarHostCustom
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
-import com.jinproject.twomillustratedbook.ui.screen.compose.theme.white
 import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
 import com.mate.carpool.ui.composable.DialogCustom
 import com.mate.carpool.ui.composable.DialogState
@@ -49,6 +41,7 @@ fun AlarmScreen(
     setSelectedBossName: (String) -> Unit,
     setRecentlySelectedBossClassifiedChanged: (MonsterType) -> Unit,
     setRecentlySelectedBossNameChanged: (String) -> Unit,
+    onNavigateToGear: () -> Unit
 ) {
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -77,26 +70,14 @@ fun AlarmScreen(
             }
         }
 
-    Scaffold(
+    DefaultLayout(
         topBar = {
             AlarmTopAppBar(
-                onNavigateToTimer = { },
-                onNavigateToLogin = { }) {
-
-            }
+                onNavigateToGear = onNavigateToGear,
+                onNavigateToOverlaySetting = {}
+            )
         },
-        backgroundColor = white,
-        scaffoldState = scaffoldState,
-        snackbarHost = { snackBarHostState ->
-            Column() {
-                SnackBarHostCustom(headerMessage = snackBarHostState.currentSnackbarData?.message
-                    ?: "",
-                    contentMessage = snackBarHostState.currentSnackbarData?.actionLabel ?: "",
-                    snackBarHostState = scaffoldState.snackbarHostState,
-                    disMissSnackBar = { scaffoldState.snackbarHostState.currentSnackbarData?.dismiss() })
-                VerticalSpacer(height = 90.dp)
-            }
-        }
+        scaffoldState = scaffoldState
     ) {
         ModalBottomSheetLayout(
             sheetContent = {
@@ -233,7 +214,8 @@ private fun PreviewAlarmScreen() {
             setMinutesChanged = {},
             setSecondsChanged = {},
             setRecentlySelectedBossClassifiedChanged = {},
-            setRecentlySelectedBossNameChanged = {}
+            setRecentlySelectedBossNameChanged = {},
+            onNavigateToGear = {}
         )
     }
 }

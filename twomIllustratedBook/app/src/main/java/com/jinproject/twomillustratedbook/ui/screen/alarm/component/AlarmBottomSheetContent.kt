@@ -107,17 +107,19 @@ fun AlarmBottomSheetContent(
         VerticalSpacer(height = 16.dp)
 
         Row() {
-            DefaultButton(content = "시작", modifier = Modifier
+            DefaultButton(content = "시작하기", modifier = Modifier
                 .weight(1f)
                 .clickable {
                     onStartAlarm(selectedBossName)
                     onCloseBottomSheet()
                 }
             )
+            /*
             HorizontalSpacer(width = 5.dp)
             DefaultButton(content = "서버로 전송", modifier = Modifier
                 .weight(1f)
                 .clickable { onCloseBottomSheet() })
+             */
         }
 
     }
