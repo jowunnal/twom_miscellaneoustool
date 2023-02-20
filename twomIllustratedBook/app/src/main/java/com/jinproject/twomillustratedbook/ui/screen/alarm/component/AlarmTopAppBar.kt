@@ -1,7 +1,5 @@
 package com.jinproject.twomillustratedbook.ui.screen.alarm.component
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.TopAppBar
@@ -15,17 +13,16 @@ import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
 
 @Composable
 fun AlarmTopAppBar(
-    onNavigateToTimer: () -> Unit,
-    onNavigateToLogin: () -> Unit,
+    onNavigateToGear: () -> Unit,
     onNavigateToOverlaySetting: () -> Unit
 ) {
     TopAppBar(
         title = {},
         actions = {
-            IconButton(onClick = { onNavigateToTimer() }) {
+            IconButton(onClick = { onNavigateToGear() }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.icon_alarm),
-                    contentDescription = "AlarmIcon"
+                    painter = painterResource(id = R.drawable.icon_gear),
+                    contentDescription = "GearIcon"
                 )
             }
             IconButton(onClick = { onNavigateToOverlaySetting() }) {
@@ -34,12 +31,12 @@ fun AlarmTopAppBar(
                     contentDescription = "AlarmIcon"
                 )
             }
-            IconButton(onClick = { onNavigateToLogin() }) {
+            /*IconButton(onClick = { onNavigateToLogin() }) {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_login),
                     contentDescription = "LoginIcon"
                 )
-            }
+            }*/
         },
         backgroundColor = white,
         contentColor = black
@@ -51,8 +48,7 @@ fun AlarmTopAppBar(
 private fun PreviewAlarmTopAppBar() =
     TwomIllustratedBookPreview {
         AlarmTopAppBar(
-            onNavigateToTimer = {},
-            onNavigateToLogin = {},
+            onNavigateToGear = {},
             onNavigateToOverlaySetting = {}
         )
     }

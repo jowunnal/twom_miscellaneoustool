@@ -9,23 +9,27 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
 import com.jinproject.twomillustratedbook.ui.screen.alarm.AlarmScreen
 import com.jinproject.twomillustratedbook.ui.screen.alarm.AlarmViewModel
-import com.jinproject.twomillustratedbook.ui.screen.alarm.SnackBarMessage
-import com.jinproject.twomillustratedbook.ui.screen.droplist.monster.DropListViewModel
+import com.jinproject.twomillustratedbook.ui.screen.gear.GearScreen
+import com.jinproject.twomillustratedbook.ui.screen.gear.GearViewModel
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
+    changeVisibilityBottomNavigationBar: (Boolean) -> Unit,
     alarmViewModel: AlarmViewModel = hiltViewModel(),
-    dropListViewModel: DropListViewModel = hiltViewModel()
+    gearViewModel: GearViewModel = hiltViewModel()
 ) {
     NavHost(
         navController = navController,
         startDestination = NavigationItem.Alarm.route
     ) {
         composable(route = NavigationItem.Alarm.route) {
+            changeVisibilityBottomNavigationBar(true)
+
             val alarmUiState by alarmViewModel.uiState.collectAsStateWithLifecycle()
             val snackBarMessage by alarmViewModel.snackBarMessage.collectAsStateWithLifecycle(
                 initialValue = SnackBarMessage.getInitValues(),
@@ -44,7 +48,28 @@ fun NavigationGraph(
                 setSecondsChanged = alarmViewModel::setSecondsChanged,
                 setSelectedBossName = alarmViewModel::setSelectedBossName,
                 setRecentlySelectedBossClassifiedChanged = alarmViewModel::setRecentlySelectedBossClassified,
-                setRecentlySelectedBossNameChanged = alarmViewModel::setRecentlySelectedBossName
+                setRecentlySelectedBossNameChanged = alarmViewModel::setRecentlySelectedBossName,
+                onNavigateToGear = {
+                    navController.navigate(NavigationItem.Gear.route)
+                }
+            )
+        }
+
+        composable(route = NavigationItem.Gear.route) {
+            changeVisibilityBottomNavigationBar(false)
+
+            val gearUiState by gearViewModel.uiState.collectAsStateWithLifecycle()
+            val snackBarMessage by gearViewModel.snackBarMessage.collectAsStateWithLifecycle(
+                initialValue = SnackBarMessage.getInitValues(),
+                lifecycleOwner = LocalLifecycleOwner.current
+            )
+
+            GearScreen(
+                gearUiState = gearUiState,
+                snackBarMessage = snackBarMessage,
+                setIntervalFirstTimerSetting = gearViewModel::setIntervalFirstTimerSetting,
+                setIntervalSecondTimerSetting = gearViewModel::setIntervalSecondTimerSetting,
+                onNavigatePopBackStack = { navController.popBackStack() }
             )
         }
     }

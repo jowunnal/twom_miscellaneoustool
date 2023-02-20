@@ -11,4 +11,8 @@ sealed class NavigationItem(
         title = "알람",
         route = "alarm"
     )
+    object Gear: NavigationItem(
+        title = "설정",
+        route = "gear"
+    )
 }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
+import kotlin.math.min
 
 class TimerRepositoryImpl @Inject constructor(
     private val timerDao: TimerDao,
@@ -47,6 +48,18 @@ class TimerRepositoryImpl @Inject constructor(
     override suspend fun setRecentlySelectedBossName(bossName: String) {
         timerDataStore.updateData { prefs ->
             prefs.toBuilder().setRecentlySelectedBossName(bossName).build()
+        }
+    }
+
+    override suspend fun setIntervalFirstTimerSetting(minutes: Int) {
+        timerDataStore.updateData { prefs ->
+            prefs.toBuilder().setIntervalFirstTimerSetting(minutes).build()
+        }
+    }
+
+    override suspend fun setIntervalSecondTimerSetting(minutes: Int) {
+        timerDataStore.updateData { prefs ->
+            prefs.toBuilder().setIntervalSecondTimerSetting(minutes).build()
         }
     }
 

@@ -5,19 +5,16 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.*
 import com.jinproject.twomillustratedbook.data.repository.DropListRepository
-import com.jinproject.twomillustratedbook.ui.screen.alarm.item.AlarmItem
-import com.jinproject.twomillustratedbook.ui.Receiver.AlarmReceiver
 import com.jinproject.twomillustratedbook.data.repository.TimerRepository
-import com.jinproject.twomillustratedbook.domain.model.MonsterModel
 import com.jinproject.twomillustratedbook.domain.model.MonsterType
 import com.jinproject.twomillustratedbook.domain.model.WeekModel
+import com.jinproject.twomillustratedbook.ui.Receiver.AlarmReceiver
+import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
+import com.jinproject.twomillustratedbook.ui.screen.alarm.item.AlarmItem
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimeState
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimerState
-import com.jinproject.twomillustratedbook.ui.screen.droplist.monster.item.MonsterState
 import com.jinproject.twomillustratedbook.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -25,11 +22,8 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
-import kotlin.NoSuchElementException
-import kotlin.math.min
 
 data class AlarmUiState(
     val timerList: List<TimerState>,
@@ -49,18 +43,6 @@ data class AlarmUiState(
             recentlySelectedBossName = "",
             bossNameList = emptyList(),
             frequentlyUsedBossList = emptyList()
-        )
-    }
-}
-
-data class SnackBarMessage(
-    val headerMessage: String,
-    val contentMessage: String = ""
-) {
-    companion object {
-        fun getInitValues() = SnackBarMessage(
-            headerMessage = "",
-            contentMessage = ""
         )
     }
 }
