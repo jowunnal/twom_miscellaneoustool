@@ -18,4 +18,8 @@
     <string name="Rewarded_Ad_UnitId">ca-app-pub-3630394418001517/7487969905</string>
     <string name="아이템이름">아이템이름</string>
     <string name="스텟">스텟</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="현재시간항상보기">아이모 현재시간 항상보기 서비스</string>
+    <string name="알람재생성서비스">아이모 알람 재생성 서비스</string>
+    <string name="알람서비스">아이모 알람 생성 서비스</string>
 </resources>

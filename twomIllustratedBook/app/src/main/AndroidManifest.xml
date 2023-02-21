@@ -32,15 +32,10 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name=".ui.Receiver.AlarmReceiver"
-            android:enabled="true"
-            android:exported="false" />
-
-        <service android:name=".ui.Service.AlarmService" />
-        <service android:name=".ui.Service.WService" />
-        <service android:name=".ui.Service.ReAlarmService" />
-        <service android:name=".ui.Service.AlarmServerService" />
+        <service android:name=".ui.Service.OverlayService" android:description="@string/현재시간항상보기"/>
+        <service android:name=".ui.Service.ReAlarmService" android:description="@string/알람재생성서비스"/>
+        <service android:name=".ui.Service.AlarmService" android:description="@string/알람서비스"/>
+        <service android:name=".ui.Service.AlarmServerService"/>
     </application>
 
 </manifest>

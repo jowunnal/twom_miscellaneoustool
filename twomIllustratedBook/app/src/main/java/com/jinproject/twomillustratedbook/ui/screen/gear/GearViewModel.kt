@@ -24,7 +24,7 @@ data class GearUiState(
 @HiltViewModel
 class GearViewModel @Inject constructor(
     private val timerRepository: TimerRepository
-) : ViewModel(){
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(GearUiState.getInitValue())
     val uiState get() = _uiState.asStateFlow()
@@ -57,7 +57,7 @@ class GearViewModel @Inject constructor(
         }
     }
 
-    private fun emitSnackBar(snackBarMessage: SnackBarMessage) {
+    fun emitSnackBar(snackBarMessage: SnackBarMessage) {
         viewModelScope.launch {
             _snackBarMessage.emit(snackBarMessage)
         }

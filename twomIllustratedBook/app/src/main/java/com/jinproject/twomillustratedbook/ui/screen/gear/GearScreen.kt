@@ -32,13 +32,14 @@ fun GearScreen(
     snackBarMessage: SnackBarMessage,
     setIntervalFirstTimerSetting: (Int) -> Unit,
     setIntervalSecondTimerSetting: (Int) -> Unit,
-    onNavigatePopBackStack: () -> Unit
+    onNavigatePopBackStack: () -> Unit,
+    emitSnackBar: (SnackBarMessage) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
 
-    if (snackBarMessage.headerMessage.isNotBlank())
-        LaunchedEffect(key1 = snackBarMessage) {
+    if (snackBarMessage.contentMessage.isNotBlank())
+        LaunchedEffect(key1 = snackBarMessage.contentMessage) {
             coroutineScope.launch {
                 scaffoldState.snackbarHostState.showSnackbar(
                     message = snackBarMessage.headerMessage,
@@ -67,13 +68,13 @@ fun GearScreen(
                 headerText = "첫번째",
                 pickerValue = gearUiState.intervalFirstTimer,
                 onPickerValueChange = { minutes -> setIntervalFirstTimerSetting(minutes) },
-                onButtonClick = {}
+                onButtonClick = emitSnackBar
             )
             SettingIntervalItem(
                 headerText = "두번째",
                 pickerValue = gearUiState.intervalSecondTimer,
                 onPickerValueChange = { minutes -> setIntervalSecondTimerSetting(minutes) },
-                onButtonClick = {}
+                onButtonClick = emitSnackBar
             )
         }
     }
@@ -84,7 +85,7 @@ private fun SettingIntervalItem(
     headerText: String,
     pickerValue: Int,
     onPickerValueChange: (Int) -> Unit,
-    onButtonClick: () -> Unit
+    onButtonClick: (SnackBarMessage) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -111,7 +112,14 @@ private fun SettingIntervalItem(
         HorizontalSpacer(width = 4.dp)
         DefaultButton(
             content = "적용하기",
-            modifier = Modifier.clickable { onButtonClick() }
+            modifier = Modifier.clickable {
+                onButtonClick(
+                    SnackBarMessage(
+                        headerMessage = "알람 간격 설정이 완료되었습니다.",
+                        contentMessage = "$headerText 알람 간격이 $pickerValue 분 전으로 설정되었습니다."
+                    )
+                )
+            }
         )
     }
 }
@@ -125,6 +133,7 @@ private fun PreviewGearScreen() =
             snackBarMessage = SnackBarMessage.getInitValues(),
             setIntervalFirstTimerSetting = {},
             setIntervalSecondTimerSetting = {},
-            onNavigatePopBackStack = {}
+            onNavigatePopBackStack = {},
+            emitSnackBar = {}
         )
     }

@@ -5,12 +5,13 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.*
 import com.jinproject.twomillustratedbook.data.repository.DropListRepository
 import com.jinproject.twomillustratedbook.data.repository.TimerRepository
 import com.jinproject.twomillustratedbook.domain.model.MonsterType
 import com.jinproject.twomillustratedbook.domain.model.WeekModel
-import com.jinproject.twomillustratedbook.ui.Receiver.AlarmReceiver
+import com.jinproject.twomillustratedbook.ui.Service.AlarmService
 import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.AlarmItem
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimeState
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+import kotlin.NoSuchElementException
 
 data class AlarmUiState(
     val timerList: List<TimerState>,
@@ -70,14 +72,23 @@ class AlarmViewModel @Inject constructor(
 
     private fun getRecentlySelectedBossInfo() {
         timerRepository.timerPreferences.onEach { prefs ->
-            _uiState.update { state ->
-                state.copy(
-                    recentlySelectedBossClassified = MonsterType.findByStoredName(prefs.recentlySelectedBossClassified).displayName,
-                    recentlySelectedBossName = prefs.recentlySelectedBossName,
-                    frequentlyUsedBossList = prefs.frequentlyUsedBossListList
-                )
+            try {
+                _uiState.update { state ->
+                    state.copy(
+                        recentlySelectedBossClassified = MonsterType.findByStoredName(prefs.recentlySelectedBossClassified).displayName,
+                        recentlySelectedBossName = prefs.recentlySelectedBossName,
+                        frequentlyUsedBossList = prefs.frequentlyUsedBossListList
+                    )
+                }
+                getBossListByType(MonsterType.findByStoredName(prefs.recentlySelectedBossClassified))
+            } catch (e: java.util.NoSuchElementException) {
+                _uiState.update { state ->
+                    state.copy(
+                        recentlySelectedBossClassified = "",
+                        recentlySelectedBossName = ""
+                    )
+                }
             }
-            getBossListByType(MonsterType.findByStoredName(prefs.recentlySelectedBossClassified))
         }.launchIn(viewModelScope)
     }
 
@@ -136,8 +147,9 @@ class AlarmViewModel @Inject constructor(
         }
     }.launchIn(viewModelScope)
 
-    fun setTimer(timerState: TimerState) = viewModelScope.launch(Dispatchers.IO) {
+    private fun setTimer(timerState: TimerState) = viewModelScope.launch(Dispatchers.IO) {
         timerRepository.setTimer(
+            timerState.id,
             timerState.timeState.day.getCodeByWeek(),
             timerState.timeState.hour,
             timerState.timeState.minutes,
@@ -176,12 +188,48 @@ class AlarmViewModel @Inject constructor(
                 second = uiState.value.timeState.seconds
             }.timeInMillis + (monsterState.genTime * 1000).toLong()
 
+            val cal = Calendar.getInstance().apply {
+                timeInMillis = genTime
+            }
+
+            val timer = uiState.value.timerList.find { timerState ->
+                timerState.bossName == monsterName
+            }
+
+            val code = timer?.id?: if(uiState.value.timerList.isNotEmpty()) uiState.value.timerList.last().id + 1 else 1
+
+            when (timer) {
+                is TimerState -> {
+                    timerRepository.updateTimer(
+                        id = code,
+                        day = cal.day,
+                        hour = cal.hour,
+                        min = cal.minute,
+                        sec = cal.second
+                    )
+                }
+                null -> {
+                    setTimer(
+                        TimerState(
+                            id = code,
+                            bossName = monsterName,
+                            timeState = TimeState(
+                                day = WeekModel.findByCode(cal.day),
+                                hour = cal.hour,
+                                minutes = cal.minute,
+                                seconds = cal.second
+                            )
+                        )
+                    )
+                }
+            }
+
             makeAlarm(
                 nextGenTime = genTime - prefs.intervalFirstTimerSetting * 60000,
                 item = AlarmItem(
                     name = monsterState.name,
                     imgName = monsterState.imgName,
-                    code = getAlarmCode(monsterName),
+                    code = code,
                     gtime = monsterState.genTime
                 )
             )
@@ -191,29 +239,12 @@ class AlarmViewModel @Inject constructor(
                 item = AlarmItem(
                     name = monsterState.name,
                     imgName = monsterState.imgName,
-                    code = getAlarmCode(monsterName) + 300,
+                    code = code + 300,
                     gtime = monsterState.genTime
                 )
             )
 
-            val cal = Calendar.getInstance().apply {
-                timeInMillis = genTime
-            }
-
-            setTimer(
-                TimerState(
-                    id = getAlarmCode(monsterName),
-                    bossName = monsterName,
-                    timeState = TimeState(
-                        day = WeekModel.findByCode(cal.day),
-                        hour = cal.hour,
-                        minutes = cal.minute,
-                        seconds = cal.second
-                    )
-                )
-            )
-
-            emitSnackBar(SnackBarMessage(headerMessage = "알람이 설정되었습니다."))
+            emitSnackBar(SnackBarMessage(headerMessage = "$monsterName 의 알람이 설정되었습니다."))
         }.catch { e ->
             when (e) {
                 is NoSuchElementException -> {
@@ -230,26 +261,9 @@ class AlarmViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun getAlarmCode(monsterName: String): Int {
-        var code = 0
-        try {
-            code = uiState.value.timerList.last().id + 1
-
-            uiState.value.timerList.forEach { timerState ->
-                if (timerState.bossName == monsterName) {
-                    code = timerState.id
-                }
-            }
-        } catch (e: NoSuchElementException) {
-            code = 1
-        }
-
-        return code
-    }
-
     fun clearAlarm(code: Int, bossName: String) {
-        val notifyIntent = Intent(context, AlarmReceiver::class.java)
-        val notifyPendingIntent = PendingIntent.getBroadcast(
+        val notifyIntent = Intent(context, AlarmService::class.java)
+        val notifyPendingIntent = PendingIntent.getService(
             context,
             code,
             notifyIntent,
@@ -264,12 +278,13 @@ class AlarmViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) { timerRepository.deleteTimer(bossName) }
 
     private fun makeAlarm(nextGenTime: Long, item: AlarmItem) {
-        val notifyIntentImmediately = Intent(context, AlarmReceiver::class.java)
+        val notifyIntentImmediately = Intent(context, AlarmService::class.java)
         notifyIntentImmediately.putExtra("msg", item.name)
         notifyIntentImmediately.putExtra("img", item.imgName)
         notifyIntentImmediately.putExtra("code", item.code)
         notifyIntentImmediately.putExtra("gtime", item.gtime)
-        val notifyPendingIntent = PendingIntent.getBroadcast(
+
+        val notifyPendingIntent = PendingIntent.getService(
             context,
             item.code,
             notifyIntentImmediately,
