@@ -261,23 +261,6 @@ class AlarmViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun getAlarmCode(monsterName: String): Int {
-
-        val code = when(
-            val timer = uiState.value.timerList.find { timerState ->
-                timerState.bossName == monsterName
-            }
-        ) {
-            is TimerState -> timer.id
-            null -> if(uiState.value.timerList.isNotEmpty()) uiState.value.timerList.last().id + 1 else 1
-            else -> {throw IllegalArgumentException("IllegalArgumentException has occurred : $timer")}
-        }
-
-        Log.d("test", code.toString())
-
-        return code
-    }
-
     fun clearAlarm(code: Int, bossName: String) {
         val notifyIntent = Intent(context, AlarmService::class.java)
         val notifyPendingIntent = PendingIntent.getService(
