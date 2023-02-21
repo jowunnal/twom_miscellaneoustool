@@ -60,7 +60,7 @@ fun AlarmScreen(
         )
 
     if (snackBarMessage.headerMessage.isNotBlank())
-        LaunchedEffect(key1 = snackBarMessage) {
+        LaunchedEffect(key1 = snackBarMessage.headerMessage) {
             coroutineScope.launch {
                 scaffoldState.snackbarHostState.showSnackbar(
                     message = snackBarMessage.headerMessage,

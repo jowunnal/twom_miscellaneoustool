@@ -18,4 +18,8 @@
     <string name="Rewarded_Ad_UnitId">ca-app-pub-3630394418001517/7487969905</string>
     <string name="아이템이름">Item\'s Name</string>
     <string name="스텟">Stat</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="현재시간항상보기">Twom watch always present time service</string>
+    <string name="알람재생성서비스">Twom recreate alarm service</string>
+    <string name="알람서비스">Twom create alarm service</string>
 </resources>

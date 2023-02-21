@@ -35,7 +35,8 @@ class TimerRepositoryImpl @Inject constructor(
 
     override suspend fun setBossToFrequentlyUsedList(bossList: List<String>) {
         timerDataStore.updateData { prefs ->
-            prefs.toBuilder().clearFrequentlyUsedBossList().addAllFrequentlyUsedBossList(bossList).build()
+            prefs.toBuilder().clearFrequentlyUsedBossList().addAllFrequentlyUsedBossList(bossList)
+                .build()
         }
     }
 
@@ -78,8 +79,24 @@ class TimerRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun setTimer(day: Int, hour: Int, min: Int, sec: Int, bossName: String) =
-        timerDao.setTimer(day, hour, min, sec, bossName)
+    override suspend fun setTimer(
+        id: Int,
+        day: Int,
+        hour: Int,
+        min: Int,
+        sec: Int,
+        bossName: String
+    ) = timerDao.setTimer(id, day, hour, min, sec, bossName)
+
+    override suspend fun updateTimer(id: Int, day: Int, hour: Int, min: Int, sec: Int) {
+        timerDao.updateTimer(
+            id = id,
+            day = day,
+            hour = hour,
+            min = min,
+            sec = sec
+        )
+    }
 
     override suspend fun deleteTimer(bossName: String) = timerDao.deleteTimer(bossName)
     override suspend fun setOta(ota: Int, bossName: String) = timerDao.setOta(ota, bossName)

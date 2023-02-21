@@ -16,9 +16,10 @@ interface TimerRepository {
     suspend fun setIntervalSecondTimerSetting(minutes: Int)
 
     suspend fun updateTimerInterval(firstIntervalTime: Int, secondIntervalTime: Int)
-    suspend fun setTimer(day:Int,hour:Int, min:Int,sec:Int, bossName:String)
+    suspend fun setTimer(id: Int, day: Int, hour: Int, min: Int, sec: Int, bossName: String)
+    suspend fun updateTimer(id: Int, day: Int, hour: Int, min: Int, sec: Int)
     suspend fun deleteTimer(bossName: String)
-    fun getTimer() : Flow<List<TimerModel>>
-    suspend fun setOta(ota:Int,bossName:String)
+    fun getTimer(): Flow<List<TimerModel>>
+    suspend fun setOta(ota: Int, bossName: String)
 
 }

@@ -10,7 +10,7 @@ import com.jinproject.twomillustratedbook.data.database.Entity.Timer
 import com.jinproject.twomillustratedbook.domain.Item.Room
 import com.jinproject.twomillustratedbook.domain.Item.TimerItem
 import com.jinproject.twomillustratedbook.ui.Service.AlarmServerService
-import com.jinproject.twomillustratedbook.ui.Service.WService
+import com.jinproject.twomillustratedbook.ui.Service.OverlayService
 import com.jinproject.twomillustratedbook.utils.sortTimerList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -44,10 +44,10 @@ class ServerManageViewModel @Inject constructor(@ApplicationContext private val 
         sortTimerList(listToWservice)
 
         if(listToWservice.isNotEmpty()){ //비어잇는게 아니면 백그라운드상에 동작하도록 서비스시작
-            context.startService(Intent(context, WService::class.java).apply { putExtra("list",listToWservice) })
+            context.startService(Intent(context, OverlayService::class.java).apply { putExtra("list",listToWservice) })
         }
         else{ // 비어잇으면(등록된타이머가없으면) 현재시간만 계속 출력하도록 함
-            context.startService(Intent(context, WService::class.java))
+            context.startService(Intent(context, OverlayService::class.java))
         }
     }
 

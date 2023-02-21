@@ -69,7 +69,8 @@ fun NavigationGraph(
                 snackBarMessage = snackBarMessage,
                 setIntervalFirstTimerSetting = gearViewModel::setIntervalFirstTimerSetting,
                 setIntervalSecondTimerSetting = gearViewModel::setIntervalSecondTimerSetting,
-                onNavigatePopBackStack = { navController.popBackStack() }
+                onNavigatePopBackStack = { navController.popBackStack() },
+                emitSnackBar = gearViewModel::emitSnackBar
             )
         }
     }

@@ -2,79 +2,150 @@ package com.jinproject.twomillustratedbook.ui.Service
 
 import android.app.AlarmManager
 import android.app.Application
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
-import androidx.lifecycle.LifecycleService
-import androidx.lifecycle.lifecycleScope
-import com.jinproject.twomillustratedbook.ui.screen.alarm.item.AlarmItem
-import com.jinproject.twomillustratedbook.ui.Receiver.AlarmReceiver
+import androidx.lifecycle.*
 import com.jinproject.twomillustratedbook.data.repository.TimerRepository
+import com.jinproject.twomillustratedbook.domain.model.TimerModel
+import com.jinproject.twomillustratedbook.ui.screen.alarm.AlarmViewModel
+import com.jinproject.twomillustratedbook.ui.screen.alarm.item.AlarmItem
+import com.jinproject.twomillustratedbook.utils.day
+import com.jinproject.twomillustratedbook.utils.hour
+import com.jinproject.twomillustratedbook.utils.minute
+import com.jinproject.twomillustratedbook.utils.second
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.select
 import java.util.*
 import javax.inject.Inject
+import kotlin.math.min
 
 @AndroidEntryPoint
 class ReAlarmService : LifecycleService() {
-    @Inject lateinit var repository: TimerRepository
+    @Inject
+    lateinit var repository: TimerRepository
+    private var alarmManager: AlarmManager? = null
+    private var notificationManager: NotificationManager? = null
+
+    override fun onCreate() {
+        super.onCreate()
+        notificationManager =
+            applicationContext!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        alarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        val alarmManager: AlarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val gtime=intent?.getIntExtra("gtime",0)!!
+        lifecycleScope.launch {
+            val genTime = intent?.getIntExtra("gtime", 0)!!
+            val code = intent.getIntExtra("code",0)
+            val monsterName = intent.getStringExtra("msg")!!.split("<",">").first()
+            val nextGenTime = (genTime * 1000).toLong() + System.currentTimeMillis()
+            notificationManager?.cancel(code)
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                val cal = Calendar.getInstance().apply {
+                    timeInMillis = nextGenTime
+                }
+                repository.getTimer().zip(repository.timerPreferences) { timerModels, prefs ->
+                    val timer = timerModels.find { timerModel ->
+                        timerModel.bossName == monsterName
+                    }
+                    val id = timer?.id
+                        ?: if (timerModels.isNotEmpty()) timerModels.last().id + 1 else 1
 
-        val timerSharedPreferences=applicationContext.getSharedPreferences("TimerSharedPref",Context.MODE_PRIVATE)
-        val first=timerSharedPreferences.getInt("first",5)
-        val last=timerSharedPreferences.getInt("last",0)
-        makeAlarm(alarmManager,application,(gtime-first*60)*1000, AlarmItem(
-            intent.getStringExtra("msg")!!,
-            intent.getStringExtra("img")!!,
-           intent.getIntExtra("code", 0)-300,
-           gtime)
-        )
+                    when (timer) {
+                        is TimerModel -> {
+                            repository.updateTimer(
+                                id = id,
+                                day = cal.day,
+                                hour = cal.hour,
+                                min = cal.minute,
+                                sec = cal.second
+                            )
+                        }
+                        null -> {
+                            repository.setTimer(
+                                id = id,
+                                day = cal.day,
+                                hour = cal.hour,
+                                min = cal.minute,
+                                sec = cal.second,
+                                bossName = monsterName
+                            )
+                        }
+                    }
 
-        makeAlarm(alarmManager,application,(gtime-last*60)*1000, AlarmItem(
-            intent.getStringExtra("msg")!!,
-            intent.getStringExtra("img")!!,
-            intent.getIntExtra("code",0),
-            gtime)
-        )
+                    makeAlarm(
+                        alarmManager!!,
+                        application,
+                        (nextGenTime - prefs.intervalFirstTimerSetting * 60000),
+                        AlarmItem(
+                            monsterName,
+                            intent.getStringExtra("img")!!,
+                            id,
+                            genTime
+                        )
+                    )
 
-
-        val cal = Calendar.getInstance()
-        var day=cal.get(Calendar.DAY_OF_WEEK)
-        var hour=cal.get(Calendar.HOUR_OF_DAY)+((gtime/60)/60)
-        var min=cal.get(Calendar.MINUTE)+((gtime/60)%60)
-        var sec=cal.get(Calendar.SECOND)+((gtime%60))
-        while(sec>=60){
-            min+=1
-            sec-=60
+                    makeAlarm(
+                        alarmManager!!,
+                        application,
+                        (nextGenTime - prefs.intervalSecondTimerSetting * 60000),
+                        AlarmItem(
+                            monsterName,
+                            intent.getStringExtra("img")!!,
+                            id + 300,
+                            genTime
+                        )
+                    )
+                }.collect()
+                stopSelf()
+            }
         }
-        while(min>=60){
-            hour+=1
-            min-=60
-        }
-        while(hour>=24){
-            hour-=24
-            day+=1
-        }
-        lifecycleScope.launch(Dispatchers.IO){repository.setTimer(day,hour,min,sec,intent.getStringExtra("msg")!!)}
-        return START_STICKY
+        return START_NOT_STICKY
     }
+
     override fun onBind(intent: Intent): IBinder? {
         super.onBind(intent)
         // We don't provide binding, so return null
         return null
     }
-    private fun makeAlarm(alarmManager:AlarmManager,app:Application,count:Int,item: AlarmItem){
-        val notifyIntentImmediately = Intent(app, AlarmReceiver::class.java)
-        notifyIntentImmediately.putExtra("msg",item.name)
-        notifyIntentImmediately.putExtra("img",item.imgName)
-        notifyIntentImmediately.putExtra("code",item.code)
-        notifyIntentImmediately.putExtra("gtime",item.gtime)
-        val notifyPendingIntent = PendingIntent.getBroadcast(app,item.code,notifyIntentImmediately,PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-        alarmManager.setAlarmClock(AlarmManager.AlarmClockInfo(System.currentTimeMillis()+count,notifyPendingIntent), notifyPendingIntent)
+
+    private fun makeAlarm(
+        alarmManager: AlarmManager,
+        app: Application,
+        nextGenTime: Long,
+        item: AlarmItem
+    ) {
+        val notifyIntentImmediately = Intent(app, AlarmService::class.java)
+        notifyIntentImmediately.putExtra("msg", item.name)
+        notifyIntentImmediately.putExtra("img", item.imgName)
+        notifyIntentImmediately.putExtra("code", item.code)
+        notifyIntentImmediately.putExtra("gtime", item.gtime)
+
+        val notifyPendingIntent = PendingIntent.getService(
+            app,
+            item.code,
+            notifyIntentImmediately,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.setAlarmClock(
+            AlarmManager.AlarmClockInfo(
+                nextGenTime,
+                notifyPendingIntent
+            ), notifyPendingIntent
+        )
+    }
+
+    override fun onDestroy() {
+        notificationManager = null
+        alarmManager = null
+        super.onDestroy()
     }
 }

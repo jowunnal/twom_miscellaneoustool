@@ -5,22 +5,13 @@ import android.app.Application
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.IBinder
-import android.widget.Toast
 import androidx.lifecycle.LifecycleService
-import androidx.lifecycle.lifecycleScope
 import com.google.firebase.database.*
 import com.jinproject.twomillustratedbook.data.database.Entity.Monster
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.AlarmItem
-import com.jinproject.twomillustratedbook.domain.Item.Room
-import com.jinproject.twomillustratedbook.ui.Receiver.AlarmReceiver
 import com.jinproject.twomillustratedbook.data.repository.DropListRepository
 import com.jinproject.twomillustratedbook.data.repository.TimerRepository
-import com.jinproject.twomillustratedbook.utils.getMonsterCode
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -96,12 +87,12 @@ class AlarmServerService :LifecycleService() {
     }
 
     private fun makeAlarm(alarmManager: AlarmManager, app: Application, count:Int, item: AlarmItem){
-        val notifyIntentImmediately = Intent(app, AlarmReceiver::class.java)
+        val notifyIntentImmediately = Intent(app, AlarmService::class.java)
         notifyIntentImmediately.putExtra("msg",item.name)
         notifyIntentImmediately.putExtra("img",item.imgName)
         notifyIntentImmediately.putExtra("code",item.code)
         notifyIntentImmediately.putExtra("gtime",item.gtime)
-        val notifyPendingIntent = PendingIntent.getBroadcast(app,item.code,notifyIntentImmediately,
+        val notifyPendingIntent = PendingIntent.getService(app,item.code,notifyIntentImmediately,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         alarmManager.setAlarmClock(AlarmManager.AlarmClockInfo(System.currentTimeMillis()+count,notifyPendingIntent), notifyPendingIntent)
     }
