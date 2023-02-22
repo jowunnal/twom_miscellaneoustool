@@ -18,8 +18,8 @@ fun NotificationManager.sendNotification(
     code: Int,
     applicationContext: Context,
     gtime: Int,
-    intervalFirstTimerSetting: Int,
-    intervalSecondTimerSetting: Int
+    intervalFirstTimerSetting: Int = 0,
+    intervalSecondTimerSetting: Int = 0
 ) {
     val contentIntent = Intent(applicationContext, MainActivity::class.java)
     val alarmIntent = Intent(applicationContext, ReAlarmService::class.java).apply {

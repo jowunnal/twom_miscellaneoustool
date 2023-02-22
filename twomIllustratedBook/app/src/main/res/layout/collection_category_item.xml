@@ -24,12 +24,12 @@
 
         <ImageView
             android:id="@+id/collectionCategoryImg"
-            android:layout_width="390dp"
+            context="@{activityContext}"
+            imgName="@{category.storedName}"
+            android:layout_width="match_parent"
             android:layout_height="132dp"
             android:layout_marginBottom="25dp"
-            app:srcCompat="@drawable/weapon"
-            context="@{activityContext}"
-            imgName="@{category.storedName}"/>
+            app:srcCompat="@drawable/weapon" />
 
         <TextView
             android:id="@+id/collectionCategoryName"

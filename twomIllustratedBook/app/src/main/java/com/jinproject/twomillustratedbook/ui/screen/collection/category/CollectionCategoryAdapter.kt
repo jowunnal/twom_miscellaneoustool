@@ -49,6 +49,8 @@ class CollectionCategoryAdapter @Inject constructor(@ActivityContext val context
         init {
             binding.collectionCategoryItem.minimumWidth =
                 context.applicationContext.resources.displayMetrics.widthPixels
+            binding.collectionCategoryImg.minimumWidth =
+                context.applicationContext.resources.displayMetrics.widthPixels
             itemView.doOnAttach {
                 lifecycleOwner = itemView.findViewTreeLifecycleOwner()
             }

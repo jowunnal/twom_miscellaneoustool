@@ -22,6 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import com.jinproject.twomillustratedbook.data.database.Entity.Timer
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.domain.model.WeekModel
+import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimerState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -47,14 +48,18 @@ class OverlayService : LifecycleService() {
             exitIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+        notificationManager =
+            applicationContext!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
         createNotificationChannel()
 
-        val notification = NotificationCompat.Builder(applicationContext, "현재시간 항상 보기")
+        val notification = NotificationCompat.Builder(applicationContext, "WatchNotificationChannel")
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setSmallIcon(R.mipmap.ic_main)
             .setContentTitle("현재시간 항상 보기가 실행중입니다.")
             .addAction(R.drawable.img_delete_alarm, "끄기", exitPendingIntent)
             .build()
+
         startForeground(999, notification)
 
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -82,7 +87,7 @@ class OverlayService : LifecycleService() {
         val name = "아이모 도감"
         val descriptionText = "현재시간 항상 보기"
         val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel("현재시간 항상 보기", name, importance).apply {
+        val channel = NotificationChannel("WatchNotificationChannel", name, importance).apply {
             description = descriptionText
             setShowBadge(true)
             enableLights(false)
@@ -112,11 +117,11 @@ class OverlayService : LifecycleService() {
             }
         }
 
-        val list = intent?.getParcelableArrayListExtra<Timer>("list")
+        val list = intent?.getParcelableArrayListExtra<TimerState>("timerList")
         if (list != null) {
             var strOta = ""
             for (item in list) {
-                strOta += item.timerMonsName + " (" + WeekModel.findByCode(item.day) + ") " + item.hour + ":" + item.min + ":" + item.sec + "\n"
+                strOta += item.bossName + " (" + item.timeState.day.displayName + ") " + item.timeState.hour + ":" + item.timeState.minutes + ":" + item.timeState.seconds + "\n"
             }
             mView?.findViewById<TextView>(R.id.tv_onOtherApps)?.text = strOta
         } else {

@@ -5,7 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 
 @Entity(
-    primaryKeys = ["rlBookId", "rlItemName"],
+    primaryKeys = ["rlBookId", "rlItemName","rlItemEnchant"],
     foreignKeys = [ForeignKey(
         entity = Book::class,
         parentColumns = arrayOf("bookId"),

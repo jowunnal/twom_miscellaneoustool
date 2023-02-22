@@ -28,5 +28,10 @@ data class Book(
     val pveDmgDownPer: Double,
     val pvpDmgDownPer: Double,
     val goldDrop: Double,
-    val itemDrop: Double
+    val itemDrop: Double,
+    val bossDmgPer: Double,
+    val critDmgDown: Double,
+    val critDmgDownPer: Double,
+    val miss: Double,
+    val critResistPer: Double
 )
