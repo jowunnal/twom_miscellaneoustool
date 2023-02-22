@@ -1,8 +1,12 @@
 package com.jinproject.twomillustratedbook.ui.screen.compose.navigation
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -14,14 +18,19 @@ import com.jinproject.twomillustratedbook.ui.screen.alarm.AlarmScreen
 import com.jinproject.twomillustratedbook.ui.screen.alarm.AlarmViewModel
 import com.jinproject.twomillustratedbook.ui.screen.gear.GearScreen
 import com.jinproject.twomillustratedbook.ui.screen.gear.GearViewModel
+import com.jinproject.twomillustratedbook.ui.screen.watch.WatchScreen
+import com.jinproject.twomillustratedbook.ui.screen.watch.WatchViewModel
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
     changeVisibilityBottomNavigationBar: (Boolean) -> Unit,
+    showRewardedAd: () -> Unit,
+    checkAuthorityDrawOverlays:(Context, (Intent)->Unit) -> Boolean,
     alarmViewModel: AlarmViewModel = hiltViewModel(),
-    gearViewModel: GearViewModel = hiltViewModel()
+    gearViewModel: GearViewModel = hiltViewModel(),
+    watchViewModel: WatchViewModel = hiltViewModel()
 ) {
     NavHost(
         navController = navController,
@@ -51,7 +60,11 @@ fun NavigationGraph(
                 setRecentlySelectedBossNameChanged = alarmViewModel::setRecentlySelectedBossName,
                 onNavigateToGear = {
                     navController.navigate(NavigationItem.Gear.route)
-                }
+                },
+                onNavigateToWatch = {
+                    navController.navigate(NavigationItem.Watch.route)
+                },
+                showRewardedAd = showRewardedAd
             )
         }
 
@@ -71,6 +84,22 @@ fun NavigationGraph(
                 setIntervalSecondTimerSetting = gearViewModel::setIntervalSecondTimerSetting,
                 onNavigatePopBackStack = { navController.popBackStack() },
                 emitSnackBar = gearViewModel::emitSnackBar
+            )
+        }
+
+        composable(route = NavigationItem.Watch.route) {
+            changeVisibilityBottomNavigationBar(false)
+
+            val context = LocalContext.current
+            val uiState by watchViewModel.uiState.collectAsStateWithLifecycle()
+
+            WatchScreen(
+                uiState = uiState,
+                activityContext = context,
+                setWatchStatus = watchViewModel::setWatchStatus,
+                setFontSize = watchViewModel::setFontSize,
+                checkAuthorityDrawOverlays = checkAuthorityDrawOverlays,
+                onNavigatePopBackStack = { navController.popBackStack() },
             )
         }
     }

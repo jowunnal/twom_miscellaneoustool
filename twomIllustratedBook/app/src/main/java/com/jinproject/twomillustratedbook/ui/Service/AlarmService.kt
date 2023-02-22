@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.IBinder
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.*
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.data.repository.TimerRepository
@@ -82,10 +83,8 @@ class AlarmService : LifecycleService() {
             enableLights(true)
             lightColor = Color.BLUE
         }
-        // Register the channel with the system
-        val notificationManager: NotificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
+
+        notificationManager?.createNotificationChannel(channel)
     }
 
     override fun onBind(intent: Intent): IBinder? {

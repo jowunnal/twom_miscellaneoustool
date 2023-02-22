@@ -1,5 +1,7 @@
 package com.jinproject.twomillustratedbook.ui.screen.compose.navigation
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -8,6 +10,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
@@ -50,8 +53,13 @@ class NavigationFragment : Fragment() {
     private fun Content() {
         NavigationGraph(
             navController = rememberNavController(),
-            changeVisibilityBottomNavigationBar = { bool -> changeVisibilityBottomNavigationBar(bool) }
+            changeVisibilityBottomNavigationBar = { bool -> changeVisibilityBottomNavigationBar(bool) },
+            showRewardedAd = { showRewardedAd(mRewardedAd) },
+            checkAuthorityDrawOverlays = { context:Context, register:(Intent) -> Unit
+                -> checkAuthorityDrawOverlays(context, register)
+            }
         )
+        loadRewardedAd()
     }
 
     private fun changeVisibilityBottomNavigationBar(bottomNavigationBarVisibility: Boolean) {
@@ -100,7 +108,24 @@ class NavigationFragment : Fragment() {
         }
     }
 
-    private fun showRewaredAd(mRewardedAd: RewardedAd?) {
+    private fun checkAuthorityDrawOverlays(
+        context: Context,
+        registerForActivityResult: (Intent) -> Unit
+    ): Boolean { // 다른앱 위에 그리기 체크 : true = 권한있음 , false = 권한없음
+        return if (!Settings.canDrawOverlays(context)) {
+            val intent = Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:" + context.packageName)
+            )
+            registerForActivityResult(intent)
+            false
+        } else {
+            true
+        }
+    }
+
+
+    private fun showRewardedAd(mRewardedAd: RewardedAd?) {
         mRewardedAd?.show(requireActivity(), OnUserEarnedRewardListener() {
             fun onUserEarnedReward(rewardItem: RewardItem) {
                 var rewardAmount = rewardItem.amount
@@ -109,22 +134,8 @@ class NavigationFragment : Fragment() {
         })
     }
 
-    private fun checkAuthorityDrawOverlays(): Boolean { // 다른앱 위에 그리기 체크 : true = 권한있음 , false = 권한없음
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            if (!Settings.canDrawOverlays(requireActivity())) {
-                val intent = Intent(
-                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:" + requireActivity().packageName)
-                )
-                startActivityForResult(intent, 404)
-                return false
-            } else {
-                return true
-            }
-        } else {
-            Snackbar.make(requireView(), "다른앱 위에 그리기 권한 설정을 해주셔야 합니다.", Snackbar.LENGTH_SHORT)
-                .show()
-            return false
-        }
+    override fun onDestroy() {
+        mRewardedAd = null
+        super.onDestroy()
     }
 }

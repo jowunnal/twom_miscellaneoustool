@@ -9,4 +9,5 @@ message TimerPreferences {
   string recently_selected_boss_classified = 3;
   string recently_selected_boss_name = 4;
   repeated string frequently_used_boss_list = 5;
+  int32 font_size = 6;
 }
