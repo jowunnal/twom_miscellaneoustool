@@ -1,19 +1,18 @@
 package com.jinproject.twomillustratedbook.ui
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.MenuProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.navigation.NavigationBarView
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,11 +23,10 @@ class MainActivity : AppCompatActivity() {
     val binding get() = _binding!!
 
     private val permissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
+        ActivityResultContracts.RequestPermission()
     ) { result ->
-        if (result.any { permission -> permission.value.not() }) {
-            Toast.makeText(applicationContext, "권한 동의가 필요합니다.", Toast.LENGTH_SHORT).show()
-            finish()
+        if (result.not()) {
+            Toast.makeText(applicationContext, "알림 권한에 동의하지 않으시면 알람 서비스를 이용하실 수 없습니다.", Toast.LENGTH_LONG).show()
         }
     }
     private val adRequest = AdRequest.Builder().build()
@@ -42,6 +40,8 @@ class MainActivity : AppCompatActivity() {
         initTopBar()
         initBottomNavigationBar()
         initAdView()
+        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU)
+            permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
     }
 
     private fun initTopBar() {
@@ -53,7 +53,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun initBottomNavigationBar() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-        binding.bottomNavigationView.setupWithNavController(navHostFragment.navController)
+        binding.bottomNavigationView.apply {
+            setupWithNavController(navHostFragment.navController)
+            labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_UNLABELED
+        }
     }
 
     private fun initAdView() {

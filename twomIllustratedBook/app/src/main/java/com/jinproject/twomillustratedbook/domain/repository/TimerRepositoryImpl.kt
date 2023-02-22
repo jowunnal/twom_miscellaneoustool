@@ -64,6 +64,12 @@ class TimerRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun setFontSize(size: Int) {
+        timerDataStore.updateData { prefs ->
+            prefs.toBuilder().setFontSize(size).build()
+        }
+    }
+
     override suspend fun updateTimerInterval(firstIntervalTime: Int, secondIntervalTime: Int) {
         timerDataStore.updateData { prefs ->
             prefs.toBuilder()

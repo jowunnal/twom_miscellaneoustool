@@ -41,7 +41,9 @@ fun AlarmScreen(
     setSelectedBossName: (String) -> Unit,
     setRecentlySelectedBossClassifiedChanged: (MonsterType) -> Unit,
     setRecentlySelectedBossNameChanged: (String) -> Unit,
-    onNavigateToGear: () -> Unit
+    onNavigateToGear: () -> Unit,
+    onNavigateToWatch: () -> Unit,
+    showRewardedAd: () -> Unit
 ) {
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -74,7 +76,7 @@ fun AlarmScreen(
         topBar = {
             AlarmTopAppBar(
                 onNavigateToGear = onNavigateToGear,
-                onNavigateToOverlaySetting = {}
+                onNavigateToOverlaySetting = onNavigateToWatch
             )
         },
         scaffoldState = scaffoldState
@@ -92,7 +94,8 @@ fun AlarmScreen(
                         coroutineScope.launch {
                             bottomSheetState.animateTo(ModalBottomSheetValue.Hidden)
                         }
-                    }
+                    },
+                    showRewardedAd = showRewardedAd
                 )
             },
             sheetState = bottomSheetState,
@@ -215,7 +218,9 @@ private fun PreviewAlarmScreen() {
             setSecondsChanged = {},
             setRecentlySelectedBossClassifiedChanged = {},
             setRecentlySelectedBossNameChanged = {},
-            onNavigateToGear = {}
+            onNavigateToGear = {},
+            onNavigateToWatch = {},
+            showRewardedAd = {}
         )
     }
 }

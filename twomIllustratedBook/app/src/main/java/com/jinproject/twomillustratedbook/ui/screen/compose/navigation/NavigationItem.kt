@@ -15,4 +15,8 @@ sealed class NavigationItem(
         title = "설정",
         route = "gear"
     )
+    object Watch: NavigationItem(
+        title = "시간",
+        route = "watch"
+    )
 }

@@ -14,6 +14,7 @@ interface TimerRepository {
     suspend fun setRecentlySelectedBossName(bossName: String)
     suspend fun setIntervalFirstTimerSetting(minutes: Int)
     suspend fun setIntervalSecondTimerSetting(minutes: Int)
+    suspend fun setFontSize(size: Int)
 
     suspend fun updateTimerInterval(firstIntervalTime: Int, secondIntervalTime: Int)
     suspend fun setTimer(id: Int, day: Int, hour: Int, min: Int, sec: Int, bossName: String)

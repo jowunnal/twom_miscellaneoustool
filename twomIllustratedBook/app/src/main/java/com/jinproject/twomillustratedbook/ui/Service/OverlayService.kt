@@ -1,15 +1,22 @@
 package com.jinproject.twomillustratedbook.ui.Service
 
 import android.annotation.SuppressLint
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Intent
 import android.os.IBinder
 import android.content.Context
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.view.Gravity
 import android.graphics.PixelFormat
 import android.view.WindowManager
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.jinproject.twomillustratedbook.data.database.Entity.Timer
@@ -27,8 +34,29 @@ import java.util.*
 class OverlayService : LifecycleService() {
     private var wm: WindowManager? = null
     private var mView: View? = null
+    private var notificationManager: NotificationManager? = null
     override fun onCreate() {
         super.onCreate()
+
+        val exitIntent = Intent(this, OverlayService::class.java).apply {
+            putExtra("status", true)
+        }
+        val exitPendingIntent = PendingIntent.getService(
+            this,
+            999,
+            exitIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        createNotificationChannel()
+
+        val notification = NotificationCompat.Builder(applicationContext, "현재시간 항상 보기")
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setSmallIcon(R.mipmap.ic_main)
+            .setContentTitle("현재시간 항상 보기가 실행중입니다.")
+            .addAction(R.drawable.img_delete_alarm, "끄기", exitPendingIntent)
+            .build()
+        startForeground(999, notification)
+
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         // inflater 를 사용하여 layout 을 가져오자
         wm = getSystemService(WINDOW_SERVICE) as WindowManager
@@ -50,14 +78,31 @@ class OverlayService : LifecycleService() {
 
     }
 
+    private fun createNotificationChannel() {
+        val name = "아이모 도감"
+        val descriptionText = "현재시간 항상 보기"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel("현재시간 항상 보기", name, importance).apply {
+            description = descriptionText
+            setShowBadge(true)
+            enableLights(false)
+            lockscreenVisibility = Notification.VISIBILITY_SECRET
+            lightColor = Color.BLUE
+        }
+        notificationManager?.createNotificationChannel(channel)
+    }
+
     override fun onBind(p0: Intent): IBinder? {
         super.onBind(p0)
         return null
     }
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint("SimpleDateFormat", "CutPasteId")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
+
+        if (intent?.getBooleanExtra("status", false) == true)
+            stopSelf()
 
         lifecycleScope.launch(Dispatchers.Main) {
             while (true) {
@@ -78,6 +123,10 @@ class OverlayService : LifecycleService() {
             mView?.findViewById<TextView>(R.id.tv_onOtherApps)?.text = ""
         }
 
+        val fontSize = intent?.getIntExtra("fontSize",14)!!
+        mView?.findViewById<TextView>(R.id.tv_onOtherApps)?.textSize = fontSize.toFloat()
+        mView?.findViewById<TextView>(R.id.tv_currentTimes)?.textSize = fontSize.toFloat()
+
         return START_STICKY
     }
 
@@ -89,6 +138,7 @@ class OverlayService : LifecycleService() {
                 mView = null
             }
         }
+        notificationManager = null
         super.onDestroy()
     }
 }

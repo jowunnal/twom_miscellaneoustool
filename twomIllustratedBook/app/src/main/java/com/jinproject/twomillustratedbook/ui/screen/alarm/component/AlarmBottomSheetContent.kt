@@ -43,7 +43,8 @@ fun AlarmBottomSheetContent(
     setMinutesChanged: (Int) -> Unit,
     setSecondsChanged: (Int) -> Unit,
     onStartAlarm: (String) -> Unit,
-    onCloseBottomSheet: () -> Unit
+    onCloseBottomSheet: () -> Unit,
+    showRewardedAd: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -112,6 +113,7 @@ fun AlarmBottomSheetContent(
                 .clickable {
                     onStartAlarm(selectedBossName)
                     onCloseBottomSheet()
+                    showRewardedAd()
                 }
             )
             /*
@@ -177,6 +179,7 @@ private fun PreviewAlarmBottomSheetContent() =
             setMinutesChanged = {},
             setSecondsChanged = {},
             onStartAlarm = {},
-            onCloseBottomSheet = {}
+            onCloseBottomSheet = {},
+            showRewardedAd = {}
         )
     }
