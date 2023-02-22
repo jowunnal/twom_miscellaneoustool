@@ -10,6 +10,7 @@ import android.os.IBinder
 import androidx.lifecycle.*
 import com.jinproject.twomillustratedbook.data.repository.TimerRepository
 import com.jinproject.twomillustratedbook.domain.model.TimerModel
+import com.jinproject.twomillustratedbook.ui.receiver.AlarmReceiver
 import com.jinproject.twomillustratedbook.ui.screen.alarm.AlarmViewModel
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.AlarmItem
 import com.jinproject.twomillustratedbook.utils.day
@@ -44,8 +45,8 @@ class ReAlarmService : LifecycleService() {
         super.onStartCommand(intent, flags, startId)
         lifecycleScope.launch {
             val genTime = intent?.getIntExtra("gtime", 0)!!
-            val code = intent.getIntExtra("code",0)
-            val monsterName = intent.getStringExtra("msg")!!.split("<",">").first()
+            val code = intent.getIntExtra("code", 0)
+            val monsterName = intent.getStringExtra("msg")!!.split("<", ">").first()
             val nextGenTime = (genTime * 1000).toLong() + System.currentTimeMillis()
             notificationManager?.cancel(code)
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -90,7 +91,8 @@ class ReAlarmService : LifecycleService() {
                             intent.getStringExtra("img")!!,
                             id,
                             genTime
-                        )
+                        ),
+                        intervalFirstTimerSetting = prefs.intervalFirstTimerSetting
                     )
 
                     makeAlarm(
@@ -102,7 +104,8 @@ class ReAlarmService : LifecycleService() {
                             intent.getStringExtra("img")!!,
                             id + 300,
                             genTime
-                        )
+                        ),
+                        intervalSecondTimerSetting = prefs.intervalSecondTimerSetting
                     )
                 }.collect()
                 stopSelf()
@@ -121,15 +124,19 @@ class ReAlarmService : LifecycleService() {
         alarmManager: AlarmManager,
         app: Application,
         nextGenTime: Long,
-        item: AlarmItem
+        item: AlarmItem,
+        intervalFirstTimerSetting: Int = 0,
+        intervalSecondTimerSetting: Int = 0
     ) {
-        val notifyIntentImmediately = Intent(app, AlarmService::class.java)
+        val notifyIntentImmediately = Intent(app, AlarmReceiver::class.java)
         notifyIntentImmediately.putExtra("msg", item.name)
         notifyIntentImmediately.putExtra("img", item.imgName)
         notifyIntentImmediately.putExtra("code", item.code)
         notifyIntentImmediately.putExtra("gtime", item.gtime)
+        notifyIntentImmediately.putExtra("first", intervalFirstTimerSetting)
+        notifyIntentImmediately.putExtra("second", intervalSecondTimerSetting)
 
-        val notifyPendingIntent = PendingIntent.getService(
+        val notifyPendingIntent = PendingIntent.getBroadcast(
             app,
             item.code,
             notifyIntentImmediately,

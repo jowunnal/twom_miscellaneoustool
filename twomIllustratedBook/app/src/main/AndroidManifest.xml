@@ -39,6 +39,7 @@
         <service android:name=".ui.Service.ReAlarmService" android:description="@string/알람재생성서비스"/>
         <service android:name=".ui.Service.AlarmService" android:description="@string/알람서비스"/>
         <service android:name=".ui.Service.AlarmServerService"/>
+        <receiver android:name=".ui.receiver.AlarmReceiver" android:enabled="true" android:exported="false"/>
     </application>
 
 </manifest>

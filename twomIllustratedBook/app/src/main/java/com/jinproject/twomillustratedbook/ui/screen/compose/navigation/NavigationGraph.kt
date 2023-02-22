@@ -100,6 +100,8 @@ fun NavigationGraph(
                 setFontSize = watchViewModel::setFontSize,
                 checkAuthorityDrawOverlays = checkAuthorityDrawOverlays,
                 onNavigatePopBackStack = { navController.popBackStack() },
+                setSelectedMonsterName = watchViewModel::setSelectedMonsterName,
+                setSelectedMonsterOtaToTrue = watchViewModel::setSelectedMonsterOtaToTrue
             )
         }
     }

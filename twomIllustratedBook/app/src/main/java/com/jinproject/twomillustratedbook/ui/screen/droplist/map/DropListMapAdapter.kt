@@ -5,6 +5,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnAttach
+import androidx.core.view.doOnDetach
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.jinproject.twomillustratedbook.databinding.DroplistmapItemBinding
 import com.jinproject.twomillustratedbook.ui.listener.OnItemClickListener
@@ -38,19 +41,21 @@ class DropListMapAdapter @Inject constructor(@ActivityContext val context: Conte
         return items[pos].name
     }
 
-    inner class ViewHolder(private val binding: DroplistmapItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: DroplistmapItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.dropListMapItem.minimumWidth =
+                context.applicationContext.resources.displayMetrics.widthPixels
+            binding.root.setOnClickListener {
+                mlistener?.OnHomeItemClick(it, adapterPosition)
+            }
+        }
 
         @SuppressLint("DiscouragedApi")
         fun bind(item: MapState) {
             binding.dropMapName.text = item.name
             val res = context.resources.getIdentifier(item.imgName, "drawable", context.packageName)
             binding.dropMapImg.setImageResource(res)
-        }
-
-        init {
-            binding.root.setOnClickListener {
-                mlistener?.OnHomeItemClick(it, adapterPosition)
-            }
         }
     }
 

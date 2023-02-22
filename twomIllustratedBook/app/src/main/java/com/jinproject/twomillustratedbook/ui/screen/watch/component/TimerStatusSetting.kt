@@ -2,6 +2,7 @@ package com.jinproject.twomillustratedbook.ui.screen.watch.component
 
 import android.content.Context
 import android.content.Intent
+import android.os.Parcelable
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateFloatAsState
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
@@ -23,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import com.jinproject.twomillustratedbook.ui.Service.OverlayService
+import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimerState
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.deepGray
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.primary
@@ -30,9 +33,11 @@ import com.jinproject.twomillustratedbook.ui.screen.compose.theme.white
 import com.jinproject.twomillustratedbook.ui.screen.watch.item.ButtonStatus
 import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
 import com.jinproject.twomillustratedbook.utils.tu
+import java.util.ArrayList
 
 @Composable
 fun TimeStatusSetting(
+    timerList: List<TimerState>,
     watchStatus: ButtonStatus,
     fontSize: Int,
     activityContext: Context,
@@ -50,6 +55,31 @@ fun TimeStatusSetting(
             ButtonStatus.OFF -> -1f
         }
     )
+
+    if(watchStatus == ButtonStatus.ON)
+        LaunchedEffect(key1 = timerList) {
+            when (checkAuthorityDrawOverlays(activityContext) { intent ->
+                permissionLauncher.launch(intent)
+            }) {
+                true -> {
+                    activityContext.startForegroundService(
+                        Intent(
+                            activityContext,
+                            OverlayService::class.java
+                        ).apply {
+                            putExtra("status", false)
+                            putExtra("fontSize", fontSize)
+                            if (timerList.isNotEmpty())
+                                putParcelableArrayListExtra(
+                                    "timerList",
+                                    timerList as ArrayList
+                                )
+                        }
+                    )
+                }
+                false ->{}
+            }
+        }
 
     Row(
         modifier = Modifier
@@ -124,6 +154,11 @@ fun TimeStatusSetting(
                                         ).apply {
                                             putExtra("status", false)
                                             putExtra("fontSize", fontSize)
+                                            if (timerList.isNotEmpty())
+                                                putParcelableArrayListExtra(
+                                                    "timerList",
+                                                    timerList as ArrayList
+                                                )
                                         }
                                     )
                                     setWatchStatus(ButtonStatus.ON)
@@ -168,6 +203,7 @@ fun TimeStatusSetting(
 private fun PreviewTimeStatusSetting() {
     TwomIllustratedBookPreview {
         TimeStatusSetting(
+            timerList = emptyList(),
             watchStatus = ButtonStatus.OFF,
             fontSize = 14,
             setWatchStatus = {},

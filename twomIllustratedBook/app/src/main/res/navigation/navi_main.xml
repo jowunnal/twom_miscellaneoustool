@@ -30,18 +30,6 @@
             app:destination="@id/dropList" />
     </fragment>
     <fragment
-        android:id="@+id/alarm"
-        android:name="com.jinproject.twomillustratedbook.ui.screen.alarm.Alarm"
-        android:label="alarm"
-        tools:layout="@layout/alarm" >
-        <action
-            android:id="@+id/action_alarm_to_timer"
-            app:destination="@id/timer" />
-        <action
-            android:id="@+id/action_alarm_to_login"
-            app:destination="@id/login" />
-    </fragment>
-    <fragment
         android:id="@+id/collectionCategory"
         android:name="com.jinproject.twomillustratedbook.ui.screen.collection.category.CollectionCategory"
         android:label="collection_category"
@@ -61,25 +49,6 @@
             android:defaultValue=""
             />
     </fragment>
-    <fragment
-        android:id="@+id/timer"
-        android:name="com.jinproject.twomillustratedbook.ui.Fragment.Timer"
-        android:label="alarm_user_select"
-        tools:layout="@layout/alarm_user_select" />
-    <fragment
-        android:id="@+id/login"
-        android:name="com.jinproject.twomillustratedbook.ui.Fragment.Login"
-        android:label="alarm_login"
-        tools:layout="@layout/alarm_login" >
-        <action
-            android:id="@+id/action_login_to_register"
-            app:destination="@id/register" />
-    </fragment>
-    <fragment
-        android:id="@+id/register"
-        android:name="com.jinproject.twomillustratedbook.ui.Fragment.Register"
-        android:label="alarm_register"
-        tools:layout="@layout/alarm_register" />
     <fragment
         android:id="@+id/dropList"
         android:name="com.jinproject.twomillustratedbook.ui.screen.droplist.monster.DropListMonster"

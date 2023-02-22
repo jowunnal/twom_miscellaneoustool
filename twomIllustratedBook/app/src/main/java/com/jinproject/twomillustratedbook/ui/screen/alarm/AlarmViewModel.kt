@@ -5,6 +5,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
 import androidx.lifecycle.*
 import com.jinproject.twomillustratedbook.data.repository.DropListRepository
@@ -13,6 +14,7 @@ import com.jinproject.twomillustratedbook.domain.model.MonsterType
 import com.jinproject.twomillustratedbook.domain.model.WeekModel
 import com.jinproject.twomillustratedbook.ui.Service.AlarmService
 import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
+import com.jinproject.twomillustratedbook.ui.receiver.AlarmReceiver
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.AlarmItem
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimeState
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimerState
@@ -147,15 +149,17 @@ class AlarmViewModel @Inject constructor(
         }
     }.launchIn(viewModelScope)
 
-    private fun setTimer(timerState: TimerState) = viewModelScope.launch(Dispatchers.IO) {
-        timerRepository.setTimer(
-            timerState.id,
-            timerState.timeState.day.getCodeByWeek(),
-            timerState.timeState.hour,
-            timerState.timeState.minutes,
-            timerState.timeState.seconds,
-            timerState.bossName
-        )
+    private fun setTimer(timerState: TimerState) {
+        viewModelScope.launch(Dispatchers.IO) {
+            timerRepository.setTimer(
+                timerState.id,
+                timerState.timeState.day.getCodeByWeek(),
+                timerState.timeState.hour,
+                timerState.timeState.minutes,
+                timerState.timeState.seconds,
+                timerState.bossName
+            )
+        }
     }
 
     fun setOta(ota: Int, bossName: String) =
@@ -196,7 +200,8 @@ class AlarmViewModel @Inject constructor(
                 timerState.bossName == monsterName
             }
 
-            val code = timer?.id?: if(uiState.value.timerList.isNotEmpty()) uiState.value.timerList.last().id + 1 else 1
+            val code = timer?.id
+                ?: if (uiState.value.timerList.isNotEmpty()) uiState.value.timerList.maxOf { item -> item.id } + 1 else 1
 
             when (timer) {
                 is TimerState -> {
@@ -231,7 +236,8 @@ class AlarmViewModel @Inject constructor(
                     imgName = monsterState.imgName,
                     code = code,
                     gtime = monsterState.genTime
-                )
+                ),
+                intervalFirstTimerSetting = prefs.intervalFirstTimerSetting
             )
 
             makeAlarm(
@@ -241,7 +247,8 @@ class AlarmViewModel @Inject constructor(
                     imgName = monsterState.imgName,
                     code = code + 300,
                     gtime = monsterState.genTime
-                )
+                ),
+                intervalSecondTimerSetting = prefs.intervalSecondTimerSetting
             )
 
             emitSnackBar(SnackBarMessage(headerMessage = "$monsterName 의 알람이 설정되었습니다."))
@@ -277,14 +284,21 @@ class AlarmViewModel @Inject constructor(
     private fun deleteTimer(bossName: String) =
         viewModelScope.launch(Dispatchers.IO) { timerRepository.deleteTimer(bossName) }
 
-    private fun makeAlarm(nextGenTime: Long, item: AlarmItem) {
-        val notifyIntentImmediately = Intent(context, AlarmService::class.java)
+    private fun makeAlarm(
+        nextGenTime: Long,
+        item: AlarmItem,
+        intervalFirstTimerSetting: Int = 0,
+        intervalSecondTimerSetting: Int = 0
+    ) {
+        val notifyIntentImmediately = Intent(context, AlarmReceiver::class.java)
         notifyIntentImmediately.putExtra("msg", item.name)
         notifyIntentImmediately.putExtra("img", item.imgName)
         notifyIntentImmediately.putExtra("code", item.code)
         notifyIntentImmediately.putExtra("gtime", item.gtime)
+        notifyIntentImmediately.putExtra("first", intervalFirstTimerSetting)
+        notifyIntentImmediately.putExtra("second", intervalSecondTimerSetting)
 
-        val notifyPendingIntent = PendingIntent.getService(
+        val notifyPendingIntent = PendingIntent.getBroadcast(
             context,
             item.code,
             notifyIntentImmediately,

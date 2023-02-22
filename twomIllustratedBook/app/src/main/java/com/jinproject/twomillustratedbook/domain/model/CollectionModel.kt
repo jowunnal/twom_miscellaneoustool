@@ -2,8 +2,6 @@ package com.jinproject.twomillustratedbook.domain.model
 
 import com.jinproject.twomillustratedbook.data.database.Entity.Book
 import com.jinproject.twomillustratedbook.data.database.Entity.RegisterItemToBook
-import com.jinproject.twomillustratedbook.ui.screen.collection.item.item.CollectionState
-import com.jinproject.twomillustratedbook.ui.screen.collection.item.item.StatState
 
 data class CollectionModel(
     val bookId: Int,
@@ -30,6 +28,11 @@ data class CollectionModel(
     val pvpDmgDownPer: Double,
     val goldDrop: Double,
     val itemDrop: Double,
+    val bossDmgPer: Double,
+    val critDmgDown: Double,
+    val critDmgDownPer: Double,
+    val miss: Double,
+    val critResistPer: Double,
     val items: List<ItemModel>
 ) {
     companion object {
@@ -59,6 +62,11 @@ data class CollectionModel(
                 pvpDmgDownPer = response.key.pvpDmgDownPer,
                 goldDrop = response.key.goldDrop,
                 itemDrop = response.key.itemDrop,
+                bossDmgPer = response.key.bossDmgPer,
+                critDmgDown = response.key.critDmgDown,
+                critDmgDownPer = response.key.critDmgDownPer,
+                miss = response.key.miss,
+                critResistPer = response.key.critResistPer,
                 items = response.value.map { item -> ItemModel.fromRegisterItemToDomain(item) }
             )
     }

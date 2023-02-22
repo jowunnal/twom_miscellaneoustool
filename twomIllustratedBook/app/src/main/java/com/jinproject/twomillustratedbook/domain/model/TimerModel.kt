@@ -1,6 +1,5 @@
 package com.jinproject.twomillustratedbook.domain.model
 
-import android.os.health.TimerStat
 import androidx.compose.runtime.Stable
 import com.jinproject.twomillustratedbook.data.database.Entity.Timer
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimeState
@@ -19,6 +18,7 @@ data class TimerModel(
     fun toTimerState() = TimerState(
         id = id,
         bossName = bossName,
+        ota = isOverlayOnOrNot,
         timeState = TimeState(
             day = day,
             hour = hour,

@@ -32,9 +32,13 @@ data class CollectionState(
                 add(StatState(value = collectionModel.pvpDmgDownPer, name = "pvp데미지감소퍼센트"))
                 add(StatState(value = collectionModel.goldDrop, name = "골드드랍률"))
                 add(StatState(value = collectionModel.itemDrop, name = "아이템드랍률"))
+                add(StatState(value = collectionModel.bossDmgPer, name = "보스데미지퍼센트"))
+                add(StatState(value = collectionModel.critDmgDown, name = "크리티컬데미지감소"))
+                add(StatState(value = collectionModel.critDmgDownPer, name = "크리티컬데미지감소퍼센트"))
+                add(StatState(value = collectionModel.miss, name = "회피"))
+                add(StatState(value = collectionModel.critResistPer, name = "크리티컬저항퍼센트"))
             },
             items = collectionModel.items.map { item -> item.toCollectionItemState() }
         )
     }
 }
-

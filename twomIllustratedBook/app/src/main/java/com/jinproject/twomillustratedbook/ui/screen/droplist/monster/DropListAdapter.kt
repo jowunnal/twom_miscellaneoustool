@@ -17,7 +17,10 @@ import com.jinproject.twomillustratedbook.ui.screen.droplist.monster.item.Monste
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 
-class DropListAdapter (private val context: Context,private val getMonsterItem: (List<ItemState>) -> String) :
+class DropListAdapter(
+    private val context: Context,
+    private val getMonsterItem: (List<ItemState>) -> String
+) :
     RecyclerView.Adapter<DropListAdapter.ViewHolder>(), Filterable {
 
     var items = ArrayList<MonsterState>()
@@ -80,7 +83,7 @@ class DropListAdapter (private val context: Context,private val getMonsterItem: 
                         if (monster.name.contains(p0.toString()))
                             itemsFiltering.add(monster)
                         monster.item?.forEach { itemState ->
-                            if(itemState.name.contains(p0.toString()))
+                            if (itemState.name.contains(p0.toString()))
                                 itemsFiltering.add(monster)
                         }
                     }
