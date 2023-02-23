@@ -48,9 +48,21 @@ Overlay 에서는 현재시간을 매초마다 갱신하여 볼수있고, 하단
  - Utils
 
 # 스택 변화
+
  - 명령형 -> Compose(선언형)
  - LiveData -> Flow
  - SharedPreferences -> DataStore ( proto )
+ 
+# UI
+
+![KakaoTalk_20230223_015847465_09](https://user-images.githubusercontent.com/75519689/220841698-0dd9ebb2-766c-4311-9935-b01f1cd3d532.jpg)
+![KakaoTalk_20230223_015847465_08](https://user-images.githubusercontent.com/75519689/220841697-a6a0b463-e7df-4cf6-a988-483b0a94807a.jpg)
+![KakaoTalk_20230223_015847465_02](https://user-images.githubusercontent.com/75519689/220841677-a4a9e778-b8ef-43e5-a747-f078d6709d58.jpg)
+![KakaoTalk_20230223_015847465_07](https://user-images.githubusercontent.com/75519689/220841692-e0fa3424-9fae-41c4-bc76-f17fb59ee1e6.jpg)
+![KakaoTalk_20230223_015847465_03](https://user-images.githubusercontent.com/75519689/220841684-c7758b4b-d3de-4484-a868-be44b89d4e6d.jpg)
+![KakaoTalk_20230223_015847465_06](https://user-images.githubusercontent.com/75519689/220841690-0319ba52-d5a2-4f1b-b028-3759c9abbf25.jpg)
+![KakaoTalk_20230223_015847465_05](https://user-images.githubusercontent.com/75519689/220841687-1a93c799-4f44-457f-a9a2-3d82c0af7f1d.jpg)
+![KakaoTalk_20230223_015847465_04](https://user-images.githubusercontent.com/75519689/220841686-abba5f8a-c820-441c-8053-993a9710d8f2.jpg)
 
 # 패치버전
 
