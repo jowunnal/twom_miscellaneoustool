@@ -55,10 +55,10 @@ Overlay 에서는 현재시간을 매초마다 갱신하여 볼수있고, 하단
  
 # UI
 
-![KakaoTalk_20230223_015847465_09](https://user-images.githubusercontent.com/75519689/220841698-0dd9ebb2-766c-4311-9935-b01f1cd3d532.jpg)
+![KakaoTalk_20230223_015847465_09](https://user-images.githubusercontent.com/75519689/220842625-c738a854-1e1e-484f-bfeb-4da4b8b575f8.jpg)
 ![KakaoTalk_20230223_015847465_08](https://user-images.githubusercontent.com/75519689/220842377-8ba5f4e9-efe0-4f0d-b980-ffa84c1b3bdb.jpg)
 ![KakaoTalk_20230223_015847465_03](https://user-images.githubusercontent.com/75519689/220842383-72f124dc-cdb3-4fa8-9104-3a732f66ae3d.jpg)
-![KakaoTalk_20230223_015847465_07](https://user-images.githubusercontent.com/75519689/220842374-c465f719-434e-4b23-989a-92b8a225f9e7.jpg)
+![KakaoTalk_20230223_015847465_07](https://user-images.githubusercontent.com/75519689/220842797-3d463bdd-7e5f-4ed5-a75a-c7cbff3143ea.jpg)
 ![KakaoTalk_20230223_015847465_02](https://user-images.githubusercontent.com/75519689/220842379-e4783def-6deb-441a-869c-f9ecb3cf9058.jpg)
 ![KakaoTalk_20230223_015847465_06](https://user-images.githubusercontent.com/75519689/220842371-0831c0c3-44ee-4c77-b21a-d6dc9b82fdec.jpg)
 ![KakaoTalk_20230223_015847465_05](https://user-images.githubusercontent.com/75519689/220842369-cd54f511-182a-44f9-8342-92747a57d316.jpg)
