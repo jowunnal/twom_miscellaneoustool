@@ -54,11 +54,13 @@ class ReAlarmService : LifecycleService() {
                     timeInMillis = nextGenTime
                 }
                 repository.getTimer().zip(repository.timerPreferences) { timerModels, prefs ->
+
                     val timer = timerModels.find { timerModel ->
                         timerModel.bossName == monsterName
                     }
+
                     val id = timer?.id
-                        ?: if (timerModels.isNotEmpty()) timerModels.last().id + 1 else 1
+                        ?: if (timerModels.isNotEmpty()) timerModels.maxOf { item -> item.id } + 1 else 1
 
                     when (timer) {
                         is TimerModel -> {

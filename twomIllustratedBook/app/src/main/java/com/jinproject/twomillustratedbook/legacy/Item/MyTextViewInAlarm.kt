@@ -1,4 +1,4 @@
-package com.jinproject.twomillustratedbook.domain.Item
+package com.jinproject.twomillustratedbook.legacy.Item
 
 import android.content.Context
 import android.graphics.Canvas

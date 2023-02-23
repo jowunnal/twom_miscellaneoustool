@@ -1,4 +1,4 @@
-package com.jinproject.twomillustratedbook.domain.Item
+package com.jinproject.twomillustratedbook.legacy.Item
 
 import androidx.databinding.ObservableField
 import androidx.room.Entity

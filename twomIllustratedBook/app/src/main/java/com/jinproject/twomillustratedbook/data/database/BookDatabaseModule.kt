@@ -37,7 +37,7 @@ object BookDatabaseModule {
     @Singleton
     fun provideBookDatabaseInstance(@ApplicationContext context:Context): BookDatabase {
         return Room.databaseBuilder(context, BookDatabase::class.java,"BookDatabase")
-            .createFromAsset("database/db_twom_2.db").fallbackToDestructiveMigration()
+            .createFromAsset("database/db_twom_2.db")
             .build()
     }
 }

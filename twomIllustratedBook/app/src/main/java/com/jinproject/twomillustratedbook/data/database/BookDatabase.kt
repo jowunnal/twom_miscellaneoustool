@@ -9,7 +9,7 @@ import com.jinproject.twomillustratedbook.data.database.dao.DropListDao
 import com.jinproject.twomillustratedbook.data.database.dao.TimerDao
 
 @Database(entities = [Book::class, Item::class, Monster::class, Map::class, MonsDropItem::class, MonsLiveAtMap::class, RegisterItemToBook::class, Timer::class],
-    version = 10,  exportSchema = true)
+    version = 11,  exportSchema = true)
 abstract class BookDatabase : RoomDatabase() {
     abstract fun getDropListDao() : DropListDao
     abstract fun getCollectionDao() : CollectionDao

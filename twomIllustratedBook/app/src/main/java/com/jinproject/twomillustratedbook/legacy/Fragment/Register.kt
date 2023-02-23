@@ -1,4 +1,4 @@
-package com.jinproject.twomillustratedbook.ui.Fragment
+package com.jinproject.twomillustratedbook.legacy.Fragment
 
 import android.os.Bundle
 import android.view.View
@@ -10,9 +10,9 @@ import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.AlarmLoginBinding
 import com.jinproject.twomillustratedbook.databinding.AlarmRegisterBinding
 import com.jinproject.twomillustratedbook.ui.base.BaseFragment
-import com.jinproject.twomillustratedbook.ui.viewModel.RegisterViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+/*
 @AndroidEntryPoint
 class Register : BaseFragment<AlarmRegisterBinding>() {
     private val registerViewModel : RegisterViewModel by viewModels()
@@ -49,4 +49,4 @@ class Register : BaseFragment<AlarmRegisterBinding>() {
         })
 
     }
-}
+}*/

@@ -10,12 +10,15 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.material.navigation.NavigationBarView
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -29,8 +32,6 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, "알림 권한에 동의하지 않으시면 알람 서비스를 이용하실 수 없습니다.", Toast.LENGTH_LONG).show()
         }
     }
-    private val adRequest = AdRequest.Builder().build()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +62,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun initAdView() {
         MobileAds.initialize(this) { }
+        val adRequest = AdRequest.Builder().build()
+        val config = RequestConfiguration.Builder().setTestDeviceIds(listOf(this.getString(R.string.testDeviceId))).build()
+        MobileAds.setRequestConfiguration(config)
         binding.adView.loadAd(adRequest)
         binding.adView.adListener = object : AdListener() {
             override fun onAdLoaded() {
