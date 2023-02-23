@@ -1,3 +1,4 @@
+/*
 package com.jinproject.twomillustratedbook.ui.viewModel
 
 import android.content.Context
@@ -85,3 +86,5 @@ class ServerManageViewModel @Inject constructor(@ApplicationContext private val 
         return "서버상태: $serverStatue /로그인ID: $loginId"
     }
 }
+
+ */

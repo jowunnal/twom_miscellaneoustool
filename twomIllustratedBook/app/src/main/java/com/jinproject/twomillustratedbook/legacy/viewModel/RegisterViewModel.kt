@@ -1,5 +1,5 @@
-package com.jinproject.twomillustratedbook.ui.viewModel
-
+package com.jinproject.twomillustratedbook.legacy.viewModel
+/*
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
@@ -9,6 +9,7 @@ import com.jinproject.twomillustratedbook.domain.Item.Room
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(@ApplicationContext private val context:Context) :
@@ -75,3 +76,4 @@ class RegisterViewModel @Inject constructor(@ApplicationContext private val cont
             info.r_PwDouble.set("")
     }
 }
+ */

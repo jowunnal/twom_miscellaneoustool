@@ -1,4 +1,4 @@
-package com.jinproject.twomillustratedbook.ui.Fragment
+package com.jinproject.twomillustratedbook.legacy.Fragment
 
 import android.os.Bundle
 import android.view.View
@@ -12,6 +12,7 @@ import com.jinproject.twomillustratedbook.databinding.DroplistmapBinding
 import com.jinproject.twomillustratedbook.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
+/*
 @AndroidEntryPoint
 class Login : BaseFragment<AlarmLoginBinding>() {
     val loginViewModel: LoginViewModel by viewModels()
@@ -33,3 +34,5 @@ class Login : BaseFragment<AlarmLoginBinding>() {
         })
     }
 }
+
+ */

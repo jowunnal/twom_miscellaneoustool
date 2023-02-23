@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.jinproject.twomillustratedbook"
-    android:versionCode="1"
-    android:versionName="illustratedBook1">
+    android:versionCode="17"
+    android:versionName="illustratedBook17">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" android:minSdkVersion="33"/>
+    <uses-permission
+        android:name="android.permission.POST_NOTIFICATIONS"
+        android:minSdkVersion="33" />
 
     <application
         android:name=".data.database.BookApplication"
@@ -23,7 +24,7 @@
         android:theme="@style/Theme.TwomIllustratedBook">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/test_AppId" />
+            android:value="@string/my_AppId" />
 
         <activity
             android:name="com.jinproject.twomillustratedbook.ui.MainActivity"
@@ -35,11 +36,21 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".ui.Service.OverlayService" android:description="@string/현재시간항상보기"/>
-        <service android:name=".ui.Service.ReAlarmService" android:description="@string/알람재생성서비스"/>
-        <service android:name=".ui.Service.AlarmService" android:description="@string/알람서비스"/>
-        <service android:name=".ui.Service.AlarmServerService"/>
-        <receiver android:name=".ui.receiver.AlarmReceiver" android:enabled="true" android:exported="false"/>
+        <service
+            android:name=".ui.Service.OverlayService"
+            android:description="@string/현재시간항상보기" />
+        <service
+            android:name=".ui.Service.ReAlarmService"
+            android:description="@string/알람재생성서비스" />
+        <service
+            android:name=".ui.Service.AlarmService"
+            android:description="@string/알람서비스" />
+        <service android:name=".ui.Service.AlarmServerService" />
+
+        <receiver
+            android:name=".ui.receiver.AlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -1,8 +1,56 @@
 # 소개
+
 아이모 도감&드랍아이템 및 알람타이머 앱 입니다.
+
 도감&드랍아이템을 각각 분류별로(아이템단위,맵단위) recyclerView로 보여줍니다.
+
+각 아이템 혹은 도감정보를 상단 돋보기버튼을 누르고 검색 하여 필터링된 결과를 볼수있습니다.
+
 지정된 몬스터들에 대해서 선택하여 타이머를 등록&수정&삭제 할수 있습니다.
+
 타이머가 설정되면, 선택된 타이머들에 대해 선택하여 Overlay로 보여줄수 있습니다.
+
+Overlay 에서는 현재시간을 매초마다 갱신하여 볼수있고, 하단에 등록한 몬스터들의 리젠타임을
+함께 확인할 수 있습니다.
+
+# 사용된 스택
+
+ - Compose
+ - Kotlin.Coroutines.Flow
+ - Databinding
+ - Navigation ( Single Activity )
+ - Room
+ - DataStore
+ - AlarmManager
+ - Hilt
+
+# Architecture ( MVVM )
+
+ - Data
+  - Room
+  - DataStore
+  - Serializer
+  - Repository Interface
+
+ - Domain
+  - Repository Implementation
+  - Model
+
+ - Presenter
+  - Activity & Fragment
+   - BindingAdapter
+   - State
+  - Broadcast Receiver
+  - Service
+  - Compose Component
+   - State
+
+ - Utils
+
+# 스택 변화
+ - 명령형 -> Compose(선언형)
+ - LiveData -> Flow
+ - SharedPreferences -> DataStore ( proto )
 
 # 패치버전
 
@@ -39,9 +87,14 @@
 ### 1.5.4
 - 화면위에그리기 Overlay 활성화 중에 업데이트 발생시 ANR 발생하는 이슈 해결
 
-본 앱은 구글 플레이스토어에 등록된 앱입니다.
-
 ### 1.6.2
 - 화면 UI구성이 전체적으로 변경되었습니다.
 - 서버기능이 개설되었습니다.
 - 알람발생시 알람의 액션버튼을 통해 즉시 타이머등록이 가능해졋습니다.
+
+### 1.7.2
+ - 전체적인 UI 구성이 변경되었습니다.
+ - 서버기능이 삭제되었습니다.
+ - 신규몬스터, 아이템도감이 대응되었습니다.
+
+본 앱은 구글 플레이스토어에 등록된 앱입니다.

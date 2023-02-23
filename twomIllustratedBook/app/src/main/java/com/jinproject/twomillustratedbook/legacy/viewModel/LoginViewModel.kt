@@ -1,10 +1,11 @@
-package com.jinproject.twomillustratedbook.ui.viewModel
+package com.jinproject.twomillustratedbook.legacy.viewModel
 import android.content.Context
 import android.widget.Toast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
+/*
 @HiltViewModel
 class LoginViewModel @Inject constructor(@ApplicationContext private val context:Context)
     : ManageMemberViewModel(context) {
@@ -31,4 +32,4 @@ class LoginViewModel @Inject constructor(@ApplicationContext private val context
             }
         }
     }
-}
+}*/

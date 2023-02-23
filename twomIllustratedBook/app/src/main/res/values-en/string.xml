@@ -10,12 +10,6 @@
     <string name="bulldozerbro">bulldozerbro</string>
     <string name="channel_name">channel_name</string>
     <string name="channel_description">channel_description</string>
-    <string name="test_AppId">ca-app-pub-3940256099942544~3347511713</string>
-    <string name="test_UnitId">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="my_AppId">ca-app-pub-3630394418001517~2743030483</string>
-    <string name="my_fullAppId">ca-app-pub-3630394418001517/8637400041</string>
-    <string name="my_UnitId">ca-app-pub-3630394418001517/9336358991</string>
-    <string name="Rewarded_Ad_UnitId">ca-app-pub-3630394418001517/7487969905</string>
     <string name="아이템이름">Item\'s Name</string>
     <string name="스텟">Stat</string>
     <string name="title_activity_main">MainActivity</string>

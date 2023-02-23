@@ -1,31 +1,34 @@
 package com.jinproject.twomillustratedbook.ui.screen.compose.navigation
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
 import androidx.navigation.compose.rememberNavController
-import com.google.android.gms.ads.AdError
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.OnUserEarnedRewardListener
-import com.google.android.gms.ads.rewarded.RewardItem
+import com.google.android.gms.ads.*
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.Snackbar
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.TwomIllustratedBookTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +36,11 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class NavigationFragment : Fragment() {
     private var mRewardedAd: RewardedAd? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loadRewardedAd()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,11 +63,11 @@ class NavigationFragment : Fragment() {
             navController = rememberNavController(),
             changeVisibilityBottomNavigationBar = { bool -> changeVisibilityBottomNavigationBar(bool) },
             showRewardedAd = { showRewardedAd(mRewardedAd) },
-            checkAuthorityDrawOverlays = { context:Context, register:(Intent) -> Unit
-                -> checkAuthorityDrawOverlays(context, register)
+            checkAuthorityDrawOverlays = { context: Context, register: (Intent) -> Unit
+                ->
+                checkAuthorityDrawOverlays(context, register)
             }
         )
-        loadRewardedAd()
     }
 
     private fun changeVisibilityBottomNavigationBar(bottomNavigationBarVisibility: Boolean) {
@@ -124,14 +132,13 @@ class NavigationFragment : Fragment() {
         }
     }
 
-
     private fun showRewardedAd(mRewardedAd: RewardedAd?) {
-        mRewardedAd?.show(requireActivity(), OnUserEarnedRewardListener() {
-            fun onUserEarnedReward(rewardItem: RewardItem) {
-                var rewardAmount = rewardItem.amount
-                var rewardType = rewardItem.type
-            }
-        })
+        mRewardedAd?.let { ad ->
+            ad.show(requireActivity(), OnUserEarnedRewardListener { rewardItem ->
+                val rewardAmount = rewardItem.amount
+                val rewardType = rewardItem.type
+            })
+        } ?: run {}
     }
 
     override fun onDestroy() {
