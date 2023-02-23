@@ -54,8 +54,7 @@ Overlay 에서는 현재시간을 매초마다 갱신하여 볼수있고, 하단
  - SharedPreferences -> DataStore ( proto )
  
 # UI
-
-![KakaoTalk_20230223_015847465_09](https://user-images.githubusercontent.com/75519689/220841698-0dd9ebb2-766c-4311-9935-b01f1cd3d532.jpg)
+![KakaoTalk_20230223_015847465_09](https://user-images.githubusercontent.com/75519689/220842165-645d5381-7e71-4181-83f8-f54e4e39b52b.jpg)
 ![KakaoTalk_20230223_015847465_08](https://user-images.githubusercontent.com/75519689/220841697-a6a0b463-e7df-4cf6-a988-483b0a94807a.jpg)
 ![KakaoTalk_20230223_015847465_02](https://user-images.githubusercontent.com/75519689/220841677-a4a9e778-b8ef-43e5-a747-f078d6709d58.jpg)
 ![KakaoTalk_20230223_015847465_07](https://user-images.githubusercontent.com/75519689/220841692-e0fa3424-9fae-41c4-bc76-f17fb59ee1e6.jpg)
