@@ -27,23 +27,23 @@ Overlay 에서는 현재시간을 매초마다 갱신하여 볼수있고, 하단
 # Architecture ( MVVM )
 
  - Data
-  - Room
-  - DataStore
-  - Serializer
-  - Repository Interface
+ 	- Room
+ 	- DataStore
+  	- Serializer
+  	- Repository Interface
 
  - Domain
-  - Repository Implementation
-  - Model
+  	- Repository Implementation
+  	- Model
 
  - Presenter
-  - Activity & Fragment
-   - BindingAdapter
-   - State
-  - Broadcast Receiver
-  - Service
-  - Compose Component
-   - State
+  	- Activity & Fragment
+   		- BindingAdapter
+   		- State
+  	- Broadcast Receiver
+  	- Service
+  	- Compose Component
+   		- State
 
  - Utils
 
@@ -63,8 +63,6 @@ Overlay 에서는 현재시간을 매초마다 갱신하여 볼수있고, 하단
 ![KakaoTalk_20230223_015847465_02](https://user-images.githubusercontent.com/75519689/220842379-e4783def-6deb-441a-869c-f9ecb3cf9058.jpg)
 ![KakaoTalk_20230223_015847465_07](https://user-images.githubusercontent.com/75519689/220842797-3d463bdd-7e5f-4ed5-a75a-c7cbff3143ea.jpg)
 ![KakaoTalk_20230223_015847465_03](https://user-images.githubusercontent.com/75519689/220842383-72f124dc-cdb3-4fa8-9104-3a732f66ae3d.jpg)
-
-
 
 # 패치버전
 
