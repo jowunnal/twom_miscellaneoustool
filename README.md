@@ -125,4 +125,6 @@ Overlay 에서는 현재시간을 매초마다 갱신하여 볼수있고, 하단
  - 서버기능이 삭제되었습니다.
  - 신규몬스터, 아이템도감이 대응되었습니다.
 
-본 앱은 구글 플레이스토어에 등록된 앱입니다.
+본 앱은 [구글 플레이스토어]("https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" "마켓 링크") 에 등록된 앱입니다.
+
+자세한 설명은 [깃블로그]("https://jowunnal.github.io/categories/#projects" "블로그 링크") 에 있습니다.
