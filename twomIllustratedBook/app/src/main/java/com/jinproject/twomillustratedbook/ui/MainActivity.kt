@@ -3,6 +3,7 @@ package com.jinproject.twomillustratedbook.ui
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -62,9 +63,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun initAdView() {
         MobileAds.initialize(this) { }
+
         val adRequest = AdRequest.Builder().build()
-        val config = RequestConfiguration.Builder().setTestDeviceIds(listOf(this.getString(R.string.testDeviceId))).build()
-        MobileAds.setRequestConfiguration(config)
         binding.adView.loadAd(adRequest)
         binding.adView.adListener = object : AdListener() {
             override fun onAdLoaded() {

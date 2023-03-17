@@ -50,7 +50,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 code = code,
                 applicationContext = p0,
                 gtime = gtime,
-                intervalSecondTimerSetting = intervalFirstTimeSetting
+                intervalFirstTimerSetting = intervalFirstTimeSetting
             )
         }
     }

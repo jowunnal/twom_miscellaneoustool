@@ -5,14 +5,11 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.database.sqlite.SQLiteConstraintException
-import android.util.Log
 import androidx.lifecycle.*
 import com.jinproject.twomillustratedbook.data.repository.DropListRepository
 import com.jinproject.twomillustratedbook.data.repository.TimerRepository
 import com.jinproject.twomillustratedbook.domain.model.MonsterType
 import com.jinproject.twomillustratedbook.domain.model.WeekModel
-import com.jinproject.twomillustratedbook.ui.Service.AlarmService
 import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
 import com.jinproject.twomillustratedbook.ui.receiver.AlarmReceiver
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.AlarmItem
@@ -27,7 +24,6 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
-import kotlin.NoSuchElementException
 
 data class AlarmUiState(
     val timerList: List<TimerState>,
@@ -268,22 +264,6 @@ class AlarmViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun clearAlarm(code: Int, bossName: String) {
-        val notifyIntent = Intent(context, AlarmService::class.java)
-        val notifyPendingIntent = PendingIntent.getService(
-            context,
-            code,
-            notifyIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        alarmManager.cancel(notifyPendingIntent)
-
-        deleteTimer(bossName)
-    }
-
-    private fun deleteTimer(bossName: String) =
-        viewModelScope.launch(Dispatchers.IO) { timerRepository.deleteTimer(bossName) }
-
     private fun makeAlarm(
         nextGenTime: Long,
         item: AlarmItem,
@@ -311,6 +291,27 @@ class AlarmViewModel @Inject constructor(
             ), notifyPendingIntent
         )
     }
+
+    fun clearAlarm(code: Int, bossName: String) {
+        deleteAlarm(code)
+        deleteAlarm(code + 300)
+
+        deleteTimer(bossName)
+    }
+
+    private fun deleteAlarm(code: Int) {
+        val notifyIntent = Intent(context, AlarmReceiver::class.java)
+        val notifyPendingIntent = PendingIntent.getBroadcast(
+            context,
+            code,
+            notifyIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.cancel(notifyPendingIntent)
+    }
+
+    private fun deleteTimer(bossName: String) =
+        viewModelScope.launch(Dispatchers.IO) { timerRepository.deleteTimer(bossName) }
 
     private fun emitSnackBar(snackBarMessage: SnackBarMessage) {
         viewModelScope.launch {
