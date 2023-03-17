@@ -6,8 +6,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.jinproject.twomillustratedbook.R
-import com.jinproject.twomillustratedbook.ui.viewModel.LoginViewModel
-import com.jinproject.twomillustratedbook.databinding.AlarmLoginBinding
 import com.jinproject.twomillustratedbook.databinding.DroplistmapBinding
 import com.jinproject.twomillustratedbook.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
