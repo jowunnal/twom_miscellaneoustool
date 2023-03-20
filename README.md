@@ -69,6 +69,10 @@ Overlay 에서는 현재시간을 매초마다 갱신하여 볼수있고, 하단
  - LiveData -> Flow
  - SharedPreferences -> DataStore ( proto )
  
+# Database ER-D
+
+![Untitled](https://user-images.githubusercontent.com/75519689/226339058-254c1447-f118-49f0-a314-3240214033ca.png)
+ 
 # UI
 
 ![KakaoTalk_20230223_015847465_09](https://user-images.githubusercontent.com/75519689/220842625-c738a854-1e1e-484f-bfeb-4da4b8b575f8.jpg)
