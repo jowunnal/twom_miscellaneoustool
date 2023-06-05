@@ -37,10 +37,10 @@ Overlay 에서는 현재시간을 매초마다 갱신하여 볼수있고, 하단
  	- Room
  	- DataStore
   	- Serializer
-  	- Repository Interface
+  	- Repository Implementation
 
  - Domain
-  	- Repository Implementation
+  	- Repository Interface
   	- Model
 
  - Presenter
