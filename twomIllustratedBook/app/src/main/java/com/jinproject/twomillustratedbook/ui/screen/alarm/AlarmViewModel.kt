@@ -6,8 +6,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.*
-import com.jinproject.twomillustratedbook.data.repository.DropListRepository
-import com.jinproject.twomillustratedbook.data.repository.TimerRepository
+import com.jinproject.twomillustratedbook.domain.repository.DropListRepository
+import com.jinproject.twomillustratedbook.domain.repository.TimerRepository
 import com.jinproject.twomillustratedbook.domain.model.MonsterType
 import com.jinproject.twomillustratedbook.domain.model.WeekModel
 import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
@@ -158,9 +158,6 @@ class AlarmViewModel @Inject constructor(
         }
     }
 
-    fun setOta(ota: Int, bossName: String) =
-        viewModelScope.launch(Dispatchers.IO) { timerRepository.setOta(ota, bossName) }
-
     fun setHourChanged(hour: Int) = _uiState.update { state ->
         state.copy(timeState = uiState.value.timeState.copy(hour = hour))
     }
@@ -284,6 +281,7 @@ class AlarmViewModel @Inject constructor(
             notifyIntentImmediately,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+
         alarmManager.setAlarmClock(
             AlarmManager.AlarmClockInfo(
                 nextGenTime,

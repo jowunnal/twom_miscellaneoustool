@@ -1,4 +1,4 @@
-package com.jinproject.twomillustratedbook.data.repository
+package com.jinproject.twomillustratedbook.domain.repository
 
 import com.jinproject.twomillustratedbook.domain.model.CollectionModel
 import kotlinx.coroutines.flow.Flow

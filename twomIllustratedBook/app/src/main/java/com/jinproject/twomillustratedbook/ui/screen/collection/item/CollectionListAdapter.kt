@@ -6,6 +6,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.core.view.doOnAttach
+import androidx.core.view.doOnDetach
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.jinproject.twomillustratedbook.data.database.Entity.Book
 import com.jinproject.twomillustratedbook.data.database.Entity.RegisterItemToBook
@@ -16,8 +20,8 @@ import javax.inject.Inject
 
 class CollectionListAdapter @Inject constructor(@ActivityContext private val context: Context) :
     RecyclerView.Adapter<CollectionListAdapter.BookViewHolder>(), Filterable {
-    var items = ArrayList<CollectionState>()
-    var itemsUnfiltered = ArrayList<CollectionState>()
+    private var items = ArrayList<CollectionState>()
+    private var itemsUnfiltered = ArrayList<CollectionState>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
         val binding = CollectionListItemBinding.inflate(LayoutInflater.from(parent.context))
@@ -44,13 +48,22 @@ class CollectionListAdapter @Inject constructor(@ActivityContext private val con
 
     inner class BookViewHolder(private val binding: CollectionListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        private var lifecycleOwner: LifecycleOwner? = null
 
         init {
             binding.containerInBook.minWidth =
                 context.applicationContext.resources.displayMetrics.widthPixels
+            itemView.doOnAttach {
+                lifecycleOwner = itemView.findViewTreeLifecycleOwner()
+            }
+            itemView.doOnDetach {
+                lifecycleOwner = null
+            }
         }
 
         fun bind(item: CollectionState) {
+            binding.lifecycleOwner = lifecycleOwner
+
             var itemInfo = ""
             item.items.forEachIndexed { index, itemState ->
                 if (itemState.enchantNumber != 0)
@@ -81,7 +94,7 @@ class CollectionListAdapter @Inject constructor(@ActivityContext private val con
         private fun isValidItemStat(
             stat: Double,
             statName: String,
-            isPercentValue: Boolean = false
+            isPercentValue: Boolean
         ): String =
             if (stat != 0.0) {
                 if (isPercentValue)

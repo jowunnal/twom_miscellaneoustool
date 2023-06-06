@@ -31,7 +31,7 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
     private val collectionViewModel: CollectionViewModel by viewModels()
 
     @Inject lateinit var collectionListAdapter: CollectionListAdapter
-    private val args: CollectionListArgs by navArgs()
+    private val navArgs: CollectionListArgs by navArgs()
 
     override fun getViewDataBinding(): CollectionListBinding = CollectionListBinding.inflate(layoutInflater)
     override var topBarVisibility: Boolean = true
@@ -48,7 +48,7 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
             recyclerView.adapter = collectionListAdapter
             dropListViewModel = dropListViewModel
         }
-        collectionViewModel.getCollectionList(args.category)
+        collectionViewModel.getCollectionList(navArgs.category)
         addMenuProvider()
     }
 

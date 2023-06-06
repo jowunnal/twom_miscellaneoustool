@@ -6,11 +6,9 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.IBinder
-import android.util.Log
-import androidx.core.app.NotificationCompat
 import androidx.lifecycle.*
 import com.jinproject.twomillustratedbook.R
-import com.jinproject.twomillustratedbook.data.repository.TimerRepository
+import com.jinproject.twomillustratedbook.domain.repository.TimerRepository
 import com.jinproject.twomillustratedbook.utils.sendNotification
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect

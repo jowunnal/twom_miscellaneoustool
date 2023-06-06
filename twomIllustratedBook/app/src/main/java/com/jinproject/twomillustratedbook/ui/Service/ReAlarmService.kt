@@ -8,10 +8,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import androidx.lifecycle.*
-import com.jinproject.twomillustratedbook.data.repository.TimerRepository
+import com.jinproject.twomillustratedbook.domain.repository.TimerRepository
 import com.jinproject.twomillustratedbook.domain.model.TimerModel
 import com.jinproject.twomillustratedbook.ui.receiver.AlarmReceiver
-import com.jinproject.twomillustratedbook.ui.screen.alarm.AlarmViewModel
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.AlarmItem
 import com.jinproject.twomillustratedbook.utils.day
 import com.jinproject.twomillustratedbook.utils.hour
@@ -19,13 +18,10 @@ import com.jinproject.twomillustratedbook.utils.minute
 import com.jinproject.twomillustratedbook.utils.second
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.selects.select
 import java.util.*
 import javax.inject.Inject
-import kotlin.math.min
 
 @AndroidEntryPoint
 class ReAlarmService : LifecycleService() {

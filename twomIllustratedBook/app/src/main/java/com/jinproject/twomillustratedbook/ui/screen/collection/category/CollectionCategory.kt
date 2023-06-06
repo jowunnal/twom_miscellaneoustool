@@ -33,7 +33,7 @@ class CollectionCategory : BaseFragment<CollectionCategoryBinding>() {
             bookTypeRecyclerView.adapter = collectionCategoryAdapter
         }
         collectionCategoryAdapter.setItem(Category.values().toList())
-        collectionCategoryAdapter.setOnItemClickListener(object : OnItemClickListener {
+        collectionCategoryAdapter.setItemClickListener(object : OnItemClickListener {
             override fun OnHomeItemClick(v: View, pos: Int) {
                 val category = collectionCategoryAdapter.getItem(pos)
                 val action = CollectionCategoryDirections.actionCollectionCategoryToCollectionList(category)

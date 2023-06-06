@@ -1,20 +1,6 @@
 package com.jinproject.twomillustratedbook.ui.Service
 
-import android.app.AlarmManager
-import android.app.Application
-import android.app.PendingIntent
-import android.content.Intent
-import android.os.IBinder
-import androidx.lifecycle.LifecycleService
-import com.google.firebase.database.*
-import com.jinproject.twomillustratedbook.data.database.Entity.Monster
-import com.jinproject.twomillustratedbook.ui.screen.alarm.item.AlarmItem
-import com.jinproject.twomillustratedbook.data.repository.DropListRepository
-import com.jinproject.twomillustratedbook.data.repository.TimerRepository
-import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
-import javax.inject.Inject
-
+/*
 @AndroidEntryPoint
 class AlarmServerService :LifecycleService() {
     lateinit var monster: Monster
@@ -28,7 +14,6 @@ class AlarmServerService :LifecycleService() {
         super.onStartCommand(intent, flags, startId)
         val db = FirebaseDatabase.getInstance().reference
         val loginPreference=applicationContext.getSharedPreferences("login", MODE_PRIVATE)
-        /*
         db.child("RoomList").child(loginPreference.getString("key","")!!).addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 val alarmManager: AlarmManager = applicationContext.getSystemService(ALARM_SERVICE) as AlarmManager
@@ -70,9 +55,8 @@ class AlarmServerService :LifecycleService() {
                 }
             }
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
-        })*/
+        })
 
         return START_STICKY
     }
@@ -97,3 +81,4 @@ class AlarmServerService :LifecycleService() {
         alarmManager.setAlarmClock(AlarmManager.AlarmClockInfo(System.currentTimeMillis()+count,notifyPendingIntent), notifyPendingIntent)
     }
 }
+ */

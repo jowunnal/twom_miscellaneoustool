@@ -1,11 +1,11 @@
-package com.jinproject.twomillustratedbook.domain.repository
+package com.jinproject.twomillustratedbook.data.repository
 
 import com.jinproject.twomillustratedbook.data.database.dao.DropListDao
-import com.jinproject.twomillustratedbook.data.repository.DropListRepository
 import com.jinproject.twomillustratedbook.domain.model.ItemModel
 import com.jinproject.twomillustratedbook.domain.model.MapModel
 import com.jinproject.twomillustratedbook.domain.model.MonsterModel
 import com.jinproject.twomillustratedbook.domain.model.MonsterType
+import com.jinproject.twomillustratedbook.domain.repository.DropListRepository
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 

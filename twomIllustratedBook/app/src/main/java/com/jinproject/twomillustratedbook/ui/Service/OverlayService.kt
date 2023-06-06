@@ -49,7 +49,7 @@ class OverlayService : LifecycleService() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         notificationManager =
-            applicationContext!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         createNotificationChannel()
 

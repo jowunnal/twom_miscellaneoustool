@@ -69,7 +69,7 @@ class CollectionCategoryAdapter @Inject constructor(@ActivityContext val context
         }
     }
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
+    fun setItemClickListener(listener: OnItemClickListener) {
         mlistener = listener
     }
 

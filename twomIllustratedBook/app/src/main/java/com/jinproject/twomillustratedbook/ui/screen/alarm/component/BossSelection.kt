@@ -10,8 +10,6 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -21,13 +19,11 @@ import com.jinproject.twomillustratedbook.domain.model.MonsterType
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultButton
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.deepGray
-import com.jinproject.twomillustratedbook.ui.screen.compose.theme.gray
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.lightGray
 import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
 import com.jinproject.twomillustratedbook.utils.tu
-import com.mate.carpool.ui.composable.DialogCustom
 import com.mate.carpool.ui.composable.DialogState
-import com.mate.carpool.ui.composable.DropDownMenuCustom
+import com.jinproject.twomillustratedbook.ui.screen.compose.component.DropDownMenuCustom
 
 @Composable
 fun BossSelection(

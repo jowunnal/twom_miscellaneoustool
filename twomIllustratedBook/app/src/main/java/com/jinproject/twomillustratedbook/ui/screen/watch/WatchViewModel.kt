@@ -2,7 +2,7 @@ package com.jinproject.twomillustratedbook.ui.screen.watch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jinproject.twomillustratedbook.data.repository.TimerRepository
+import com.jinproject.twomillustratedbook.domain.repository.TimerRepository
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimerState
 import com.jinproject.twomillustratedbook.ui.screen.watch.item.ButtonStatus
 import dagger.hilt.android.lifecycle.HiltViewModel

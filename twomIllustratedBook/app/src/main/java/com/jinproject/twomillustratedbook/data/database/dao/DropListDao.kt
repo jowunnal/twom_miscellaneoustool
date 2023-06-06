@@ -1,10 +1,7 @@
 package com.jinproject.twomillustratedbook.data.database.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.jinproject.twomillustratedbook.data.database.Entity.*
-import com.jinproject.twomillustratedbook.data.database.Entity.MonsDropItem
-import com.jinproject.twomillustratedbook.data.database.Entity.Monster
 import kotlinx.coroutines.flow.Flow
 
 @Dao

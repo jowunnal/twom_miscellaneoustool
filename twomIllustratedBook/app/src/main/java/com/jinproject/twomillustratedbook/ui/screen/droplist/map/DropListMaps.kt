@@ -19,7 +19,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class DropListMaps : BaseFragment<DroplistmapBinding>() {
     private val dropListMapViewModel: DropListMapViewModel by viewModels()
-    @Inject lateinit var adapter: DropListMapAdapter
+    @Inject lateinit var dropListMapAdapter: DropListMapAdapter
 
     override fun getViewDataBinding(): DroplistmapBinding =
         DroplistmapBinding.inflate(layoutInflater)
@@ -32,12 +32,12 @@ class DropListMaps : BaseFragment<DroplistmapBinding>() {
             lifecycleOwner = viewLifecycleOwner
             mapRecyclerView.layoutManager =
                 LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            mapRecyclerView.adapter = adapter
+            mapRecyclerView.adapter = dropListMapAdapter
             dropListViewModel = dropListViewModel
         }
-        adapter.setItemClickListener(object : OnItemClickListener {
+        dropListMapAdapter.setItemClickListener(object : OnItemClickListener {
             override fun OnHomeItemClick(v: View, pos: Int) {
-                val map = adapter.getItem(pos)
+                val map = dropListMapAdapter.getItem(pos)
                 val action = DropListMapsDirections.actionDropListMapsToDropList(map)
                 findNavController().navigate(action)
             }
@@ -50,8 +50,8 @@ class DropListMaps : BaseFragment<DroplistmapBinding>() {
             dropListMapViewModel.mapState
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle,Lifecycle.State.STARTED)
                 .collectLatest { mapList ->
-                adapter.setItems(mapList)
-                adapter.notifyDataSetChanged()
+                    dropListMapAdapter.setItems(mapList)
+                    dropListMapAdapter.notifyDataSetChanged()
             }
         }
     }

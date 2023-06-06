@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jinproject.twomillustratedbook"
-    android:versionCode="17"
+    android:versionCode="18"
     android:versionName="illustratedBook17">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,7 +14,7 @@
         android:minSdkVersion="33" />
 
     <application
-        android:name=".data.database.BookApplication"
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_main"
         android:label="@string/app_name"
@@ -44,7 +44,6 @@
         <service
             android:name=".ui.Service.AlarmService"
             android:description="@string/알람서비스" />
-        <service android:name=".ui.Service.AlarmServerService" />
 
         <receiver
             android:name=".ui.receiver.AlarmReceiver"

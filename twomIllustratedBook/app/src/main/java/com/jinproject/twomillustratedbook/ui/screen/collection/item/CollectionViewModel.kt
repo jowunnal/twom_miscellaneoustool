@@ -2,7 +2,7 @@ package com.jinproject.twomillustratedbook.ui.screen.collection.item
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jinproject.twomillustratedbook.data.repository.CollectionRepository
+import com.jinproject.twomillustratedbook.domain.repository.CollectionRepository
 import com.jinproject.twomillustratedbook.ui.screen.collection.item.item.CollectionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*

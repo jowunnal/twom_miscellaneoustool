@@ -2,7 +2,7 @@ package com.jinproject.twomillustratedbook.ui.screen.droplist.map
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jinproject.twomillustratedbook.data.repository.DropListRepository
+import com.jinproject.twomillustratedbook.domain.repository.DropListRepository
 import com.jinproject.twomillustratedbook.ui.screen.droplist.map.item.MapState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*

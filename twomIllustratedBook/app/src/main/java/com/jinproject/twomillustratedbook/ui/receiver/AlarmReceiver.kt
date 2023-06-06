@@ -7,7 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import com.jinproject.twomillustratedbook.R
-import com.jinproject.twomillustratedbook.data.repository.TimerRepository
+import com.jinproject.twomillustratedbook.domain.repository.TimerRepository
 import com.jinproject.twomillustratedbook.utils.sendNotification
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope

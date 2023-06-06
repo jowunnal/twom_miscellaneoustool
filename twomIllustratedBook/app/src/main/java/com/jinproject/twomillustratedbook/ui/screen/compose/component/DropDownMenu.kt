@@ -1,4 +1,4 @@
-package com.mate.carpool.ui.composable
+package com.jinproject.twomillustratedbook.ui.screen.compose.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -11,15 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.twomillustratedbook.R
-import com.jinproject.twomillustratedbook.ui.screen.compose.component.HorizontalSpacer
-import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.black
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.gray
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.white
@@ -111,8 +107,8 @@ private fun PreviewDropDownMenuCustom() {
         DropDownMenuCustom(
             iconHeader = R.drawable.icon_home,
             iconTail = R.drawable.icon_login,
-            label = "출발 지역",
-            text = "인동",
+            label = "라벨텍스트",
+            text = "컨텐트 텍스트",
             setTextChanged = {},
             items = emptyList()
         )

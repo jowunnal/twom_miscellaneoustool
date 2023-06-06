@@ -18,7 +18,7 @@ import javax.inject.Inject
 class DropListMapAdapter @Inject constructor(@ActivityContext val context: Context) :
     RecyclerView.Adapter<DropListMapAdapter.ViewHolder>(), OnItemClickListener {
     var items = ArrayList<MapState>()
-    var mlistener: OnItemClickListener? = null
+    var mListener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(DroplistmapItemBinding.inflate(LayoutInflater.from(parent.context)))
@@ -47,7 +47,7 @@ class DropListMapAdapter @Inject constructor(@ActivityContext val context: Conte
             binding.dropListMapItem.minimumWidth =
                 context.applicationContext.resources.displayMetrics.widthPixels
             binding.root.setOnClickListener {
-                mlistener?.OnHomeItemClick(it, adapterPosition)
+                mListener?.OnHomeItemClick(it, adapterPosition)
             }
         }
 
@@ -60,10 +60,10 @@ class DropListMapAdapter @Inject constructor(@ActivityContext val context: Conte
     }
 
     override fun OnHomeItemClick(v: View, pos: Int) {
-        mlistener?.OnHomeItemClick(v, pos)
+        mListener?.OnHomeItemClick(v, pos)
     }
 
     fun setItemClickListener(listener: OnItemClickListener) {
-        mlistener = listener
+        mListener = listener
     }
 }

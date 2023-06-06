@@ -3,7 +3,7 @@ package com.jinproject.twomillustratedbook.ui.screen.droplist.monster
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jinproject.twomillustratedbook.data.repository.DropListRepository
+import com.jinproject.twomillustratedbook.domain.repository.DropListRepository
 import com.jinproject.twomillustratedbook.ui.screen.droplist.monster.item.ItemState
 import com.jinproject.twomillustratedbook.ui.screen.droplist.monster.item.MonsterState
 import dagger.hilt.android.lifecycle.HiltViewModel

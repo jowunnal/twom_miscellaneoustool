@@ -1,7 +1,8 @@
-package com.jinproject.twomillustratedbook.data.database
+package com.jinproject.twomillustratedbook.di
 
 import android.content.Context
 import androidx.room.Room
+import com.jinproject.twomillustratedbook.data.database.BookDatabase
 import com.jinproject.twomillustratedbook.data.database.dao.CollectionDao
 import com.jinproject.twomillustratedbook.data.database.dao.DropListDao
 import com.jinproject.twomillustratedbook.data.database.dao.TimerDao

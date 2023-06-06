@@ -1,17 +1,16 @@
-package com.jinproject.twomillustratedbook.domain.repository
+package com.jinproject.twomillustratedbook.data.repository
 
 import androidx.datastore.core.DataStore
 import com.jinproject.twomillustratedbook.TimerPreferences
 import com.jinproject.twomillustratedbook.data.database.dao.TimerDao
-import com.jinproject.twomillustratedbook.data.repository.TimerRepository
 import com.jinproject.twomillustratedbook.domain.model.MonsterType
 import com.jinproject.twomillustratedbook.domain.model.TimerModel
+import com.jinproject.twomillustratedbook.domain.repository.TimerRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
-import kotlin.math.min
 
 class TimerRepositoryImpl @Inject constructor(
     private val timerDao: TimerDao,
