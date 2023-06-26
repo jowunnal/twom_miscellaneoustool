@@ -63,32 +63,27 @@ class CollectionListAdapter @Inject constructor(@ActivityContext private val con
 
         fun bind(item: CollectionState) {
             binding.lifecycleOwner = lifecycleOwner
+            binding.itemName = item.items.mapIndexed { index, itemState ->
+                StringBuilder().apply {
+                    if (itemState.enchantNumber != 0)
+                        append("+${itemState.enchantNumber} ")
 
-            var itemInfo = ""
-            item.items.forEachIndexed { index, itemState ->
-                if (itemState.enchantNumber != 0)
-                    itemInfo += "+${itemState.enchantNumber} "
+                    append(itemState.name)
 
-                if (itemState.count != 1)
-                    itemInfo += "${itemState.name} * ${itemState.count}"
-                else
-                    itemInfo += itemState.name
+                    if (itemState.count != 1)
+                        append(" * ${itemState.count}")
+                }.toString()
+            }.joinToString("\n")
 
-                if (index != item.items.lastIndex)
-                    itemInfo += "\n"
+            binding.stat = item.stats.joinToString("\n") { statState ->
+                StringBuilder().append(
+                    isValidItemStat(
+                        stat = statState.value,
+                        statName = statState.name,
+                        isPercentValue = statState.name.contains("%")
+                    )
+                ).toString()
             }
-
-            binding.tvContent.text = itemInfo
-
-            var statInfo = ""
-            item.stats.forEach { statState ->
-                statInfo += isValidItemStat(
-                    stat = statState.value,
-                    statName = statState.name,
-                    isPercentValue = statState.name.contains("퍼센트")
-                )
-            }
-            binding.tvStat.text = statInfo
         }
 
         private fun isValidItemStat(
@@ -96,14 +91,10 @@ class CollectionListAdapter @Inject constructor(@ActivityContext private val con
             statName: String,
             isPercentValue: Boolean
         ): String =
-            if (stat != 0.0) {
-                if (isPercentValue)
-                    "${statName.replace("퍼센트","")}: $stat%\n"
-                else
-                    "$statName: $stat\n"
-            } else
-                ""
-
+            if (isPercentValue)
+                "${statName.replace("%", "")}: $stat%"
+            else
+                "$statName: $stat"
     }
 
     override fun getFilter(): Filter {

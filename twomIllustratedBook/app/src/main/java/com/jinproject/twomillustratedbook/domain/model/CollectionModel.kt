@@ -5,68 +5,43 @@ import com.jinproject.twomillustratedbook.data.database.Entity.RegisterItemToBoo
 
 data class CollectionModel(
     val bookId: Int,
-    val hp: Double,
-    val mp: Double,
-    val hpPer: Double,
-    val mpPer: Double,
-    val hpRegen: Double,
-    val mpRegen: Double,
-    val hr: Double,
-    val cri: Double,
-    val statInt: Double,
-    val statStr: Double,
-    val statDex: Double,
-    val move: Double,
-    val armor: Double,
-    val pveDmg: Double,
-    val pvpDmg: Double,
-    val pveDmgPer: Double,
-    val pvpDmgPer: Double,
-    val pveDmgDown: Double,
-    val pvpDmgDown: Double,
-    val pveDmgDownPer: Double,
-    val pvpDmgDownPer: Double,
-    val goldDrop: Double,
-    val itemDrop: Double,
-    val bossDmgPer: Double,
-    val critDmgDown: Double,
-    val critDmgDownPer: Double,
-    val miss: Double,
-    val critResistPer: Double,
+    val stat: Map<Stat, Double>,
     val items: List<ItemModel>
 ) {
     companion object {
         fun fromCollectionResponse(response: Map.Entry<Book, List<RegisterItemToBook>>) =
             CollectionModel(
                 bookId = response.key.bookId,
-                hp = response.key.hp,
-                mp = response.key.mp,
-                hpPer = response.key.hpPer,
-                mpPer = response.key.mpPer,
-                hpRegen = response.key.hpRegen,
-                mpRegen = response.key.mpRegen,
-                hr = response.key.hr,
-                cri = response.key.cri,
-                statInt = response.key.statInt,
-                statStr = response.key.statStr,
-                statDex = response.key.statDex,
-                move = response.key.move,
-                armor = response.key.armor,
-                pveDmg = response.key.pveDmg,
-                pvpDmg = response.key.pvpDmg,
-                pveDmgPer = response.key.pveDmgPer,
-                pvpDmgPer = response.key.pvpDmgPer,
-                pveDmgDown = response.key.pveDmgDown,
-                pvpDmgDown = response.key.pvpDmgDown,
-                pveDmgDownPer = response.key.pveDmgDownPer,
-                pvpDmgDownPer = response.key.pvpDmgDownPer,
-                goldDrop = response.key.goldDrop,
-                itemDrop = response.key.itemDrop,
-                bossDmgPer = response.key.bossDmgPer,
-                critDmgDown = response.key.critDmgDown,
-                critDmgDownPer = response.key.critDmgDownPer,
-                miss = response.key.miss,
-                critResistPer = response.key.critResistPer,
+                stat = mutableMapOf<Stat, Double>().apply {
+                    put(Stat.Hp, response.key.hp)
+                    put(Stat.Mp, response.key.mp)
+                    put(Stat.HpPer, response.key.hpPer)
+                    put(Stat.MpPer, response.key.mpPer)
+                    put(Stat.HpRegen, response.key.hpRegen)
+                    put(Stat.MpRegen, response.key.mpRegen)
+                    put(Stat.Hr, response.key.hr)
+                    put(Stat.Cri, response.key.cri)
+                    put(Stat.StatInt, response.key.statInt)
+                    put(Stat.StatStr, response.key.statStr)
+                    put(Stat.StatDex, response.key.statDex)
+                    put(Stat.Move, response.key.move)
+                    put(Stat.Armor, response.key.armor)
+                    put(Stat.PveDmg, response.key.pveDmg)
+                    put(Stat.PvpDmg, response.key.pvpDmg)
+                    put(Stat.PveDmgPer, response.key.pveDmgPer)
+                    put(Stat.PvpDmgPer, response.key.pvpDmgPer)
+                    put(Stat.PveDmgDown, response.key.pveDmgDown)
+                    put(Stat.PvpDmgDown, response.key.pvpDmgDown)
+                    put(Stat.PveDmgDownPer, response.key.pveDmgDownPer)
+                    put(Stat.PvpDmgDownPer, response.key.pvpDmgDownPer)
+                    put(Stat.GoldDrop, response.key.goldDrop)
+                    put(Stat.ItemDrop, response.key.itemDrop)
+                    put(Stat.BossDmgPer, response.key.bossDmgPer)
+                    put(Stat.CriDmgDown, response.key.critDmgDown)
+                    put(Stat.CriDmgDownPer, response.key.critDmgDownPer)
+                    put(Stat.Miss, response.key.miss)
+                    put(Stat.CriResistPer, response.key.critResistPer)
+                }.filter { it.value != 0.0 },
                 items = response.value.map { item -> ItemModel.fromRegisterItemToDomain(item) }
             )
     }

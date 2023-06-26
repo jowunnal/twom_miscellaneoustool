@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.CollectionListBinding
+import com.jinproject.twomillustratedbook.domain.model.Category
 import com.jinproject.twomillustratedbook.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -48,7 +49,7 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
             recyclerView.adapter = collectionListAdapter
             dropListViewModel = dropListViewModel
         }
-        collectionViewModel.getCollectionList(navArgs.category)
+        collectionViewModel.getCollectionList(Category.findByStoredName(navArgs.category))
         addMenuProvider()
     }
 
