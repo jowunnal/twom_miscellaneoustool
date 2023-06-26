@@ -1,14 +1,6 @@
 <resources>
-    <string name="app_name">아이모 잡학사전</string>
-    <string name="kooii">쿠이</string>
-    <string name="donguri">나무동그리</string>
-    <string name="pig_leaf">나뭇잎멧돼지</string>
-    <string name="pig_angry">성난잎멧돼지</string>
-    <string name="bulldozerjr">불도저주니어</string>
-    <string name="bulldozer">불도저</string>
-    <string name="bulldozerbro">불도저형님</string>
-    <string name="channel_name">채널이름</string>
-    <string name="channel_description">채널디크립션</string>
+
+    <!-- ID strings !-->
     <string name="test_AppId" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
     <string name="test_UnitId" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="my_AppId" translatable="false">ca-app-pub-3630394418001517~2743030483</string>
@@ -16,10 +8,20 @@
     <string name="my_fullAppId" translatable="false">ca-app-pub-3630394418001517/8637400041</string>
     <string name="Rewarded_Ad_UnitId" translatable="false">ca-app-pub-3630394418001517/7487969905</string>
     <string name="testDeviceId" translatable="false">791CD8B7A9915A8BC18F8483EBAC2762</string>
-    <string name="아이템이름">아이템이름</string>
-    <string name="스텟">스텟</string>
+
+    <!-- App strings !-->
+    <string name="app_name">아이모 잡학도구</string>
+    <string name="channel_name">채널이름</string>
+    <string name="channel_description">채널디크립션</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="현재시간항상보기">아이모 현재시간 항상보기 서비스</string>
     <string name="알람재생성서비스">아이모 알람 재생성 서비스</string>
     <string name="알람서비스">아이모 알람 생성 서비스</string>
+
+    <!-- UI strings !-->
+    <string name="item_name">아이템이름</string>
+    <string name="stat">스텟</string>
+    <string name="home_header">아이모 잡학도구</string>
+    <string name="version">v1.7</string>
+
 </resources>

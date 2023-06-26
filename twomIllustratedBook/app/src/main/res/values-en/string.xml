@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">twomIllustratedBook</string>
-    <string name="kooii">kooii</string>
-    <string name="donguri">donguri</string>
-    <string name="pig_leaf">pig_leaf</string>
-    <string name="pig_angry">pig_angry</string>
-    <string name="bulldozerjr">bulldozerjr</string>
-    <string name="bulldozer">bulldozer</string>
-    <string name="bulldozerbro">bulldozerbro</string>
+
+    <!-- App strings !-->
+    <string name="app_name">TwomMiscellaneousTool</string>
     <string name="channel_name">channel_name</string>
     <string name="channel_description">channel_description</string>
-    <string name="아이템이름">Item\'s Name</string>
-    <string name="스텟">Stat</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="현재시간항상보기">Twom watch always present time service</string>
     <string name="알람재생성서비스">Twom recreate alarm service</string>
     <string name="알람서비스">Twom create alarm service</string>
+
+    <!-- UI strings !-->
+    <string name="item_name">Item\'s Name</string>
+    <string name="stat">Stat</string>
+    <string name="home_header">Twom Miscellaneous Tool</string>
+    <string name="version">v1.7</string>
+
 </resources>
