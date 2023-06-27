@@ -1,0 +1,23 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.TwomMiscellaneousTools" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/light_primary</item>
+        <item name="colorPrimaryVariant">@color/light_primary_variants</item>
+        <item name="colorOnPrimary">@color/light_onPrimary</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/light_secondary</item>
+        <item name="colorSecondaryVariant">@color/light_secondary_variants</item>
+        <item name="colorOnSecondary">@color/light_onSecondary</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar" >true</item>
+        <!-- Customize your theme here. -->
+        <item name="colorError">@color/light_error</item>
+        <item name="colorOnError">@color/light_onError</item>
+        <item name="background">@color/light_background</item>
+        <item name="colorOnBackground">@color/light_onBackground</item>
+        <item name="colorSurface">@color/light_surface</item>
+        <item name="colorOnSurface">@color/light_onSurface</item>
+    </style>
+</resources>

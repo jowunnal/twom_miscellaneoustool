@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navi_main"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.miscellaneoustool.app.ui.screen.home.Home"
+        android:label="BookHome"
+        tools:layout="@layout/home">
+        <action
+            android:id="@+id/action_homeFragment_to_dropListMaps"
+            app:destination="@id/dropListMaps" />
+        <action
+            android:id="@+id/action_homeFragment_to_collectionCategory"
+            app:destination="@id/collectionCategory" />
+        <action
+            android:id="@+id/action_homeFragment_to_navigationFragment"
+            app:destination="@id/navigationFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/dropListMaps"
+        android:name="com.miscellaneoustool.app.ui.screen.droplist.map.DropListMaps"
+        android:label="droplistmap"
+        tools:layout="@layout/droplistmap" >
+        <action
+            android:id="@+id/action_dropListMaps_to_dropList"
+            app:destination="@id/dropList" />
+    </fragment>
+    <fragment
+        android:id="@+id/collectionCategory"
+        android:name="com.miscellaneoustool.app.ui.screen.collection.category.CollectionCategory"
+        android:label="collection_category"
+        tools:layout="@layout/collection_category" >
+        <action
+            android:id="@+id/action_collectionCategory_to_collectionList"
+            app:destination="@id/collectionList" />
+    </fragment>
+    <fragment
+        android:id="@+id/collectionList"
+        android:name="com.miscellaneoustool.app.ui.screen.collection.item.CollectionList"
+        android:label="Collection_list"
+        tools:layout="@layout/collection_list">
+        <argument
+            android:name="category"
+            app:argType="string"
+            android:defaultValue=""
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/dropList"
+        android:name="com.miscellaneoustool.app.ui.screen.droplist.monster.DropListMonster"
+        android:label="drop"
+        tools:layout="@layout/drop">
+        <argument
+            android:name="mapName"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
+    <fragment
+        android:id="@+id/navigationFragment"
+        android:name="com.miscellaneoustool.app.ui.screen.compose.navigation.NavigationFragment"
+        android:label="NavigationFragment" />
+
+</navigation>
