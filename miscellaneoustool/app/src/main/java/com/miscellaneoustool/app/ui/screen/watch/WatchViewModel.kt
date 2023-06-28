@@ -47,7 +47,7 @@ class WatchViewModel @Inject constructor(
     }
 
     private fun getRecentlySelectedBossInfo() {
-        timerRepository.timerPreferences.onEach { prefs ->
+        timerRepository.getTimerPreferences().onEach { prefs ->
             _uiState.update { state ->
                 state.copy(
                     frequentlyUsedBossList = prefs.frequentlyUsedBossListList,

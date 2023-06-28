@@ -1,6 +1,6 @@
 package com.miscellaneoustool.app.domain.model
 
-import com.miscellaneoustool.app.data.database.entity.Map
+import com.miscellaneoustool.app.data.datasource.cache.database.entity.Map
 import com.miscellaneoustool.app.ui.screen.droplist.map.item.MapState
 
 data class MapModel(

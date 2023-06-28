@@ -1,6 +1,6 @@
 package com.miscellaneoustool.app.domain.model
 
-import com.miscellaneoustool.app.data.database.entity.Monster
+import com.miscellaneoustool.app.data.datasource.cache.database.entity.Monster
 import com.miscellaneoustool.app.ui.screen.droplist.monster.item.MonsterState
 
 data class MonsterModel(

@@ -1,7 +1,7 @@
 package com.miscellaneoustool.app.domain.model
 
 import androidx.compose.runtime.Stable
-import com.miscellaneoustool.app.data.database.entity.Timer
+import com.miscellaneoustool.app.data.datasource.cache.database.entity.Timer
 import com.miscellaneoustool.app.ui.screen.alarm.item.TimeState
 import com.miscellaneoustool.app.ui.screen.alarm.item.TimerState
 

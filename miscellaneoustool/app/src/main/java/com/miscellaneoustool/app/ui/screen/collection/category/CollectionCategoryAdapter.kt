@@ -2,7 +2,6 @@ package com.miscellaneoustool.app.ui.screen.collection.category
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.doOnAttach
 import androidx.core.view.doOnDetach
@@ -11,15 +10,15 @@ import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.miscellaneoustool.app.databinding.CollectionCategoryItemBinding
 import com.miscellaneoustool.app.domain.model.Category
-import com.miscellaneoustool.app.ui.listener.OnItemClickListener
+import com.miscellaneoustool.app.ui.listener.OnClickedListener
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 
 class CollectionCategoryAdapter @Inject constructor(@ActivityContext val context: Context) :
-    RecyclerView.Adapter<CollectionCategoryAdapter.ViewHolder>(), OnItemClickListener {
+    RecyclerView.Adapter<CollectionCategoryAdapter.ViewHolder>(), OnClickedListener {
 
     private var items = ArrayList<Category>()
-    private var mlistener: OnItemClickListener? = null
+    private var mlistener: OnClickedListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(CollectionCategoryItemBinding.inflate(LayoutInflater.from(parent.context)))
@@ -58,7 +57,7 @@ class CollectionCategoryAdapter @Inject constructor(@ActivityContext val context
                 lifecycleOwner = null
             }
             binding.root.setOnClickListener {
-                OnHomeItemClick(it, adapterPosition)
+                setOnClickedListener(adapterPosition)
             }
         }
 
@@ -69,11 +68,11 @@ class CollectionCategoryAdapter @Inject constructor(@ActivityContext val context
         }
     }
 
-    fun setItemClickListener(listener: OnItemClickListener) {
+    fun setItemClickListener(listener: OnClickedListener) {
         mlistener = listener
     }
 
-    override fun OnHomeItemClick(v: View, pos: Int) {
-        mlistener?.OnHomeItemClick(v, pos)
+    override fun setOnClickedListener(pos: Int) {
+        mlistener?.setOnClickedListener(pos)
     }
 }

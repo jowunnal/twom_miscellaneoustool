@@ -44,7 +44,7 @@ class AlarmService : LifecycleService() {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
 
                 val getNotification = launch {
-                    timerRepository.timerPreferences.onEach { prefs ->
+                    timerRepository.getTimerPreferences().onEach { prefs ->
                         notificationManager?.sendNotification(
                             message = msg,
                             img = img,

@@ -1,6 +1,6 @@
 package com.miscellaneoustool.app.domain.model
 
-import com.miscellaneoustool.app.data.database.entity.MonsDropItem
+import com.miscellaneoustool.app.data.datasource.cache.database.entity.MonsDropItem
 import com.miscellaneoustool.app.ui.screen.collection.item.item.CollectionItemState
 import com.miscellaneoustool.app.ui.screen.droplist.monster.item.ItemState
 

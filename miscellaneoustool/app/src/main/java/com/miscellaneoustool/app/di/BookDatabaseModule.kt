@@ -2,10 +2,10 @@ package com.miscellaneoustool.app.di
 
 import android.content.Context
 import androidx.room.Room
-import com.miscellaneoustool.app.data.database.BookDatabase
-import com.miscellaneoustool.app.data.database.dao.CollectionDao
-import com.miscellaneoustool.app.data.database.dao.DropListDao
-import com.miscellaneoustool.app.data.database.dao.TimerDao
+import com.miscellaneoustool.app.data.datasource.cache.database.BookDatabase
+import com.miscellaneoustool.app.data.datasource.cache.database.dao.CollectionDao
+import com.miscellaneoustool.app.data.datasource.cache.database.dao.DropListDao
+import com.miscellaneoustool.app.data.datasource.cache.database.dao.TimerDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

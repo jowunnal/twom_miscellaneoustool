@@ -5,7 +5,8 @@ import com.miscellaneoustool.app.domain.model.CollectionModel
 import kotlinx.coroutines.flow.Flow
 
 interface CollectionRepository {
-
     fun getCollectionList(category: Category): Flow<List<CollectionModel>>
+
+    suspend fun deleteCollection(collectionList: List<Int>)
 
 }

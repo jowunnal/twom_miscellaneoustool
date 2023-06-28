@@ -7,7 +7,10 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
-import androidx.lifecycle.*
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.miscellaneoustool.app.domain.model.TimerModel
 import com.miscellaneoustool.app.domain.repository.TimerRepository
 import com.miscellaneoustool.app.ui.receiver.AlarmReceiver
@@ -20,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Calendar
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -49,7 +52,7 @@ class ReAlarmService : LifecycleService() {
                 val cal = Calendar.getInstance().apply {
                     timeInMillis = nextGenTime
                 }
-                repository.getTimer().zip(repository.timerPreferences) { timerModels, prefs ->
+                repository.getTimer().zip(repository.getTimerPreferences()) { timerModels, prefs ->
 
                     val timer = timerModels.find { timerModel ->
                         timerModel.bossName == monsterName

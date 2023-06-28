@@ -1,6 +1,6 @@
 package com.miscellaneoustool.app.data.repository
 
-import com.miscellaneoustool.app.data.database.dao.DropListDao
+import com.miscellaneoustool.app.data.datasource.cache.database.dao.DropListDao
 import com.miscellaneoustool.app.domain.model.ItemModel
 import com.miscellaneoustool.app.domain.model.MapModel
 import com.miscellaneoustool.app.domain.model.MonsterModel

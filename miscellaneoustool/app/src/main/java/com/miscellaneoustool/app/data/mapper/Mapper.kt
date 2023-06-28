@@ -1,14 +1,14 @@
 package com.miscellaneoustool.app.data.mapper
 
-import com.miscellaneoustool.app.data.database.entity.Book
-import com.miscellaneoustool.app.data.database.entity.RegisterItemToBook
+import com.miscellaneoustool.app.data.datasource.cache.database.entity.Book
+import com.miscellaneoustool.app.data.datasource.cache.database.entity.RegisterItemToBook
 import com.miscellaneoustool.app.domain.model.CollectionModel
 import com.miscellaneoustool.app.domain.model.ItemModel
 import com.miscellaneoustool.app.domain.model.Stat
 
 fun fromItemsWithStatsToCollectionModel(
     items: Map<Book, List<RegisterItemToBook>>,
-    stats: Map<Book, List<com.miscellaneoustool.app.data.database.entity.Stat>>
+    stats: Map<Book, List<com.miscellaneoustool.app.data.datasource.cache.database.entity.Stat>>
 ) =
     items.map { eachItem ->
         CollectionModel(

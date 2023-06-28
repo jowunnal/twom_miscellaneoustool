@@ -1,13 +1,13 @@
 package com.miscellaneoustool.app.domain.repository
 
-import com.jinproject.twomillustratedbook.TimerPreferences
+import com.miscellaneoustool.app.TimerPreferences
 import com.miscellaneoustool.app.domain.model.MonsterType
 import com.miscellaneoustool.app.domain.model.TimerModel
 import kotlinx.coroutines.flow.Flow
 
 interface TimerRepository {
 
-    val timerPreferences: Flow<TimerPreferences>
+    fun getTimerPreferences(): Flow<TimerPreferences>
     suspend fun addBossToFrequentlyUsedList(bossName: String)
     suspend fun setBossToFrequentlyUsedList(bossList: List<String>)
     suspend fun setRecentlySelectedBossClassified(bossClassified: MonsterType)

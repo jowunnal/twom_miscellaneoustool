@@ -72,7 +72,7 @@ class AlarmViewModel @Inject constructor(
     }
 
     private fun getRecentlySelectedBossInfo() {
-        timerRepository.timerPreferences.onEach { prefs ->
+        timerRepository.getTimerPreferences().onEach { prefs ->
             try {
                 _uiState.update { state ->
                     state.copy(
@@ -181,7 +181,7 @@ class AlarmViewModel @Inject constructor(
     fun setAlarm(monsterName: String) {
         dropListRepository.getMonsInfo(monsterName).transform { monsterModel ->
             emit(monsterModel.toMonsterState())
-        }.zip(timerRepository.timerPreferences) { monsterState, prefs ->
+        }.zip(timerRepository.getTimerPreferences()) { monsterState, prefs ->
             val genTime = Calendar.getInstance().apply {
                 hour = uiState.value.timeState.hour
                 minute = uiState.value.timeState.minutes

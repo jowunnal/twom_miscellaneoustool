@@ -3,7 +3,7 @@ package com.miscellaneoustool.app.data.serializer
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import com.google.protobuf.InvalidProtocolBufferException
-import com.jinproject.twomillustratedbook.TimerPreferences
+import com.miscellaneoustool.app.TimerPreferences
 import java.io.InputStream
 import java.io.OutputStream
 

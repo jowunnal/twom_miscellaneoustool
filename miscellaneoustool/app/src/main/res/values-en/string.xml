@@ -15,5 +15,6 @@
     <string name="stat">Stat</string>
     <string name="home_header">Twom Miscellaneous Tool</string>
     <string name="version">v1.7</string>
+    <string name="delete">Delete</string>
 
 </resources>

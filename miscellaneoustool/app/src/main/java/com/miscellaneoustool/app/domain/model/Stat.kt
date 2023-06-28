@@ -25,8 +25,8 @@ enum class Stat(val displayName: String) {
     GOLDDROP(displayName = "골드드랍률"),
     ITEMDROP(displayName = "아이템드랍률"),
     BOSSDMGPER(displayName = "보스데미지%"),
-    CRITDMGPER(displayName = "크리티컬데미지감소"),
-    CIRTDMGDOWNPER(displayName = "크리티컬데미지감소%"),
+    CRITDMGDOWN(displayName = "크리티컬데미지감소"),
+    CRITDMGDOWNPER(displayName = "크리티컬데미지감소%"),
     MISS(displayName = "회피"),
     CRITRESISTPER(displayName = "크리티컬저항%")
 }

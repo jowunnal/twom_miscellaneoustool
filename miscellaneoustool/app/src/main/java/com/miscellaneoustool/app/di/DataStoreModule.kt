@@ -2,8 +2,10 @@ package com.miscellaneoustool.app.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import com.jinproject.twomillustratedbook.TimerPreferences
-import com.miscellaneoustool.app.data.datastore.timerPreferencesStore
+import com.miscellaneoustool.app.CollectionPreferences
+import com.miscellaneoustool.app.TimerPreferences
+import com.miscellaneoustool.app.data.datasource.cache.datastore.collectionPreferencesStore
+import com.miscellaneoustool.app.data.datasource.cache.datastore.timerPreferencesStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,4 +22,11 @@ object DataStoreModule {
     fun providesDataStoreInstance(@ApplicationContext context:Context): DataStore<TimerPreferences> {
         return context.timerPreferencesStore
     }
+
+    @Singleton
+    @Provides
+    fun providesCollectionDataStore(@ApplicationContext context: Context): DataStore<CollectionPreferences> {
+        return context.collectionPreferencesStore
+    }
+
 }

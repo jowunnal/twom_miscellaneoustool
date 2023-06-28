@@ -44,12 +44,17 @@ abstract class BaseFragment<VB : ViewDataBinding> : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        (requireActivity() as AppCompatActivity).supportActionBar?.run {
-            if (topBarVisibility) show() else hide()
-        }
+        showOrHideTopBar(topBarVisibility)
+
         requireActivity()
             .findViewById<BottomNavigationView>(R.id.bottomNavigationView)
             .visibility = if (bottomNavigationBarVisibility) View.VISIBLE else View.GONE
+    }
+
+    fun showOrHideTopBar(visibility: Boolean) {
+        (requireActivity() as AppCompatActivity).supportActionBar?.run {
+            if (visibility) show() else hide()
+        }
     }
 
     override fun onDestroyView() {

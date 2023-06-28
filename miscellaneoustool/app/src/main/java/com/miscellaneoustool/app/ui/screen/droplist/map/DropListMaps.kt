@@ -1,14 +1,13 @@
 package com.miscellaneoustool.app.ui.screen.droplist.map
 
 import android.annotation.SuppressLint
-import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.miscellaneoustool.app.databinding.DroplistmapBinding
 import com.miscellaneoustool.app.ui.base.BaseFragment
-import com.miscellaneoustool.app.ui.listener.OnItemClickListener
+import com.miscellaneoustool.app.ui.listener.OnClickedListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -33,8 +32,8 @@ class DropListMaps : BaseFragment<DroplistmapBinding>() {
             mapRecyclerView.adapter = dropListMapAdapter
             dropListViewModel = dropListViewModel
         }
-        dropListMapAdapter.setItemClickListener(object : OnItemClickListener {
-            override fun OnHomeItemClick(v: View, pos: Int) {
+        dropListMapAdapter.setItemClickListener(object : OnClickedListener {
+            override fun setOnClickedListener(pos: Int) {
                 val map = dropListMapAdapter.getItem(pos)
                 val action = DropListMapsDirections.actionDropListMapsToDropList(map)
                 findNavController().navigate(action)

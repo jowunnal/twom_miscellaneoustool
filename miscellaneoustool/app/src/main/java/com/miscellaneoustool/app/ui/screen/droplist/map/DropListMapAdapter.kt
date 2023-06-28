@@ -3,19 +3,18 @@ package com.miscellaneoustool.app.ui.screen.droplist.map
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.miscellaneoustool.app.databinding.DroplistmapItemBinding
-import com.miscellaneoustool.app.ui.listener.OnItemClickListener
+import com.miscellaneoustool.app.ui.listener.OnClickedListener
 import com.miscellaneoustool.app.ui.screen.droplist.map.item.MapState
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 
 class DropListMapAdapter @Inject constructor(@ActivityContext val context: Context) :
-    RecyclerView.Adapter<DropListMapAdapter.ViewHolder>(), OnItemClickListener {
+    RecyclerView.Adapter<DropListMapAdapter.ViewHolder>(), OnClickedListener {
     var items = ArrayList<MapState>()
-    var mListener: OnItemClickListener? = null
+    var mListener: OnClickedListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(DroplistmapItemBinding.inflate(LayoutInflater.from(parent.context)))
@@ -44,7 +43,7 @@ class DropListMapAdapter @Inject constructor(@ActivityContext val context: Conte
             binding.dropListMapItem.minimumWidth =
                 context.applicationContext.resources.displayMetrics.widthPixels
             binding.root.setOnClickListener {
-                mListener?.OnHomeItemClick(it, adapterPosition)
+                setOnClickedListener(adapterPosition)
             }
         }
 
@@ -56,11 +55,11 @@ class DropListMapAdapter @Inject constructor(@ActivityContext val context: Conte
         }
     }
 
-    override fun OnHomeItemClick(v: View, pos: Int) {
-        mListener?.OnHomeItemClick(v, pos)
+    override fun setOnClickedListener(pos: Int) {
+        mListener?.setOnClickedListener(pos)
     }
 
-    fun setItemClickListener(listener: OnItemClickListener) {
+    fun setItemClickListener(listener: OnClickedListener) {
         mListener = listener
     }
 }

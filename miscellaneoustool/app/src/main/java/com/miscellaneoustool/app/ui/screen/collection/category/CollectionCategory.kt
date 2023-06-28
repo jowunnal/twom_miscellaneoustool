@@ -1,12 +1,11 @@
 package com.miscellaneoustool.app.ui.screen.collection.category
 
-import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.miscellaneoustool.app.databinding.CollectionCategoryBinding
 import com.miscellaneoustool.app.domain.model.Category
 import com.miscellaneoustool.app.ui.base.BaseFragment
-import com.miscellaneoustool.app.ui.listener.OnItemClickListener
+import com.miscellaneoustool.app.ui.listener.OnClickedListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -31,8 +30,8 @@ class CollectionCategory : BaseFragment<CollectionCategoryBinding>() {
             bookTypeRecyclerView.adapter = collectionCategoryAdapter
         }
         collectionCategoryAdapter.setItem(Category.values().toList())
-        collectionCategoryAdapter.setItemClickListener(object : OnItemClickListener {
-            override fun OnHomeItemClick(v: View, pos: Int) {
+        collectionCategoryAdapter.setItemClickListener(object : OnClickedListener {
+            override fun setOnClickedListener(pos: Int) {
                 val category = collectionCategoryAdapter.getItem(pos)
                 val action = CollectionCategoryDirections.actionCollectionCategoryToCollectionList(category)
                 findNavController().navigate(action)

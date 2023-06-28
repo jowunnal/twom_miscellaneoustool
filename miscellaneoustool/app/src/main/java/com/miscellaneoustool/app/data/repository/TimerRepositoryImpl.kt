@@ -1,81 +1,53 @@
 package com.miscellaneoustool.app.data.repository
 
-import androidx.datastore.core.DataStore
-import com.jinproject.twomillustratedbook.TimerPreferences
-import com.miscellaneoustool.app.data.database.dao.TimerDao
+import com.miscellaneoustool.app.TimerPreferences
+import com.miscellaneoustool.app.data.datasource.cache.database.dao.TimerDao
+import com.miscellaneoustool.app.data.datasource.cache.CacheTimerDataSource
 import com.miscellaneoustool.app.domain.model.MonsterType
 import com.miscellaneoustool.app.domain.model.TimerModel
 import com.miscellaneoustool.app.domain.repository.TimerRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import java.io.IOException
 import javax.inject.Inject
 
 class TimerRepositoryImpl @Inject constructor(
     private val timerDao: TimerDao,
-    private val timerDataStore: DataStore<TimerPreferences>
+    private val cacheTimerDataSource: CacheTimerDataSource
 ) : TimerRepository {
+    override fun getTimerPreferences(): Flow<TimerPreferences> =
+        cacheTimerDataSource.timerPreferences
 
-    override val timerPreferences: Flow<TimerPreferences> = timerDataStore.data
-        .catch { exception ->
-            if (exception is IOException) {
-                emit(TimerPreferences.getDefaultInstance())
-            } else {
-                throw exception
-            }
-        }
 
     override suspend fun addBossToFrequentlyUsedList(bossName: String) {
-        timerDataStore.updateData { prefs ->
-            prefs.toBuilder().addFrequentlyUsedBossList(bossName).build()
-        }
+        cacheTimerDataSource.addBossToFrequentlyUsedList(bossName)
     }
 
     override suspend fun setBossToFrequentlyUsedList(bossList: List<String>) {
-        timerDataStore.updateData { prefs ->
-            prefs.toBuilder().clearFrequentlyUsedBossList().addAllFrequentlyUsedBossList(bossList)
-                .build()
-        }
+        cacheTimerDataSource.setBossToFrequentlyUsedList(bossList)
     }
 
     override suspend fun setRecentlySelectedBossClassified(bossClassified: MonsterType) {
-        timerDataStore.updateData { prefs ->
-            prefs.toBuilder().setRecentlySelectedBossClassified(bossClassified.storedName).build()
-        }
+        cacheTimerDataSource.setRecentlySelectedBossClassified(bossClassified)
     }
 
     override suspend fun setRecentlySelectedBossName(bossName: String) {
-        timerDataStore.updateData { prefs ->
-            prefs.toBuilder().setRecentlySelectedBossName(bossName).build()
-        }
+        cacheTimerDataSource.setRecentlySelectedBossName(bossName)
     }
 
     override suspend fun setIntervalFirstTimerSetting(minutes: Int) {
-        timerDataStore.updateData { prefs ->
-            prefs.toBuilder().setIntervalFirstTimerSetting(minutes).build()
-        }
+        cacheTimerDataSource.setIntervalFirstTimerSetting(minutes)
     }
 
     override suspend fun setIntervalSecondTimerSetting(minutes: Int) {
-        timerDataStore.updateData { prefs ->
-            prefs.toBuilder().setIntervalSecondTimerSetting(minutes).build()
-        }
+        cacheTimerDataSource.setIntervalSecondTimerSetting(minutes)
     }
 
     override suspend fun setFontSize(size: Int) {
-        timerDataStore.updateData { prefs ->
-            prefs.toBuilder().setFontSize(size).build()
-        }
+        cacheTimerDataSource.setFontSize(size)
     }
 
     override suspend fun updateTimerInterval(firstIntervalTime: Int, secondIntervalTime: Int) {
-        timerDataStore.updateData { prefs ->
-            prefs.toBuilder()
-                .setIntervalFirstTimerSetting(firstIntervalTime)
-                .setIntervalSecondTimerSetting(secondIntervalTime)
-                .build()
-        }
+        cacheTimerDataSource.updateTimerInterval(firstIntervalTime, secondIntervalTime)
     }
 
     override fun getTimer() = timerDao.getTimer().map { response ->
