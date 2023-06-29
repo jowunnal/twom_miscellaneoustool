@@ -2,8 +2,9 @@ package com.miscellaneoustool.app.ui.screen.watch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.miscellaneoustool.app.domain.repository.TimerRepository
+import com.miscellaneoustool.domain.repository.TimerRepository
 import com.miscellaneoustool.app.ui.screen.alarm.item.TimerState
+import com.miscellaneoustool.app.ui.screen.alarm.mapper.toTimerState
 import com.miscellaneoustool.app.ui.screen.watch.item.ButtonStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,7 +36,7 @@ data class WatchUiState(
 
 @HiltViewModel
 class WatchViewModel @Inject constructor(
-    private val timerRepository: TimerRepository
+    private val timerRepository: com.miscellaneoustool.domain.repository.TimerRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(WatchUiState.getInitValue())

@@ -6,15 +6,13 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.*
-import com.miscellaneoustool.app.domain.model.MonsterType
-import com.miscellaneoustool.app.domain.model.WeekModel
-import com.miscellaneoustool.app.domain.repository.DropListRepository
-import com.miscellaneoustool.app.domain.repository.TimerRepository
 import com.miscellaneoustool.app.ui.base.item.SnackBarMessage
 import com.miscellaneoustool.app.ui.receiver.AlarmReceiver
 import com.miscellaneoustool.app.ui.screen.alarm.item.AlarmItem
 import com.miscellaneoustool.app.ui.screen.alarm.item.TimeState
 import com.miscellaneoustool.app.ui.screen.alarm.item.TimerState
+import com.miscellaneoustool.app.ui.screen.alarm.mapper.toTimerState
+import com.miscellaneoustool.app.ui.screen.droplist.mapper.toMonsterState
 import com.miscellaneoustool.app.utils.day
 import com.miscellaneoustool.app.utils.hour
 import com.miscellaneoustool.app.utils.minute
@@ -53,8 +51,8 @@ data class AlarmUiState(
 @HiltViewModel
 class AlarmViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val timerRepository: TimerRepository,
-    private val dropListRepository: DropListRepository
+    private val timerRepository: com.miscellaneoustool.domain.repository.TimerRepository,
+    private val dropListRepository: com.miscellaneoustool.domain.repository.DropListRepository
 ) :
     ViewModel() {
     private val alarmManager: AlarmManager =
@@ -76,12 +74,12 @@ class AlarmViewModel @Inject constructor(
             try {
                 _uiState.update { state ->
                     state.copy(
-                        recentlySelectedBossClassified = MonsterType.findByStoredName(prefs.recentlySelectedBossClassified).displayName,
+                        recentlySelectedBossClassified = com.miscellaneoustool.domain.model.MonsterType.findByStoredName(prefs.recentlySelectedBossClassified).displayName,
                         recentlySelectedBossName = prefs.recentlySelectedBossName,
                         frequentlyUsedBossList = prefs.frequentlyUsedBossListList
                     )
                 }
-                getBossListByType(MonsterType.findByStoredName(prefs.recentlySelectedBossClassified))
+                getBossListByType(com.miscellaneoustool.domain.model.MonsterType.findByStoredName(prefs.recentlySelectedBossClassified))
             } catch (e: java.util.NoSuchElementException) {
                 _uiState.update { state ->
                     state.copy(
@@ -93,13 +91,13 @@ class AlarmViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun setRecentlySelectedBossClassified(bossClassified: MonsterType) {
+    fun setRecentlySelectedBossClassified(bossClassified: com.miscellaneoustool.domain.model.MonsterType) {
         viewModelScope.launch(Dispatchers.IO) {
             timerRepository.setRecentlySelectedBossClassified(bossClassified)
         }
     }
 
-    private fun getBossListByType(bossClassified: MonsterType) {
+    private fun getBossListByType(bossClassified: com.miscellaneoustool.domain.model.MonsterType) {
         dropListRepository.getMonsterByType(bossClassified).onEach { monsterModels ->
             _uiState.update { state ->
                 state.copy(bossNameList = monsterModels.map { monsterModel ->
@@ -215,7 +213,7 @@ class AlarmViewModel @Inject constructor(
                             id = code,
                             bossName = monsterName,
                             timeState = TimeState(
-                                day = WeekModel.findByCode(cal.day),
+                                day = com.miscellaneoustool.domain.model.WeekModel.findByCode(cal.day),
                                 hour = cal.hour,
                                 minutes = cal.minute,
                                 seconds = cal.second

@@ -1,6 +1,6 @@
 package com.miscellaneoustool.app.ui.screen.collection.item.item
 
-import com.miscellaneoustool.app.domain.model.CollectionModel
+import com.miscellaneoustool.app.ui.screen.collection.mapper.toCollectionItemState
 
 data class CollectionState(
     val id: Int,
@@ -15,7 +15,7 @@ data class CollectionState(
     }
 
     companion object {
-        fun fromCollectionModel(collectionModel: CollectionModel) = CollectionState(
+        fun fromCollectionModel(collectionModel: com.miscellaneoustool.domain.model.CollectionModel) = CollectionState(
             id =  collectionModel.bookId,
             stats = mutableListOf<StatState>().apply {
                 collectionModel.stat.forEach { statItem ->

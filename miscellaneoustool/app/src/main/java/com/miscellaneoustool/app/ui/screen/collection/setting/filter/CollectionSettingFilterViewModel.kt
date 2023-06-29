@@ -3,9 +3,9 @@ package com.miscellaneoustool.app.ui.screen.collection.setting.filter
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.miscellaneoustool.app.domain.model.Category
-import com.miscellaneoustool.app.domain.usecase.collection.DeleteFilterUsecase
-import com.miscellaneoustool.app.domain.usecase.collection.GetCollectionUsecase
+import com.miscellaneoustool.domain.model.Category
+import com.miscellaneoustool.domain.usecase.collection.DeleteFilterUsecase
+import com.miscellaneoustool.domain.usecase.collection.GetCollectionUsecase
 import com.miscellaneoustool.app.ui.screen.collection.item.CollectionUiState
 import com.miscellaneoustool.app.ui.screen.collection.item.item.CollectionState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,14 +21,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CollectionSettingFilterViewModel @Inject constructor(
-    private val getCollectionUsecase: GetCollectionUsecase,
-    private val deleteCollectionUsecase: DeleteFilterUsecase
+    private val getCollectionUsecase: com.miscellaneoustool.domain.usecase.collection.GetCollectionUsecase,
+    private val deleteCollectionUsecase: com.miscellaneoustool.domain.usecase.collection.DeleteFilterUsecase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CollectionUiState.getInitValue())
     val uiState get() = _uiState.asStateFlow()
 
-    fun getCollectionList(category: Category) =
+    fun getCollectionList(category: com.miscellaneoustool.domain.model.Category) =
         getCollectionUsecase(category, false)
             .onEach { collectionModelList ->
                 _uiState.update { state ->
@@ -40,7 +40,7 @@ class CollectionSettingFilterViewModel @Inject constructor(
                 Log.d("test", "${e.message}")
             }.launchIn(viewModelScope)
 
-    fun deleteFilter(id: Int, category: Category) {
+    fun deleteFilter(id: Int, category: com.miscellaneoustool.domain.model.Category) {
         viewModelScope.launch(Dispatchers.IO) {
             deleteCollectionUsecase.invoke(id)
             getCollectionList(category)

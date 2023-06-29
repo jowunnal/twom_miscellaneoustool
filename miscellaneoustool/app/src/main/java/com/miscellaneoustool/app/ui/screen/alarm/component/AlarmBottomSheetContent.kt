@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.miscellaneoustool.app.R
-import com.miscellaneoustool.app.domain.model.WeekModel
+import com.miscellaneoustool.domain.model.WeekModel
 import com.miscellaneoustool.app.ui.screen.alarm.item.TimeState
 import com.miscellaneoustool.app.ui.screen.compose.component.DefaultButton
 import com.miscellaneoustool.app.ui.screen.compose.component.HorizontalSpacer
@@ -169,7 +169,7 @@ private fun PreviewAlarmBottomSheetContent() =
     TwomIllustratedBookPreview {
         AlarmBottomSheetContent(
             timeState = TimeState(
-                day = WeekModel.Mon,
+                day = com.miscellaneoustool.domain.model.WeekModel.Mon,
                 hour = 13,
                 minutes = 20,
                 seconds = 34

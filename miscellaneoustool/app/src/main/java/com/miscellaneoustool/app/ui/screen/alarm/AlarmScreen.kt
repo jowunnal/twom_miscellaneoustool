@@ -7,8 +7,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.miscellaneoustool.app.domain.model.MonsterType
-import com.miscellaneoustool.app.domain.model.WeekModel
 import com.miscellaneoustool.app.ui.base.item.SnackBarMessage
 import com.miscellaneoustool.app.ui.screen.alarm.component.AlarmBottomSheetContent
 import com.miscellaneoustool.app.ui.screen.alarm.component.AlarmTopAppBar
@@ -37,7 +35,7 @@ fun AlarmScreen(
     setMinutesChanged: (Int) -> Unit,
     setSecondsChanged: (Int) -> Unit,
     setSelectedBossName: (String) -> Unit,
-    setRecentlySelectedBossClassifiedChanged: (MonsterType) -> Unit,
+    setRecentlySelectedBossClassifiedChanged: (com.miscellaneoustool.domain.model.MonsterType) -> Unit,
     setRecentlySelectedBossNameChanged: (String) -> Unit,
     onNavigateToGear: () -> Unit,
     onNavigateToWatch: () -> Unit,
@@ -153,7 +151,7 @@ private fun PreviewAlarmScreen() {
                         id = 1,
                         bossName = "보스1",
                         timeState = TimeState(
-                            day = WeekModel.Mon,
+                            day = com.miscellaneoustool.domain.model.WeekModel.Mon,
                             hour = 14,
                             minutes = 22,
                             seconds = 25
@@ -163,7 +161,7 @@ private fun PreviewAlarmScreen() {
                         id = 2,
                         bossName = "보스2",
                         timeState = TimeState(
-                            day = WeekModel.Mon,
+                            day = com.miscellaneoustool.domain.model.WeekModel.Mon,
                             hour = 16,
                             minutes = 18,
                             seconds = 33
@@ -173,7 +171,7 @@ private fun PreviewAlarmScreen() {
                         id = 3,
                         bossName = "보스3",
                         timeState = TimeState(
-                            day = WeekModel.Mon,
+                            day = com.miscellaneoustool.domain.model.WeekModel.Mon,
                             hour = 13,
                             minutes = 34,
                             seconds = 49

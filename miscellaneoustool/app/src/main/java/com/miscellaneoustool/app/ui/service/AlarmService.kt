@@ -11,7 +11,7 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.miscellaneoustool.app.R
-import com.miscellaneoustool.app.domain.repository.TimerRepository
+import com.miscellaneoustool.domain.repository.TimerRepository
 import com.miscellaneoustool.app.utils.sendNotification
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AlarmService : LifecycleService() {
-    @Inject lateinit var timerRepository: TimerRepository
+    @Inject lateinit var timerRepository: com.miscellaneoustool.domain.repository.TimerRepository
     private var notificationManager: NotificationManager? = null
 
     override fun onCreate() {

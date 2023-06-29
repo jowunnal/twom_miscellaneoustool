@@ -3,9 +3,6 @@ package com.miscellaneoustool.app.ui.screen.collection.item
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.miscellaneoustool.app.domain.model.Category
-import com.miscellaneoustool.app.domain.usecase.collection.DeleteCollectionUsecase
-import com.miscellaneoustool.app.domain.usecase.collection.GetCollectionUsecase
 import com.miscellaneoustool.app.ui.screen.collection.item.item.CollectionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -30,14 +27,14 @@ data class CollectionUiState(
 
 @HiltViewModel
 class CollectionViewModel @Inject constructor(
-    private val getCollectionUsecase: GetCollectionUsecase,
-    private val deleteCollectionUsecase: DeleteCollectionUsecase
+    private val getCollectionUsecase: com.miscellaneoustool.domain.usecase.collection.GetCollectionUsecase,
+    private val deleteCollectionUsecase: com.miscellaneoustool.domain.usecase.collection.DeleteCollectionUsecase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CollectionUiState.getInitValue())
     val uiState get() = _uiState.asStateFlow()
 
-    fun getCollectionList(category: Category) =
+    fun getCollectionList(category: com.miscellaneoustool.domain.model.Category) =
         getCollectionUsecase(category, true)
             .onEach { collectionModelList ->
                 _uiState.update { state ->
@@ -49,7 +46,7 @@ class CollectionViewModel @Inject constructor(
                 Log.d("test", "${e.message}")
             }.launchIn(viewModelScope)
 
-    fun deleteCollection(collectionList: List<Int>, category: Category) {
+    fun deleteCollection(collectionList: List<Int>, category: com.miscellaneoustool.domain.model.Category) {
         viewModelScope.launch(Dispatchers.IO) {
             deleteCollectionUsecase.invoke(collectionList)
             getCollectionList(category)

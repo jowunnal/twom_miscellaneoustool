@@ -3,7 +3,7 @@ package com.miscellaneoustool.app.ui.screen.collection.category
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.miscellaneoustool.app.databinding.CollectionCategoryBinding
-import com.miscellaneoustool.app.domain.model.Category
+import com.miscellaneoustool.domain.model.Category
 import com.miscellaneoustool.app.ui.base.BaseFragment
 import com.miscellaneoustool.app.ui.listener.OnClickedListener
 import dagger.hilt.android.AndroidEntryPoint

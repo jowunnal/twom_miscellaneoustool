@@ -9,7 +9,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.miscellaneoustool.app.databinding.CollectionCategoryItemBinding
-import com.miscellaneoustool.app.domain.model.Category
+import com.miscellaneoustool.domain.model.Category
 import com.miscellaneoustool.app.ui.listener.OnClickedListener
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
@@ -17,7 +17,7 @@ import javax.inject.Inject
 class CollectionCategoryAdapter @Inject constructor(@ActivityContext val context: Context) :
     RecyclerView.Adapter<CollectionCategoryAdapter.ViewHolder>(), OnClickedListener {
 
-    private var items = ArrayList<Category>()
+    private var items = ArrayList<com.miscellaneoustool.domain.model.Category>()
     private var mlistener: OnClickedListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,7 +32,7 @@ class CollectionCategoryAdapter @Inject constructor(@ActivityContext val context
         return items.size
     }
 
-    fun setItem(items: List<Category>) {
+    fun setItem(items: List<com.miscellaneoustool.domain.model.Category>) {
         this.items.clear()
         this.items.addAll(items)
     }
@@ -61,7 +61,7 @@ class CollectionCategoryAdapter @Inject constructor(@ActivityContext val context
             }
         }
 
-        fun bind(item: Category) {
+        fun bind(item: com.miscellaneoustool.domain.model.Category) {
             binding.lifecycleOwner = lifecycleOwner
             binding.activityContext = context
             binding.category = item

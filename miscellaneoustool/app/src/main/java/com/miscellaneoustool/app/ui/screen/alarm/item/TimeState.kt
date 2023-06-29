@@ -2,7 +2,6 @@ package com.miscellaneoustool.app.ui.screen.alarm.item
 
 import android.os.Parcelable
 import androidx.compose.runtime.Stable
-import com.miscellaneoustool.app.domain.model.WeekModel
 import com.miscellaneoustool.app.utils.hour
 import com.miscellaneoustool.app.utils.minute
 import com.miscellaneoustool.app.utils.second
@@ -12,7 +11,7 @@ import java.util.Calendar
 @Stable
 @Parcelize
 data class TimeState(
-    val day: WeekModel,
+    val day: com.miscellaneoustool.domain.model.WeekModel,
     val hour: Int,
     val minutes: Int,
     val seconds: Int
@@ -21,7 +20,7 @@ data class TimeState(
         fun getInitValue(): TimeState {
             val cal = Calendar.getInstance()
             return TimeState(
-                day = WeekModel.Mon,
+                day = com.miscellaneoustool.domain.model.WeekModel.Mon,
                 hour = cal.hour,
                 minutes = cal.minute,
                 seconds = cal.second

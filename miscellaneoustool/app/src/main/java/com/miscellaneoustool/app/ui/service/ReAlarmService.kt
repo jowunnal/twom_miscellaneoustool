@@ -11,8 +11,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.miscellaneoustool.app.domain.model.TimerModel
-import com.miscellaneoustool.app.domain.repository.TimerRepository
+import com.miscellaneoustool.domain.model.TimerModel
+import com.miscellaneoustool.domain.repository.TimerRepository
 import com.miscellaneoustool.app.ui.receiver.AlarmReceiver
 import com.miscellaneoustool.app.ui.screen.alarm.item.AlarmItem
 import com.miscellaneoustool.app.utils.day
@@ -29,7 +29,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ReAlarmService : LifecycleService() {
     @Inject
-    lateinit var repository: TimerRepository
+    lateinit var repository: com.miscellaneoustool.domain.repository.TimerRepository
     private var alarmManager: AlarmManager? = null
     private var notificationManager: NotificationManager? = null
 
@@ -62,7 +62,7 @@ class ReAlarmService : LifecycleService() {
                         ?: if (timerModels.isNotEmpty()) timerModels.maxOf { item -> item.id } + 1 else 1
 
                     when (timer) {
-                        is TimerModel -> {
+                        is com.miscellaneoustool.domain.model.TimerModel -> {
                             repository.updateTimer(
                                 id = id,
                                 day = cal.day,

@@ -2,9 +2,10 @@ package com.miscellaneoustool.app.ui.screen.collection.setting.item
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.miscellaneoustool.app.domain.usecase.collection.GetItemsUsecase
-import com.miscellaneoustool.app.domain.usecase.collection.UpdateItemPriceUsecase
+import com.miscellaneoustool.domain.usecase.collection.GetItemsUsecase
+import com.miscellaneoustool.domain.usecase.collection.UpdateItemPriceUsecase
 import com.miscellaneoustool.app.ui.screen.collection.item.item.CollectionItemState
+import com.miscellaneoustool.app.ui.screen.collection.mapper.toCollectionItemState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,8 +26,8 @@ data class SettingUiState(
 
 @HiltViewModel
 class CollectionSettingITemViewModel @Inject constructor(
-    private val getItemsUsecase: GetItemsUsecase,
-    private val updateItemPriceUsecase: UpdateItemPriceUsecase
+    private val getItemsUsecase: com.miscellaneoustool.domain.usecase.collection.GetItemsUsecase,
+    private val updateItemPriceUsecase: com.miscellaneoustool.domain.usecase.collection.UpdateItemPriceUsecase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingUiState.getInitValues())

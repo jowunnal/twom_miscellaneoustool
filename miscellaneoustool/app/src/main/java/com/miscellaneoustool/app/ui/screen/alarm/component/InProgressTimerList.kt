@@ -15,7 +15,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.miscellaneoustool.app.domain.model.WeekModel
 import com.miscellaneoustool.app.ui.screen.alarm.item.TimeState
 import com.miscellaneoustool.app.ui.screen.alarm.item.TimerState
 import com.miscellaneoustool.app.ui.screen.compose.component.DialogState
@@ -116,7 +115,7 @@ private fun PreviewInProgressTimerList() {
                     id = 1,
                     bossName = "보스1",
                     timeState = TimeState(
-                        day = WeekModel.Mon,
+                        day = com.miscellaneoustool.domain.model.WeekModel.Mon,
                         hour = 14,
                         minutes = 22,
                         seconds = 25
@@ -126,7 +125,7 @@ private fun PreviewInProgressTimerList() {
                     id = 2,
                     bossName = "보스2",
                     timeState = TimeState(
-                        day = WeekModel.Mon,
+                        day = com.miscellaneoustool.domain.model.WeekModel.Mon,
                         hour = 16,
                         minutes = 18,
                         seconds = 33
@@ -136,7 +135,7 @@ private fun PreviewInProgressTimerList() {
                     id = 3,
                     bossName = "보스3",
                     timeState = TimeState(
-                        day = WeekModel.Mon,
+                        day = com.miscellaneoustool.domain.model.WeekModel.Mon,
                         hour = 13,
                         minutes = 34,
                         seconds = 49

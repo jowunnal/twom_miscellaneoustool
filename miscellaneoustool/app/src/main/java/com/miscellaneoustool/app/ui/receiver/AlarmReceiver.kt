@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import com.miscellaneoustool.app.R
-import com.miscellaneoustool.app.domain.repository.TimerRepository
 import com.miscellaneoustool.app.utils.sendNotification
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -17,7 +16,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AlarmReceiver : BroadcastReceiver() {
-    @Inject lateinit var timerRepository: TimerRepository
+    @Inject lateinit var timerRepository: com.miscellaneoustool.domain.repository.TimerRepository
     override fun onReceive(p0: Context?, p1: Intent?) {
         val notificationManager =
             p0!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

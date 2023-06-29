@@ -3,7 +3,7 @@ package com.miscellaneoustool.app.ui.screen.droplist.monster
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.miscellaneoustool.app.domain.repository.DropListRepository
+import com.miscellaneoustool.app.ui.screen.droplist.mapper.toMonsterState
 import com.miscellaneoustool.app.ui.screen.droplist.monster.item.ItemState
 import com.miscellaneoustool.app.ui.screen.droplist.monster.item.MonsterState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +27,7 @@ data class DropListUiState(
 
 @HiltViewModel
 class DropListViewModel @Inject constructor(
-    private val repository: DropListRepository
+    private val repository: com.miscellaneoustool.domain.repository.DropListRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DropListUiState.getInitValue())

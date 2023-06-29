@@ -2,8 +2,8 @@ package com.miscellaneoustool.app.ui.screen.droplist.map
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.miscellaneoustool.app.domain.repository.DropListRepository
 import com.miscellaneoustool.app.ui.screen.droplist.map.item.MapState
+import com.miscellaneoustool.app.ui.screen.droplist.mapper.toMapState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DropListMapViewModel @Inject constructor(
-    private val dropListRepository: DropListRepository
+    private val dropListRepository: com.miscellaneoustool.domain.repository.DropListRepository
 ) : ViewModel() {
     private val _mapState: MutableStateFlow<List<MapState>> = MutableStateFlow(emptyList())
     val mapState get() = _mapState.asStateFlow()

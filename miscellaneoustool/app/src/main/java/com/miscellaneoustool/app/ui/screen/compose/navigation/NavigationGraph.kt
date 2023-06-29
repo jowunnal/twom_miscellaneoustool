@@ -7,7 +7,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -20,7 +19,6 @@ import com.miscellaneoustool.app.ui.screen.gear.GearViewModel
 import com.miscellaneoustool.app.ui.screen.watch.WatchScreen
 import com.miscellaneoustool.app.ui.screen.watch.WatchViewModel
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun NavigationGraph(
     navController: NavHostController,

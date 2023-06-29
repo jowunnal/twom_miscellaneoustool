@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.miscellaneoustool.app.domain.model.MonsterType
+import com.miscellaneoustool.domain.model.MonsterType
 import com.miscellaneoustool.app.ui.screen.compose.component.DefaultButton
 import com.miscellaneoustool.app.ui.screen.compose.component.DialogState
 import com.miscellaneoustool.app.ui.screen.compose.component.DropDownMenuCustom
@@ -34,7 +34,7 @@ fun BossSelection(
     onClickBossItem: (String) -> Unit,
     addBossToFrequentlyUsedList: (String) -> Unit,
     removeBossFromFrequentlyUsedList: (String) -> Unit,
-    setRecentlySelectedBossClassifiedChanged:(MonsterType) -> Unit,
+    setRecentlySelectedBossClassifiedChanged:(com.miscellaneoustool.domain.model.MonsterType) -> Unit,
     setRecentlySelectedBossNameChanged:(String) -> Unit,
     onOpenDialog: (DialogState) -> Unit,
     onCloseDialog: () -> Unit
@@ -86,7 +86,7 @@ private fun BossSelectionHeader(
     recentlySelectedBossClassified: String,
     recentlySelectedBossName: String,
     addBossToFrequentlyUsedList: (String) -> Unit,
-    setRecentlySelectedBossClassifiedChanged:(MonsterType) -> Unit,
+    setRecentlySelectedBossClassifiedChanged:(com.miscellaneoustool.domain.model.MonsterType) -> Unit,
     setRecentlySelectedBossNameChanged:(String) -> Unit,
 ) {
     Column() {
@@ -97,11 +97,11 @@ private fun BossSelectionHeader(
                 DropDownMenuCustom(
                     label = "보스 분류",
                     text = recentlySelectedBossClassified,
-                    items = MonsterType.values().toMutableList()
-                        .apply { remove(MonsterType.NORMAL) }
+                    items = com.miscellaneoustool.domain.model.MonsterType.values().toMutableList()
+                        .apply { remove(com.miscellaneoustool.domain.model.MonsterType.NORMAL) }
                         .map { monsterType -> monsterType.displayName }
                         .toList(),
-                    setTextChanged = { item -> setRecentlySelectedBossClassifiedChanged(MonsterType.findByDisplayName(item)) }
+                    setTextChanged = { item -> setRecentlySelectedBossClassifiedChanged(com.miscellaneoustool.domain.model.MonsterType.findByDisplayName(item)) }
                 )
             }
             Spacer(modifier = Modifier.weight(1f))

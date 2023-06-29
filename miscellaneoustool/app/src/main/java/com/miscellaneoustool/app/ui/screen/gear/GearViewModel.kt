@@ -2,7 +2,6 @@ package com.miscellaneoustool.app.ui.screen.gear
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.miscellaneoustool.app.domain.repository.TimerRepository
 import com.miscellaneoustool.app.ui.base.item.SnackBarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,7 +28,7 @@ data class GearUiState(
 
 @HiltViewModel
 class GearViewModel @Inject constructor(
-    private val timerRepository: TimerRepository
+    private val timerRepository: com.miscellaneoustool.domain.repository.TimerRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(GearUiState.getInitValue())

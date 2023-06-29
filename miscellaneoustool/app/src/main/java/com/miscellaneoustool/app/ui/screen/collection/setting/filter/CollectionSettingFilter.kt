@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.miscellaneoustool.app.R
 import com.miscellaneoustool.app.databinding.CollectionListBinding
-import com.miscellaneoustool.app.domain.model.Category
+import com.miscellaneoustool.domain.model.Category
 import com.miscellaneoustool.app.ui.base.BaseFragment
 import com.miscellaneoustool.app.ui.base.CommonDialogFragment
 import com.miscellaneoustool.app.ui.listener.OnClickedListener
@@ -67,7 +67,7 @@ class CollectionSettingFilter : BaseFragment<CollectionListBinding>() {
                     listener = object: CommonDialogFragment.Listener() {
                         override fun onPositiveButtonClick(value: String) {
                             collectionViewModel.deleteFilter(
-                                collectionSettingFilterAdapter.getItemIdOnPosition(pos).id, Category.findByStoredName(navArgs.category)
+                                collectionSettingFilterAdapter.getItemIdOnPosition(pos).id, com.miscellaneoustool.domain.model.Category.findByStoredName(navArgs.category)
                             )
                         }
                     }
@@ -75,7 +75,7 @@ class CollectionSettingFilter : BaseFragment<CollectionListBinding>() {
             }
         })
 
-        collectionViewModel.getCollectionList(Category.findByStoredName(navArgs.category))
+        collectionViewModel.getCollectionList(com.miscellaneoustool.domain.model.Category.findByStoredName(navArgs.category))
         addMenuProvider()
     }
 

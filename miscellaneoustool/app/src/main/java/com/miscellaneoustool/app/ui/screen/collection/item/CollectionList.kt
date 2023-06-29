@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.miscellaneoustool.app.R
 import com.miscellaneoustool.app.databinding.CollectionListBinding
-import com.miscellaneoustool.app.domain.model.Category
+import com.miscellaneoustool.domain.model.Category
 import com.miscellaneoustool.app.ui.base.BaseFragment
 import com.miscellaneoustool.app.ui.listener.OnClickedListener
 import com.miscellaneoustool.app.ui.listener.OnLongClickedListener
@@ -87,7 +87,7 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
                         scrollState = binding.recyclerView.layoutManager?.onSaveInstanceState()
                         collectionViewModel.deleteCollection(
                             collectionList = collectionListAdapter.getCheckedItems(),
-                            category = Category.findByStoredName(navArgs.category)
+                            category = com.miscellaneoustool.domain.model.Category.findByStoredName(navArgs.category)
                         )
                         removeMenuProvider(collectionMenu)
                         addMenuProvider(basicMenu)
@@ -171,7 +171,7 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
                 }
             })
 
-        collectionViewModel.getCollectionList(Category.findByStoredName(navArgs.category))
+        collectionViewModel.getCollectionList(com.miscellaneoustool.domain.model.Category.findByStoredName(navArgs.category))
         addMenuProvider(basicMenu)
     }
 

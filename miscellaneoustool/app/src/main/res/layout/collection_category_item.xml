@@ -10,7 +10,7 @@
 
         <variable
             name="category"
-            type="com.miscellaneoustool.app.domain.model.Category" />
+            type="com.miscellaneoustool.domain.model.Category" />
 
     </data>
 

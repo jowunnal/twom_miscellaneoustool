@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-option java_package = "com.miscellaneoustool.app";
-option java_multiple_files = true;
-
-message CollectionPreferences {
-  repeated int32 filtered_collection_list = 1;
-}
