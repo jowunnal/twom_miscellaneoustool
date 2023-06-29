@@ -24,6 +24,7 @@
             android:id="@+id/drop_img"
             context="@{activityContext}"
             imgName="@{monster.imgName}"
+            type="@{false}"
             android:layout_width="0dp"
             android:layout_height="80dp"
             android:layout_marginStart="8dp"
@@ -31,7 +32,7 @@
             app:layout_constraintEnd_toStartOf="@id/guideline_35"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/donguri" />
+            app:srcCompat="@drawable/test" />
 
         <TextView
             style="@style/body_small"

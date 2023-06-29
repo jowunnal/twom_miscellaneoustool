@@ -113,7 +113,7 @@ private fun PreviewDropDownMenuCustom() {
     TwomIllustratedBookPreview {
         DropDownMenuCustom(
             iconHeader = R.drawable.icon_home,
-            iconTail = R.drawable.icon_login,
+            iconTail = R.drawable.icon_alarm,
             label = "라벨텍스트",
             text = "컨텐트 텍스트",
             setTextChanged = {},

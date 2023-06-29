@@ -25,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="80dp"
                 android:layout_gravity="center_horizontal"
-                app:srcCompat="@drawable/elemental_flower"
+                app:srcCompat="@drawable/test"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>

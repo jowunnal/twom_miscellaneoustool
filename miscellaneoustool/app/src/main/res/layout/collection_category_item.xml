@@ -31,10 +31,11 @@
                 android:id="@+id/collectionCategoryImg"
                 context="@{activityContext}"
                 imgName="@{category.storedName}"
+                type="@{true}"
                 android:layout_width="match_parent"
                 android:layout_height="110dp"
                 android:layout_marginBottom="25dp"
-                app:srcCompat="@drawable/weapon"
+                app:srcCompat="@drawable/test"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />

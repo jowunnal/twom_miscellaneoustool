@@ -2,9 +2,11 @@ package com.miscellaneoustool.app.ui.screen.droplist.map
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.miscellaneoustool.app.databinding.DroplistmapItemBinding
 import com.miscellaneoustool.app.ui.listener.OnClickedListener
 import com.miscellaneoustool.app.ui.screen.droplist.map.item.MapState
@@ -50,8 +52,10 @@ class DropListMapAdapter @Inject constructor(@ActivityContext val context: Conte
         @SuppressLint("DiscouragedApi")
         fun bind(item: MapState) {
             binding.dropMapName.text = item.name
-            val res = context.resources.getIdentifier(item.imgName, "drawable", context.packageName)
-            binding.dropMapImg.setImageResource(res)
+
+            Glide.with(itemView)
+                .load(Uri.parse("file:///android_asset/img/monster/${item.imgName}.png"))
+                .into(binding.dropMapImg)
         }
     }
 

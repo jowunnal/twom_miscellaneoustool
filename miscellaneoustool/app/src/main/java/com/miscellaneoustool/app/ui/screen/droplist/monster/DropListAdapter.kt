@@ -65,7 +65,7 @@ class DropListAdapter(
             binding.activityContext = context
             binding.monster = monster
 
-            binding.dropContent.text = getMonsterItem(monster.item ?: emptyList())
+            binding.dropContent.text = getMonsterItem(monster.item)
         }
 
     }
@@ -80,7 +80,7 @@ class DropListAdapter(
                     itemsUnfiltered.forEach { monster ->
                         if (monster.name.contains(p0.toString()))
                             itemsFiltering.add(monster)
-                        monster.item?.forEach { itemState ->
+                        monster.item.forEach { itemState ->
                             if (itemState.name.contains(p0.toString()))
                                 itemsFiltering.add(monster)
                         }

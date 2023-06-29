@@ -148,6 +148,9 @@ dependencies {
 
     // compose NumberPicker
     implementation "com.chargemap.compose:numberpicker:1.0.3"
+
+    // glide
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
 }
 
 protobuf {
