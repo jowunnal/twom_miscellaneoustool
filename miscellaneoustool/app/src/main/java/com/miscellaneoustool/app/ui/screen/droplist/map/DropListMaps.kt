@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.miscellaneoustool.app.databinding.DroplistmapBinding
 import com.miscellaneoustool.app.ui.base.BaseFragment
 import com.miscellaneoustool.app.ui.listener.OnClickedListener
@@ -28,9 +28,8 @@ class DropListMaps : BaseFragment<DroplistmapBinding>() {
         with(binding) {
             lifecycleOwner = viewLifecycleOwner
             mapRecyclerView.layoutManager =
-                LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+                GridLayoutManager(activity, 3,GridLayoutManager.VERTICAL,false)
             mapRecyclerView.adapter = dropListMapAdapter
-            dropListViewModel = dropListViewModel
         }
         dropListMapAdapter.setItemClickListener(object : OnClickedListener {
             override fun setOnClickedListener(pos: Int) {

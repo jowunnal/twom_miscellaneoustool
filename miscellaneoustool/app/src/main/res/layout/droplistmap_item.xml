@@ -6,7 +6,7 @@
     </data>
     <androidx.cardview.widget.CardView
         android:id="@+id/dropListMapItem"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="5dp"
         app:cardElevation="8dp"
@@ -16,22 +16,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/drop_map_img"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="132dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="30dp"
-            app:srcCompat="@drawable/elemental_flower" />
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/drop_map_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:gravity="center_horizontal"
-            android:text="맵이름"
-            android:textSize="20sp" />
+            <ImageView
+                android:id="@+id/drop_map_img"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                app:srcCompat="@drawable/elemental_flower"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
+            <TextView
+                style="@style/body_small"
+                android:id="@+id/drop_map_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="맵이름"
+                app:layout_constraintTop_toBottomOf="@id/drop_map_img"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>

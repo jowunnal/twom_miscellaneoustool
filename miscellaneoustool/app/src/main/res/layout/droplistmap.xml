@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.screen.droplist.map.DropListMaps">
     <data>
-        <variable
-            name="dropListViewModel"
-            type="com.miscellaneoustool.app.ui.screen.droplist.monster.DropListViewModel" />
+
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
