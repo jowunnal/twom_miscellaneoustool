@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:versionCode="18"
+    android:versionName="illustratedBook17">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <uses-permission
+        android:name="android.permission.POST_NOTIFICATIONS"
+        android:minSdkVersion="33" />
+
+    <application
+        android:name="com.miscellaneoustool.app.MainApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_main"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_main_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.TwomMiscellaneousTools">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/my_AppId" />
+
+        <activity
+            android:name="com.miscellaneoustool.app.ui.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="com.miscellaneoustool.app.ui.service.OverlayService"
+            android:description="@string/현재시간항상보기" />
+        <service
+            android:name="com.miscellaneoustool.app.ui.service.ReAlarmService"
+            android:description="@string/알람재생성서비스" />
+        <service
+            android:name="com.miscellaneoustool.app.ui.service.AlarmService"
+            android:description="@string/알람서비스" />
+
+        <receiver
+            android:name="com.miscellaneoustool.app.ui.receiver.AlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
+    </application>
+
+</manifest>

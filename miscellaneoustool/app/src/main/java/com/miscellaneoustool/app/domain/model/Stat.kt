@@ -1,0 +1,32 @@
+package com.miscellaneoustool.app.domain.model
+
+enum class Stat(val displayName: String) {
+    HP(displayName = "체력"),
+    MP(displayName = "마나"),
+    HPPER(displayName = "체력%"),
+    MPPER(displayName = "마나%"),
+    HPREGEN(displayName = "체력재생"),
+    MPREGEN(displayName = "마나재생"),
+    HR(displayName = "명중"),
+    CRI(displayName = "크리티컬"),
+    STATINT(displayName = "지능"),
+    STATSTR(displayName = "힘"),
+    STATDEX(displayName = "덱스"),
+    MOVE(displayName = "이동속도"),
+    ARMOR(displayName = "방어력"),
+    PVEDMG(displayName = "pve데미지증가"),
+    PVPDMG(displayName = "pvp데미지증가"),
+    PVEDMGPER(displayName = "pve데미지증가%"),
+    PVPDMGPER(displayName = "pvp데미지증가%"),
+    PVEDMGDOWN(displayName = "pve데미지감소"),
+    PVPDMGDOWN(displayName = "pvp데미지감소"),
+    PVEDMGDOWNPER(displayName = "pve데미지감소%"),
+    PVPDMGDOWNPER(displayName = "pvp데미지감소%"),
+    GOLDDROP(displayName = "골드드랍률"),
+    ITEMDROP(displayName = "아이템드랍률"),
+    BOSSDMGPER(displayName = "보스데미지%"),
+    CRITDMGDOWN(displayName = "크리티컬데미지감소"),
+    CRITDMGDOWNPER(displayName = "크리티컬데미지감소%"),
+    MISS(displayName = "회피"),
+    CRITRESISTPER(displayName = "크리티컬저항%")
+}
