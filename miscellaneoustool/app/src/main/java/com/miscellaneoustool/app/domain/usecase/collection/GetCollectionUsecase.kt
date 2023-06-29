@@ -9,7 +9,7 @@ import javax.inject.Inject
 class GetCollectionUsecase @Inject constructor(
     private val collectionRepository: CollectionRepository
 ) {
-    operator fun invoke(category: Category): Flow<List<CollectionModel>> =
-        collectionRepository.getCollectionList(category)
+    operator fun invoke(category: Category, filter: Boolean): Flow<List<CollectionModel>> =
+        collectionRepository.getCollectionList(category, filter)
 
 }

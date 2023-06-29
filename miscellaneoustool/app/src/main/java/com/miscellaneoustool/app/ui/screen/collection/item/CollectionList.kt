@@ -39,7 +39,10 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
 
     private val basicMenu by lazy {
         CollectionMenu(
-            onCreate = {menu, menuInflater -> menuInflater.inflate(R.menu.book_option_menu, menu) },
+            onCreate = { menu, menuInflater ->
+                menuInflater.inflate(R.menu.book_option_menu, menu)
+                menu.findItem(R.id.icon_setting).isVisible = true
+            },
             onClick = { menuItem ->
                 when (menuItem.itemId) {
                     R.id.icon_search -> {
@@ -63,9 +66,11 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
                         }
                     }
 
-                    android.R.id.home -> {
-                        findNavController().popBackStack()
+                    R.id.icon_setting -> {
+                        val action = CollectionListDirections.actionCollectionListToCollectionSetting(navArgs.category)
+                        findNavController().navigate(action)
                     }
+                    android.R.id.home -> findNavController().popBackStack()
                 }
             }
         )
@@ -111,7 +116,6 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
                 adapter = collectionListAdapter
                 itemAnimator = null
             }
-            dropListViewModel = dropListViewModel
         }
 
 
@@ -169,7 +173,6 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
 
         collectionViewModel.getCollectionList(Category.findByStoredName(navArgs.category))
         addMenuProvider(basicMenu)
-
     }
 
     override fun subScribeUi() {

@@ -13,8 +13,12 @@
     <!-- UI strings !-->
     <string name="item_name">Item\'s Name</string>
     <string name="stat">Stat</string>
+    <string name="price">Price</string>
     <string name="home_header">Twom Miscellaneous Tool</string>
     <string name="version">v1.7</string>
     <string name="delete">Delete</string>
+    <string name="input_price">Input Price</string>
+    <string name="setting_item"><u>Change Item Setting</u></string>
+    <string name="setting_filter"><u>Change Filtering Setting</u></string>
 
 </resources>

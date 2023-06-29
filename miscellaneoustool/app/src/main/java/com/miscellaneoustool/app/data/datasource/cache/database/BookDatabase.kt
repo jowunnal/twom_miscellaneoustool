@@ -16,7 +16,7 @@ import com.miscellaneoustool.app.data.datasource.cache.database.entity.Stat
 import com.miscellaneoustool.app.data.datasource.cache.database.entity.Timer
 
 @Database(entities = [Book::class, Item::class, Monster::class, Map::class, Stat::class, MonsDropItem::class, MonsLiveAtMap::class, RegisterItemToBook::class, Timer::class],
-    version = 12,  exportSchema = true)
+    version = 1,  exportSchema = true)
 abstract class BookDatabase : RoomDatabase() {
     abstract fun getDropListDao() : DropListDao
     abstract fun getCollectionDao() : CollectionDao

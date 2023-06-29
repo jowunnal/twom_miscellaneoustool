@@ -12,8 +12,12 @@
     <!-- UI strings !-->
     <string name="item_name">아이템이름</string>
     <string name="stat">스텟</string>
+    <string name="price">가격</string>
     <string name="home_header">아이모 잡학도구</string>
     <string name="version">v1.7</string>
     <string name="delete">제거</string>
+    <string name="input_price">가격 입력</string>
+    <string name="setting_item"><u>아이템 설정 변경</u></string>
+    <string name="setting_filter"><u>필터링 설정 변경</u></string>
 
 </resources>

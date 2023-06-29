@@ -2,9 +2,11 @@ package com.miscellaneoustool.app.data.repository
 
 import com.miscellaneoustool.app.data.datasource.cache.CacheCollectionDataSource
 import com.miscellaneoustool.app.data.datasource.cache.database.dao.CollectionDao
+import com.miscellaneoustool.app.data.mapper.fromItemsToItemModel
 import com.miscellaneoustool.app.data.mapper.fromItemsWithStatsToCollectionModel
 import com.miscellaneoustool.app.domain.model.Category
 import com.miscellaneoustool.app.domain.model.CollectionModel
+import com.miscellaneoustool.app.domain.model.ItemModel
 import com.miscellaneoustool.app.domain.repository.CollectionRepository
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +21,7 @@ class CollectionRepositoryImpl @Inject constructor(
 ) : CollectionRepository {
 
     @OptIn(FlowPreview::class)
-    override fun getCollectionList(category: Category): Flow<List<CollectionModel>> =
+    override fun getCollectionList(category: Category, filter: Boolean): Flow<List<CollectionModel>> =
         collectionDao.getCollectionItems(category.storedName).flatMapConcat { items ->
             collectionDao.getCollectionStats(items.keys.map { it.bookId }).map { stats ->
                 fromItemsWithStatsToCollectionModel(items, stats)
@@ -30,14 +32,27 @@ class CollectionRepositoryImpl @Inject constructor(
             collectionModels.filter { collectionModel ->
                 if(collectionModel.bookId in list) {
                     list.remove(collectionModel.bookId)
-                    false
+                    !filter
                 } else
-                    true
+                    filter
             }
         }
 
     override suspend fun deleteCollection(collectionList: List<Int>) {
         cacheCollectionDataSource.setFilteringCollectionList(collectionList)
+    }
+
+    override fun getItems(): Flow<List<ItemModel>> =
+        collectionDao.getItems().map { items ->
+            fromItemsToItemModel(items)
+        }
+
+    override suspend fun updateItemPrice(name: String, price: Int) {
+        collectionDao.updateItemPrice(name = name, price = price)
+    }
+
+    override suspend fun deleteFilter(id: Int) {
+        cacheCollectionDataSource.deleteFilter(id)
     }
 
 }

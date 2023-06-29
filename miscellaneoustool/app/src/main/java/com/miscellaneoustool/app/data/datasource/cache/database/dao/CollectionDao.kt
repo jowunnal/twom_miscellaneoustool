@@ -4,22 +4,27 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.RewriteQueriesToDropUnusedColumns
 import com.miscellaneoustool.app.data.datasource.cache.database.entity.Book
-import com.miscellaneoustool.app.data.datasource.cache.database.entity.RegisterItemToBook
+import com.miscellaneoustool.app.data.datasource.cache.database.entity.Item
 import com.miscellaneoustool.app.data.datasource.cache.database.entity.Stat
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CollectionDao {
     @RewriteQueriesToDropUnusedColumns
-    @Query("select * " +
-            "from RegisterItemToBook inner join Book on RegisterItemToBook.rlBookId = Book.bookId " +
-            "where RegisterItemToBook.rlBookId in (select distinct rlBookId " +
-            "from Book inner join RegisterItemToBook on Book.bookId = RegisterItemToBook.rlBookId join Item on Item.itemName = RegisterItemToBook.rlItemName " +
-            "where Item.itemType like:category)")
-    fun getCollectionItems(category: String): Flow<Map<Book, List<RegisterItemToBook>>>
+    @Query("select bookId, itemName as name, rlItemEnchant as enchant, rlItemCount as count, itemPrice as price " +
+            "from Book inner join RegisterItemToBook on Book.bookId = RegisterItemToBook.rlBookId " +
+            "inner join Item on RegisterItemToBook.rlItemName = Item.itemName " +
+            "where rlBookId in (select DISTINCT rlBookId from RegisterItemToBook inner join Item on Item.itemName = RegisterItemToBook.rlItemName where Item.itemType like :category)")
+    fun getCollectionItems(category: String): Flow<Map<Book, List<com.miscellaneoustool.app.data.model.Item>>>
 
     @RewriteQueriesToDropUnusedColumns
     @Query("select * from Book inner join Stat on Book.bookId = Stat.book_id where bookId in (:bookList)")
     fun getCollectionStats(bookList: List<Int>) : Flow<Map<Book, List<Stat>>>
+
+    @Query("select * from Item order by Item.itemType desc")
+    fun getItems(): Flow<List<Item>>
+
+    @Query("update Item set itemPrice = :price where itemName like :name")
+    suspend fun updateItemPrice(name: String, price: Int)
 
 }

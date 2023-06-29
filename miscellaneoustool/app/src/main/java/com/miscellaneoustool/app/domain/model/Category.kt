@@ -14,7 +14,7 @@ enum class Category(val displayName: String,val storedName: String) {
                 "weapon" -> WEAPONS
                 "armor" -> ARMORS
                 "costume" -> COSTUMES
-                else -> throw IllegalStateException("잘못된 카테고리 입니다.")
+                else -> throw IllegalStateException(" $storedName 은 잘못된 카테고리 입니다.")
             }
     }
 }

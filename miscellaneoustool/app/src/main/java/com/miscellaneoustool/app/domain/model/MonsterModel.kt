@@ -9,7 +9,7 @@ data class MonsterModel(
     val genTime: Int,
     val imgName: String,
     val type: MonsterType,
-    val item: List<ItemModel>?
+    val item: List<ItemModel>
 ) {
     fun toMonsterState() = MonsterState(
         name = name,
@@ -17,7 +17,7 @@ data class MonsterModel(
         genTime = genTime,
         imgName = imgName,
         type = type,
-        item = item?.map { itemModel ->
+        item = item.map { itemModel ->
             itemModel.toItemState()
         }
     )

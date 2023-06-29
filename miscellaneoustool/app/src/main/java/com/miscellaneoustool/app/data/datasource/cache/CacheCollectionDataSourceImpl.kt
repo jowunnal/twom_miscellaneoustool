@@ -32,4 +32,16 @@ class CacheCollectionDataSourceImpl @Inject constructor(
                 .build()
         }
     }
+
+    override suspend fun deleteFilter(id: Int) {
+        dataStorePrefs.updateData { prefs ->
+            val old = prefs.filteredCollectionListList.toMutableList().apply {
+                remove(id)
+            }
+            prefs.toBuilder()
+                .clearFilteredCollectionList()
+                .addAllFilteredCollectionList(old)
+                .build()
+        }
+    }
 }

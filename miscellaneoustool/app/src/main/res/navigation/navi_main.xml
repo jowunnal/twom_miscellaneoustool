@@ -48,6 +48,43 @@
             app:argType="string"
             android:defaultValue=""
             />
+        <action
+            android:id="@+id/action_collectionList_to_collectionSetting"
+            app:destination="@id/collectionSetting" />
+    </fragment>
+    <fragment
+        android:id="@+id/collectionSetting"
+        android:name="com.miscellaneoustool.app.ui.screen.collection.setting.CollectionSetting"
+        android:label="collection_setting"
+        tools:layout="@layout/collection_setting">
+        <argument
+            android:name="category"
+            app:argType="string"
+            android:defaultValue=""
+            />
+        <action
+            android:id="@+id/action_collectionSetting_to_collectionSettingItem"
+            app:destination="@id/collectionSettingItem" />
+        <action
+            android:id="@+id/action_collectionSetting_to_collectionSettingFilter"
+            app:destination="@id/collectionSettingFilter" />
+    </fragment>
+    <fragment
+        android:id="@+id/collectionSettingFilter"
+        android:name="com.miscellaneoustool.app.ui.screen.collection.setting.filter.CollectionSettingFilter"
+        android:label="collection_setting_filter"
+        tools:layout="@layout/collection_list">
+        <argument
+            android:name="category"
+            app:argType="string"
+            android:defaultValue=""
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/collectionSettingItem"
+        android:name="com.miscellaneoustool.app.ui.screen.collection.setting.item.CollectionSettingItem"
+        android:label="collection_setting_item"
+        tools:layout="@layout/collection_setting_item_list">
     </fragment>
     <fragment
         android:id="@+id/dropList"
