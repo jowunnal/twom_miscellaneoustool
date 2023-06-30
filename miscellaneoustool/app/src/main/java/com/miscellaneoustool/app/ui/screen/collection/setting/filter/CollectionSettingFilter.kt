@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.miscellaneoustool.app.R
 import com.miscellaneoustool.app.databinding.CollectionListBinding
-import com.miscellaneoustool.domain.model.Category
 import com.miscellaneoustool.app.ui.base.BaseFragment
 import com.miscellaneoustool.app.ui.base.CommonDialogFragment
 import com.miscellaneoustool.app.ui.listener.OnClickedListener
@@ -96,6 +95,7 @@ class CollectionSettingFilter : BaseFragment<CollectionListBinding>() {
             object : MenuProvider {
                 override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                     menuInflater.inflate(R.menu.book_option_menu, menu)
+                    setMenuColorOnDarkMode(menu)
                 }
 
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

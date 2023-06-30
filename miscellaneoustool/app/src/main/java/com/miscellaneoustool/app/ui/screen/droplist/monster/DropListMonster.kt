@@ -61,6 +61,7 @@ class DropListMonster : BaseFragment<DropBinding>() {
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.book_option_menu, menu)
+                setMenuColorOnDarkMode(menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

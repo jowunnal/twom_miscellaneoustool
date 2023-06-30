@@ -14,7 +14,6 @@ import com.miscellaneoustool.app.ui.base.BaseFragment
 class CollectionSetting: BaseFragment<CollectionSettingBinding>() {
     override fun getViewDataBinding(): CollectionSettingBinding = CollectionSettingBinding.inflate(layoutInflater)
     private val navArgs: CollectionSettingArgs by navArgs()
-
     override var topBarVisibility: Boolean = true
 
     override fun initState() {
@@ -35,6 +34,7 @@ class CollectionSetting: BaseFragment<CollectionSettingBinding>() {
                 override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                     menuInflater.inflate(R.menu.book_option_menu, menu)
                     menu.findItem(R.id.icon_search).isVisible = false
+                    setMenuColorOnDarkMode(menu)
                 }
 
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

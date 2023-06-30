@@ -19,5 +19,10 @@
         <item name="colorOnBackground">@color/dark_onBackground</item>
         <item name="colorSurface">@color/dark_surface</item>
         <item name="colorOnSurface">@color/dark_onSurface</item>
+        <item name="colorSeperator">@color/white_gray</item>
+        <item name="colorHeader">@color/white_70</item>
+        <item name="colorIcon">@color/white_gray</item>
+        <item name="colorControlNormal">@color/white</item>
     </style>
+
 </resources>

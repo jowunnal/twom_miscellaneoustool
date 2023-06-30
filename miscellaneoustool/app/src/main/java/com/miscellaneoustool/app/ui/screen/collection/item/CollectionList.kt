@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.miscellaneoustool.app.R
 import com.miscellaneoustool.app.databinding.CollectionListBinding
-import com.miscellaneoustool.domain.model.Category
 import com.miscellaneoustool.app.ui.base.BaseFragment
 import com.miscellaneoustool.app.ui.listener.OnClickedListener
 import com.miscellaneoustool.app.ui.listener.OnLongClickedListener
@@ -42,6 +41,7 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
             onCreate = { menu, menuInflater ->
                 menuInflater.inflate(R.menu.book_option_menu, menu)
                 menu.findItem(R.id.icon_setting).isVisible = true
+                setMenuColorOnDarkMode(menu)
             },
             onClick = { menuItem ->
                 when (menuItem.itemId) {
@@ -67,9 +67,11 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
                     }
 
                     R.id.icon_setting -> {
-                        val action = CollectionListDirections.actionCollectionListToCollectionSetting(navArgs.category)
+                        val action =
+                            CollectionListDirections.actionCollectionListToCollectionSetting(navArgs.category)
                         findNavController().navigate(action)
                     }
+
                     android.R.id.home -> findNavController().popBackStack()
                 }
             }
@@ -80,6 +82,7 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
         CollectionMenu(
             onCreate = { menu, menuInflater ->
                 menuInflater.inflate(R.menu.collection_customize_menu, menu)
+                setMenuColorOnDarkMode(menu)
             },
             onClick = { menuItem ->
                 when (menuItem.itemId) {
@@ -87,7 +90,9 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
                         scrollState = binding.recyclerView.layoutManager?.onSaveInstanceState()
                         collectionViewModel.deleteCollection(
                             collectionList = collectionListAdapter.getCheckedItems(),
-                            category = com.miscellaneoustool.domain.model.Category.findByStoredName(navArgs.category)
+                            category = com.miscellaneoustool.domain.model.Category.findByStoredName(
+                                navArgs.category
+                            )
                         )
                         removeMenuProvider(collectionMenu)
                         addMenuProvider(basicMenu)
@@ -171,7 +176,11 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
                 }
             })
 
-        collectionViewModel.getCollectionList(com.miscellaneoustool.domain.model.Category.findByStoredName(navArgs.category))
+        collectionViewModel.getCollectionList(
+            com.miscellaneoustool.domain.model.Category.findByStoredName(
+                navArgs.category
+            )
+        )
         addMenuProvider(basicMenu)
     }
 

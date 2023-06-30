@@ -19,5 +19,13 @@
         <item name="colorOnBackground">@color/light_onBackground</item>
         <item name="colorSurface">@color/light_surface</item>
         <item name="colorOnSurface">@color/light_onSurface</item>
+        <item name="colorSeperator">@color/deep_gray</item>
+        <item name="colorHeader">@color/black</item>
+        <item name="colorIcon">@color/primary</item>
+        <item name="colorControlNormal">@color/black</item>
     </style>
+
+    <attr name="colorSeperator" format="color"/>
+    <attr name="colorHeader" format="color"/>
+    <attr name="colorIcon" format="color"/>
 </resources>

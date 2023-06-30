@@ -22,7 +22,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
             android:text="@string/item_name"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorHeader"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,7 +34,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
             android:text="@string/stat"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorHeader"
             app:layout_constraintStart_toEndOf="@id/guideline_half"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="@string/price"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorHeader"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.75"
             app:layout_constraintStart_toEndOf="@+id/tv_explainBookStat"

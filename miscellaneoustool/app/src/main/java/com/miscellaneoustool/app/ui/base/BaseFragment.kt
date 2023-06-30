@@ -1,10 +1,15 @@
 package com.miscellaneoustool.app.ui.base
 
+import android.graphics.PorterDuff
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.forEach
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -54,6 +59,22 @@ abstract class BaseFragment<VB : ViewDataBinding> : Fragment() {
     fun showOrHideTopBar(visibility: Boolean) {
         (requireActivity() as AppCompatActivity).supportActionBar?.run {
             if (visibility) show() else hide()
+        }
+    }
+
+    fun setMenuColorOnDarkMode(menu: Menu) {
+        when(AppCompatDelegate.getDefaultNightMode()) {
+            AppCompatDelegate.MODE_NIGHT_UNSPECIFIED -> {
+                val typed = TypedValue()
+                requireActivity().theme.resolveAttribute(R.attr.colorIcon, typed, true)
+                menu.forEach { item ->
+                    item.icon?.apply {
+                        setTint(typed.data)
+                        setTintMode(PorterDuff.Mode.SRC_ATOP)
+                    }
+                }
+            }
+            else -> {}
         }
     }
 

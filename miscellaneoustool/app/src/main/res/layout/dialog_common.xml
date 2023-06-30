@@ -15,7 +15,7 @@
         android:orientation="vertical">
 
         <TextView
-            style="@style/header_medium"
+            style="@style/header_small"
             android:id="@+id/tv_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
             android:layout_marginHorizontal="36dp"
             android:layout_marginTop="19dp"
             tools:text="가격을 입력해 주세요."
-            android:textColor="@color/black"
+            android:textColor="?attr/colorHeader"
             tools:visibility="visible" />
 
         <EditText
@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="19dp"
-            android:background="#A2ABB4" />
+            android:background="?attr/colorSeperator"  />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,28 +49,28 @@
             android:orientation="horizontal">
 
             <TextView
+                style="@style/body_small"
                 android:id="@+id/btn_negative"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/blue"
-                android:textSize="16dp"
                 tools:text="취소" />
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="#A2ABB4" />
+                android:background="?attr/colorSeperator" />
 
             <TextView
+                style="@style/body_small"
                 android:id="@+id/btn_positive"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/red"
-                android:textSize="16dp"
                 tools:text="변경" />
         </LinearLayout>
 
