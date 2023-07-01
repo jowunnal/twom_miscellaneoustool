@@ -8,28 +8,26 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.miscellaneoustool.app.R
 import com.miscellaneoustool.app.ui.screen.compose.component.DefaultButton
 import com.miscellaneoustool.app.ui.screen.compose.component.HorizontalSpacer
 import com.miscellaneoustool.app.ui.screen.compose.component.VerticalSpacer
-import com.miscellaneoustool.app.ui.screen.compose.theme.black
-import com.miscellaneoustool.app.ui.screen.compose.theme.deepGray
-import com.miscellaneoustool.app.ui.screen.compose.theme.gray
+import com.miscellaneoustool.app.ui.screen.compose.theme.Typography
 import com.miscellaneoustool.app.utils.TwomIllustratedBookPreview
-import com.miscellaneoustool.app.utils.tu
 import kotlinx.coroutines.launch
 
 @Composable
@@ -50,7 +48,8 @@ fun TimerBottomSheetContent(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_handle_bar),
-                contentDescription = "HandleBar"
+                contentDescription = "HandleBar",
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.scrim)
             )
         }
         Row(
@@ -67,21 +66,19 @@ fun TimerBottomSheetContent(
                     }
                 },
                 modifier = Modifier
-                    .height(24.dp)
-                    .width(24.dp)
+                    .size(24.dp)
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_x),
                     contentDescription = "ExitIcon",
-                    tint = gray
+                    tint = MaterialTheme.colorScheme.scrim
                 )
             }
         }
         Text(
             text = selectedMonsterName,
-            fontSize = 18.tu,
-            fontWeight = FontWeight.ExtraBold,
-            color = deepGray,
+            style = Typography.headlineMedium,
+            color = MaterialTheme.colorScheme.outline,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         VerticalSpacer(height = 16.dp)
@@ -92,9 +89,8 @@ fun TimerBottomSheetContent(
         ) {
             Text(
                 text = "현재시간 항상 보기에 등록 하시겠습니까?",
-                fontSize = 18.tu,
-                fontWeight = FontWeight.ExtraBold,
-                color = black
+                style = Typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
 

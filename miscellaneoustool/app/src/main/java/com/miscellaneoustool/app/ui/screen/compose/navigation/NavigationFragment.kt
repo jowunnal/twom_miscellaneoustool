@@ -1,10 +1,6 @@
 package com.miscellaneoustool.app.ui.screen.compose.navigation
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,11 +50,7 @@ class NavigationFragment : Fragment() {
         NavigationGraph(
             navController = rememberNavController(),
             changeVisibilityBottomNavigationBar = { bool -> changeVisibilityBottomNavigationBar(bool) },
-            showRewardedAd = { showRewardedAd(mRewardedAd) },
-            checkAuthorityDrawOverlays = { context: Context, register: (Intent) -> Unit
-                ->
-                checkAuthorityDrawOverlays(context, register)
-            }
+            showRewardedAd = { showRewardedAd(mRewardedAd) }
         )
     }
 
@@ -105,22 +97,6 @@ class NavigationFragment : Fragment() {
             override fun onAdShowedFullScreenContent() {
                 // Called when ad is shown.
             }
-        }
-    }
-
-    private fun checkAuthorityDrawOverlays(
-        context: Context,
-        registerForActivityResult: (Intent) -> Unit
-    ): Boolean { // 다른앱 위에 그리기 체크 : true = 권한있음 , false = 권한없음
-        return if (!Settings.canDrawOverlays(context)) {
-            val intent = Intent(
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                Uri.parse("package:" + context.packageName)
-            )
-            registerForActivityResult(intent)
-            false
-        } else {
-            true
         }
     }
 

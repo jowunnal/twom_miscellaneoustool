@@ -8,22 +8,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.miscellaneoustool.app.ui.screen.compose.theme.black
+import com.miscellaneoustool.app.ui.screen.compose.theme.Typography
 import com.miscellaneoustool.app.ui.screen.compose.theme.blue
 import com.miscellaneoustool.app.ui.screen.compose.theme.red
 import com.miscellaneoustool.app.utils.TwomIllustratedBookPreview
-import com.miscellaneoustool.app.utils.tu
 
 @Stable
 data class DialogState(
@@ -56,7 +56,9 @@ fun DialogCustom(
         properties = properties
     ) {
         Surface(
-            shape = RoundedCornerShape(14.dp)
+            shape = RoundedCornerShape(14.dp),
+            color = MaterialTheme.colors.surface,
+            contentColor = contentColorFor(MaterialTheme.colors.surface)
         ) {
             DialogCustomContent(
                 dialogState = dialogState,
@@ -81,9 +83,7 @@ private fun DialogCustomContent(
             ) {
                 Text(
                     text = dialogState.header,
-                    fontSize = 16.tu,
-                    fontWeight = FontWeight.W700,
-                    color = black
+                    style = Typography.bodyLarge
                 )
             }
             VerticalSpacer(height = 12.dp)
@@ -94,9 +94,7 @@ private fun DialogCustomContent(
                 ) {
                     Text(
                         text = dialogState.content,
-                        fontSize = 12.tu,
-                        fontWeight = FontWeight.W400,
-                        color = black
+                        style = Typography.bodySmall
                     )
                 }
         }
@@ -116,8 +114,7 @@ private fun DialogCustomContent(
             ) {
                 Text(
                     text = dialogState.negativeMessage,
-                    fontSize = 16.tu,
-                    fontWeight = FontWeight.W400,
+                    style = Typography.bodyLarge,
                     color = blue,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
@@ -135,8 +132,7 @@ private fun DialogCustomContent(
                 ) {
                     Text(
                         text = dialogState.positiveMessage,
-                        fontSize = 16.tu,
-                        fontWeight = FontWeight.W400,
+                        style = Typography.bodyLarge,
                         color = red,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )

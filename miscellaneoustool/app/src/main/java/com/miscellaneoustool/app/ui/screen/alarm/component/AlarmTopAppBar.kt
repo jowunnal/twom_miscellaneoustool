@@ -3,12 +3,11 @@ package com.miscellaneoustool.app.ui.screen.alarm.component
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.TopAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.miscellaneoustool.app.R
-import com.miscellaneoustool.app.ui.screen.compose.theme.black
-import com.miscellaneoustool.app.ui.screen.compose.theme.white
 import com.miscellaneoustool.app.utils.TwomIllustratedBookPreview
 
 @Composable
@@ -38,8 +37,8 @@ fun AlarmTopAppBar(
                 )
             }*/
         },
-        backgroundColor = white,
-        contentColor = black
+        backgroundColor = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.onSurface
     )
 }
 

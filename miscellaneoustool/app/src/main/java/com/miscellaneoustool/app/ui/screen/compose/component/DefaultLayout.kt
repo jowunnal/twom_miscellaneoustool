@@ -4,9 +4,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import com.miscellaneoustool.app.ui.screen.compose.theme.white
 
 @Composable
 fun DefaultLayout(
@@ -15,7 +15,7 @@ fun DefaultLayout(
     content: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(
-        topBar = { topBar() },
+        topBar = topBar,
         scaffoldState = scaffoldState,
         snackbarHost = { snackBarHostState ->
             Column() {
@@ -26,7 +26,8 @@ fun DefaultLayout(
                 VerticalSpacer(height = 90.dp)
             }
         },
-        backgroundColor = white
+        backgroundColor = MaterialTheme.colorScheme.background,
+        contentColor = MaterialTheme.colorScheme.onBackground
     ) {
         content(it)
     }

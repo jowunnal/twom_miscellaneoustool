@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.chargemap.compose.numberpicker.NumberPicker
@@ -26,11 +26,10 @@ import com.miscellaneoustool.app.ui.screen.compose.component.DefaultAppBar
 import com.miscellaneoustool.app.ui.screen.compose.component.DefaultButton
 import com.miscellaneoustool.app.ui.screen.compose.component.DefaultLayout
 import com.miscellaneoustool.app.ui.screen.compose.component.HorizontalSpacer
-import com.miscellaneoustool.app.ui.screen.compose.theme.deepGray
+import com.miscellaneoustool.app.ui.screen.compose.theme.Typography
 import com.miscellaneoustool.app.ui.screen.compose.theme.red
 import com.miscellaneoustool.app.utils.TwomIllustratedBookPreview
 import com.miscellaneoustool.app.utils.appendBoldText
-import com.miscellaneoustool.app.utils.tu
 import kotlinx.coroutines.launch
 
 @Composable
@@ -104,19 +103,20 @@ private fun SettingIntervalItem(
                 appendBoldText(text = headerText, color = red)
                 append(" 알람 간격")
             },
-            fontSize = 18.tu,
-            fontWeight = FontWeight.W400
+            style = Typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onBackground
         )
-        HorizontalSpacer(width = 8.dp)
+        HorizontalSpacer(width = 16.dp)
         NumberPicker(
             value = pickerValue,
             onValueChange = onPickerValueChange,
             range = 0..59,
             textStyle = TextStyle(
-                color = deepGray
-            )
+                color = MaterialTheme.colorScheme.outline
+            ),
+            dividersColor = MaterialTheme.colorScheme.primary
         )
-        HorizontalSpacer(width = 4.dp)
+        HorizontalSpacer(width = 16.dp)
         DefaultButton(
             content = "적용하기",
             modifier = Modifier.clickable {

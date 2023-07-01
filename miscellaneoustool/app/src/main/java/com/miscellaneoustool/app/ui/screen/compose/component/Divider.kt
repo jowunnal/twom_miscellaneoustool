@@ -3,6 +3,7 @@ package com.miscellaneoustool.app.ui.screen.compose.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -10,13 +11,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.miscellaneoustool.app.ui.screen.compose.theme.lightGray
 
 @Composable
 fun VerticalDivider(
     modifier: Modifier = Modifier,
     thickness: Dp = 1.dp,
-    color: Color = lightGray,
+    color: Color = MaterialTheme.colorScheme.scrim,
 ) {
     Spacer(
         modifier = modifier
@@ -27,10 +27,11 @@ fun VerticalDivider(
 }
 
 @Suppress("FunctionName")
+@Composable
 fun LazyListScope.VerticalDividerItem(
     modifier: Modifier = Modifier,
     thickness: Dp = 1.dp,
-    color: Color = lightGray,
+    color: Color = MaterialTheme.colorScheme.scrim,
 ) {
     item {
         VerticalDivider(
@@ -45,7 +46,7 @@ fun LazyListScope.VerticalDividerItem(
 fun HorizontalDivider(
     modifier: Modifier = Modifier,
     thickness: Dp = 1.dp,
-    color: Color = lightGray,
+    color: Color = MaterialTheme.colorScheme.scrim,
 ) {
     Spacer(
         modifier = modifier
@@ -56,10 +57,11 @@ fun HorizontalDivider(
 }
 
 @Suppress("FunctionName")
+@Composable
 fun LazyListScope.HorizontalDividerItem(
     modifier: Modifier = Modifier,
     thickness: Dp = 1.dp,
-    color: Color = lightGray,
+    color: Color = MaterialTheme.colorScheme.scrim,
 ) {
     item {
         HorizontalDivider(

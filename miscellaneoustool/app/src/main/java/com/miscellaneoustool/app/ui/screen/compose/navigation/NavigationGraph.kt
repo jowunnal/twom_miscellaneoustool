@@ -1,7 +1,5 @@
 package com.miscellaneoustool.app.ui.screen.compose.navigation
 
-import android.content.Context
-import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
@@ -24,7 +22,6 @@ fun NavigationGraph(
     navController: NavHostController,
     changeVisibilityBottomNavigationBar: (Boolean) -> Unit,
     showRewardedAd: () -> Unit,
-    checkAuthorityDrawOverlays:(Context, (Intent)->Unit) -> Boolean,
     alarmViewModel: AlarmViewModel = hiltViewModel(),
     gearViewModel: GearViewModel = hiltViewModel(),
     watchViewModel: WatchViewModel = hiltViewModel()
@@ -95,7 +92,6 @@ fun NavigationGraph(
                 activityContext = context,
                 setWatchStatus = watchViewModel::setWatchStatus,
                 setFontSize = watchViewModel::setFontSize,
-                checkAuthorityDrawOverlays = checkAuthorityDrawOverlays,
                 onNavigatePopBackStack = { navController.popBackStack() },
                 setSelectedMonsterName = watchViewModel::setSelectedMonsterName,
                 setSelectedMonsterOtaToTrue = watchViewModel::setSelectedMonsterOtaToTrue

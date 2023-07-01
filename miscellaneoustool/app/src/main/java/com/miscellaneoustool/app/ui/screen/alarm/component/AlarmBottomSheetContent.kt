@@ -1,6 +1,7 @@
 package com.miscellaneoustool.app.ui.screen.alarm.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,14 +9,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -23,14 +26,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.miscellaneoustool.app.R
-import com.miscellaneoustool.domain.model.WeekModel
 import com.miscellaneoustool.app.ui.screen.alarm.item.TimeState
 import com.miscellaneoustool.app.ui.screen.compose.component.DefaultButton
 import com.miscellaneoustool.app.ui.screen.compose.component.HorizontalSpacer
 import com.miscellaneoustool.app.ui.screen.compose.component.VerticalSpacer
-import com.miscellaneoustool.app.ui.screen.compose.theme.deepGray
-import com.miscellaneoustool.app.ui.screen.compose.theme.gray
-import com.miscellaneoustool.app.ui.screen.compose.theme.primary
 import com.miscellaneoustool.app.utils.TwomIllustratedBookPreview
 import com.miscellaneoustool.app.utils.tu
 import kotlinx.coroutines.launch
@@ -49,7 +48,9 @@ fun AlarmBottomSheetContent(
     val coroutineScope = rememberCoroutineScope()
 
     Column(
-        modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
+            .padding(horizontal = 20.dp, vertical = 16.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -57,7 +58,8 @@ fun AlarmBottomSheetContent(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_handle_bar),
-                contentDescription = "HandleBar"
+                contentDescription = "HandleBar",
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.scrim)
             )
         }
         Row(
@@ -74,13 +76,12 @@ fun AlarmBottomSheetContent(
                     }
                 },
                 modifier = Modifier
-                    .height(24.dp)
-                    .width(24.dp)
+                    .size(24.dp)
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_x),
                     contentDescription = "ExitIcon",
-                    tint = gray
+                    tint = MaterialTheme.colorScheme.scrim
                 )
             }
         }
@@ -88,7 +89,7 @@ fun AlarmBottomSheetContent(
             text = selectedBossName,
             fontSize = 18.tu,
             fontWeight = FontWeight.ExtraBold,
-            color = deepGray,
+            color = MaterialTheme.colorScheme.outline,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         VerticalSpacer(height = 16.dp)
@@ -108,7 +109,9 @@ fun AlarmBottomSheetContent(
         VerticalSpacer(height = 16.dp)
 
         Row() {
-            DefaultButton(content = "시작하기", modifier = Modifier
+            DefaultButton(
+                content = "시작하기",
+                modifier = Modifier
                 .weight(1f)
                 .clickable {
                     onStartAlarm(selectedBossName)
@@ -135,31 +138,31 @@ private fun NumberPickerDefault(
     setSecondsChanged: (Int) -> Unit
 ) {
     NumberPicker(
-        dividersColor = primary,
+        dividersColor = MaterialTheme.colorScheme.primary,
         value = timeState.hour,
         onValueChange = { hour -> setHourChanged(hour) },
         range = 0..23,
-        textStyle = TextStyle(color = gray)
+        textStyle = TextStyle(color = MaterialTheme.colorScheme.outline)
     )
 
     HorizontalSpacer(width = 16.dp)
 
     NumberPicker(
-        dividersColor = primary,
+        dividersColor = MaterialTheme.colorScheme.primary,
         value = timeState.minutes,
         onValueChange = { minutes -> setMinutesChanged(minutes) },
         range = 0..59,
-        textStyle = TextStyle(color = gray)
+        textStyle = TextStyle(color = MaterialTheme.colorScheme.outline)
     )
 
     HorizontalSpacer(width = 16.dp)
 
     NumberPicker(
-        dividersColor = primary,
+        dividersColor = MaterialTheme.colorScheme.primary,
         value = timeState.seconds,
         onValueChange = { seconds -> setSecondsChanged(seconds) },
         range = 0..59,
-        textStyle = TextStyle(color = gray)
+        textStyle = TextStyle(color = MaterialTheme.colorScheme.outline)
     )
 }
 

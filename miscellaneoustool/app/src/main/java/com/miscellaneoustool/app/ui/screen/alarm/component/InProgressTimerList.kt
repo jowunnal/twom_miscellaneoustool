@@ -7,23 +7,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.miscellaneoustool.app.ui.screen.alarm.item.TimeState
 import com.miscellaneoustool.app.ui.screen.alarm.item.TimerState
 import com.miscellaneoustool.app.ui.screen.compose.component.DialogState
 import com.miscellaneoustool.app.ui.screen.compose.component.VerticalSpacer
-import com.miscellaneoustool.app.ui.screen.compose.theme.black
-import com.miscellaneoustool.app.ui.screen.compose.theme.deepGray
+import com.miscellaneoustool.app.ui.screen.compose.theme.Typography
 import com.miscellaneoustool.app.utils.TwomIllustratedBookPreview
 import com.miscellaneoustool.app.utils.appendBoldText
-import com.miscellaneoustool.app.utils.tu
 
 @Composable
 fun InProgressTimerList(
@@ -42,9 +40,8 @@ fun InProgressTimerList(
         item {
             Text(
                 text = "현재 진행중인 알람 내역",
-                fontSize = 20.tu,
-                fontWeight = FontWeight.ExtraBold,
-                color = deepGray
+                style = Typography.headlineMedium,
+                color = MaterialTheme.colorScheme.outline
             )
             VerticalSpacer(height = 20.dp)
         }
@@ -71,32 +68,32 @@ fun InProgressTimerList(
                     text = buildAnnotatedString {
                         appendBoldText(
                             text = item.bossName,
-                            color = black
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                         append(" (")
                         appendBoldText(
                             text = item.timeState.day.displayName,
-                            color = black
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                         append(") ")
                         appendBoldText(
                             text = item.timeState.hour.toString(),
-                            color = black
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                         append("시 ")
                         appendBoldText(
                             text = item.timeState.minutes.toString(),
-                            color = black
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                         append("분 ")
                         appendBoldText(
                             text = item.timeState.seconds.toString(),
-                            color = black
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                         append("초")
                     },
-                    fontSize = 16.tu,
-                    color = deepGray,
+                    style = Typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.outline,
                     modifier = Modifier.fillMaxWidth()
                 )
                 VerticalSpacer(height = 16.dp)

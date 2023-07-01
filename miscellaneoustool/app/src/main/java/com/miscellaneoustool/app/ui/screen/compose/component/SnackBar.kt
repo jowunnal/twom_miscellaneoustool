@@ -6,25 +6,22 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.miscellaneoustool.app.R
-import com.miscellaneoustool.app.ui.screen.compose.theme.gray
-import com.miscellaneoustool.app.ui.screen.compose.theme.primary
-import com.miscellaneoustool.app.ui.screen.compose.theme.white
+import com.miscellaneoustool.app.ui.screen.compose.theme.Typography
 import com.miscellaneoustool.app.utils.TwomIllustratedBookPreview
-import com.miscellaneoustool.app.utils.tu
 
 @Composable
 fun SnackBarHostCustom(
@@ -57,7 +54,8 @@ private fun SnackBarCustom(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .height(78.dp),
-        backgroundColor = primary,
+        backgroundColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
         shape = RoundedCornerShape(8.dp),
         action =  {
             Column(
@@ -68,14 +66,13 @@ private fun SnackBarCustom(
                 androidx.compose.material3.IconButton(
                     onClick = disMissSnackBar,
                     modifier = Modifier
-                        .height(24.dp)
-                        .width(24.dp)
+                        .size(24.dp)
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_x),
-                        contentDescription = null,
+                        contentDescription = "snackBarCloseButton",
                         modifier = Modifier.fillMaxSize(),
-                        tint = gray
+                        tint = MaterialTheme.colorScheme.scrim
                     )
                 }
             }
@@ -88,17 +85,13 @@ private fun SnackBarCustom(
         ) {
             Text(
                 text = headerMessage,
-                fontWeight = FontWeight.W700,
-                fontSize = 16.tu,
-                color = white
+                style = Typography.bodyLarge
             )
             if(contentMessage.isNotBlank()){
                 VerticalSpacer(height = 4.dp)
                 Text(
                     text = contentMessage,
-                    fontWeight = FontWeight.W400,
-                    fontSize = 13.tu,
-                    color = white
+                    style = Typography.bodySmall
                 )
             }
         }

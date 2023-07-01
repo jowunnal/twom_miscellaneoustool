@@ -8,22 +8,20 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.miscellaneoustool.domain.model.MonsterType
 import com.miscellaneoustool.app.ui.screen.compose.component.DefaultButton
 import com.miscellaneoustool.app.ui.screen.compose.component.DialogState
 import com.miscellaneoustool.app.ui.screen.compose.component.DropDownMenuCustom
 import com.miscellaneoustool.app.ui.screen.compose.component.VerticalSpacer
-import com.miscellaneoustool.app.ui.screen.compose.theme.deepGray
-import com.miscellaneoustool.app.ui.screen.compose.theme.lightGray
+import com.miscellaneoustool.app.ui.screen.compose.theme.Typography
 import com.miscellaneoustool.app.utils.TwomIllustratedBookPreview
-import com.miscellaneoustool.app.utils.tu
+import com.miscellaneoustool.domain.model.MonsterType
 
 @Composable
 fun BossSelection(
@@ -34,7 +32,7 @@ fun BossSelection(
     onClickBossItem: (String) -> Unit,
     addBossToFrequentlyUsedList: (String) -> Unit,
     removeBossFromFrequentlyUsedList: (String) -> Unit,
-    setRecentlySelectedBossClassifiedChanged:(com.miscellaneoustool.domain.model.MonsterType) -> Unit,
+    setRecentlySelectedBossClassifiedChanged:(MonsterType) -> Unit,
     setRecentlySelectedBossNameChanged:(String) -> Unit,
     onOpenDialog: (DialogState) -> Unit,
     onCloseDialog: () -> Unit
@@ -50,13 +48,12 @@ fun BossSelection(
         )
 
         VerticalSpacer(height = 16.dp)
-        Divider(thickness = 1.dp, color = lightGray)
+        Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.scrim)
         VerticalSpacer(height = 16.dp)
         Text(
             text = "자주 사용하는 보스 목록",
-            fontSize = 18.tu,
-            fontWeight = FontWeight.ExtraBold,
-            color = deepGray,
+            style = Typography.bodyMedium,
+            color = MaterialTheme.colorScheme.outline,
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentWidth()
@@ -86,7 +83,7 @@ private fun BossSelectionHeader(
     recentlySelectedBossClassified: String,
     recentlySelectedBossName: String,
     addBossToFrequentlyUsedList: (String) -> Unit,
-    setRecentlySelectedBossClassifiedChanged:(com.miscellaneoustool.domain.model.MonsterType) -> Unit,
+    setRecentlySelectedBossClassifiedChanged:(MonsterType) -> Unit,
     setRecentlySelectedBossNameChanged:(String) -> Unit,
 ) {
     Column() {
@@ -97,11 +94,13 @@ private fun BossSelectionHeader(
                 DropDownMenuCustom(
                     label = "보스 분류",
                     text = recentlySelectedBossClassified,
-                    items = com.miscellaneoustool.domain.model.MonsterType.values().toMutableList()
-                        .apply { remove(com.miscellaneoustool.domain.model.MonsterType.NORMAL) }
+                    items = MonsterType.values().toMutableList()
+                        .apply { remove(MonsterType.NORMAL) }
                         .map { monsterType -> monsterType.displayName }
                         .toList(),
-                    setTextChanged = { item -> setRecentlySelectedBossClassifiedChanged(com.miscellaneoustool.domain.model.MonsterType.findByDisplayName(item)) }
+                    setTextChanged = { item ->
+                        setRecentlySelectedBossClassifiedChanged(MonsterType.findByDisplayName(item))
+                    }
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
@@ -159,7 +158,7 @@ private fun BossSelectionItem(
                     )
                 }
             ),
-            fontSize = 16
+            style = Typography.bodyLarge
         )
     }
 }

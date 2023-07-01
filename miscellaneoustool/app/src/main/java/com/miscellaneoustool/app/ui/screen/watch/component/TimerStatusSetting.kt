@@ -2,14 +2,24 @@ package com.miscellaneoustool.app.ui.screen.watch.component
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,9 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import com.miscellaneoustool.app.ui.screen.alarm.item.TimerState
 import com.miscellaneoustool.app.ui.screen.compose.component.VerticalSpacer
-import com.miscellaneoustool.app.ui.screen.compose.theme.deepGray
-import com.miscellaneoustool.app.ui.screen.compose.theme.primary
-import com.miscellaneoustool.app.ui.screen.compose.theme.white
+import com.miscellaneoustool.app.ui.screen.compose.theme.Typography
 import com.miscellaneoustool.app.ui.screen.watch.item.ButtonStatus
 import com.miscellaneoustool.app.ui.service.OverlayService
 import com.miscellaneoustool.app.utils.TwomIllustratedBookPreview
@@ -39,8 +47,7 @@ fun TimeStatusSetting(
     watchStatus: ButtonStatus,
     fontSize: Int,
     activityContext: Context,
-    setWatchStatus: (ButtonStatus) -> Unit,
-    checkAuthorityDrawOverlays: (Context, (Intent) -> Unit) -> Boolean
+    setWatchStatus: (ButtonStatus) -> Unit
 ) {
     val permissionLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
@@ -87,16 +94,15 @@ fun TimeStatusSetting(
     ) {
         Text(
             text = "현재 시간 항상 보기",
-            fontSize = 16.tu,
-            fontWeight = FontWeight.W700,
-            color = deepGray,
+            style = Typography.headlineSmall,
+            color = MaterialTheme.colorScheme.outline,
             modifier = Modifier.weight(1f)
         )
         BoxWithConstraints(
             modifier = Modifier
                 .weight(1f)
-                .border(1.dp, primary, RoundedCornerShape(35.dp))
-                .background(white, RoundedCornerShape(35.dp))
+                .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(35.dp))
+                .background(MaterialTheme.colorScheme.background, RoundedCornerShape(35.dp))
         ) {
             Row(
                 modifier = Modifier.fillMaxSize(),
@@ -130,7 +136,7 @@ fun TimeStatusSetting(
                 ) {
                     Text(
                         text = "OFF",
-                        color = primary,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 16.tu,
                         fontWeight = FontWeight.Bold,
                     )
@@ -168,7 +174,7 @@ fun TimeStatusSetting(
                 ) {
                     Text(
                         text = "ON",
-                        color = primary,
+                        color = MaterialTheme.colorScheme.primary,
                         fontSize = 16.tu,
                         fontWeight = FontWeight.Bold,
                     )
@@ -180,19 +186,35 @@ fun TimeStatusSetting(
                     .fillMaxHeight()
                     .width(maxWidth / 2)
                     .padding(3.dp)
-                    .background(primary, RoundedCornerShape(100.dp))
+                    .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(100.dp))
                     .align(BiasAlignment(indicatorBias, 0f)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = watchStatus.displayName,
-                    color = white,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 16.tu,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
             }
         }
+    }
+}
+
+private fun checkAuthorityDrawOverlays(
+    context: Context,
+    registerForActivityResult: (Intent) -> Unit
+): Boolean { // 다른앱 위에 그리기 체크 : true = 권한있음 , false = 권한없음
+    return if (!Settings.canDrawOverlays(context)) {
+        val intent = Intent(
+            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+            Uri.parse("package:" + context.packageName)
+        )
+        registerForActivityResult(intent)
+        false
+    } else {
+        true
     }
 }
 
@@ -205,8 +227,7 @@ private fun PreviewTimeStatusSetting() {
             watchStatus = ButtonStatus.OFF,
             fontSize = 14,
             setWatchStatus = {},
-            activityContext = object : FragmentActivity() {},
-            checkAuthorityDrawOverlays = { _, _ -> false }
+            activityContext = object : FragmentActivity() {}
         )
     }
 }

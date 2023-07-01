@@ -51,6 +51,7 @@ fun AlarmScreen(
     val dialogUiState = remember {
         mutableStateOf(DialogState.getInitValue())
     }
+
     if (showDialogState.value)
         DialogCustom(
             dialogState = dialogUiState.value,

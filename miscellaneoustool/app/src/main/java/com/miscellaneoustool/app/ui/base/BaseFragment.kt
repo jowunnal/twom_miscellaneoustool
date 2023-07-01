@@ -66,7 +66,7 @@ abstract class BaseFragment<VB : ViewDataBinding> : Fragment() {
         when(AppCompatDelegate.getDefaultNightMode()) {
             AppCompatDelegate.MODE_NIGHT_UNSPECIFIED -> {
                 val typed = TypedValue()
-                requireActivity().theme.resolveAttribute(R.attr.colorIcon, typed, true)
+                requireActivity().theme.resolveAttribute(R.attr.colorHeader, typed, true)
                 menu.forEach { item ->
                     item.icon?.apply {
                         setTint(typed.data)

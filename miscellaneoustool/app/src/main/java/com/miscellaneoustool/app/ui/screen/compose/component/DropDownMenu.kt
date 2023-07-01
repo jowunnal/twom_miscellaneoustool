@@ -13,21 +13,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.miscellaneoustool.app.R
-import com.miscellaneoustool.app.ui.screen.compose.theme.black
-import com.miscellaneoustool.app.ui.screen.compose.theme.gray
-import com.miscellaneoustool.app.ui.screen.compose.theme.white
+import com.miscellaneoustool.app.ui.screen.compose.theme.Typography
 import com.miscellaneoustool.app.utils.TwomIllustratedBookPreview
-import com.miscellaneoustool.app.utils.tu
 
 @Composable
 fun DropDownMenuCustom(
@@ -49,14 +46,13 @@ fun DropDownMenuCustom(
     ) {
         Text(
             text = label,
-            color = black,
-            fontWeight = FontWeight.Normal,
-            fontSize = 13.tu
+            style = Typography.bodySmall,
+            color = MaterialTheme.colorScheme.onBackground
         )
         VerticalSpacer(height = 1.dp)
         Row(
             modifier = Modifier
-                .border(1.dp, gray, RoundedCornerShape(4.dp))
+                .border(1.dp, MaterialTheme.colorScheme.scrim, RoundedCornerShape(4.dp))
                 .padding(horizontal = 8.dp, vertical = 10.dp)
         ) {
             iconHeader?.let {
@@ -69,9 +65,8 @@ fun DropDownMenuCustom(
 
             Text(
                 text = text,
-                fontSize = 16.tu,
-                fontWeight = FontWeight.W400,
-                color = black,
+                style = Typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.weight(1f)
             )
 
@@ -91,7 +86,7 @@ fun DropDownMenuCustom(
         DropdownMenu(
             expanded = dropDownExpandedState.value,
             onDismissRequest = { dropDownExpandedState.value = false },
-            modifier = Modifier.background(white)
+            modifier = Modifier.background(MaterialTheme.colorScheme.background)
         ) {
             items.forEach {
                 androidx.compose.material.DropdownMenuItem(

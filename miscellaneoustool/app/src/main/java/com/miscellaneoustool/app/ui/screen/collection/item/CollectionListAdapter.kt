@@ -120,21 +120,25 @@ class CollectionListAdapter @Inject constructor(@ActivityContext private val con
 
         init {
             with(binding) {
-                containerInBook.minWidth =
-                    context.applicationContext.resources.displayMetrics.widthPixels
-                containerInBook.setOnLongClickListener {
-                    onLongClicked?.setOnLongClickedListener(adapterPosition)
-                    true
-                }
-                containerInBook.setOnClickListener {
-                    onClicked?.setOnClickedListener(adapterPosition)
+                containerInBook.apply {
+                    minWidth = context.applicationContext.resources.displayMetrics.widthPixels
+                    setPadding(16,0,16,0)
+                    setOnLongClickListener {
+                        onLongClicked?.setOnLongClickedListener(adapterPosition)
+                        true
+                    }
+                    setOnClickListener {
+                        onClicked?.setOnClickedListener(adapterPosition)
+                    }
                 }
             }
-            itemView.doOnAttach {
-                viewHolderLifecycleOwner = itemView.findViewTreeLifecycleOwner()
-            }
-            itemView.doOnDetach {
-                viewHolderLifecycleOwner = null
+            with(itemView) {
+                doOnAttach {
+                    viewHolderLifecycleOwner = itemView.findViewTreeLifecycleOwner()
+                }
+                doOnDetach {
+                    viewHolderLifecycleOwner = null
+                }
             }
         }
 

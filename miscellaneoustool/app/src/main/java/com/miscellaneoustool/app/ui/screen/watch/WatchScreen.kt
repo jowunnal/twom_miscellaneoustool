@@ -1,13 +1,13 @@
 package com.miscellaneoustool.app.ui.screen.watch
 
 import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -21,7 +21,7 @@ import com.miscellaneoustool.app.ui.screen.compose.component.DefaultAppBar
 import com.miscellaneoustool.app.ui.screen.compose.component.DefaultButton
 import com.miscellaneoustool.app.ui.screen.compose.component.DefaultLayout
 import com.miscellaneoustool.app.ui.screen.compose.component.VerticalSpacer
-import com.miscellaneoustool.app.ui.screen.compose.theme.deepGray
+import com.miscellaneoustool.app.ui.screen.compose.theme.Typography
 import com.miscellaneoustool.app.ui.screen.watch.component.TimeStatusSetting
 import com.miscellaneoustool.app.ui.screen.watch.component.TimerBottomSheetContent
 import com.miscellaneoustool.app.ui.screen.watch.component.TimerFontSizeSetting
@@ -38,7 +38,6 @@ fun WatchScreen(
     setWatchStatus: (ButtonStatus) -> Unit,
     setFontSize: (Int) -> Unit,
     setSelectedMonsterName: (String) -> Unit,
-    checkAuthorityDrawOverlays: (Context, (Intent) -> Unit) -> Boolean,
     onNavigatePopBackStack: () -> Unit,
     setSelectedMonsterOtaToTrue: (Int) -> Unit
 ) {
@@ -80,8 +79,7 @@ fun WatchScreen(
                     watchStatus = uiState.watchStatus,
                     fontSize = uiState.fontSize,
                     activityContext = activityContext,
-                    setWatchStatus = setWatchStatus,
-                    checkAuthorityDrawOverlays = checkAuthorityDrawOverlays
+                    setWatchStatus = setWatchStatus
                 )
                 TimerFontSizeSetting(
                     fontSize = uiState.fontSize,
@@ -93,7 +91,7 @@ fun WatchScreen(
                     text = "자주 사용하는 보스 목록",
                     fontSize = 18.tu,
                     fontWeight = FontWeight.ExtraBold,
-                    color = deepGray,
+                    color = MaterialTheme.colorScheme.outline,
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentWidth()
@@ -139,7 +137,7 @@ private fun BossSelectionItem(
             modifier = Modifier.combinedClickable(
                 onClick = { onClickBossItem(bossName) }
             ),
-            fontSize = 16
+            style = Typography.bodyLarge
         )
     }
 }
@@ -168,7 +166,6 @@ private fun PreviewWatchScreen() =
             setWatchStatus = {},
             setFontSize = {},
             activityContext = object : FragmentActivity() {},
-            checkAuthorityDrawOverlays = { _, _ -> false },
             onNavigatePopBackStack = {},
             setSelectedMonsterName = {},
             setSelectedMonsterOtaToTrue = {}

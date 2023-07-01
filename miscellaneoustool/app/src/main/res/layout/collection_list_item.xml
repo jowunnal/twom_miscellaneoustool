@@ -21,7 +21,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bookLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -31,46 +31,46 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/containerInBook"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            app:layout_constraintTop_toTopOf="@+id/bookLayout"
-            app:layout_constraintStart_toStartOf="@+id/bookLayout"
-            app:layout_constraintEnd_toEndOf="@+id/bookLayout"
-            app:layout_constraintBottom_toTopOf="@+id/sperator">
+            app:layout_constraintBottom_toTopOf="@id/sperator"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/img_check"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@id/containerInBook"
+                app:layout_constraintTop_toTopOf="@id/containerInBook"
                 app:srcCompat="@drawable/ic_check"
                 app:tint="?attr/colorIcon" />
 
             <TextView
-                style="@style/body_small"
                 android:id="@+id/tv_content"
+                style="@style/body_small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{itemName}"
-                app:layout_constraintEnd_toStartOf="@+id/guideline_half"
+                app:layout_constraintBottom_toBottomOf="@id/containerInBook"
+                app:layout_constraintEnd_toStartOf="@id/guideline_half"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/containerInBook"
-                app:layout_constraintTop_toTopOf="@+id/containerInBook"
-                app:layout_constraintBottom_toBottomOf="@+id/containerInBook" />
+                app:layout_constraintStart_toStartOf="@id/containerInBook"
+                app:layout_constraintTop_toTopOf="@id/containerInBook" />
 
             <TextView
-                style="@style/body_small"
                 android:id="@+id/tv_stat"
+                style="@style/body_small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{stat}"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/containerInBook"
+                app:layout_constraintEnd_toEndOf="@id/containerInBook"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/guideline_half"
-                app:layout_constraintTop_toTopOf="@id/containerInBook"
-                app:layout_constraintBottom_toBottomOf="@+id/containerInBook" />
+                app:layout_constraintStart_toEndOf="@id/guideline_half"
+                app:layout_constraintTop_toTopOf="@id/containerInBook" />
 
             <TextView
                 android:id="@+id/tv_price"
@@ -78,11 +78,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{price}"
+                app:layout_constraintBottom_toBottomOf="@+id/containerInBook"
                 app:layout_constraintEnd_toEndOf="@id/containerInBook"
                 app:layout_constraintHorizontal_bias="0.75"
                 app:layout_constraintStart_toEndOf="@id/tv_stat"
-                app:layout_constraintTop_toTopOf="@id/containerInBook"
-                app:layout_constraintBottom_toBottomOf="@+id/containerInBook" />
+                app:layout_constraintTop_toTopOf="@id/containerInBook" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_half"
@@ -97,8 +97,7 @@
             android:id="@+id/sperator"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginHorizontal="8dp"
             android:layout_marginBottom="8dp"
             android:background="?attr/colorSeperator"
             app:layout_constraintBottom_toBottomOf="parent"

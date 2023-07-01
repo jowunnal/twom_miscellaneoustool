@@ -7,23 +7,23 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.miscellaneoustool.app.R
-import com.miscellaneoustool.app.ui.screen.compose.theme.black
-import com.miscellaneoustool.app.ui.screen.compose.theme.white
+import com.miscellaneoustool.app.ui.screen.compose.theme.Typography
 import com.miscellaneoustool.app.utils.TwomIllustratedBookPreview
-import com.miscellaneoustool.app.utils.tu
 
 @Composable
 fun DefaultAppBar(
@@ -35,8 +35,8 @@ fun DefaultAppBar(
         modifier = modifier
             .fillMaxWidth()
             .height(56.dp)
-            .background(white)
-            .padding(horizontal = 16.dp),
+            .shadow(4.dp, RectangleShape, clip = false)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         Image(
             modifier = Modifier
@@ -47,17 +47,17 @@ fun DefaultAppBar(
                     indication = rememberRipple(bounded = false, radius = 18.dp)
                 ),
             painter = painterResource(id = R.drawable.ic_arrow_left),
-            contentDescription = "back"
+            contentDescription = "back",
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
         )
         Text(
             modifier = Modifier
                 .align(Alignment.Center),
             text = title,
-            color = black,
-            fontSize = 16.tu,
-            fontWeight = FontWeight.Bold,
+            style = Typography.headlineSmall,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }

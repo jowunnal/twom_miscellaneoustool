@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="header_large">
-        <item name="fontFamily">@font/noto_sans_bold</item>
+        <item name="fontFamily">@font/nanum_gothic_bold</item>
         <item name="android:textSize">24dp</item>
         <item name="lineHeight">32dp</item>
         <item name="android:letterSpacing">0.</item>
     </style>
     <style name="header_medium">
-        <item name="fontFamily">@font/noto_sans_medium</item>
+        <item name="fontFamily">@font/nanum_gothic_bold</item>
         <item name="android:textSize">22dp</item>
         <item name="lineHeight">28dp</item>
         <item name="android:letterSpacing">0.</item>
     </style>
     <style name="header_small">
-        <item name="fontFamily">@font/noto_sans_medium</item>
+        <item name="fontFamily">@font/nanum_gothic_bold</item>
         <item name="android:textSize">18dp</item>
         <item name="lineHeight">24dp</item>
         <item name="android:letterSpacing">0.</item>
     </style>
     <style name="body_large">
-        <item name="fontFamily">@font/noto_sans_bold</item>
+        <item name="fontFamily">@font/nanum_gothic_medium</item>
         <item name="android:textSize">16dp</item>
         <item name="lineHeight">22dp</item>
         <item name="android:letterSpacing">0.</item>
     </style>
     <style name="body_medium">
-        <item name="fontFamily">@font/noto_sans_medium</item>
+        <item name="fontFamily">@font/nanum_gothic_medium</item>
         <item name="android:textSize">14dp</item>
         <item name="lineHeight">18dp</item>
         <item name="android:letterSpacing">0.</item>
     </style>
     <style name="body_small">
-        <item name="fontFamily">@font/noto_sans_medium</item>
+        <item name="fontFamily">@font/nanum_gothic_medium</item>
         <item name="android:textSize">12dp</item>
-        <item name="lineHeight">14dp</item>
+        <item name="lineHeight">16dp</item>
         <item name="android:letterSpacing">0.</item>
     </style>
 </resources>

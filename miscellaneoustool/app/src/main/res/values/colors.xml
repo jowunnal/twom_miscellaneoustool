@@ -46,11 +46,11 @@
     <color name="grass">#D6F7AC</color>
     <color name="home_font_color">#79BFC8</color>
 
-    <color name="white_gray">#FFEAEAEA</color>
+    <color name="white_gray">#FFDADDE1</color>
     <color name="deep_gray">#FF575757</color>
     <color name="middle_gray">#FF8A8A8A</color>
 
-    <color name="red">#E0302D</color>
-    <color name="blue">#007AFF</color>
+    <color name="red">#FFE0302D</color>
+    <color name="blue">#FF007AFF</color>
 
 </resources>

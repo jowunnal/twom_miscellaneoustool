@@ -1,28 +1,58 @@
 package com.miscellaneoustool.app.ui.screen.compose.theme
 
-import androidx.compose.material.Typography
+import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import com.miscellaneoustool.app.R
+import com.miscellaneoustool.app.utils.tu
 
-// Set of Material typography styles to start with
-val Typography = Typography(
-    body1 = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
-    )
-    /* Other default text styles to override
-    button = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.W500,
-        fontSize = 14.sp
+
+val font = FontFamily(
+    Font(R.font.nanum_gothic_bold, FontWeight.Bold),
+    Font(R.font.nanum_gothic_medium, FontWeight.Medium),
+    Font(R.font.nanum_gothic_light, FontWeight.Light)
+)
+
+@Stable
+val Typography @Composable get() = Typography(
+    headlineLarge = TextStyle(
+        fontFamily = font,
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.tu,
+        lineHeight = 26.tu
     ),
-    caption = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
+    headlineMedium = TextStyle(
+        fontFamily = font,
+        fontWeight = FontWeight.Bold,
+        fontSize = 21.tu,
+        lineHeight = 23.tu
+    ),
+    headlineSmall = TextStyle(
+        fontFamily = font,
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.tu,
+        lineHeight = 20.tu
+    ),
+    bodyLarge = TextStyle(
+        fontFamily = font,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.tu,
+        lineHeight = 18.tu
+    ),
+    bodyMedium = TextStyle(
+        fontFamily = font,
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.tu,
+        lineHeight = 16.tu
+    ),
+    bodySmall = TextStyle(
+        fontFamily = font,
+        fontWeight = FontWeight.Medium,
+        fontSize = 12.tu,
+        lineHeight = 14.tu
     )
-    */
 )
