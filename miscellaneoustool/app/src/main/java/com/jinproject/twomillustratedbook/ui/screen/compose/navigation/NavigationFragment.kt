@@ -11,7 +11,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.Purchase
 import com.google.android.gms.ads.AdError
@@ -23,37 +22,36 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.jinproject.twomillustratedbook.R
+import com.jinproject.twomillustratedbook.ui.MainActivity
 import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.MiscellaneousToolTheme
 import com.jinproject.twomillustratedbook.ui.screen.gear.GearViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NavigationFragment : Fragment() {
+class NavigationFragment : Fragment(), MainActivity.OnBillingCallback {
     private var mRewardedAd: RewardedAd? = null
     private val gearViewModel: GearViewModel by viewModels()
-    private val billingModule by lazy {
-        BillingModule(requireActivity(), viewLifecycleOwner.lifecycleScope,object: BillingModule.BillingCallback {
-            override fun onSuccess(purchase: Purchase) {
-                gearViewModel.emitSnackBar(SnackBarMessage(
-                    headerMessage = "${purchase.products.first()} 상품의 구매가 완료되었어요."
-                ))
-            }
 
-            override fun onFailure(errorCode: Int) {
-                Log.e("test","error : $errorCode")
-                gearViewModel.emitSnackBar(SnackBarMessage(
-                    headerMessage = "구매 실패",
-                    contentMessage = when(errorCode) {
-                        1 -> "취소를 하셨어요."
-                        2,3,4 -> "유효하지 않은 상품 이에요."
-                        5,6 -> "잘못된 상품 이에요."
-                        7 -> "이미 보유하고 있는 상품 이에요."
-                        else -> "네트워크 에러로 인해 실패했어요."
-                    }
-                ))
+    override fun onSuccess(purchase: Purchase) {
+        gearViewModel.emitSnackBar(SnackBarMessage(
+            headerMessage = "${purchase.products.first()} 상품의 구매가 완료되었어요."
+        ))
+    }
+
+    override fun onFailure(errorCode: Int) {
+        Log.e("test","error : $errorCode")
+        gearViewModel.emitSnackBar(SnackBarMessage(
+            headerMessage = "구매 실패",
+            contentMessage = when(errorCode) {
+                1 -> "취소를 하셨어요."
+                2,3,4 -> "유효하지 않은 상품 이에요."
+                5,6 -> "잘못된 상품 이에요."
+                7 -> "이미 보유하고 있는 상품 이에요."
+                else -> "네트워크 에러로 인해 실패했어요."
             }
-        })}
+        ))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,14 +73,13 @@ class NavigationFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        billingModule.queryPurchase()
-        super.onResume()
-    }
-
     @Composable
     private fun Content() {
         hideTopBar()
+        val activity = (activity as MainActivity).apply {
+            setBillingCallback(this@NavigationFragment)
+        }
+        val billingModule = activity.billingModule
         NavigationGraph(
             navController = rememberNavController(),
             changeVisibilityBottomNavigationBar = { bool -> changeVisibilityBottomNavigationBar(bool) },
