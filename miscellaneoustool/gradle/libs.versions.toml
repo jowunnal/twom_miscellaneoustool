@@ -20,6 +20,7 @@ android-test-ext = "1.1.5"
 espresso = "3.5.1"
 gms-service-ads = "22.1.0"
 glide = "4.15.1"
+billing-version = "6.0.1"
 
 # plugin
 androidStudioGradlePlugin = "7.4.2"
@@ -77,6 +78,9 @@ jUnit = { group = "junit", name = "junit", version.ref = "junit" }
 test-ext = { group = "androidx.test.ext", name = "junit", version.ref = "android-test-ext" }
 test-espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
 
+billing-client = { group = "com.android.billingclient", name = "billing", version.ref = "billing-version"}
+billing-ktx = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billing-version"}
+
 [bundles]
 navigation = ["navigation-fragment","navigation-ui","navigation-compose"]
 compose = ["compose-material3", "compose-material", "compose-foundation", "compose-ui", "compose-ui-preview", "compose-viewBinding"]
@@ -85,6 +89,7 @@ coroutines = ["coroutines"]
 hilt = ["dagger-hilt-android"]
 datastore = ["datastore", "protobuf"]
 testing = ["jUnit", "test-ext", "test-espresso"]
+billing = ["billing-client", "billing-ktx"]
 
 [plugins]
 

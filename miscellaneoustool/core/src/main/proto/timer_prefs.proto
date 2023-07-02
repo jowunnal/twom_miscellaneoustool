@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option java_package = "com.miscellaneoustool.core";
+option java_package = "com.jinproject.core";
 option java_multiple_files = true;
 
 message TimerPreferences {
@@ -10,4 +10,6 @@ message TimerPreferences {
   string recently_selected_boss_name = 4;
   repeated string frequently_used_boss_list = 5;
   int32 font_size = 6;
+  int32 x_pos = 7;
+  int32 y_pos = 8;
 }

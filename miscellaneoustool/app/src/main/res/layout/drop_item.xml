@@ -10,7 +10,7 @@
 
         <variable
             name="monster"
-            type="com.miscellaneoustool.app.ui.screen.droplist.monster.item.MonsterState" />
+            type="com.jinproject.twomillustratedbook.ui.screen.droplist.monster.item.MonsterState" />
 
     </data>
 

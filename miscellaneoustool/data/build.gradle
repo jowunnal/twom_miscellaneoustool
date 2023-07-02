@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace 'com.miscellaneoustool.data'
+    namespace 'com.jinproject.data'
     compileSdk 33
 
     compileOptions {

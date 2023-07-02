@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.miscellaneoustool.domain'
+    namespace 'com.jinproject.domain'
     compileSdk 33
 
 }
