@@ -10,7 +10,7 @@
             name="navController"
             type="androidx.navigation.NavController" />
 
-        <import type="com.miscellaneoustool.app.R" />
+        <import type="com.jinproject.twomillustratedbook.R" />
 
     </data>
 

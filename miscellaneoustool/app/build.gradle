@@ -10,16 +10,16 @@ plugins {
 }
 
 android {
-    namespace 'com.miscellaneoustool.app'
-    compileSdkVersion 33
+    namespace 'com.jinproject.twomillustratedbook'
+    compileSdkVersion 34
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.miscellaneoustool.app"
+        applicationId "com.jinproject.twomillustratedbook"
         minSdkVersion 26
-        targetSdkVersion 33
-        versionCode 18
-        versionName "1.7.3"
+        targetSdkVersion 34
+        versionCode 20
+        versionName "1.7.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -61,7 +61,7 @@ android {
 }
 
 dependencies {
-    implementation implementation(project(':data',))
+    implementation implementation(project(':data'))
     implementation(project(":domain"))
     implementation(project(":core"))
 
@@ -93,11 +93,14 @@ dependencies {
 
     implementation(libs.bumptech.glide)
 
+    implementation(libs.bundles.billing)
+
     //firebase
     implementation platform('com.google.firebase:firebase-bom:30.2.0')
     implementation 'com.google.firebase:firebase-core:21.1.1'
     implementation 'com.google.firebase:firebase-database:20.2.2'
     implementation 'com.google.firebase:firebase-messaging:23.1.2'
+    implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.9.6'
 
     // compose NumberPicker
     implementation "com.chargemap.compose:numberpicker:1.0.3"

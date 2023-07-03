@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace 'com.miscellaneoustool.core'
+    namespace 'com.jinproject.core'
     compileSdk 33
 
 }
