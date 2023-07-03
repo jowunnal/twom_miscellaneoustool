@@ -11,13 +11,13 @@ plugins {
 
 android {
     namespace 'com.jinproject.twomillustratedbook'
-    compileSdkVersion 33
+    compileSdkVersion 34
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.jinproject.twomillustratedbook"
         minSdkVersion 26
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 20
         versionName "1.7.5"
 

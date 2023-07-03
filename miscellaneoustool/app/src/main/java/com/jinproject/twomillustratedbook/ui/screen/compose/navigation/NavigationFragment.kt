@@ -1,10 +1,13 @@
 package com.jinproject.twomillustratedbook.ui.screen.compose.navigation
 
+import android.app.AlarmManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
@@ -58,6 +61,16 @@ class NavigationFragment : Fragment(), MainActivity.OnBillingCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadRewardedAd()
+    }
+
+    override fun onResume() {
+        if(Build.VERSION.SDK_INT >= 31) {
+            val alarmManager = requireActivity().getSystemService(AlarmManager::class.java)
+            if (!alarmManager.canScheduleExactAlarms()) {
+                Toast.makeText(requireContext(),"권한을 거부하시면 정확한 알람을 받으실 수 없습니다.",Toast.LENGTH_LONG).show()
+            }
+        }
+        super.onResume()
     }
 
     override fun onCreateView(

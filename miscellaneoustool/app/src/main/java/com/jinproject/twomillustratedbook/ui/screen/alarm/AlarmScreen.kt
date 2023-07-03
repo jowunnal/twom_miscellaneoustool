@@ -1,12 +1,22 @@
 package com.jinproject.twomillustratedbook.ui.screen.alarm
 
+import android.app.AlarmManager
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.getSystemService
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
 import com.jinproject.twomillustratedbook.ui.screen.alarm.component.AlarmBottomSheetContent
 import com.jinproject.twomillustratedbook.ui.screen.alarm.component.AlarmTopAppBar
@@ -20,15 +30,69 @@ import com.jinproject.twomillustratedbook.ui.screen.compose.component.DialogStat
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.HorizontalDivider
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
 import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+
+@Composable
+fun AlarmScreen(
+    alarmViewModel: AlarmViewModel = hiltViewModel(),
+    context: Context = LocalContext.current,
+    changeVisibilityBottomNavigationBar: (Boolean) -> Unit,
+    showRewardedAd: () -> Unit,
+    onNavigateToGear: () -> Unit,
+    onNavigateToWatch: () -> Unit
+) {
+    changeVisibilityBottomNavigationBar(true)
+
+    val alarmUiState by alarmViewModel.uiState.collectAsStateWithLifecycle()
+    val snackBarMessage by alarmViewModel.snackBarMessage.collectAsStateWithLifecycle(
+        initialValue = SnackBarMessage.getInitValues(),
+        lifecycleOwner = LocalLifecycleOwner.current
+    )
+
+    AlarmScreen(
+        alarmUiState = alarmUiState,
+        snackBarMessage = snackBarMessage,
+        addBossToFrequentlyUsedList = alarmViewModel::addBossToFrequentlyUsedList,
+        removeBossFromFrequentlyUsedList = alarmViewModel::removeBossFromFrequentlyUsedList,
+        onStartAlarm = { bossName ->
+            if(Build.VERSION.SDK_INT >= 31) {
+                val alarmManager = context.getSystemService<AlarmManager>()!!
+                when {
+                    alarmManager.canScheduleExactAlarms() -> {
+                        alarmViewModel::setAlarm.invoke(bossName)
+                    }
+                    else -> {
+                        context.startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
+                    }
+                }
+            } else {
+                alarmViewModel::setAlarm.invoke(bossName)
+            }
+        },
+        onClearAlarm = alarmViewModel::clearAlarm,
+        setHourChanged = alarmViewModel::setHourChanged,
+        setMinutesChanged = alarmViewModel::setMinutesChanged,
+        setSecondsChanged = alarmViewModel::setSecondsChanged,
+        setSelectedBossName = alarmViewModel::setSelectedBossName,
+        setRecentlySelectedBossClassifiedChanged = alarmViewModel::setRecentlySelectedBossClassified,
+        setRecentlySelectedBossNameChanged = alarmViewModel::setRecentlySelectedBossName,
+        onNavigateToGear = onNavigateToGear,
+        onNavigateToWatch = onNavigateToWatch,
+        showRewardedAd = showRewardedAd
+    )
+}
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AlarmScreen(
+private fun AlarmScreen(
     alarmUiState: AlarmUiState,
     snackBarMessage: SnackBarMessage,
     addBossToFrequentlyUsedList: (String) -> Unit,
     removeBossFromFrequentlyUsedList: (String) -> Unit,
+    scaffoldState:ScaffoldState = rememberScaffoldState(),
+    coroutineScope:CoroutineScope = rememberCoroutineScope(),
+    context: Context = LocalContext.current,
     onStartAlarm: (String) -> Unit,
     onClearAlarm: (Int, String) -> Unit,
     setHourChanged: (Int) -> Unit,
@@ -43,8 +107,7 @@ fun AlarmScreen(
 ) {
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
-    val scaffoldState = rememberScaffoldState()
-    val coroutineScope = rememberCoroutineScope()
+
     val showDialogState = remember {
         mutableStateOf(false)
     }
