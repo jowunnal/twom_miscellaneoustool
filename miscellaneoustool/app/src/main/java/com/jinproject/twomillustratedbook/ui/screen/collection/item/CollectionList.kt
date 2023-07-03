@@ -120,7 +120,6 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
                     false
                 )
                 adapter = collectionListAdapter
-                itemAnimator = null
             }
         }
 

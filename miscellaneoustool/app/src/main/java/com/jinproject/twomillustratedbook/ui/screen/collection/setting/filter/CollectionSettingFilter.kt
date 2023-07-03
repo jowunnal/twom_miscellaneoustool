@@ -51,7 +51,6 @@ class CollectionSettingFilter : BaseFragment<CollectionListBinding>() {
                     false
                 )
                 adapter = collectionSettingFilterAdapter
-                itemAnimator = null
             }
         }
 
