@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.Purchase
 import com.google.android.gms.ads.AdError
@@ -27,6 +28,7 @@ import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.MiscellaneousToolTheme
 import com.jinproject.twomillustratedbook.ui.screen.gear.GearViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NavigationFragment : Fragment(), MainActivity.OnBillingCallback {
@@ -84,8 +86,10 @@ class NavigationFragment : Fragment(), MainActivity.OnBillingCallback {
             navController = rememberNavController(),
             changeVisibilityBottomNavigationBar = { bool -> changeVisibilityBottomNavigationBar(bool) },
             showRewardedAd = {
-                showRewardedAd(mRewardedAd,
-                billingModule.purchasableProducts.value.find { it.productId == "ad_remove" } == null)
+                showRewardedAd(
+                    mRewardedAd = mRewardedAd,
+                    billingModule = billingModule
+                )
             },
             billingModule = billingModule,
             gearViewModel = gearViewModel
@@ -142,15 +146,19 @@ class NavigationFragment : Fragment(), MainActivity.OnBillingCallback {
         }
     }
 
-    private fun showRewardedAd(mRewardedAd: RewardedAd?, state: Boolean) {
-        mRewardedAd?.let { ad ->
-            if(!state) {
-                ad.show(requireActivity(), OnUserEarnedRewardListener { rewardItem ->
-                    val rewardAmount = rewardItem.amount
-                    val rewardType = rewardItem.type
-                })
+    private fun showRewardedAd(mRewardedAd: RewardedAd?, billingModule: BillingModule) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            billingModule.queryPurchase { purchaseList ->
+                if(billingModule.checkPurchased(purchaseList = purchaseList, productId = "ad_remove")) {
+                    mRewardedAd?.let { ad ->
+                        ad.show(requireActivity(), OnUserEarnedRewardListener { rewardItem ->
+                            val rewardAmount = rewardItem.amount
+                            val rewardType = rewardItem.type
+                        })
+                    } ?: run {}
+                }
             }
-        } ?: run {}
+        }
     }
 
     override fun onDestroy() {

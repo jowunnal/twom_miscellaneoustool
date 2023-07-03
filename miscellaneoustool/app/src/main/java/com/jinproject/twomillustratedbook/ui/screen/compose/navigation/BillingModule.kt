@@ -20,12 +20,17 @@ import com.android.billingclient.api.queryProductDetails
 import com.android.billingclient.api.queryPurchaseHistory
 import com.jinproject.twomillustratedbook.ui.screen.compose.navigation.BillingModule.Product.Companion.findProductById
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * 결제 관리 모듈 클래스
+ * @param context 결제 객체생성에 필요
+ * @param lifeCycleScope 수행될 코루틴 스쿠프
+ * @param callback 결제 수행 콜백
+ * @property purchasableProducts 구입 가능한 상품들
+ * @property isReady 결제를 수행하기에 준비된 상태인지의 여부
+ */
 @Stable
 class BillingModule(
     private val context: Activity,
@@ -33,9 +38,8 @@ class BillingModule(
     private val callback: BillingCallback
 ) {
 
-    private val _purchasableProducts = MutableStateFlow(listOf<ProductDetails>())
-    val purchasableProducts get() = _purchasableProducts.asStateFlow()
-
+    val purchasableProducts = ArrayList<ProductDetails>()
+    var isReady: Boolean = false
 
     private val purChasedUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
         when(billingResult.responseCode) {
@@ -60,21 +64,27 @@ class BillingModule(
         .build()
 
     init {
-        billingClient.startConnection(object: BillingClientStateListener {
-            override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    lifeCycleScope.launch(Dispatchers.IO) {
-                        getPurchasableProducts()
-                    }
-                } else {
-                    callback.onFailure(billingResult.responseCode)
-                }
-            }
+        initBillingClient(3)
+    }
 
-            override fun onBillingServiceDisconnected() {
-                Log.e("test","disconnected")
-            }
-        })
+    fun initBillingClient(maxCount: Int) {
+        if(maxCount > 0) {
+            billingClient.startConnection(object: BillingClientStateListener {
+                override fun onBillingSetupFinished(billingResult: BillingResult) {
+                    if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                        callback.onReady()
+                        isReady = true
+                    } else {
+                        callback.onFailure(billingResult.responseCode)
+                    }
+                }
+
+                override fun onBillingServiceDisconnected() {
+                    initBillingClient(maxCount - 1)
+                    Log.e("test","disconnected")
+                }
+            })
+        }
     }
 
     /**
@@ -103,16 +113,15 @@ class BillingModule(
             billingClient.queryProductDetails(params.build())
         }
 
-        _purchasableProducts.update {
+        purchasableProducts.clear()
+        purchasableProducts.addAll(
             if(productDetailsResult.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 (productDetailsResult.productDetailsList?.filter { productDetail ->
-                    kotlin.runCatching {
-                        productDetail.productId.findProductById()
-                    }.getOrNull() != null
+                    productDetail.productId.findProductById() != null
                 } ?: emptyList())
             } else
                 emptyList()
-        }
+        )
     }
 
     /**
@@ -134,6 +143,11 @@ class BillingModule(
         billingClient.launchBillingFlow(context, billingFlowParams)
     }
 
+    /**
+     * 구매 처리
+     * @param purchase 구매 상품
+     * @param isConsume 소비 여부
+     */
     private suspend fun handlePurchase(purchase: Purchase, isConsume: Boolean) {
         when(isConsume) {
             true -> {
@@ -171,27 +185,42 @@ class BillingModule(
     }
 
     /**
-    구매 기록 조회
+     * 구매 기록 조회
+     * @param doOnPurchaseList 구매 기록에 따라 처리할 콜백
      */
-    fun queryPurchase() {
+    fun queryPurchase(doOnPurchaseList: (List<Purchase>) -> Unit) {
         val params = QueryPurchasesParams.newBuilder()
             .setProductType(BillingClient.ProductType.INAPP)
 
         billingClient.queryPurchasesAsync(params.build()) { billingResult, purchaseList ->
             if(billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                purchaseList.forEach { purchase ->
-                    if(purchase.isAcknowledged && purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-                        lifeCycleScope.launch {
-                            handlePurchase(purchase = purchase, purchase.products.first().findProductById()!!.isConsume)
-                        }
-                    }
-                    if(purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-                        _purchasableProducts.update { it.filter { product -> product.productId !in purchase.products } }
-                    }
+                doOnPurchaseList(purchaseList)
+            }
+        }
+    }
+
+    /**
+     * 결제 재확인(승인)
+     * @param purchaseList 구매 목록
+     */
+    fun approvePurchased(purchaseList: List<Purchase>) {
+        purchaseList.forEach { purchase ->
+            if(!purchase.isAcknowledged && purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+                lifeCycleScope.launch {
+                    handlePurchase(purchase = purchase, purchase.products.first().findProductById()!!.isConsume)
                 }
             }
         }
     }
+
+    /**
+     * 구매 목록의 상품들이 구매했는지의 여부를 확인
+     * @param purchaseList 구매 목록
+     * @param productId 비교할 상품 id
+     */
+    fun checkPurchased(purchaseList: List<Purchase>, productId: String):Boolean =
+        purchaseList.none { purchase -> purchase.purchaseState == Purchase.PurchaseState.PURCHASED && purchase.products.contains(productId) }
+
 
     suspend fun queryPurchaseLatest() {
         val params = QueryPurchaseHistoryParams.newBuilder()
@@ -201,6 +230,7 @@ class BillingModule(
     }
 
     interface BillingCallback {
+        fun onReady()
         fun onSuccess(purchase: Purchase)
         fun onFailure(errorCode: Int)
     }
@@ -210,7 +240,7 @@ class BillingModule(
         SUPPORT("support", BillingClient.ProductType.INAPP, true);
 
         companion object {
-            fun String.findProductById() = values().find { value -> value.id == this }
+            fun String.findProductById() = kotlin.runCatching { values().find { value -> value.id == this } }.getOrNull()
         }
     }
 }

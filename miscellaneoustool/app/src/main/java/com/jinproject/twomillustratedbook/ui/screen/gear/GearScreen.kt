@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -53,7 +54,10 @@ fun GearScreen(
         initialValue = SnackBarMessage.getInitValues(),
         lifecycleOwner = LocalLifecycleOwner.current
     )
-    val availableProducts by billingModule.purchasableProducts.collectAsStateWithLifecycle()
+
+    val availableProducts = remember {
+        billingModule.purchasableProducts
+    }
 
     GearScreen(
         gearUiState = gearUiState,
