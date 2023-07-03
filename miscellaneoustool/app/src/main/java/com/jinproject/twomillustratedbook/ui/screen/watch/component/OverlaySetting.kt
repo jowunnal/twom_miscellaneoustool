@@ -11,9 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.chargemap.compose.numberpicker.NumberPicker
+import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.MiscellaneousToolTheme
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
 
@@ -33,21 +35,21 @@ fun OverlaySetting(
         verticalAlignment = Alignment.CenterVertically
     ) {
         NumberPicker(
-            title = "폰트 크기 조절",
+            title = stringResource(id = R.string.watch_setting_fontsize),
             number = fontSize,
             setNumber = setFontSize,
             range = 1..32
         )
         Spacer(modifier = Modifier.weight(1f))
         NumberPicker(
-            title = "가로축 이동",
+            title = stringResource(id = R.string.watch_setting_move_x),
             number = xPos,
             setNumber = setXPos,
             range = -(displayMetrics.widthPixels / 2)..(displayMetrics.widthPixels / 2) step 5
         )
         Spacer(modifier = Modifier.weight(1f))
         NumberPicker(
-            title = "세로축 이동",
+            title = stringResource(id = R.string.watch_setting_move_y),
             number = yPos,
             setNumber = setYPos,
             range = 0..displayMetrics.heightPixels / 2 step 5

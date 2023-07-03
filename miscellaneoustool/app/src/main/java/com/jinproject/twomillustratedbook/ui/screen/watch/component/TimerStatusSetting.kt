@@ -28,9 +28,11 @@ import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
 import com.jinproject.twomillustratedbook.ui.screen.watch.item.ButtonStatus
@@ -61,7 +63,7 @@ fun TimeStatusSetting(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "현재 시간 항상 보기",
+            text = stringResource(id = R.string.watch_setting_title),
             style = Typography.bodyLarge,
             color = MaterialTheme.colorScheme.outline,
             modifier = Modifier.weight(1f)
@@ -89,13 +91,14 @@ fun TimeStatusSetting(
                                     startOverlayService(true)
                                     setWatchStatus(ButtonStatus.OFF)
                                 }
+
                                 false -> {}
                             }
                         },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "OFF",
+                        text = stringResource(id = R.string.off),
                         color = MaterialTheme.colorScheme.onPrimary,
                         style = Typography.bodyLarge
                     )
@@ -113,13 +116,14 @@ fun TimeStatusSetting(
                                     startOverlayService(false)
                                     setWatchStatus(ButtonStatus.ON)
                                 }
+
                                 false -> {}
                             }
                         },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "ON",
+                        text = stringResource(id = R.string.on),
                         color = MaterialTheme.colorScheme.primary,
                         style = Typography.bodyLarge
                     )

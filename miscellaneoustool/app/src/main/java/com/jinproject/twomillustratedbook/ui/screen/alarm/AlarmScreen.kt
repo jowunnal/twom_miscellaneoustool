@@ -92,7 +92,6 @@ private fun AlarmScreen(
     removeBossFromFrequentlyUsedList: (String) -> Unit,
     scaffoldState:ScaffoldState = rememberScaffoldState(),
     coroutineScope:CoroutineScope = rememberCoroutineScope(),
-    context: Context = LocalContext.current,
     onStartAlarm: (String) -> Unit,
     onClearAlarm: (Int, String) -> Unit,
     setHourChanged: (Int) -> Unit,

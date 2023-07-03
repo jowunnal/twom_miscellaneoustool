@@ -3,6 +3,7 @@ package com.jinproject.twomillustratedbook.ui.screen.gear
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jinproject.domain.usecase.timer.SetIntervalSettingUsecase
 import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,7 +31,8 @@ data class GearUiState(
 
 @HiltViewModel
 class GearViewModel @Inject constructor(
-    private val timerRepository: com.jinproject.domain.repository.TimerRepository
+    private val timerRepository: com.jinproject.domain.repository.TimerRepository,
+    private val setIntervalSettingUsecase: SetIntervalSettingUsecase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(GearUiState.getInitValue())
@@ -52,15 +54,20 @@ class GearViewModel @Inject constructor(
         }
     }.launchIn(viewModelScope)
 
-    fun setIntervalFirstTimerSetting(minutes: Int) {
-        viewModelScope.launch {
-            timerRepository.setIntervalFirstTimerSetting(minutes)
-        }
+    fun setIntervalFirstTimerSetting(minutes: Int) = _uiState.update { state ->
+        state.copy(intervalFirstTimer = minutes)
     }
 
-    fun setIntervalSecondTimerSetting(minutes: Int) {
+    fun setIntervalSecondTimerSetting(minutes: Int) = _uiState.update { state ->
+        state.copy(intervalSecondTimer = minutes)
+    }
+
+    fun setIntervalTimerSetting() {
         viewModelScope.launch {
-            timerRepository.setIntervalSecondTimerSetting(minutes)
+            setIntervalSettingUsecase(
+                first = uiState.value.intervalFirstTimer,
+                second = uiState.value.intervalSecondTimer
+            )
         }
     }
 

@@ -51,9 +51,10 @@ class CollectionSettingItem : BaseFragment<CollectionSettingItemListBinding>() {
             override fun setOnClickedListener(pos: Int) {
                 CommonDialogFragment.show(
                     fragmentManager = requireActivity().supportFragmentManager,
-                    title = "${listAdapter.getItemInfo(pos).name} 의 가격을 입력해주세요.",
+                    title = "${listAdapter.getItemInfo(pos).name} ${requireContext().getString(R.string.input_price)}",
                     message = "",
-                    positiveButtonText = "변경",
+                    positiveButtonText = requireContext().getString(R.string.change),
+                    negativeButtonText = requireContext().getString(R.string.cancel),
                     listener = object : CommonDialogFragment.Listener() {
                         override fun onPositiveButtonClick(value: String) {
                             if (value.isNotBlank())
@@ -62,7 +63,7 @@ class CollectionSettingItem : BaseFragment<CollectionSettingItemListBinding>() {
                                     price = kotlin.runCatching { value.toInt() }.onFailure { e ->
                                         when (e) {
                                             is NumberFormatException -> {
-                                                Toast.makeText(requireContext(), "아이템의 가격이 허용치를 벗어났습니다.", Toast.LENGTH_LONG).show()
+                                                Toast.makeText(requireContext(), requireContext().getString(R.string.out_of_item_price), Toast.LENGTH_LONG).show()
                                             }
                                             else -> {
                                                 Toast.makeText(requireContext(), "${e.message}", Toast.LENGTH_LONG).show()

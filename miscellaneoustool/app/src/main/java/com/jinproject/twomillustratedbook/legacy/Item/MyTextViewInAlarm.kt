@@ -13,7 +13,7 @@ class MyTextViewInAlarm : androidx.appcompat.widget.AppCompatTextView {
     constructor(ctx: Context, attr: AttributeSet, def: Int) : super(ctx, attr, def)
     // inflater를 통해 만들어지고 theme attribute로 기본스타일을 지정할때
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         this.paint.style = Paint.Style.STROKE //테두리지정
         this.paint.strokeWidth = 6.0F //테두리두께
         this.setTextColor(Color.BLACK) //색깔지정

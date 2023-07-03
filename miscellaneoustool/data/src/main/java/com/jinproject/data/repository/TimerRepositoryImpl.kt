@@ -34,12 +34,8 @@ class TimerRepositoryImpl @Inject constructor(
         cacheTimerDataSource.setRecentlySelectedBossName(bossName)
     }
 
-    override suspend fun setIntervalFirstTimerSetting(minutes: Int) {
-        cacheTimerDataSource.setIntervalFirstTimerSetting(minutes)
-    }
-
-    override suspend fun setIntervalSecondTimerSetting(minutes: Int) {
-        cacheTimerDataSource.setIntervalSecondTimerSetting(minutes)
+    override suspend fun setIntervalTimerSetting(first: Int, second: Int) {
+        cacheTimerDataSource.setIntervalTimerSetting(first, second)
     }
 
     override suspend fun setTimerSetting(fontSize: Int, xPos: Int, yPos: Int) {

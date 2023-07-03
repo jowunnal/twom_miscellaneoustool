@@ -1,9 +1,16 @@
 package com.jinproject.twomillustratedbook.ui.screen.alarm.component
 
+import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
@@ -13,15 +20,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jinproject.domain.model.MonsterType
+import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultButton
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.DialogState
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.DropDownMenuCustom
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
 import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
-import com.jinproject.domain.model.MonsterType
 
 @Composable
 fun BossSelection(
@@ -51,7 +61,7 @@ fun BossSelection(
         Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.scrim)
         VerticalSpacer(height = 16.dp)
         Text(
-            text = "자주 사용하는 보스 목록",
+            text = stringResource(id = R.string.watch_title_recently_bosslist),
             style = Typography.headlineSmall,
             color = MaterialTheme.colorScheme.outline,
             modifier = Modifier
@@ -92,7 +102,7 @@ private fun BossSelectionHeader(
                 modifier = Modifier.weight(1f)
             ) {
                 DropDownMenuCustom(
-                    label = "보스 분류",
+                    label = stringResource(id = R.string.alarm_classify_boss),
                     text = recentlySelectedBossClassified,
                     items = MonsterType.values().toMutableList()
                         .apply { remove(MonsterType.NORMAL) }
@@ -108,7 +118,7 @@ private fun BossSelectionHeader(
                 modifier = Modifier.weight(1f)
             ) {
                 DropDownMenuCustom(
-                    label = "보스 선택",
+                    label = stringResource(id = R.string.alarm_selectboss),
                     text = recentlySelectedBossName,
                     items = bossNameList,
                     setTextChanged = { item -> setRecentlySelectedBossNameChanged(item) }
@@ -117,7 +127,7 @@ private fun BossSelectionHeader(
         }
         VerticalSpacer(height = 20.dp)
         DefaultButton(
-            content = "추가하기",
+            content = stringResource(id = R.string.addition_do),
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { addBossToFrequentlyUsedList(recentlySelectedBossName) }
@@ -129,6 +139,7 @@ private fun BossSelectionHeader(
 @Composable
 private fun BossSelectionItem(
     bossName: String,
+    context: Context = LocalContext.current,
     onClickBossItem: (String) -> Unit,
     removeBossFromFrequentlyUsedList: (String) -> Unit,
     onOpenDialog: (DialogState) -> Unit,
@@ -146,9 +157,9 @@ private fun BossSelectionItem(
                 onLongClick = {
                     onOpenDialog(
                         DialogState(
-                            header = "$bossName 를 삭제 하시겠습니까?",
-                            positiveMessage = "예",
-                            negativeMessage = "아니오",
+                            header = "$bossName ${context.getString(R.string.delete_something)}",
+                            positiveMessage = context.getString(R.string.yes),
+                            negativeMessage = context.getString(R.string.no),
                             onPositiveCallback = {
                                 removeBossFromFrequentlyUsedList(bossName)
                                 onCloseDialog()

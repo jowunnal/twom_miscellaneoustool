@@ -16,10 +16,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimerState
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultAppBar
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultButton
@@ -80,7 +82,7 @@ private fun WatchScreen(
     DefaultLayout(
         topBar = {
             DefaultAppBar(
-                title = "현재 시간 보기 설정",
+                title = stringResource(id = R.string.watch_appbar_title),
                 onBackClick = onNavigatePopBackStack
             )
         },
@@ -131,12 +133,12 @@ private fun WatchScreen(
                 )
 
                 DefaultButton(
-                    content = "설정하기",
+                    content = stringResource(id = R.string.set_do),
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
                             setTimerSetting()
-                            if(uiState.watchStatus == ButtonStatus.ON)
+                            if (uiState.watchStatus == ButtonStatus.ON)
                                 context.startOverlayService(
                                     status = false,
                                     fontSize = uiState.fontSize,
@@ -149,7 +151,7 @@ private fun WatchScreen(
 
                 VerticalSpacer(height = 26.dp)
                 Text(
-                    text = "자주 사용하는 보스 목록",
+                    text = stringResource(id = R.string.watch_title_recently_bosslist),
                     style = Typography.bodyLarge,
                     color = MaterialTheme.colorScheme.outline,
                     modifier = Modifier

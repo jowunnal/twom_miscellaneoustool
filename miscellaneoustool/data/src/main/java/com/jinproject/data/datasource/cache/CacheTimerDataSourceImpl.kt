@@ -53,18 +53,11 @@ class CacheTimerDataSourceImpl @Inject constructor(private val dataStorePrefs: D
         }
     }
 
-    override suspend fun setIntervalFirstTimerSetting(minutes: Int) {
+    override suspend fun setIntervalTimerSetting(first: Int, second: Int) {
         dataStorePrefs.updateData { prefs ->
             prefs.toBuilder()
-                .setIntervalFirstTimerSetting(minutes)
-                .build()
-        }
-    }
-
-    override suspend fun setIntervalSecondTimerSetting(minutes: Int) {
-        dataStorePrefs.updateData { prefs ->
-            prefs.toBuilder()
-                .setIntervalSecondTimerSetting(minutes)
+                .setIntervalFirstTimerSetting(first)
+                .setIntervalSecondTimerSetting(second)
                 .build()
         }
     }

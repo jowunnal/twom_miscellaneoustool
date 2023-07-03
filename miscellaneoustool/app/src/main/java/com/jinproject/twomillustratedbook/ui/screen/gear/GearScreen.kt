@@ -1,5 +1,6 @@
 package com.jinproject.twomillustratedbook.ui.screen.gear
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.SnackbarDuration
@@ -19,7 +21,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,10 +32,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.billingclient.api.ProductDetails
 import com.chargemap.compose.numberpicker.NumberPicker
+import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultAppBar
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultButton
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultLayout
+import com.jinproject.twomillustratedbook.ui.screen.compose.component.HorizontalDivider
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.HorizontalSpacer
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
 import com.jinproject.twomillustratedbook.ui.screen.compose.navigation.BillingModule
@@ -66,25 +72,29 @@ fun GearScreen(
         purchaseInApp = billingModule::purchase,
         setIntervalFirstTimerSetting = gearViewModel::setIntervalFirstTimerSetting,
         setIntervalSecondTimerSetting = gearViewModel::setIntervalSecondTimerSetting,
+        setIntervalTimerSetting = gearViewModel::setIntervalTimerSetting,
         onNavigatePopBackStack = onNavigatePopBackStack,
         emitSnackBar = gearViewModel::emitSnackBar
     )
 }
+
 @Composable
 private fun GearScreen(
     gearUiState: GearUiState,
     snackBarMessage: SnackBarMessage,
     availableProducts: List<ProductDetails>,
+    context: Context = LocalContext.current,
     purchaseInApp: (ProductDetails) -> Unit,
     setIntervalFirstTimerSetting: (Int) -> Unit,
     setIntervalSecondTimerSetting: (Int) -> Unit,
+    setIntervalTimerSetting: () -> Unit,
     onNavigatePopBackStack: () -> Unit,
     emitSnackBar: (SnackBarMessage) -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
 
     if (snackBarMessage.headerMessage.isNotBlank())
-        LaunchedEffect(key1 = snackBarMessage) {
+        LaunchedEffect(key1 = snackBarMessage.headerMessage) {
             scaffoldState.snackbarHostState.showSnackbar(
                 message = snackBarMessage.headerMessage,
                 actionLabel = snackBarMessage.contentMessage,
@@ -95,7 +105,7 @@ private fun GearScreen(
     DefaultLayout(
         topBar = {
             DefaultAppBar(
-                title = "알람 설정",
+                title = stringResource(id = R.string.alarm_setting),
                 onBackClick = onNavigatePopBackStack
             )
         },
@@ -108,29 +118,64 @@ private fun GearScreen(
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             SettingIntervalItem(
-                headerText = "첫번째",
-                pickerValue = gearUiState.intervalFirstTimer,
-                onPickerValueChange = { minutes -> setIntervalFirstTimerSetting(minutes) },
-                onButtonClick = emitSnackBar
+                headerText = stringResource(id = R.string.first),
+                pickerValue = gearUiState.intervalSecondTimer,
+                onPickerValueChange = { minutes -> setIntervalSecondTimerSetting(minutes) }
             )
             SettingIntervalItem(
-                headerText = "두번째",
-                pickerValue = gearUiState.intervalSecondTimer,
-                onPickerValueChange = { minutes -> setIntervalSecondTimerSetting(minutes) },
-                onButtonClick = emitSnackBar
+                headerText = stringResource(id = R.string.last),
+                pickerValue = gearUiState.intervalFirstTimer,
+                onPickerValueChange = { minutes -> setIntervalFirstTimerSetting(minutes) }
+
             )
-            VerticalSpacer(height = 8.dp)
+            DefaultButton(
+                content = stringResource(id = R.string.apply_do),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        if (gearUiState.intervalFirstTimer < gearUiState.intervalSecondTimer) {
+                            emitSnackBar(
+                                SnackBarMessage(
+                                    headerMessage = context.getString(R.string.alarm_setting_interval_failure),
+                                    contentMessage = context.getString(R.string.alarm_setting_interval_failure_reason)
+                                )
+                            )
+                        } else {
+                            setIntervalTimerSetting()
+                            emitSnackBar(
+                                SnackBarMessage(
+                                    headerMessage = context.getString(R.string.alarm_setting_interval_success)
+                                )
+                            )
+                        }
+                    }
+            )
+
+            VerticalSpacer(height = 30.dp)
             LazyColumn {
+                item {
+                    HorizontalDivider()
+                    VerticalSpacer(height = 8.dp)
+                    Text(
+                        text = stringResource(id = R.string.billing_purchase),
+                        style = Typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentSize()
+                    )
+                    VerticalSpacer(height = 30.dp)
+                }
                 itemsIndexed(availableProducts) { index, product ->
                     DefaultButton(
-                        content = "${product.name} 하기",
+                        content = "${product.name} ${stringResource(id = R.string.somethingdo)}",
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
                                 purchaseInApp(product)
                             }
                     )
-                    if(index != availableProducts.lastIndex)
+                    if (index != availableProducts.lastIndex)
                         VerticalSpacer(height = 8.dp)
                 }
             }
@@ -147,8 +192,7 @@ private fun SettingInAppPay(title: String) {
 private fun SettingIntervalItem(
     headerText: String,
     pickerValue: Int,
-    onPickerValueChange: (Int) -> Unit,
-    onButtonClick: (SnackBarMessage) -> Unit
+    onPickerValueChange: (Int) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -158,7 +202,7 @@ private fun SettingIntervalItem(
         Text(
             text = buildAnnotatedString {
                 appendBoldText(text = headerText, color = red)
-                append(" 알람 간격")
+                append(" ${stringResource(id = R.string.alarm_setting_interval)}")
             },
             style = Typography.headlineSmall,
             color = MaterialTheme.colorScheme.onBackground
@@ -172,18 +216,6 @@ private fun SettingIntervalItem(
                 color = MaterialTheme.colorScheme.outline
             ),
             dividersColor = MaterialTheme.colorScheme.primary
-        )
-        HorizontalSpacer(width = 16.dp)
-        DefaultButton(
-            content = "적용하기",
-            modifier = Modifier.clickable {
-                onButtonClick(
-                    SnackBarMessage(
-                        headerMessage = "알람 간격 설정이 완료되었습니다.",
-                        contentMessage = "$headerText 알람 간격이 $pickerValue 분 전으로 설정되었습니다."
-                    )
-                )
-            }
         )
     }
 }
@@ -199,6 +231,7 @@ private fun PreviewGearScreen() {
             purchaseInApp = {},
             setIntervalFirstTimerSetting = {},
             setIntervalSecondTimerSetting = {},
+            setIntervalTimerSetting = {},
             onNavigatePopBackStack = {},
             emitSnackBar = {}
         )

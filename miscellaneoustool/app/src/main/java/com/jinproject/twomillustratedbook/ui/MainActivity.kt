@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         ActivityResultContracts.RequestPermission()
     ) { result ->
         if (result.not()) {
-            Toast.makeText(applicationContext, "알림 권한에 동의하지 않으시면 알람 서비스를 이용하실 수 없습니다.", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, getString(R.string.authority_alarm_failure), Toast.LENGTH_LONG).show()
         }
     }
     private var billingCallback: OnBillingCallback? = null

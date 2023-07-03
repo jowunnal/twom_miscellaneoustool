@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -110,14 +111,14 @@ fun AlarmBottomSheetContent(
 
         Row() {
             DefaultButton(
-                content = "시작하기",
+                content = stringResource(id = R.string.start_do),
                 modifier = Modifier
-                .weight(1f)
-                .clickable {
-                    onStartAlarm(selectedBossName)
-                    onCloseBottomSheet()
-                    showRewardedAd()
-                }
+                    .weight(1f)
+                    .clickable {
+                        onStartAlarm(selectedBossName)
+                        onCloseBottomSheet()
+                        showRewardedAd()
+                    }
             )
             /*
             HorizontalSpacer(width = 5.dp)

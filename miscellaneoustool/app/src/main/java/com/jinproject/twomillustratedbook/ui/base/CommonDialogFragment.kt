@@ -71,8 +71,8 @@ class CommonDialogFragment private constructor(
             fragmentManager: FragmentManager,
             title: String,
             message: String?,
-            positiveButtonText: String = "확인",
-            negativeButtonText: String = "취소",
+            positiveButtonText: String,
+            negativeButtonText: String,
             listener: Listener
         ) {
             CommonDialogFragment(

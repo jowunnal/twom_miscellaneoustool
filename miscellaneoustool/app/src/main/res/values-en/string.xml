@@ -13,12 +13,70 @@
     <!-- UI strings !-->
     <string name="item_name">Item\'s Name</string>
     <string name="stat">Stat</string>
-    <string name="price">Price</string>
+
     <string name="home_header">Twom Miscellaneous Tool</string>
     <string name="version">v1.7</string>
-    <string name="delete">Delete</string>
-    <string name="input_price">Input Price</string>
+
+    <string name="input_price_hint">Input Price</string>
     <string name="setting_item"><u>Change Item Setting</u></string>
     <string name="setting_filter"><u>Change Filtering Setting</u></string>
+
+    <string name="price">Price</string>
+    <string name="delete">Delete</string>
+    <string name="change">Change</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="first">First</string>
+    <string name="last">Last</string>
+    <string name="apply_do">Apply</string>
+    <string name="rollback_do">Rollback</string>
+    <string name="somethingdo">do</string>
+    <string name="set_do">Set</string>
+    <string name="register_do">Register</string>
+    <string name="delete_do">Delete</string>
+    <string name="start_do">Start</string>
+    <string name="addition_do">Addition</string>
+    <string name="on">ON</string>
+    <string name="off">OFF</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="delete_something"> Are you sure you want to delete it?</string>
+    <string name="hour">hour</string>
+    <string name="minute">minutes</string>
+    <string name="second">seconds</string>
+    <string name="turnoff">Turn off</string>
+
+    <!-- collection strings -->
+    <string name="collection_roll_back">Would you like to return the collection?</string>
+    <string name="input_price">\'s Price</string>
+    <string name="out_of_item_price">The item\'s price is out of tolerance.</string>
+
+    <!-- alarm strings -->
+    <string name="alarm_selectboss">Boss Selection</string>
+    <string name="alarm_classify_boss">Boss Classified</string>
+    <string name="alarm_present_bosslist">Current progress alarm history</string>
+
+    <!-- gear strings -->
+    <string name="billing_purchase">Buy Products</string>
+    <string name="alarm_setting_interval_success">Alarm interval setting has been completed.</string>
+    <string name="alarm_setting_interval_failure">The alarm interval has not been set.</string>
+    <string name="alarm_setting_interval_failure_reason">The last alarm interval should be longer.</string>
+    <string name="alarm_setting_interval"> Alarm Interval</string>
+    <string name="alarm_setting">Alarm Setting</string>
+
+    <!-- watch strings -->
+    <string name="watch_appbar_title">Current time view settings</string>
+    <string name="watch_title_recently_bosslist">List of frequently used bosses</string>
+    <string name="watch_bottomsheet_title">Do you want to register to always view the current time?</string>
+    <string name="watch_setting_fontsize">Adjust font size</string>
+    <string name="watch_setting_move_x">Transverse axis movement</string>
+    <string name="watch_setting_move_y">Vertical axis movement</string>
+    <string name="watch_setting_title">Always see the current time</string>
+
+    <!-- service strings -->
+    <string name="service_overlay_running">The current time always view is running.</string>
+
+    <!-- activity strings -->
+    <string name="authority_alarm_failure">If you do not agree to the notification authority, you cannot use the alarm service.</string>
 
 </resources>

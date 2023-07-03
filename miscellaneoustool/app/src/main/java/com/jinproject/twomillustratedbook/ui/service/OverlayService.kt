@@ -73,8 +73,8 @@ class OverlayService: LifecycleService() {
         val notification = NotificationCompat.Builder(applicationContext, "WatchNotificationChannel")
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setSmallIcon(R.mipmap.ic_main)
-            .setContentTitle("현재시간 항상 보기가 실행중입니다.")
-            .addAction(R.drawable.img_delete_alarm, "끄기", exitPendingIntent)
+            .setContentTitle(getString(R.string.service_overlay_running))
+            .addAction(R.drawable.img_delete_alarm, getString(R.string.turnoff), exitPendingIntent)
             .build()
 
         startForeground(999, notification)
@@ -95,8 +95,8 @@ class OverlayService: LifecycleService() {
     }
 
     private fun createNotificationChannel() {
-        val name = "아이모 도감"
-        val descriptionText = "현재시간 항상 보기"
+        val name = getString(R.string.channel_name)
+        val descriptionText = getString(R.string.channel_description)
         val importance = NotificationManager.IMPORTANCE_DEFAULT
         val channel = NotificationChannel("WatchNotificationChannel", name, importance).apply {
             description = descriptionText

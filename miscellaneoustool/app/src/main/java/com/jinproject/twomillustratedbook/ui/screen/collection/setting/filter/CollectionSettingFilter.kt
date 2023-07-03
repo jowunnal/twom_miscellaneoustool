@@ -60,9 +60,10 @@ class CollectionSettingFilter : BaseFragment<CollectionListBinding>() {
             override fun setOnClickedListener(pos: Int) {
                 CommonDialogFragment.show(
                     fragmentManager = requireActivity().supportFragmentManager,
-                    title = "선택하신 도감을 되돌리시겠습니까?",
+                    title = requireContext().getString(R.string.collection_roll_back),
                     message = null,
-                    positiveButtonText = "되돌리기",
+                    positiveButtonText = requireContext().getString(R.string.rollback_do),
+                    negativeButtonText = requireContext().getString(R.string.cancel),
                     listener = object: CommonDialogFragment.Listener() {
                         override fun onPositiveButtonClick(value: String) {
                             collectionViewModel.deleteFilter(
