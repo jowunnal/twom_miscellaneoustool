@@ -1,8 +1,10 @@
 package com.jinproject.twomillustratedbook.ui.screen.alarm.mapper
 
+import com.jinproject.domain.model.MonsterModel
+import com.jinproject.domain.model.TimerModel
+import com.jinproject.twomillustratedbook.ui.screen.alarm.item.MonsterNameState
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimeState
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimerState
-import com.jinproject.domain.model.TimerModel
 
 fun TimerModel.toTimerState() = TimerState(
     id = id,
@@ -14,4 +16,9 @@ fun TimerModel.toTimerState() = TimerState(
         minutes = minutes,
         seconds = seconds
     )
+)
+
+fun MonsterModel.toMonsterNameState() = MonsterNameState(
+    name = name,
+    imgName = imgName
 )

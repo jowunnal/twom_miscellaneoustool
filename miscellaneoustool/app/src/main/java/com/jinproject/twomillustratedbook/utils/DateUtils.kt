@@ -27,9 +27,9 @@ var Calendar.day
     }
 
 var Calendar.hour
-    get() = get(Calendar.HOUR)
+    get() = get(Calendar.HOUR_OF_DAY)
     set(value) {
-        set(Calendar.HOUR, value)
+        set(Calendar.HOUR_OF_DAY, value)
     }
 
 var Calendar.minute

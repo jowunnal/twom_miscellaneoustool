@@ -10,11 +10,8 @@ enum class MonsterType(
     BIGBOSS(displayName = "대형보스", storedName = "bigboss");
 
     companion object {
-        fun findByDisplayName(displayName: String) = values().first { type ->
-            type.displayName == displayName
-        }
+        fun findByDisplayName(displayName: String) = values().find { type -> type.displayName == displayName } ?: NAMED
 
-        fun findByStoredName(storedName: String) =
-            values().first { type -> type.storedName == storedName }
+        fun findByStoredName(storedName: String) = values().find { type -> type.storedName == storedName } ?: NAMED
     }
 }

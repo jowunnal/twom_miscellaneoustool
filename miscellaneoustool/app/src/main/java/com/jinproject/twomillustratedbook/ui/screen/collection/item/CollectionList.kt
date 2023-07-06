@@ -138,11 +138,11 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
 
             setOnLongClickListener(object : OnLongClickedListener {
                 override fun setOnLongClickedListener(pos: Int) {
-                    removeMenuProvider(basicMenu)
-                    addMenuProvider(collectionMenu)
-
                     with(collectionListAdapter) {
                         if (getCollectionItem(pos).isCheck == CollectionState.CheckState.INVISIBLE) {
+                            removeMenuProvider(basicMenu)
+                            addMenuProvider(collectionMenu)
+
                             val scrollPos =
                                 binding.recyclerView.layoutManager?.onSaveInstanceState()
                             setItemsEnableClick {
@@ -150,6 +150,7 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
                             }
                         }
                     }
+
                 }
             })
         }

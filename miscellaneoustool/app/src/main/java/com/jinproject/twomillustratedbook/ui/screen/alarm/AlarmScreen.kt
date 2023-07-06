@@ -38,7 +38,7 @@ fun AlarmScreen(
     alarmViewModel: AlarmViewModel = hiltViewModel(),
     context: Context = LocalContext.current,
     changeVisibilityBottomNavigationBar: (Boolean) -> Unit,
-    showRewardedAd: () -> Unit,
+    showRewardedAd: (()->Unit) -> Unit,
     onNavigateToGear: () -> Unit,
     onNavigateToWatch: () -> Unit
 ) {
@@ -102,7 +102,7 @@ private fun AlarmScreen(
     setRecentlySelectedBossNameChanged: (String) -> Unit,
     onNavigateToGear: () -> Unit,
     onNavigateToWatch: () -> Unit,
-    showRewardedAd: () -> Unit
+    showRewardedAd: (()->Unit) -> Unit
 ) {
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)

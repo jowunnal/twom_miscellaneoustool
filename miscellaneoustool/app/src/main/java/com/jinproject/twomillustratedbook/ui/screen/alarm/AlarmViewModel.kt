@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.*
+import com.jinproject.core.util.doOnLocaleLanguage
+import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
 import com.jinproject.twomillustratedbook.ui.receiver.AlarmReceiver
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.AlarmItem
@@ -73,23 +75,17 @@ class AlarmViewModel @Inject constructor(
 
     private fun getRecentlySelectedBossInfo() {
         timerRepository.getTimerPreferences().onEach { prefs ->
-            try {
-                _uiState.update { state ->
-                    state.copy(
-                        recentlySelectedBossClassified = com.jinproject.domain.model.MonsterType.findByStoredName(prefs.recentlySelectedBossClassified).displayName,
-                        recentlySelectedBossName = prefs.recentlySelectedBossName,
-                        frequentlyUsedBossList = prefs.frequentlyUsedBossListList
-                    )
-                }
-                getBossListByType(com.jinproject.domain.model.MonsterType.findByStoredName(prefs.recentlySelectedBossClassified))
-            } catch (e: NoSuchElementException) {
-                _uiState.update { state ->
-                    state.copy(
-                        recentlySelectedBossClassified = "",
-                        recentlySelectedBossName = ""
-                    )
-                }
+            _uiState.update { state ->
+                state.copy(
+                    recentlySelectedBossClassified = context.doOnLocaleLanguage(
+                        onKo = com.jinproject.domain.model.MonsterType.findByStoredName(prefs.recentlySelectedBossClassified).displayName,
+                        onElse = com.jinproject.domain.model.MonsterType.findByStoredName(prefs.recentlySelectedBossClassified).storedName
+                    ),
+                    recentlySelectedBossName = prefs.recentlySelectedBossName,
+                    frequentlyUsedBossList = prefs.frequentlyUsedBossListList
+                )
             }
+            getBossListByType(com.jinproject.domain.model.MonsterType.findByStoredName(prefs.recentlySelectedBossClassified))
         }.launchIn(viewModelScope)
     }
 
@@ -129,7 +125,7 @@ class AlarmViewModel @Inject constructor(
     fun removeBossFromFrequentlyUsedList(bossName: String) {
         val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
             if (throwable is IllegalArgumentException) {
-                emitSnackBar(SnackBarMessage(headerMessage = "오류가 발생했습니다. 다시 시도해 주세요."))
+                emitSnackBar(SnackBarMessage(headerMessage = context.getString(R.string.message_throw_exceptions)))
             }
         }
         viewModelScope.launch(context = Dispatchers.IO + exceptionHandler) {
@@ -247,20 +243,19 @@ class AlarmViewModel @Inject constructor(
                 intervalSecondTimerSetting = prefs.intervalSecondTimerSetting
             )
 
-            emitSnackBar(SnackBarMessage(headerMessage = "$monsterName 의 알람이 설정되었습니다."))
+            emitSnackBar(SnackBarMessage(headerMessage = "$monsterName ${context.getString(R.string.alarm_setted)}"))
         }.catch { e ->
             when (e) {
                 is NoSuchElementException -> {
                     emitSnackBar(
                         SnackBarMessage(
-                            headerMessage = "일시적인 장애가 발생하였습니다.",
+                            headerMessage = context.getString(R.string.message_throw_no_such_element),
                             contentMessage = e.message.toString()
                         )
                     )
                 }
+                else -> emitSnackBar(SnackBarMessage(headerMessage = context.getString(R.string.message_throw_exceptions)))
             }
-        }.catch { e ->
-            emitSnackBar(SnackBarMessage(headerMessage = "오류가 발생했습니다. 다시 시도해 주세요."))
         }.launchIn(viewModelScope)
     }
 

@@ -6,6 +6,7 @@ import com.jinproject.data.datasource.cache.database.entity.Monster
 import com.jinproject.data.model.Item
 import com.jinproject.domain.model.CollectionModel
 import com.jinproject.domain.model.ItemModel
+import com.jinproject.domain.model.MapField
 import com.jinproject.domain.model.MapModel
 import com.jinproject.domain.model.MonsterModel
 import com.jinproject.domain.model.MonsterType
@@ -56,7 +57,7 @@ fun MonsDropItem.toItemModel() = ItemModel(
 )
 
 fun com.jinproject.data.datasource.cache.database.entity.Maps.toMapModel() = MapModel(
-    name = mapName,
+    name = MapField.findByMapName(mapName),
     imgName = mapImgName
 )
 

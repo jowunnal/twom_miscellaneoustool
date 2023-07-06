@@ -45,6 +45,10 @@
     <string name="second">초</string>
     <string name="turnoff">끄기</string>
 
+    <!-- Snackbar Message -->
+    <string name="message_throw_no_such_element">일치하는 데이터가 없습니다.</string>
+    <string name="message_throw_exceptions">오류가 발생했습니다. 다시 시도해 주세요.</string>
+
     <!-- collection strings -->
 
     <!-- Dialog -->
@@ -56,6 +60,7 @@
     <string name="alarm_selectboss">보스 선택</string>
     <string name="alarm_classify_boss">보스 분류</string>
     <string name="alarm_present_bosslist">현재 진행중인 알람 내역</string>
+    <string name="alarm_setted">의 알람이 설정되었습니다.</string>
 
     <!-- gear strings -->
     <string name="billing_purchase">상품 구매</string>

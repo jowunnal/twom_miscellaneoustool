@@ -31,6 +31,7 @@ import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.MiscellaneousToolTheme
 import com.jinproject.twomillustratedbook.ui.screen.gear.GearViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -98,10 +99,10 @@ class NavigationFragment : Fragment(), MainActivity.OnBillingCallback {
         NavigationGraph(
             navController = rememberNavController(),
             changeVisibilityBottomNavigationBar = { bool -> changeVisibilityBottomNavigationBar(bool) },
-            showRewardedAd = {
+            showRewardedAd = { onResult ->
                 showRewardedAd(
-                    mRewardedAd = mRewardedAd,
-                    billingModule = billingModule
+                    billingModule = billingModule,
+                    onResult = onResult
                 )
             },
             billingModule = billingModule,
@@ -133,42 +134,45 @@ class NavigationFragment : Fragment(), MainActivity.OnBillingCallback {
                     mRewardedAd = rewardedAd
                 }
             })
-        mRewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
-            override fun onAdClicked() {
-                // Called when a click is recorded for an ad.
-            }
-
-            override fun onAdDismissedFullScreenContent() {
-                // Called when ad is dismissed.
-                // Set the ad reference to null so you don't show the ad a second time.
-                mRewardedAd = null
-            }
-
-            override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                // Called when ad fails to show.
-                mRewardedAd = null
-            }
-
-            override fun onAdImpression() {
-                // Called when an impression is recorded for an ad.
-            }
-
-            override fun onAdShowedFullScreenContent() {
-                // Called when ad is shown.
-            }
-        }
     }
 
-    private fun showRewardedAd(mRewardedAd: RewardedAd?, billingModule: BillingModule) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            billingModule.queryPurchase { purchaseList ->
+    private fun showRewardedAd(billingModule: BillingModule, onResult:() -> Unit) {
+        billingModule.queryPurchase { purchaseList ->
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                 if(billingModule.checkPurchased(purchaseList = purchaseList, productId = "ad_remove")) {
                     mRewardedAd?.let { ad ->
+                        mRewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                            override fun onAdClicked() {
+                                // Called when a click is recorded for an ad.
+                            }
+
+                            override fun onAdDismissedFullScreenContent() {
+                                // Called when ad is dismissed.
+                                // Set the ad reference to null so you don't show the ad a second time.
+                                mRewardedAd = null
+                            }
+
+                            override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                                // Called when ad fails to show.
+                                mRewardedAd = null
+                            }
+
+                            override fun onAdImpression() {
+                                // Called when an impression is recorded for an ad.
+                            }
+
+                            override fun onAdShowedFullScreenContent() {
+                                // Called when ad is shown.
+                            }
+                        }
                         ad.show(requireActivity(), OnUserEarnedRewardListener { rewardItem ->
+                            onResult()
                             val rewardAmount = rewardItem.amount
                             val rewardType = rewardItem.type
                         })
-                    } ?: run {}
+                    } ?: run {
+                        onResult()
+                    }
                 }
             }
         }

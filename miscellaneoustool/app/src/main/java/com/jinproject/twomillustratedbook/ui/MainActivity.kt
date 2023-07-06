@@ -89,21 +89,24 @@ class MainActivity : AppCompatActivity() {
                 lifecycleScope.launch(Dispatchers.IO) {
                     billingModule.getPurchasableProducts()
                     billingModule.queryPurchase { purchaseList ->
-                        purchaseList.forEach {
-                            Log.d("test", "${it.products}")
-                        }
                         billingModule.approvePurchased(purchaseList = purchaseList)
-                        if(billingModule.checkPurchased(purchaseList = purchaseList, productId = "ad_remove"))
-                            initAdView()
 
-                        val purchasedProductIds = purchaseList.distinctBy { it.products }.map { it.products.first() }
-                        val purchasableProducts = billingModule.purchasableProducts.toList()
-                        billingModule.purchasableProducts.clear()
-                        billingModule.purchasableProducts.addAll(
-                            purchasableProducts.filter { purchasableProduct ->
-                                purchasableProduct.productId !in purchasedProductIds
+                        lifecycleScope.launch(Dispatchers.Main){
+                            launch {
+                                if(billingModule.checkPurchased(purchaseList = purchaseList, productId = "ad_remove"))
+                                    initAdView()
                             }
-                        )
+                            launch {
+                                val purchasedProductIds = purchaseList.distinctBy { it.products }.map { it.products.first() }
+                                val purchasableProducts = billingModule.purchasableProducts.toList()
+                                billingModule.purchasableProducts.clear()
+                                billingModule.purchasableProducts.addAll(
+                                    purchasableProducts.filter { purchasableProduct ->
+                                        purchasableProduct.productId !in purchasedProductIds
+                                    }
+                                )
+                            }
+                        }
                     }
                 }
             }

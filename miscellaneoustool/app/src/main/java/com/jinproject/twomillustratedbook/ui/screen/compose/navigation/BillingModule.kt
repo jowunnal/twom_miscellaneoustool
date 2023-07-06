@@ -219,7 +219,7 @@ class BillingModule(
      * @param productId 비교할 상품 id
      */
     fun checkPurchased(purchaseList: List<Purchase>, productId: String):Boolean =
-        purchaseList.none { purchase -> purchase.purchaseState == Purchase.PurchaseState.PURCHASED && purchase.products.contains(productId) }
+        purchaseList.none { purchase -> (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) && purchase.products.contains(productId) }
 
 
     suspend fun queryPurchaseLatest() {

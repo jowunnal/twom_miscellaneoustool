@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.twomillustratedbook.databinding.DroplistmapItemBinding
 import com.jinproject.twomillustratedbook.ui.listener.OnClickedListener
 import com.jinproject.twomillustratedbook.ui.screen.droplist.map.item.MapState
@@ -36,7 +37,7 @@ class DropListMapAdapter @Inject constructor(@ActivityContext val context: Conte
     }
 
     fun getItem(pos: Int): String {
-        return items[pos].name
+        return items[pos].name.nameInKR
     }
 
     inner class ViewHolder(private val binding: DroplistmapItemBinding) :
@@ -51,7 +52,10 @@ class DropListMapAdapter @Inject constructor(@ActivityContext val context: Conte
 
         @SuppressLint("DiscouragedApi")
         fun bind(item: MapState) {
-            binding.dropMapName.text = item.name
+            binding.dropMapName.text = context.doOnLocaleLanguage(
+                onKo = item.name.nameInKR,
+                onElse = item.name.nameInOthers
+            )
 
             Glide.with(itemView)
                 .load(Uri.parse("file:///android_asset/img/monster/${item.imgName}.png"))

@@ -31,16 +31,18 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
-                style="@style/body_small"
                 android:id="@+id/drop_map_name"
+                style="@style/body_small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
                 android:gravity="center_horizontal"
                 android:text="맵이름"
-                app:layout_constraintTop_toBottomOf="@id/drop_map_img"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/drop_map_img" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

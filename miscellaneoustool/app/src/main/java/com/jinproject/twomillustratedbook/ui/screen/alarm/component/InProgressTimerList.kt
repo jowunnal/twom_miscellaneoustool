@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimeState
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimerState
@@ -77,7 +78,10 @@ fun InProgressTimerList(
                         )
                         append(" (")
                         appendBoldText(
-                            text = item.timeState.day.displayName,
+                            text = context.doOnLocaleLanguage(
+                                onKo = item.timeState.day.displayOnKo,
+                                onElse = item.timeState.day.displayOnElse
+                            ),
                             color = MaterialTheme.colorScheme.onBackground
                         )
                         append(") ")

@@ -1,7 +1,10 @@
 package com.jinproject.data.di
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.room.Room
+import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.data.datasource.cache.database.BookDatabase
 import com.jinproject.data.datasource.cache.database.dao.CollectionDao
 import com.jinproject.data.datasource.cache.database.dao.DropListDao
@@ -34,11 +37,17 @@ object BookDatabaseModule {
         return bookDatabase.getTimerDao()
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     @Provides
     @Singleton
     fun provideBookDatabaseInstance(@ApplicationContext context:Context): BookDatabase {
+        val assetName = context.doOnLocaleLanguage(
+            onKo = "database/db_twom_2.db",
+            onElse = "database/db_twom_2_eng.db"
+        )
         return Room.databaseBuilder(context, BookDatabase::class.java,"BookDatabase")
-            .createFromAsset("database/db_twom_2.db")
+            .createFromAsset(assetName)
+            .fallbackToDestructiveMigration()
             .build()
     }
 }

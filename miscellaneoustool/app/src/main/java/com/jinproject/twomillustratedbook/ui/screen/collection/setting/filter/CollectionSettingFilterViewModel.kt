@@ -1,11 +1,13 @@
 package com.jinproject.twomillustratedbook.ui.screen.collection.setting.filter
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jinproject.twomillustratedbook.ui.screen.collection.item.CollectionUiState
 import com.jinproject.twomillustratedbook.ui.screen.collection.item.item.CollectionState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CollectionSettingFilterViewModel @Inject constructor(
     private val getCollectionUsecase: com.jinproject.domain.usecase.collection.GetCollectionUsecase,
-    private val deleteCollectionUsecase: com.jinproject.domain.usecase.collection.DeleteFilterUsecase
+    private val deleteCollectionUsecase: com.jinproject.domain.usecase.collection.DeleteFilterUsecase,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CollectionUiState.getInitValue())
@@ -30,7 +33,7 @@ class CollectionSettingFilterViewModel @Inject constructor(
             .onEach { collectionModelList ->
                 _uiState.update { state ->
                     state.copy(collectionList = collectionModelList.map { collectionModel ->
-                        CollectionState.fromCollectionModel(collectionModel)
+                        CollectionState.fromCollectionModel(collectionModel, context)
                     })
                 }
             }.catch { e ->

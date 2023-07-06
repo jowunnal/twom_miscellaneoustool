@@ -2,6 +2,7 @@ package com.jinproject.twomillustratedbook.ui.screen.home
 
 import android.annotation.SuppressLint
 import android.view.*
+import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.twomillustratedbook.databinding.HomeBinding
 import com.jinproject.twomillustratedbook.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,10 +15,55 @@ class Home : BaseFragment<HomeBinding>(){
 
     @SuppressLint("SetTextI18n")
     override fun initState() = with(binding) {
-        tvInfo.text = "***추가사항***\n\n\n" +
-                "1. 사용자편의성 개선\n - 전체적인 UI가 개선되었습니다.\n - 기기비율에 짤리지 않도록 수정되었습니다.\n\n\n" +
-                "2. 서버기능이 삭제 되었습니다.\n - 사용량이 저조하여 삭제됩니다.\n\n\n" +
-                "3. 2023.02.21 기준 신규몬스터, 도감에 대응되었습니다.\n" +
-                " - 기간제 도감은 포함되지 않습니다.\n\n\n"
+        tvInfo.text = this@Home.requireContext().doOnLocaleLanguage(
+            onKo = "\n\n\n" +
+                    """
+                    # 기능 구현
+                    
+                    1. 도감 커스터마이징 기능이 추가되었습니다.
+                        - 아이템도감에서 화면을 꾹 누르면 다중선택이 되고, 상단의 휴지통 아이콘으로 제거할 수 있습니다.
+                        - 뒤로가기 혹은 상단의 뒤로가기버튼 을 누르면 해제됩니다.
+                        - 설정아이콘을 누르면 제거한 도감을 돌리는 '필터링 설정 변경'과 아이템 설정 변경을 이용할 수 있습니다.
+                        - 아이템 설정 변경에서는 아이템의 가격을 개수 당 가격으로 설정할 수 있습니다.
+                        
+                    2. 몬스터도감이 격자형 구조로 변경되었습니다.
+                    
+                    3. 현재시간 항상 보기 기능에서 위치를 원하는 대로 이동시킬 수 있습니다.
+                    
+                    4. 인앱결제가 추가되었습니다.
+                        - 광고제거 구매시 상단광고와 알람시 발생하는 전면광고가 제거됩니다.
+                        - 개발자에게 후원을 할 수 있습니다.
+
+                    # 버그 수정
+                    
+                    - 알람 파트 에서 버그가 수정되었습니다.
+                    - 아이템 도감에서 Pve/Pvp 데미지 에서 데미지증가 로 변경됩니다.
+                    - 도감에서 롱 클릭을 이중으로 할 때 메뉴가 중복생성되는 버그가 수정되었습니다.
+                """.trimIndent(),
+            onElse = """
+                # Intro
+                
+                1. Collection List
+                    - You can check collection list which means how many stuffs or price you need
+                    - If u had collected some collection, then you can remove it
+                    - Also you can customize the price of item or rollback collection what you had removed
+                    - You can search collections using Search Menu on Top bar
+               
+                2. Monster List
+                    - You can check monster list on second menu
+                    - You can search items using Search Menu on Top bar
+                    
+                3. Alarm
+                    - You can set a monster's alarm, just put the time when you killed it
+                    - And you can check them on list downside or you can use Overlay operation
+                    - First menu which means Setting in alarm screen, you can adjust alarm interval
+                    - Second menu which means Overlay in alarm screen, you can see the current times on screen
+                    - And you can adjust font size or move the overlay everywhere u want
+                    - in the downside you can add monster's alarm on overlay
+                    - finally you can remove advertisement by supporting developer
+                    
+                Thanks for using App! Enjoy it
+            """.trimIndent()
+        )
     }
 }

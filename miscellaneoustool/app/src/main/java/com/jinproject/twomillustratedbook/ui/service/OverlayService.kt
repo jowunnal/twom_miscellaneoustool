@@ -26,6 +26,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.io.Files.append
+import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.domain.repository.TimerRepository
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimerState
@@ -151,11 +152,13 @@ class OverlayService: LifecycleService() {
                     }.onEach { timerStates ->
                         mView?.findViewById<TextView>(R.id.tv_onOtherApps)?.text = kotlin.runCatching { StringBuilder().apply {
                             for (item in list!!) {
-                                append("${item.bossName} (${item.timeState.day.displayName}) ${item.timeState.hour}:${item.timeState.minutes}:${item.timeState.seconds}\n")
+                                val hourOfDay = this@OverlayService.doOnLocaleLanguage(onKo = item.timeState.day.displayOnKo, onElse = item.timeState.day.displayOnElse)
+                                append("${item.bossName} (${hourOfDay}) ${item.timeState.hour}:${item.timeState.minutes}:${item.timeState.seconds}\n")
                             }
                         }.toString() }.getOrElse {
                             timerStates.joinToString("\n") { timerState ->
-                                "${timerState.bossName} (${timerState.timeState.day.displayName}) ${timerState.timeState.hour}:${timerState.timeState.minutes}:${timerState.timeState.seconds}"
+                                val hourOfDay = this@OverlayService.doOnLocaleLanguage(onKo = timerState.timeState.day.displayOnKo, onElse = timerState.timeState.day.displayOnElse)
+                                "${timerState.bossName} (${hourOfDay}) ${timerState.timeState.hour}:${timerState.timeState.minutes}:${timerState.timeState.seconds}"
                             }
                         }
                     }.launchIn(lifecycleScope)

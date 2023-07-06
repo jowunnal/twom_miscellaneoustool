@@ -17,7 +17,7 @@ fun NavigationGraph(
     navController: NavHostController,
     billingModule: BillingModule,
     changeVisibilityBottomNavigationBar: (Boolean) -> Unit,
-    showRewardedAd: () -> Unit,
+    showRewardedAd: (()->Unit) -> Unit,
     alarmViewModel: AlarmViewModel = hiltViewModel(),
     gearViewModel: GearViewModel = hiltViewModel(),
     watchViewModel: WatchViewModel = hiltViewModel()

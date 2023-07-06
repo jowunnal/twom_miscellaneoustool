@@ -51,7 +51,7 @@
             <TextView
                 android:id="@+id/tv_content"
                 style="@style/body_small"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{itemName}"
                 app:layout_constraintBottom_toBottomOf="@id/containerInBook"
@@ -63,11 +63,12 @@
             <TextView
                 android:id="@+id/tv_stat"
                 style="@style/body_small"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{stat}"
+                app:layout_constraintWidth_percent="0.35"
                 app:layout_constraintBottom_toBottomOf="@id/containerInBook"
-                app:layout_constraintEnd_toEndOf="@id/containerInBook"
+                app:layout_constraintEnd_toStartOf="@id/tv_price"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@id/guideline_half"
                 app:layout_constraintTop_toTopOf="@id/containerInBook" />
@@ -75,9 +76,10 @@
             <TextView
                 android:id="@+id/tv_price"
                 style="@style/body_small"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{price}"
+                app:layout_constraintWidth_percent="0.15"
                 app:layout_constraintBottom_toBottomOf="@+id/containerInBook"
                 app:layout_constraintEnd_toEndOf="@id/containerInBook"
                 app:layout_constraintHorizontal_bias="0.75"

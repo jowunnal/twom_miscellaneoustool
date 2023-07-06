@@ -1,10 +1,12 @@
 package com.jinproject.twomillustratedbook.ui.screen.collection.item
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jinproject.twomillustratedbook.ui.screen.collection.item.item.CollectionState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,7 +30,8 @@ data class CollectionUiState(
 @HiltViewModel
 class CollectionViewModel @Inject constructor(
     private val getCollectionUsecase: com.jinproject.domain.usecase.collection.GetCollectionUsecase,
-    private val deleteCollectionUsecase: com.jinproject.domain.usecase.collection.DeleteCollectionUsecase
+    private val deleteCollectionUsecase: com.jinproject.domain.usecase.collection.DeleteCollectionUsecase,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CollectionUiState.getInitValue())
@@ -39,7 +42,7 @@ class CollectionViewModel @Inject constructor(
             .onEach { collectionModelList ->
                 _uiState.update { state ->
                     state.copy(collectionList = collectionModelList.map { collectionModel ->
-                        CollectionState.fromCollectionModel(collectionModel)
+                        CollectionState.fromCollectionModel(collectionModel, context)
                     })
                 }
             }.catch { e ->

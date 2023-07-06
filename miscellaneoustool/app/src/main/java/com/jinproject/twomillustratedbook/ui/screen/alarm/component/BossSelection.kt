@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.domain.model.MonsterType
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultButton
@@ -90,6 +91,7 @@ fun BossSelection(
 @Composable
 private fun BossSelectionHeader(
     bossNameList: List<String>,
+    context: Context = LocalContext.current,
     recentlySelectedBossClassified: String,
     recentlySelectedBossName: String,
     addBossToFrequentlyUsedList: (String) -> Unit,
@@ -106,10 +108,20 @@ private fun BossSelectionHeader(
                     text = recentlySelectedBossClassified,
                     items = MonsterType.values().toMutableList()
                         .apply { remove(MonsterType.NORMAL) }
-                        .map { monsterType -> monsterType.displayName }
+                        .map { monsterType ->
+                            context.doOnLocaleLanguage(
+                                onKo = monsterType.displayName,
+                                onElse = monsterType.storedName
+                            )
+                        }
                         .toList(),
                     setTextChanged = { item ->
-                        setRecentlySelectedBossClassifiedChanged(MonsterType.findByDisplayName(item))
+                        setRecentlySelectedBossClassifiedChanged(
+                            context.doOnLocaleLanguage(
+                                onKo = MonsterType.findByDisplayName(item),
+                                onElse = MonsterType.findByStoredName(item)
+                            )
+                        )
                     }
                 )
             }

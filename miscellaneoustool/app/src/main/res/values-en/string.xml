@@ -46,6 +46,10 @@
     <string name="second">seconds</string>
     <string name="turnoff">Turn off</string>
 
+    <!-- Snackbar Message -->
+    <string name="message_throw_no_such_element">The item has not found in Database</string>
+    <string name="message_throw_exceptions">An error has occurred. Please try again.</string>
+
     <!-- collection strings -->
     <string name="collection_roll_back">Would you like to return the collection?</string>
     <string name="input_price">\'s Price</string>
@@ -55,6 +59,7 @@
     <string name="alarm_selectboss">Boss Selection</string>
     <string name="alarm_classify_boss">Boss Classified</string>
     <string name="alarm_present_bosslist">Current progress alarm history</string>
+    <string name="alarm_setted">\'s alarm has been set</string>
 
     <!-- gear strings -->
     <string name="billing_purchase">Buy Products</string>
@@ -68,9 +73,9 @@
     <string name="watch_appbar_title">Current time view settings</string>
     <string name="watch_title_recently_bosslist">List of frequently used bosses</string>
     <string name="watch_bottomsheet_title">Do you want to register to always view the current time?</string>
-    <string name="watch_setting_fontsize">Adjust font size</string>
-    <string name="watch_setting_move_x">Transverse axis movement</string>
-    <string name="watch_setting_move_y">Vertical axis movement</string>
+    <string name="watch_setting_fontsize">Font Size</string>
+    <string name="watch_setting_move_x">Horizontal Axis Move</string>
+    <string name="watch_setting_move_y">Vertical Axis Move</string>
     <string name="watch_setting_title">Always see the current time</string>
 
     <!-- service strings -->

@@ -24,7 +24,7 @@ val light_onBackground = lightBlack
 val light_surface = white
 val light_onSurface = lightBlack
 val light_scrim = mediumGray
-val light_outline = lightGray
+val light_outline = mediumGray
 
 val dark_primary = deep_primary
 val dark_onPrimary = lightGray

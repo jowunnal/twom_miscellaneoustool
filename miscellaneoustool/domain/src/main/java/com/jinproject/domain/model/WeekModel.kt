@@ -4,14 +4,14 @@ package com.jinproject.domain.model
  * 월~금 enum class
  */
 
-enum class WeekModel(val displayName: String) {
-    Sun(displayName = "일"),
-    Mon(displayName = "월"),
-    Tues(displayName = "화"),
-    Wed(displayName = "수"),
-    Thurs(displayName = "목"),
-    Fri(displayName = "금"),
-    Sat(displayName = "토");
+enum class WeekModel(val displayOnKo: String, val displayOnElse: String) {
+    Sun(displayOnKo = "일", displayOnElse = "Sun"),
+    Mon(displayOnKo = "월", displayOnElse = "Mon"),
+    Tues(displayOnKo = "화", displayOnElse = "Tues"),
+    Wed(displayOnKo = "수", displayOnElse = "Wed"),
+    Thurs(displayOnKo = "목", displayOnElse = "Thur"),
+    Fri(displayOnKo = "금", displayOnElse = "Fri"),
+    Sat(displayOnKo = "토", displayOnElse = "Sat");
 
     fun getCodeByWeek() =
         when (this) {
