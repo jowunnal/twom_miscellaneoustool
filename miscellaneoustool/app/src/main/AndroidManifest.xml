@@ -41,10 +41,6 @@
         <service
             android:name="com.jinproject.twomillustratedbook.ui.service.ReAlarmService"
             android:description="@string/알람재생성서비스" />
-        <service
-            android:name="com.jinproject.twomillustratedbook.ui.service.AlarmService"
-            android:description="@string/알람서비스" />
-
         <receiver
             android:name="com.jinproject.twomillustratedbook.ui.receiver.AlarmReceiver"
             android:enabled="true"

@@ -187,8 +187,7 @@ class AlarmViewModel @Inject constructor(
                     item = AlarmItem(
                         name = monsterAlarmModel.name,
                         imgName = monsterAlarmModel.img,
-                        code = monsterAlarmModel.code,
-                        gtime = monsterAlarmModel.gtime
+                        code = monsterAlarmModel.code
                     ),
                     intervalFirstTimerSetting = firstInterval
                 )
@@ -198,8 +197,7 @@ class AlarmViewModel @Inject constructor(
                     item = AlarmItem(
                         name = monsterAlarmModel.name,
                         imgName = monsterAlarmModel.img,
-                        code = monsterAlarmModel.code + 300,
-                        gtime = monsterAlarmModel.gtime
+                        code = monsterAlarmModel.code + 300
                     ),
                     intervalSecondTimerSetting = secondInterval
                 )
@@ -228,10 +226,9 @@ class AlarmViewModel @Inject constructor(
         intervalSecondTimerSetting: Int = 0
     ) {
         val notifyIntentImmediately = Intent(context, AlarmReceiver::class.java)
-        notifyIntentImmediately.putExtra("msg", item.name)
+        notifyIntentImmediately.putExtra("name", item.name)
         notifyIntentImmediately.putExtra("img", item.imgName)
         notifyIntentImmediately.putExtra("code", item.code)
-        notifyIntentImmediately.putExtra("gtime", item.gtime)
         notifyIntentImmediately.putExtra("first", intervalFirstTimerSetting)
         notifyIntentImmediately.putExtra("second", intervalSecondTimerSetting)
 

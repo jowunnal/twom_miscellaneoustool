@@ -14,40 +14,37 @@ import com.jinproject.twomillustratedbook.ui.service.ReAlarmService
 
 @SuppressLint("DiscouragedApi")
 fun NotificationManager.sendNotification(
-    message: String,
+    name: String,
     img: String,
     code: Int,
-    applicationContext: Context,
-    gtime: Int,
+    context: Context,
     intervalFirstTimerSetting: Int = 0,
     intervalSecondTimerSetting: Int = 0
 ) {
-    val contentIntent = Intent(applicationContext, MainActivity::class.java)
-    val alarmIntent = Intent(applicationContext, ReAlarmService::class.java).apply {
-        putExtra("msg", message)
-        putExtra("img", img)
+    val contentIntent = Intent(context, MainActivity::class.java)
+    val alarmIntent = Intent(context, ReAlarmService::class.java).apply {
+        putExtra("name", name)
         putExtra("code", code)
-        putExtra("gtime", gtime)
     }
 
     val alarmPendingIntent = PendingIntent.getService(
-        applicationContext,
+        context,
         code,
         alarmIntent,
         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
     val pendingIntent = PendingIntent.getActivity(
-        applicationContext,
+        context,
         code,
         contentIntent,
         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
 
-    val assetManager = applicationContext.assets
+    val assetManager = context.assets
     val inputStream = assetManager.open("img/monster/$img.png")
     val bitMap = BitmapFactory.decodeStream(inputStream)
 
-    val builder = NotificationCompat.Builder(applicationContext, "TwomBossAlarm")
+    val builder = NotificationCompat.Builder(context, "TwomBossAlarm")
         .setSmallIcon(IconCompat.createWithBitmap(bitMap))
         .setContentTitle("알람")
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -56,13 +53,13 @@ fun NotificationManager.sendNotification(
         .setLargeIcon(bitMap)
 
     val alarmMessage = StringBuilder()
-        .append(applicationContext.getString(R.string.alarm_message_head) + message + applicationContext.getString(R.string.alarm_message_body))
+        .append(context.getString(R.string.alarm_message_head) + name + context.getString(R.string.alarm_message_body))
 
     if (code < 300) {
-        builder.setContentText(alarmMessage.append(intervalFirstTimerSetting.toString() + applicationContext.getString(R.string.alarm_message_tail)).toString())
+        builder.setContentText(alarmMessage.append(intervalFirstTimerSetting.toString() + context.getString(R.string.alarm_message_tail)).toString())
     } else {
-        builder.setContentText(alarmMessage.append(intervalSecondTimerSetting.toString() + applicationContext.getString(R.string.alarm_message_tail)).toString())
-        builder.addAction(R.drawable.img_add_alarm, applicationContext.getString(R.string.alarm_regeneration), alarmPendingIntent)
+        builder.setContentText(alarmMessage.append(intervalSecondTimerSetting.toString() + context.getString(R.string.alarm_message_tail)).toString())
+        builder.addAction(R.drawable.img_add_alarm, context.getString(R.string.alarm_regeneration), alarmPendingIntent)
     }
     notify(code, builder.build())
 
