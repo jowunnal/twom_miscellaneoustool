@@ -22,7 +22,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.blue
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.red
-import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
+import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 
 @Stable
 data class DialogState(
@@ -144,7 +144,7 @@ private fun DialogCustomContent(
 @Composable
 @Preview
 private fun PreviewDialogCustomWithPositiveMessage() {
-    TwomIllustratedBookPreview {
+    PreviewMiscellaneousToolTheme {
         DialogCustom(
             dialogState = DialogState(
                 header = "헤더메세지는 이렇게 나옵니다.",
@@ -161,7 +161,7 @@ private fun PreviewDialogCustomWithPositiveMessage() {
 @Composable
 @Preview
 private fun PreviewDialogCustomConfirm() {
-    TwomIllustratedBookPreview {
+    PreviewMiscellaneousToolTheme {
         DialogCustom(
             dialogState = DialogState(
                 header = "헤더메세지는 이렇게 나옵니다.",

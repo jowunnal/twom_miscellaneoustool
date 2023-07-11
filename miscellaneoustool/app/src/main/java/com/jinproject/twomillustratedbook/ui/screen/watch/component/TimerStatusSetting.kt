@@ -36,7 +36,7 @@ import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
 import com.jinproject.twomillustratedbook.ui.screen.watch.item.ButtonStatus
-import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
+import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 
 @Composable
 fun TimeStatusSetting(
@@ -169,7 +169,7 @@ private fun checkAuthorityDrawOverlays(
 @Preview
 @Composable
 private fun PreviewTimeStatusSetting() {
-    TwomIllustratedBookPreview {
+    PreviewMiscellaneousToolTheme {
         TimeStatusSetting(
             watchStatus = ButtonStatus.OFF,
             setWatchStatus = {},

@@ -66,8 +66,7 @@ class OverlayService: LifecycleService() {
             exitIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        notificationManager =
-            applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         createNotificationChannel()
 
@@ -125,46 +124,41 @@ class OverlayService: LifecycleService() {
         var fontSize = intent?.getIntExtra("fontSize",14)
 
         lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch(Dispatchers.Main) {
-                    while (true) {
-                        mView?.findViewById<TextView>(R.id.tv_currentTimes)?.text =
-                            SimpleDateFormat("HH:mm:ss").format(Date(System.currentTimeMillis()))
-                        delay(1000)
-                    }
-                }
-
-                launch {
-                    timerRepository.getTimerPreferences()
-                        .flowOn(Dispatchers.IO)
-                        .onEach { timer ->
-                            mView?.findViewById<TextView>(R.id.tv_onOtherApps)?.textSize = fontSize?.toFloat() ?: timer.fontSize.toFloat()
-                            mView?.findViewById<TextView>(R.id.tv_currentTimes)?.textSize = fontSize?.toFloat() ?: timer.fontSize.toFloat()
-                        }
-                        .flowOn(Dispatchers.Main)
-                        .launchIn(lifecycleScope)
-                }
-                launch {
-                    timerRepository.getTimer().map { timerModels ->
-                        timerModels.filter { timerModel ->
-                            timerModel.isOverlayOnOrNot
-                        }.map { timerModel -> timerModel.toTimerState() }
-                    }.onEach { timerStates ->
-                        mView?.findViewById<TextView>(R.id.tv_onOtherApps)?.text = kotlin.runCatching { StringBuilder().apply {
-                            for (item in list!!) {
-                                val hourOfDay = this@OverlayService.doOnLocaleLanguage(onKo = item.timeState.day.displayOnKo, onElse = item.timeState.day.displayOnElse)
-                                append("${item.bossName} (${hourOfDay}) ${item.timeState.hour}:${item.timeState.minutes}:${item.timeState.seconds}\n")
-                            }
-                        }.toString() }.getOrElse {
-                            timerStates.joinToString("\n") { timerState ->
-                                val hourOfDay = this@OverlayService.doOnLocaleLanguage(onKo = timerState.timeState.day.displayOnKo, onElse = timerState.timeState.day.displayOnElse)
-                                "${timerState.bossName} (${hourOfDay}) ${timerState.timeState.hour}:${timerState.timeState.minutes}:${timerState.timeState.seconds}"
-                            }
-                        }
-                    }.launchIn(lifecycleScope)
+            launch(Dispatchers.Main) {
+                while (true) {
+                    mView?.findViewById<TextView>(R.id.tv_currentTimes)?.text =
+                        SimpleDateFormat("HH:mm:ss").format(Date(System.currentTimeMillis()))
+                    delay(1000)
                 }
             }
         }
+
+        timerRepository.getTimerPreferences()
+            .flowOn(Dispatchers.IO)
+            .onEach { timer ->
+                mView?.findViewById<TextView>(R.id.tv_onOtherApps)?.textSize = fontSize?.toFloat() ?: timer.fontSize.toFloat()
+                mView?.findViewById<TextView>(R.id.tv_currentTimes)?.textSize = fontSize?.toFloat() ?: timer.fontSize.toFloat()
+            }
+            .flowOn(Dispatchers.Main)
+            .launchIn(lifecycleScope)
+
+        timerRepository.getTimer().map { timerModels ->
+            timerModels.filter { timerModel ->
+                timerModel.isOverlayOnOrNot
+            }.map { timerModel -> timerModel.toTimerState() }
+        }.onEach { timerStates ->
+            mView?.findViewById<TextView>(R.id.tv_onOtherApps)?.text = kotlin.runCatching { StringBuilder().apply {
+                for (item in list!!) {
+                    val hourOfDay = this@OverlayService.doOnLocaleLanguage(onKo = item.timeState.day.displayOnKo, onElse = item.timeState.day.displayOnElse)
+                    append("${item.bossName} (${hourOfDay}) ${item.timeState.hour}:${item.timeState.minutes}:${item.timeState.seconds}\n")
+                }
+            }.toString() }.getOrElse {
+                timerStates.joinToString("\n") { timerState ->
+                    val hourOfDay = this@OverlayService.doOnLocaleLanguage(onKo = timerState.timeState.day.displayOnKo, onElse = timerState.timeState.day.displayOnElse)
+                    "${timerState.bossName} (${hourOfDay}) ${timerState.timeState.hour}:${timerState.timeState.minutes}:${timerState.timeState.seconds}"
+                }
+            }
+        }.launchIn(lifecycleScope)
 
         val xPos = intent?.getIntExtra("xPos", 0) ?: 0
         val yPos = intent?.getIntExtra("yPos", 0) ?: 0

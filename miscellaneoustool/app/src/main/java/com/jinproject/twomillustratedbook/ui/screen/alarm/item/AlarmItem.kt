@@ -6,15 +6,13 @@ import androidx.compose.runtime.Stable
 data class AlarmItem(
     val name: String,
     val imgName: String,
-    val code: Int,
-    val gtime: Int
+    val code: Int
 ) {
     companion object {
         fun getInitValue() = AlarmItem(
             name = "",
             imgName = "",
-            code = -1,
-            gtime = -1
+            code = -1
         )
     }
 }

@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
-import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
+import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 
 @Composable
 fun DefaultAppBar(
@@ -64,7 +64,7 @@ fun DefaultAppBar(
 
 @Preview
 @Composable
-private fun PreviewDefaultAppBar() = TwomIllustratedBookPreview {
+private fun PreviewDefaultAppBar() = PreviewMiscellaneousToolTheme {
     DefaultAppBar(
         title = "앱바 타이틀",
         onBackClick = {}

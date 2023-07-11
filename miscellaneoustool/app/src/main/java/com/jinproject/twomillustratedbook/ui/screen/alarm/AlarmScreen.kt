@@ -29,7 +29,7 @@ import com.jinproject.twomillustratedbook.ui.screen.compose.component.DialogCust
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.DialogState
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.HorizontalDivider
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
-import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
+import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -38,13 +38,14 @@ fun AlarmScreen(
     alarmViewModel: AlarmViewModel = hiltViewModel(),
     context: Context = LocalContext.current,
     changeVisibilityBottomNavigationBar: (Boolean) -> Unit,
-    showRewardedAd: (()->Unit) -> Unit,
+    showRewardedAd: (() -> Unit) -> Unit,
     onNavigateToGear: () -> Unit,
     onNavigateToWatch: () -> Unit
 ) {
     changeVisibilityBottomNavigationBar(true)
 
     val alarmUiState by alarmViewModel.uiState.collectAsStateWithLifecycle()
+    val alarmBottomSheetUiState by alarmViewModel.bottomSheetUiState.collectAsStateWithLifecycle()
     val snackBarMessage by alarmViewModel.snackBarMessage.collectAsStateWithLifecycle(
         initialValue = SnackBarMessage.getInitValues(),
         lifecycleOwner = LocalLifecycleOwner.current
@@ -52,16 +53,18 @@ fun AlarmScreen(
 
     AlarmScreen(
         alarmUiState = alarmUiState,
+        alarmBottomSheetUiState = alarmBottomSheetUiState,
         snackBarMessage = snackBarMessage,
         addBossToFrequentlyUsedList = alarmViewModel::addBossToFrequentlyUsedList,
         removeBossFromFrequentlyUsedList = alarmViewModel::removeBossFromFrequentlyUsedList,
         onStartAlarm = { bossName ->
-            if(Build.VERSION.SDK_INT >= 31) {
+            if (Build.VERSION.SDK_INT >= 31) {
                 val alarmManager = context.getSystemService<AlarmManager>()!!
                 when {
                     alarmManager.canScheduleExactAlarms() -> {
                         alarmViewModel::setAlarm.invoke(bossName)
                     }
+
                     else -> {
                         context.startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
                     }
@@ -87,11 +90,12 @@ fun AlarmScreen(
 @Composable
 private fun AlarmScreen(
     alarmUiState: AlarmUiState,
+    alarmBottomSheetUiState: AlarmBottomSheetUiState,
     snackBarMessage: SnackBarMessage,
     addBossToFrequentlyUsedList: (String) -> Unit,
     removeBossFromFrequentlyUsedList: (String) -> Unit,
-    scaffoldState:ScaffoldState = rememberScaffoldState(),
-    coroutineScope:CoroutineScope = rememberCoroutineScope(),
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
     onStartAlarm: (String) -> Unit,
     onClearAlarm: (Int, String) -> Unit,
     setHourChanged: (Int) -> Unit,
@@ -102,7 +106,7 @@ private fun AlarmScreen(
     setRecentlySelectedBossNameChanged: (String) -> Unit,
     onNavigateToGear: () -> Unit,
     onNavigateToWatch: () -> Unit,
-    showRewardedAd: (()->Unit) -> Unit
+    showRewardedAd: (() -> Unit) -> Unit
 ) {
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -120,14 +124,15 @@ private fun AlarmScreen(
             onDismissRequest = { showDialogState.value = false }
         )
 
-    if (snackBarMessage.headerMessage.isNotBlank())
-        LaunchedEffect(key1 = snackBarMessage) {
+
+    LaunchedEffect(key1 = snackBarMessage) {
+        if (snackBarMessage.headerMessage.isNotBlank())
             scaffoldState.snackbarHostState.showSnackbar(
                 message = snackBarMessage.headerMessage,
                 actionLabel = snackBarMessage.contentMessage,
                 duration = SnackbarDuration.Indefinite
             )
-        }
+    }
 
     DefaultLayout(
         topBar = {
@@ -141,8 +146,8 @@ private fun AlarmScreen(
         ModalBottomSheetLayout(
             sheetContent = {
                 AlarmBottomSheetContent(
-                    timeState = alarmUiState.timeState,
-                    selectedBossName = alarmUiState.selectedBossName,
+                    timeState = alarmBottomSheetUiState.timeState,
+                    selectedBossName = alarmBottomSheetUiState.selectedBossName,
                     setHourChanged = setHourChanged,
                     setMinutesChanged = setMinutesChanged,
                     setSecondsChanged = setSecondsChanged,
@@ -204,7 +209,7 @@ private fun AlarmScreen(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewAlarmScreen() {
-    TwomIllustratedBookPreview {
+    PreviewMiscellaneousToolTheme {
         AlarmScreen(
             alarmUiState = AlarmUiState(
                 timerList = listOf(
@@ -239,7 +244,6 @@ private fun PreviewAlarmScreen() {
                         )
                     )
                 ),
-                selectedBossName = "은둔자",
                 recentlySelectedBossClassified = "보스",
                 recentlySelectedBossName = "바슬라프",
                 bossNameList = listOf(
@@ -261,8 +265,11 @@ private fun PreviewAlarmScreen() {
                     "칼리고",
                     "데블랑",
                     "우크파나"
-                ),
-                timeState = TimeState.getInitValue()
+                )
+            ),
+            alarmBottomSheetUiState = AlarmBottomSheetUiState(
+                timeState = TimeState.getInitValue(),
+                selectedBossName = "은둔자",
             ),
             snackBarMessage = SnackBarMessage.getInitValues(),
             setSelectedBossName = {},

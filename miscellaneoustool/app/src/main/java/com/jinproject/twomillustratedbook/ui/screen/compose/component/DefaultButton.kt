@@ -17,7 +17,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
-import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
+import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 
 @Composable
 fun DefaultButton(
@@ -46,6 +46,6 @@ fun DefaultButton(
 @Preview()
 @Composable
 private fun PreviewDefaultButton() =
-    TwomIllustratedBookPreview {
+    PreviewMiscellaneousToolTheme {
         DefaultButton(content = "버튼")
     }

@@ -6,9 +6,9 @@
     <string name="channel_name">IMO Miscellaneous Channel</string>
     <string name="channel_description">This is IMO Miscellaneous Channel</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="현재시간항상보기">Twom watch always present time service</string>
-    <string name="알람재생성서비스">Twom recreate alarm service</string>
-    <string name="알람서비스">Twom create alarm service</string>
+    <string name="현재시간항상보기">Twom watch palaging present time service</string>
+    <string name="알람재생성서비스">Dalawang muling likhain ang serbisyo ng alarma</string>
+    <string name="알람서비스">Twom lumikha ng serbisyo ng alarma</string>
 
     <!-- UI strings !-->
     <string name="item_name">Item\'s Name</string>
@@ -17,9 +17,9 @@
     <string name="home_header">Twom Miscellaneous Tool</string>
     <string name="version">v2.0.3</string>
 
-    <string name="input_price_hint">Input Price</string>
-    <string name="setting_item"><u>Change Item Setting</u></string>
-    <string name="setting_filter"><u>Change Filtering Setting</u></string>
+    <string name="input_price_hint">ilagay ang presyo</string>
+    <string name="setting_item"><u>Baguhin ang mga setting ng item</u></string>
+    <string name="setting_filter"><u>Baguhin ang pag-filter ng item</u></string>
 
     <string name="price">Price</string>
     <string name="delete">Delete</string>
@@ -40,20 +40,20 @@
     <string name="off">OFF</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="delete_something">: Are you sure you want to delete it?</string>
+    <string name="delete_something">: Sigurado ka bang gusto mong tanggalin?</string>
     <string name="hour">hour</string>
     <string name="minute">minutes</string>
     <string name="second">seconds</string>
     <string name="turnoff">Turn off</string>
 
     <!-- Snackbar Message -->
-    <string name="message_throw_no_such_element">The item has not found in Database</string>
-    <string name="message_throw_exceptions">An error has occurred. Please try again.</string>
+    <string name="message_throw_no_such_element">Walang tugmang data.</string>
+    <string name="message_throw_exceptions">May naganap na hindi kilalang error. Pakisubukang muli.</string>
 
     <!-- collection strings -->
-    <string name="collection_roll_back">Would you like to return the collection?</string>
+    <string name="collection_roll_back">Gusto mo bang ibalik ang collection?</string>
     <string name="input_price">\'s Price</string>
-    <string name="out_of_item_price">The item\'s price is out of tolerance.</string>
+    <string name="out_of_item_price">The item\'s ang presyo ay wala sa katanggap-tanggap na saklaw.</string>
 
     <!-- alarm strings -->
     <string name="alarm_selectboss">Boss Selection</string>
@@ -67,25 +67,25 @@
 
     <!-- gear strings -->
     <string name="billing_purchase">Buy Products</string>
-    <string name="alarm_setting_interval_success">Alarm interval setting has been completed.</string>
-    <string name="alarm_setting_interval_failure">The alarm interval has not been set.</string>
-    <string name="alarm_setting_interval_failure_reason">The last alarm interval should be longer.</string>
+    <string name="alarm_setting_interval_success">Kumpleto na ang setting ng interval ng alarm.</string>
+    <string name="alarm_setting_interval_failure">Hindi gumanap ang setting ng interval ng alarm.</string>
+    <string name="alarm_setting_interval_failure_reason">Ang huling agwat ng alarma ay dapat na mas mahaba.</string>
     <string name="alarm_setting_interval"> Alarm Interval</string>
     <string name="alarm_setting">Alarm Setting</string>
 
     <!-- watch strings -->
     <string name="watch_appbar_title">Current time view settings</string>
     <string name="watch_title_recently_bosslist">List of frequently used bosses</string>
-    <string name="watch_bottomsheet_title">Do you want to register to always view the current time?</string>
+    <string name="watch_bottomsheet_title">Gusto mo bang magparehistro para laging makita ang kasalukuyang oras?</string>
     <string name="watch_setting_fontsize">Font Size</string>
     <string name="watch_setting_move_x">Horizontal Axis Move</string>
     <string name="watch_setting_move_y">Vertical Axis Move</string>
     <string name="watch_setting_title">Always see the current time</string>
 
     <!-- service strings -->
-    <string name="service_overlay_running">The current time always view is running.</string>
+    <string name="service_overlay_running">Ang kasalukuyang view ng oras ay palaging gumagana.</string>
 
     <!-- activity strings -->
-    <string name="authority_alarm_failure">If you do not agree to the notification authority, you cannot use the alarm service.</string>
+    <string name="authority_alarm_failure">Kung hindi mo inaprubahan ang awtoridad ng alarma, hindi ka makakatanggap ng mga tumpak na alarma.</string>
 
 </resources>

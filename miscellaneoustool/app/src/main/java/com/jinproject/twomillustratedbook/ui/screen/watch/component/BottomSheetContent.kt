@@ -1,6 +1,7 @@
 package com.jinproject.twomillustratedbook.ui.screen.watch.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,7 +28,7 @@ import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultBut
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.HorizontalSpacer
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
-import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
+import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -39,7 +40,9 @@ fun TimerBottomSheetContent(
     setSelectedMonsterOtaToTrue: (Int) -> Unit
 ) {
     Column(
-        modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
+        modifier = Modifier
+            .background(color = MaterialTheme.colorScheme.background)
+            .padding(horizontal = 20.dp, vertical = 16.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -119,7 +122,7 @@ fun TimerBottomSheetContent(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewTimerBottomSheetContent() =
-    TwomIllustratedBookPreview {
+    PreviewMiscellaneousToolTheme {
         TimerBottomSheetContent(
             selectedMonsterName = "은둔자",
             onCloseBottomSheet = {},

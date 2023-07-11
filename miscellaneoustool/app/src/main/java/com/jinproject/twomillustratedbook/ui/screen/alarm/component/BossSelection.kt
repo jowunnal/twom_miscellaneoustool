@@ -32,7 +32,7 @@ import com.jinproject.twomillustratedbook.ui.screen.compose.component.DialogStat
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.DropDownMenuCustom
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
-import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
+import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 
 @Composable
 fun BossSelection(
@@ -189,7 +189,7 @@ private fun BossSelectionItem(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewBossSelectionItem() =
-    TwomIllustratedBookPreview {
+    PreviewMiscellaneousToolTheme {
         BossSelectionItem(
             bossName = "보스이름",
             onClickBossItem = {},
@@ -203,7 +203,7 @@ private fun PreviewBossSelectionItem() =
 @Preview(showBackground = true)
 @Composable
 private fun PreviewBossSelection() =
-    TwomIllustratedBookPreview {
+    PreviewMiscellaneousToolTheme {
         BossSelection(
             bossNameList = listOf(
                 "은둔자",

@@ -22,33 +22,30 @@ class AlarmReceiver : BroadcastReceiver() {
             p0!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         createNotificationChannel(p0, notificationManager)
 
-        val msg = p1!!.getStringExtra("msg")!!
+        val name = p1!!.getStringExtra("name")!!
         val img = p1.getStringExtra("img")!!
         val code = p1.getIntExtra("code", 0)
-        val gtime = p1.getIntExtra("gtime", 0)
         val intervalFirstTimeSetting = p1.getIntExtra("first",0)
         val intervalSecondTimeSetting = p1.getIntExtra("second",0)
 
         if (code > 300) {
             notificationManager.sendNotification(
-                message = msg,
+                name = name,
                 img = img,
                 code = code,
-                applicationContext = p0,
-                gtime = gtime,
+                context = p0,
                 intervalSecondTimerSetting = intervalSecondTimeSetting
             )
             CoroutineScope(Dispatchers.IO).launch {
-                timerRepository.deleteTimer(msg.split("<",">").first())
+                timerRepository.deleteTimer(name)
             }
         }
         else {
             notificationManager.sendNotification(
-                message = msg,
+                name = name,
                 img = img,
                 code = code,
-                applicationContext = p0,
-                gtime = gtime,
+                context = p0,
                 intervalFirstTimerSetting = intervalFirstTimeSetting
             )
         }

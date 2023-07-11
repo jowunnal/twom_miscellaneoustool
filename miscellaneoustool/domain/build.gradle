@@ -22,4 +22,5 @@ dependencies {
 
     implementation(libs.bundles.coroutines)
     implementation(libs.dagger)
+    implementation(libs.protobuf)
 }
