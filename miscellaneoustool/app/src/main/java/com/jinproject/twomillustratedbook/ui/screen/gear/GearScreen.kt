@@ -1,6 +1,7 @@
 package com.jinproject.twomillustratedbook.ui.screen.gear
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.MaterialTheme
@@ -31,8 +33,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.billingclient.api.ProductDetails
+import com.android.billingclient.api.Purchase
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.jinproject.twomillustratedbook.R
+import com.jinproject.twomillustratedbook.ui.MainActivity
 import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultAppBar
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultButton
@@ -40,16 +44,17 @@ import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultLay
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.HorizontalDivider
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.HorizontalSpacer
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
-import com.jinproject.twomillustratedbook.ui.screen.compose.navigation.BillingModule
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.red
-import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
+import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 import com.jinproject.twomillustratedbook.utils.appendBoldText
+import com.jinproject.twomillustratedbook.utils.findActivity
+
 
 @Composable
 fun GearScreen(
-    billingModule: BillingModule,
     gearViewModel: GearViewModel = hiltViewModel(),
+    context: Context = LocalContext.current,
     changeVisibilityBottomNavigationBar: (Boolean) -> Unit,
     onNavigatePopBackStack: () -> Unit
 ) {
@@ -60,6 +65,35 @@ fun GearScreen(
         initialValue = SnackBarMessage.getInitValues(),
         lifecycleOwner = LocalLifecycleOwner.current
     )
+
+    val callback = object: MainActivity.OnBillingCallback {
+        override fun onSuccess(purchase: Purchase) {
+            gearViewModel::emitSnackBar.invoke(SnackBarMessage(
+                headerMessage = "${purchase.products.first()} 상품의 구매가 완료되었어요."
+            ))
+        }
+
+        override fun onFailure(errorCode: Int) {
+            Log.e("test","error : $errorCode")
+            val snackBar = SnackBarMessage(
+                headerMessage = "구매 실패",
+                contentMessage = when(errorCode) {
+                    1 -> "취소를 하셨어요."
+                    2,3,4 -> "유효하지 않은 상품 이에요."
+                    5,6 -> "잘못된 상품 이에요."
+                    7 -> "이미 보유하고 있는 상품 이에요."
+                    else -> "네트워크 에러로 인해 실패했어요."
+                }
+            )
+            gearViewModel::emitSnackBar.invoke(snackBar)
+        }
+
+    }
+
+    val activity = (context.findActivity() as MainActivity).apply {
+        setBillingCallback(callback)
+    }
+    val billingModule = activity.billingModule
 
     val availableProducts = remember {
         billingModule.purchasableProducts
@@ -84,6 +118,7 @@ private fun GearScreen(
     snackBarMessage: SnackBarMessage,
     availableProducts: List<ProductDetails>,
     context: Context = LocalContext.current,
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
     purchaseInApp: (ProductDetails) -> Unit,
     setIntervalFirstTimerSetting: (Int) -> Unit,
     setIntervalSecondTimerSetting: (Int) -> Unit,
@@ -91,16 +126,15 @@ private fun GearScreen(
     onNavigatePopBackStack: () -> Unit,
     emitSnackBar: (SnackBarMessage) -> Unit
 ) {
-    val scaffoldState = rememberScaffoldState()
 
-    if (snackBarMessage.headerMessage.isNotBlank())
-        LaunchedEffect(key1 = snackBarMessage.headerMessage) {
+    LaunchedEffect(key1 = snackBarMessage) {
+        if(snackBarMessage.headerMessage.isNotBlank())
             scaffoldState.snackbarHostState.showSnackbar(
                 message = snackBarMessage.headerMessage,
                 actionLabel = snackBarMessage.contentMessage,
                 duration = SnackbarDuration.Indefinite
             )
-        }
+    }
 
     DefaultLayout(
         topBar = {
@@ -184,11 +218,6 @@ private fun GearScreen(
 }
 
 @Composable
-private fun SettingInAppPay(title: String) {
-    DefaultButton(content = title)
-}
-
-@Composable
 private fun SettingIntervalItem(
     headerText: String,
     pickerValue: Int,
@@ -223,12 +252,13 @@ private fun SettingIntervalItem(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewGearScreen() {
-    TwomIllustratedBookPreview {
+    PreviewMiscellaneousToolTheme {
         GearScreen(
             gearUiState = GearUiState.getInitValue(),
             snackBarMessage = SnackBarMessage.getInitValues(),
             availableProducts = emptyList(),
             purchaseInApp = {},
+            scaffoldState = rememberScaffoldState(),
             setIntervalFirstTimerSetting = {},
             setIntervalSecondTimerSetting = {},
             setIntervalTimerSetting = {},

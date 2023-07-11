@@ -46,7 +46,7 @@ class BillingModule(
             BillingClient.BillingResponseCode.OK -> {
                 if(purchases != null) {
                     for(purchase in purchases) {
-                        lifeCycleScope.launch {
+                        lifeCycleScope.launch(Dispatchers.IO) {
                             handlePurchase(purchase, purchase.products.first().findProductById()!!.isConsume)
                         }
                     }
