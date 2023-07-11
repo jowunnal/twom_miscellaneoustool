@@ -1,6 +1,9 @@
 package com.jinproject.twomillustratedbook.ui.base.item
 
-data class SnackBarMessage(
+import androidx.compose.runtime.Stable
+
+@Stable
+class SnackBarMessage(
     val headerMessage: String,
     val contentMessage: String = ""
 ) {

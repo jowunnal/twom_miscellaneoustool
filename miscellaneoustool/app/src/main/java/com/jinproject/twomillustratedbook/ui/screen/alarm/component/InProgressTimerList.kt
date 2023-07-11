@@ -25,7 +25,7 @@ import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimerState
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.DialogState
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
-import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
+import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 import com.jinproject.twomillustratedbook.utils.appendBoldText
 
 @Composable
@@ -114,7 +114,7 @@ fun InProgressTimerList(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewInProgressTimerList() {
-    TwomIllustratedBookPreview {
+    PreviewMiscellaneousToolTheme {
         InProgressTimerList(
             timerStateList = listOf(
                 TimerState(

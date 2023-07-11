@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
-import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
+import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 
 @Composable
 fun SnackBarHostCustom(
@@ -103,7 +103,7 @@ private fun SnackBarCustom(
 @Preview
 @Composable
 private fun PreviewSnackBarCustom1(){
-    TwomIllustratedBookPreview {
+    PreviewMiscellaneousToolTheme {
         SnackBarCustom(
             headerMessage = "헤더메세지는 이렇게 보입니다.",
             contentMessage = "컨텐트메세지는 이렇게 보입니다.",
@@ -115,7 +115,7 @@ private fun PreviewSnackBarCustom1(){
 @Preview
 @Composable
 private fun PreviewSnackBarCustom2(){
-    TwomIllustratedBookPreview {
+    PreviewMiscellaneousToolTheme {
         SnackBarCustom(
             headerMessage = "컨텐트메세지가 없다면 이렇게 보입니다.",
             contentMessage = "",

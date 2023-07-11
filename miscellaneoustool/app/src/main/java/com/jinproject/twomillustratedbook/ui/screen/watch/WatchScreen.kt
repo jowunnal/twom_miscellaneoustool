@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,7 +34,7 @@ import com.jinproject.twomillustratedbook.ui.screen.watch.component.TimeStatusSe
 import com.jinproject.twomillustratedbook.ui.screen.watch.component.TimerBottomSheetContent
 import com.jinproject.twomillustratedbook.ui.screen.watch.item.ButtonStatus
 import com.jinproject.twomillustratedbook.ui.service.OverlayService
-import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
+import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -100,7 +101,8 @@ private fun WatchScreen(
                     setSelectedMonsterOtaToTrue = setSelectedMonsterOtaToTrue
                 )
             },
-            sheetState = bottomSheetState
+            sheetState = bottomSheetState,
+            sheetShape = RoundedCornerShape(20.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -230,7 +232,7 @@ private fun BossSelectionItem(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewWatchScreen() =
-    TwomIllustratedBookPreview {
+    PreviewMiscellaneousToolTheme {
         WatchScreen(
             uiState = WatchUiState(
                 frequentlyUsedBossList = listOf(

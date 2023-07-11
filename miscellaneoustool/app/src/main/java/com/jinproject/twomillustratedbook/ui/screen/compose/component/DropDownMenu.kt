@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
-import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
+import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 
 @Composable
 fun DropDownMenuCustom(
@@ -105,7 +105,7 @@ fun DropDownMenuCustom(
 @Composable
 @Preview(showBackground = true)
 private fun PreviewDropDownMenuCustom() {
-    TwomIllustratedBookPreview {
+    PreviewMiscellaneousToolTheme {
         DropDownMenuCustom(
             iconHeader = R.drawable.icon_home,
             iconTail = R.drawable.icon_alarm,

@@ -1,13 +1,14 @@
 package com.jinproject.twomillustratedbook.ui.screen.alarm
 
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.compose.runtime.Stable
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.jinproject.core.util.doOnLocaleLanguage
+import com.jinproject.domain.usecase.alarm.SetAlarmUsecase
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
 import com.jinproject.twomillustratedbook.ui.receiver.AlarmReceiver
@@ -15,25 +16,24 @@ import com.jinproject.twomillustratedbook.ui.screen.alarm.item.AlarmItem
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimeState
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimerState
 import com.jinproject.twomillustratedbook.ui.screen.alarm.mapper.toTimerState
-import com.jinproject.twomillustratedbook.ui.screen.droplist.mapper.toMonsterState
-import com.jinproject.twomillustratedbook.utils.day
-import com.jinproject.twomillustratedbook.utils.hour
-import com.jinproject.twomillustratedbook.utils.minute
-import com.jinproject.twomillustratedbook.utils.second
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @Stable
 data class AlarmUiState(
     val timerList: List<TimerState>,
-    val timeState: TimeState,
-    val selectedBossName: String,
     val recentlySelectedBossClassified: String,
     val recentlySelectedBossName: String,
     val bossNameList: List<String>,
@@ -42,8 +42,6 @@ data class AlarmUiState(
     companion object {
         fun getInitValue() = AlarmUiState(
             timerList = listOf(TimerState.getInitValue()),
-            timeState = TimeState.getInitValue(),
-            selectedBossName = "",
             recentlySelectedBossClassified = "",
             recentlySelectedBossName = "",
             bossNameList = emptyList(),
@@ -52,11 +50,25 @@ data class AlarmUiState(
     }
 }
 
+@Stable
+data class AlarmBottomSheetUiState(
+    val timeState: TimeState,
+    val selectedBossName: String
+) {
+    companion object {
+        fun getInitValue() = AlarmBottomSheetUiState(
+            timeState = TimeState.getInitValue(),
+            selectedBossName = ""
+        )
+    }
+}
+
 @HiltViewModel
 class AlarmViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val timerRepository: com.jinproject.domain.repository.TimerRepository,
-    private val dropListRepository: com.jinproject.domain.repository.DropListRepository
+    private val dropListRepository: com.jinproject.domain.repository.DropListRepository,
+    private val setAlarmUsecase: SetAlarmUsecase
 ) :
     ViewModel() {
     private val alarmManager: AlarmManager =
@@ -64,6 +76,9 @@ class AlarmViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(AlarmUiState.getInitValue())
     val uiState get() = _uiState.asStateFlow()
+
+    private val _bottomSheetUiState = MutableStateFlow(AlarmBottomSheetUiState.getInitValue())
+    val bottomSheetUiState get() = _bottomSheetUiState.asStateFlow()
 
     private val _snackBarMessage = MutableSharedFlow<SnackBarMessage>()
     val snackBarMessage get() = _snackBarMessage.asSharedFlow()
@@ -123,7 +138,7 @@ class AlarmViewModel @Inject constructor(
     }
 
     fun removeBossFromFrequentlyUsedList(bossName: String) {
-        val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+        val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
             if (throwable is IllegalArgumentException) {
                 emitSnackBar(SnackBarMessage(headerMessage = context.getString(R.string.message_throw_exceptions)))
             }
@@ -144,107 +159,54 @@ class AlarmViewModel @Inject constructor(
         }
     }.launchIn(viewModelScope)
 
-    private fun setTimer(timerState: TimerState) {
-        viewModelScope.launch(Dispatchers.IO) {
-            timerRepository.setTimer(
-                timerState.id,
-                timerState.timeState.day.getCodeByWeek(),
-                timerState.timeState.hour,
-                timerState.timeState.minutes,
-                timerState.timeState.seconds,
-                timerState.bossName
-            )
-        }
+    fun setHourChanged(hour: Int) = _bottomSheetUiState.update { state ->
+        state.copy(timeState = bottomSheetUiState.value.timeState.copy(hour = hour))
     }
 
-    fun setHourChanged(hour: Int) = _uiState.update { state ->
-        state.copy(timeState = uiState.value.timeState.copy(hour = hour))
+    fun setMinutesChanged(minutes: Int) = _bottomSheetUiState.update { state ->
+        state.copy(timeState = bottomSheetUiState.value.timeState.copy(minutes = minutes))
     }
 
-    fun setMinutesChanged(minutes: Int) = _uiState.update { state ->
-        state.copy(timeState = uiState.value.timeState.copy(minutes = minutes))
+    fun setSecondsChanged(seconds: Int) = _bottomSheetUiState.update { state ->
+        state.copy(timeState = bottomSheetUiState.value.timeState.copy(seconds = seconds))
     }
 
-    fun setSecondsChanged(seconds: Int) = _uiState.update { state ->
-        state.copy(timeState = uiState.value.timeState.copy(seconds = seconds))
+    fun setSelectedBossName(bossName: String) = _bottomSheetUiState.update { state ->
+        state.copy(selectedBossName = bossName, timeState = TimeState.getInitValue())
     }
 
-    fun setSelectedBossName(bossName: String) = _uiState.update { state ->
-        state.copy(selectedBossName = bossName)
-    }
+    fun setAlarm(monsterName: String) =
+        setAlarmUsecase.invoke(
+            monsterName = monsterName,
+            monsDiedHour = bottomSheetUiState.value.timeState.hour,
+            monsDiedMin = bottomSheetUiState.value.timeState.minutes,
+            monsDiedSec = bottomSheetUiState.value.timeState.seconds,
+            makeAlarm = { firstInterval, secondInterval, monsterAlarmModel ->
+                makeAlarm(
+                    nextGenTime = monsterAlarmModel.nextGtime - firstInterval * 60000,
+                    item = AlarmItem(
+                        name = monsterAlarmModel.name,
+                        imgName = monsterAlarmModel.img,
+                        code = monsterAlarmModel.code,
+                        gtime = monsterAlarmModel.gtime
+                    ),
+                    intervalFirstTimerSetting = firstInterval
+                )
 
-    @SuppressLint("SimpleDateFormat")
-    fun setAlarm(monsterName: String) {
-        dropListRepository.getMonsInfo(monsterName).transform { monsterModel ->
-            emit(monsterModel.toMonsterState())
-        }.zip(timerRepository.getTimerPreferences()) { monsterState, prefs ->
-            val genTime = Calendar.getInstance().apply {
-                hour = uiState.value.timeState.hour
-                minute = uiState.value.timeState.minutes
-                second = uiState.value.timeState.seconds
-            }.timeInMillis + (monsterState.genTime * 1000).toLong()
+                makeAlarm(
+                    nextGenTime = monsterAlarmModel.nextGtime - secondInterval * 60000,
+                    item = AlarmItem(
+                        name = monsterAlarmModel.name,
+                        imgName = monsterAlarmModel.img,
+                        code = monsterAlarmModel.code + 300,
+                        gtime = monsterAlarmModel.gtime
+                    ),
+                    intervalSecondTimerSetting = secondInterval
+                )
 
-            val cal = Calendar.getInstance().apply {
-                timeInMillis = genTime
+                emitSnackBar(SnackBarMessage(headerMessage = "$monsterName ${context.getString(R.string.alarm_setted)}"))
             }
-
-            val timer = uiState.value.timerList.find { timerState ->
-                timerState.bossName == monsterName
-            }
-
-            val code = timer?.id
-                ?: if (uiState.value.timerList.isNotEmpty()) uiState.value.timerList.maxOf { item -> item.id } + 1 else 1
-
-            when (timer) {
-                is TimerState -> {
-                    timerRepository.updateTimer(
-                        id = code,
-                        day = cal.day,
-                        hour = cal.hour,
-                        min = cal.minute,
-                        sec = cal.second
-                    )
-                }
-                null -> {
-                    setTimer(
-                        TimerState(
-                            id = code,
-                            bossName = monsterName,
-                            timeState = TimeState(
-                                day = com.jinproject.domain.model.WeekModel.findByCode(cal.day),
-                                hour = cal.hour,
-                                minutes = cal.minute,
-                                seconds = cal.second
-                            )
-                        )
-                    )
-                }
-            }
-
-            makeAlarm(
-                nextGenTime = genTime - prefs.intervalFirstTimerSetting * 60000,
-                item = AlarmItem(
-                    name = monsterState.name,
-                    imgName = monsterState.imgName,
-                    code = code,
-                    gtime = monsterState.genTime
-                ),
-                intervalFirstTimerSetting = prefs.intervalFirstTimerSetting
-            )
-
-            makeAlarm(
-                nextGenTime = genTime - prefs.intervalSecondTimerSetting * 60000,
-                item = AlarmItem(
-                    name = monsterState.name,
-                    imgName = monsterState.imgName,
-                    code = code + 300,
-                    gtime = monsterState.genTime
-                ),
-                intervalSecondTimerSetting = prefs.intervalSecondTimerSetting
-            )
-
-            emitSnackBar(SnackBarMessage(headerMessage = "$monsterName ${context.getString(R.string.alarm_setted)}"))
-        }.catch { e ->
+        ).catch { e ->
             when (e) {
                 is NoSuchElementException -> {
                     emitSnackBar(
@@ -254,10 +216,10 @@ class AlarmViewModel @Inject constructor(
                         )
                     )
                 }
+
                 else -> emitSnackBar(SnackBarMessage(headerMessage = context.getString(R.string.message_throw_exceptions)))
             }
         }.launchIn(viewModelScope)
-    }
 
     private fun makeAlarm(
         nextGenTime: Long,

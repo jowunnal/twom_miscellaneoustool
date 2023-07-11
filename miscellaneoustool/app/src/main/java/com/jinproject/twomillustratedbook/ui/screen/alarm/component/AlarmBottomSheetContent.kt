@@ -29,12 +29,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.jinproject.twomillustratedbook.R
+import com.jinproject.twomillustratedbook.ui.MainActivity
 import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimeState
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultButton
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.HorizontalSpacer
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
-import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
+import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
+import com.jinproject.twomillustratedbook.utils.findActivity
 import com.jinproject.twomillustratedbook.utils.tu
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
@@ -42,15 +46,14 @@ fun AlarmBottomSheetContent(
     timeState: TimeState,
     selectedBossName: String,
     context: Context = LocalContext.current,
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
     setHourChanged: (Int) -> Unit,
     setMinutesChanged: (Int) -> Unit,
     setSecondsChanged: (Int) -> Unit,
     onStartAlarm: (String) -> Unit,
     onCloseBottomSheet: () -> Unit,
-    showRewardedAd: (()->Unit) -> Unit
+    showRewardedAd: (() -> Unit) -> Unit
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
     Column(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
@@ -112,14 +115,27 @@ fun AlarmBottomSheetContent(
 
         VerticalSpacer(height = 16.dp)
 
-        Row() {
+        Row {
             DefaultButton(
                 content = stringResource(id = R.string.start_do),
                 modifier = Modifier
                     .weight(1f)
                     .clickable {
-                        showRewardedAd {
-                            onStartAlarm(selectedBossName)
+                        val billingModule = (context.findActivity() as MainActivity).billingModule
+
+                        billingModule.queryPurchase { purchaseList ->
+                            coroutineScope.launch(Dispatchers.Main) {
+                                if (billingModule.checkPurchased(
+                                        purchaseList = purchaseList,
+                                        productId = "ad_remove"
+                                    )
+                                ) {
+                                    showRewardedAd {
+                                        onStartAlarm(selectedBossName)
+                                    }
+                                } else
+                                    onStartAlarm(selectedBossName)
+                            }
                         }
                         onCloseBottomSheet()
                     }
@@ -174,7 +190,7 @@ private fun NumberPickerDefault(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewAlarmBottomSheetContent() =
-    TwomIllustratedBookPreview {
+    PreviewMiscellaneousToolTheme {
         AlarmBottomSheetContent(
             timeState = TimeState(
                 day = com.jinproject.domain.model.WeekModel.Mon,

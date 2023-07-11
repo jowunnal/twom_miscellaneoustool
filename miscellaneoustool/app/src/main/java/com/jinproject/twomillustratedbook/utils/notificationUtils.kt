@@ -55,11 +55,14 @@ fun NotificationManager.sendNotification(
         .setAutoCancel(true)
         .setLargeIcon(bitMap)
 
+    val alarmMessage = StringBuilder()
+        .append(applicationContext.getString(R.string.alarm_message_head) + message + applicationContext.getString(R.string.alarm_message_body))
+
     if (code < 300) {
-        builder.setContentText("띵동~ <" + message + "> 젠타임" + intervalFirstTimerSetting + "분전 입니다.")
+        builder.setContentText(alarmMessage.append(intervalFirstTimerSetting.toString() + applicationContext.getString(R.string.alarm_message_tail)).toString())
     } else {
-        builder.setContentText("띵동~ <" + message + "> 젠타임" + intervalSecondTimerSetting + "분전 입니다.")
-        builder.addAction(R.drawable.img_add_alarm, "알람생성", alarmPendingIntent)
+        builder.setContentText(alarmMessage.append(intervalSecondTimerSetting.toString() + applicationContext.getString(R.string.alarm_message_tail)).toString())
+        builder.addAction(R.drawable.img_add_alarm, applicationContext.getString(R.string.alarm_regeneration), alarmPendingIntent)
     }
     notify(code, builder.build())
 

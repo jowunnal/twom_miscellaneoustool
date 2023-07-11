@@ -47,7 +47,6 @@ object BookDatabaseModule {
         )
         return Room.databaseBuilder(context, BookDatabase::class.java,"BookDatabase")
             .createFromAsset(assetName)
-            .fallbackToDestructiveMigration()
             .build()
     }
 }

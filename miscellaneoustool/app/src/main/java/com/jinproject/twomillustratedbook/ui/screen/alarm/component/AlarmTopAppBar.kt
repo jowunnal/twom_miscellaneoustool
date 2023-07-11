@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.jinproject.twomillustratedbook.R
-import com.jinproject.twomillustratedbook.utils.TwomIllustratedBookPreview
+import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 
 @Composable
 fun AlarmTopAppBar(
@@ -45,7 +45,7 @@ fun AlarmTopAppBar(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewAlarmTopAppBar() =
-    TwomIllustratedBookPreview {
+    PreviewMiscellaneousToolTheme {
         AlarmTopAppBar(
             onNavigateToGear = {},
             onNavigateToOverlaySetting = {}
