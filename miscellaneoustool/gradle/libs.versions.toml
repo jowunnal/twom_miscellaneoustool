@@ -9,38 +9,45 @@ navigation = "2.5.3"
 composeBom = "2022.12.00"
 room = "2.5.1"
 lifecycle = "2.6.1"
-lifecycle-common = "2.5.1"
+lifecycle-common = "2.6.1"
 kotlin-coroutine = "1.7.1"
 dagger = "2.44"
 hilt = "1.1.0-alpha01"
 datastore = "1.0.0"
 protobuf = "3.18.0"
 junit = "4.13.2"
+junit-jupiter = "5.9.3"
 android-test-ext = "1.1.5"
 espresso = "3.5.1"
+kotest = "5.6.0"
+mockk = "1.13.5"
 gms-service-ads = "22.1.0"
 glide = "4.15.1"
 billing-version = "6.0.1"
 
 # plugin
-androidStudioGradlePlugin = "8.0.2"
+androidStudioGradlePlugin = "7.4.2"
 kotlin = "1.8.20"
-androidNavigationSafeargs ="2.5.3"
+androidNavigationSafeargs = "2.5.3"
 protobufPlugin = "0.9.0"
 gmsGoogleServicePlugin = "4.3.15"
+junitPlugin = "1.9.3.0"
 
 [libraries]
 
+# Androidx
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 constraintLayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintLayout" }
 
+# Navigation
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 
+# Compose
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 compose-material = { group = "androidx.compose.material", name = "material" }
@@ -50,55 +57,76 @@ compose-ui-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-viewBinding = { group = "androidx.compose.ui", name = "ui-viewbinding" }
 
+# Room
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
 
+# Lifecycle
 lifecycle-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
 lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycle-common" }
 
+# Kotlin
+kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
+
+# Coroutine
 coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlin-coroutine" }
 
+# Dagger
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "dagger" }
 dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "dagger" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt" }
+dagger-hilt-android-test = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "dagger" }
 
+# Datastore
 datastore = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
 protobuf = { group = "com.google.protobuf", name = "protobuf-javalite", version.ref = "protobuf" }
 
-google-gms-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "gms-service-ads"}
+# Ads
+google-gms-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "gms-service-ads" }
 
-bumptech-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide"}
+# Glide
+bumptech-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 
+# Test
 jUnit = { group = "junit", name = "junit", version.ref = "junit" }
 test-ext = { group = "androidx.test.ext", name = "junit", version.ref = "android-test-ext" }
 test-espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
+io-kotest-junit = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
+io-kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
+coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlin-coroutine" }
+junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit-jupiter" }
+junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit-jupiter" }
+io-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 
-billing-client = { group = "com.android.billingclient", name = "billing", version.ref = "billing-version"}
-billing-ktx = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billing-version"}
+# Billing
+billing-client = { group = "com.android.billingclient", name = "billing", version.ref = "billing-version" }
+billing-ktx = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billing-version" }
 
 [bundles]
-navigation = ["navigation-fragment","navigation-ui","navigation-compose"]
+navigation = ["navigation-fragment", "navigation-ui", "navigation-compose"]
 compose = ["compose-material3", "compose-material", "compose-foundation", "compose-ui", "compose-ui-preview", "compose-viewBinding"]
 lifecycle = ["lifecycle-compose", "lifecycle-viewmodel-ktx", "lifecycle-runtime-ktx", "lifecycle-runtime-compose", "lifecycle-service"]
 coroutines = ["coroutines"]
 hilt = ["dagger-hilt-android"]
 datastore = ["datastore", "protobuf"]
-testing = ["jUnit", "test-ext", "test-espresso"]
+testing = ["jUnit", "test-ext", "test-espresso", "coroutines-test", "junit-jupiter-api", "io-mockk"]
 billing = ["billing-client", "billing-ktx"]
+kotest = ["io-kotest-junit", "io-kotest-assertions"]
 
 [plugins]
 
 android-application = { id = "com.android.application", version.ref = "androidStudioGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidStudioGradlePlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-android-navigation-safeargs = {id = "androidx.navigation.safeargs", version.ref = "androidNavigationSafeargs"}
-android-navigation-safeargs-kotlin = {id = "androidx.navigation.safeargs.kotlin", version.ref = "androidNavigationSafeargs"}
+android-navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "androidNavigationSafeargs" }
+android-navigation-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidNavigationSafeargs" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-protobuf = {id = "com.google.protobuf", version.ref = "protobufPlugin"}
-gms-google-service = {id = "com.google.gms.google-services", version.ref = "gmsGoogleServicePlugin"}
+protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
+gms-google-service = { id = "com.google.gms.google-services", version.ref = "gmsGoogleServicePlugin" }
+junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "junitPlugin" }

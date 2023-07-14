@@ -1,26 +1,50 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    id 'kotlin-kapt'
+
 }
 
 android {
     namespace 'com.jinproject.domain'
     compileSdk 33
 
+    defaultConfig {
+        minSdkVersion 26
+    }
+
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = '17'
+        jvmTarget = '1.8'
+    }
+
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
     }
 }
 
 dependencies {
     implementation(project(":core"))
 
+    implementation(libs.kotlin.reflect)
     implementation(libs.bundles.coroutines)
     implementation(libs.dagger)
     implementation(libs.protobuf)
+
+    testImplementation(libs.bundles.kotest)
+    testImplementation(libs.dagger.hilt.android.test)
+    kaptTest(libs.dagger.hilt.compiler)
+
+    testImplementation(libs.bundles.testing)
+
+    testRuntimeOnly(libs.junit.jupiter.engine)
+
+    implementation 'org.slf4j:slf4j-api:2.0.5'
+    implementation 'ch.qos.logback:logback-classic:1.3.1'
 }
