@@ -10,7 +10,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.utils.tu
 
-
+@Stable
 val font = FontFamily(
     Font(R.font.nanum_gothic_bold, FontWeight.Bold),
     Font(R.font.nanum_gothic_medium, FontWeight.Medium),

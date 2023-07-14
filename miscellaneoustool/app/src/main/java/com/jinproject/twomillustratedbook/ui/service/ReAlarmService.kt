@@ -37,7 +37,7 @@ class ReAlarmService : LifecycleService() {
         val code = intent?.getIntExtra("code", 0)!!
         notificationManager?.cancel(code)
 
-        val monsterName = intent?.getStringExtra("name")!!
+        val monsterName = intent.getStringExtra("name")!!
         val cal = Calendar.getInstance()
 
         setAlarmUsecase.invoke(
