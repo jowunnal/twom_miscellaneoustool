@@ -84,9 +84,9 @@ fun InProgressTimerList(
                             ),
                             color = MaterialTheme.colorScheme.onBackground
                         )
-                        append(") ")
+                        append(") ${item.timeState.getMeridiem()} ")
                         appendBoldText(
-                            text = item.timeState.hour.toString(),
+                            text = item.timeState.getTime12Hour().toString(),
                             color = MaterialTheme.colorScheme.onBackground
                         )
                         append("${stringResource(id = R.string.hour)} ")

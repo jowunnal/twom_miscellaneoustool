@@ -1,8 +1,6 @@
 package com.jinproject.data.di
 
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.room.Room
 import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.data.datasource.cache.database.BookDatabase
@@ -37,7 +35,6 @@ object BookDatabaseModule {
         return bookDatabase.getTimerDao()
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     @Provides
     @Singleton
     fun provideBookDatabaseInstance(@ApplicationContext context:Context): BookDatabase {

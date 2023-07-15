@@ -4,9 +4,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material3.MaterialTheme
@@ -61,7 +58,7 @@ fun WatchScreen(
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
 @Composable
 private fun WatchScreen(
     uiState: WatchUiState,
@@ -162,10 +159,13 @@ private fun WatchScreen(
                 )
                 VerticalSpacer(height = 16.dp)
 
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(3)
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    maxItemsInEachRow = 3,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    itemsIndexed(uiState.frequentlyUsedBossList) { index, item ->
+                    uiState.frequentlyUsedBossList.forEach { item ->
                         BossSelectionItem(
                             bossName = item,
                             onClickBossItem = {
@@ -218,9 +218,7 @@ private fun BossSelectionItem(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         DefaultButton(
-            content = if (bossName.length > 4) bossName.substring(0..3) + "\n" + bossName.substring(
-                4
-            ) else bossName,
+            content = bossName,
             modifier = Modifier.combinedClickable(
                 onClick = { onClickBossItem(bossName) }
             ),

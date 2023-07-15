@@ -15,12 +15,9 @@ import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.reflection.compose
 import io.kotest.matchers.shouldBe
-import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.just
-import io.mockk.runs
-import io.mockk.spyk
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
@@ -29,8 +26,8 @@ import java.util.Calendar
 
 @ExperimentalCoroutinesApi
 class SetAlarmUsecaseTest : BehaviorSpec() {
-    private val timerRepository: TimerRepository = spyk()
-    private val dropListRepository: DropListRepository = spyk()
+    private val timerRepository: TimerRepository = mockk(relaxed = true)
+    private val dropListRepository: DropListRepository = mockk(relaxed = true)
     private val setAlarmUsecase: SetAlarmUsecase = SetAlarmUsecase(
         dropListRepository = dropListRepository,
         timerRepository = timerRepository
@@ -69,9 +66,6 @@ class SetAlarmUsecaseTest : BehaviorSpec() {
                                 TimerModel.getInitValue()
                             ))
                         }
-                        coEvery {
-                            timerRepository.updateTimer(1, cal.day, cal.hour, cal.minute, cal.second)
-                        } just runs
 
                         `when`("알람을 설정 하면") {
                             setAlarmUsecase(
@@ -112,9 +106,6 @@ class SetAlarmUsecaseTest : BehaviorSpec() {
                         every { timerRepository.getTimer() } returns flow {
                             emit(emptyList())
                         }
-                        coEvery {
-                            timerRepository.setTimer(1, cal.day, cal.hour, cal.minute, cal.second, monsterName)
-                        } just runs
 
                         `when`("알람을 설정 하면") {
                             setAlarmUsecase(

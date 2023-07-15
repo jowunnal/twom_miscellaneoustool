@@ -4,16 +4,15 @@ import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,6 +33,7 @@ import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSp
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
 import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun BossSelection(
     bossNameList: List<String>,
@@ -43,8 +43,8 @@ fun BossSelection(
     onClickBossItem: (String) -> Unit,
     addBossToFrequentlyUsedList: (String) -> Unit,
     removeBossFromFrequentlyUsedList: (String) -> Unit,
-    setRecentlySelectedBossClassifiedChanged:(MonsterType) -> Unit,
-    setRecentlySelectedBossNameChanged:(String) -> Unit,
+    setRecentlySelectedBossClassifiedChanged: (MonsterType) -> Unit,
+    setRecentlySelectedBossNameChanged: (String) -> Unit,
     onOpenDialog: (DialogState) -> Unit,
     onCloseDialog: () -> Unit
 ) {
@@ -71,11 +71,14 @@ fun BossSelection(
         )
         VerticalSpacer(height = 16.dp)
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            modifier = Modifier.height(150.dp)
+        FlowRow(
+            modifier = Modifier
+                .fillMaxWidth(),
+            maxItemsInEachRow = 3,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            itemsIndexed(frequentlyUsedBossList) { index, item ->
+            frequentlyUsedBossList.forEach { item ->
                 BossSelectionItem(
                     bossName = item,
                     onClickBossItem = onClickBossItem,
@@ -95,8 +98,8 @@ private fun BossSelectionHeader(
     recentlySelectedBossClassified: String,
     recentlySelectedBossName: String,
     addBossToFrequentlyUsedList: (String) -> Unit,
-    setRecentlySelectedBossClassifiedChanged:(MonsterType) -> Unit,
-    setRecentlySelectedBossNameChanged:(String) -> Unit,
+    setRecentlySelectedBossClassifiedChanged: (MonsterType) -> Unit,
+    setRecentlySelectedBossNameChanged: (String) -> Unit,
 ) {
     Column() {
         Row() {
@@ -157,14 +160,11 @@ private fun BossSelectionItem(
     onOpenDialog: (DialogState) -> Unit,
     onCloseDialog: () -> Unit
 ) {
-    Column(
+    DefaultButton(
+        content = bossName,
         modifier = Modifier
-            .padding(vertical = 12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        DefaultButton(
-            content = if (bossName.length > 4) bossName.substring(0..3) + "\n" + bossName.substring(4) else bossName,
-            modifier = Modifier.combinedClickable(
+            .padding(vertical = 8.dp)
+            .combinedClickable(
                 onClick = { onClickBossItem(bossName) },
                 onLongClick = {
                     onOpenDialog(
@@ -181,9 +181,8 @@ private fun BossSelectionItem(
                     )
                 }
             ),
-            style = Typography.bodyLarge
-        )
-    }
+        style = Typography.bodyLarge
+    )
 }
 
 @Preview(showBackground = true)
