@@ -14,5 +14,5 @@ plugins{
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.gms.google.service) apply false
     alias(libs.plugins.android.navigation.safeargs.kotlin) apply false
-
+    alias(libs.plugins.junit5) apply false
 }

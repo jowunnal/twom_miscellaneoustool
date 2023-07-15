@@ -127,7 +127,7 @@ class OverlayService: LifecycleService() {
             launch(Dispatchers.Main) {
                 while (true) {
                     mView?.findViewById<TextView>(R.id.tv_currentTimes)?.text =
-                        SimpleDateFormat("HH:mm:ss").format(Date(System.currentTimeMillis()))
+                        SimpleDateFormat("a hh:mm:ss").format(Date(System.currentTimeMillis()))
                     delay(1000)
                 }
             }
@@ -150,12 +150,12 @@ class OverlayService: LifecycleService() {
             mView?.findViewById<TextView>(R.id.tv_onOtherApps)?.text = kotlin.runCatching { StringBuilder().apply {
                 for (item in list!!) {
                     val hourOfDay = this@OverlayService.doOnLocaleLanguage(onKo = item.timeState.day.displayOnKo, onElse = item.timeState.day.displayOnElse)
-                    append("${item.bossName} (${hourOfDay}) ${item.timeState.hour}:${item.timeState.minutes}:${item.timeState.seconds}\n")
+                    append("${item.bossName} (${hourOfDay}) ${item.timeState.getMeridiem()} ${item.timeState.getTime12Hour()}:${item.timeState.minutes}:${item.timeState.seconds}\n")
                 }
             }.toString() }.getOrElse {
                 timerStates.joinToString("\n") { timerState ->
                     val hourOfDay = this@OverlayService.doOnLocaleLanguage(onKo = timerState.timeState.day.displayOnKo, onElse = timerState.timeState.day.displayOnElse)
-                    "${timerState.bossName} (${hourOfDay}) ${timerState.timeState.hour}:${timerState.timeState.minutes}:${timerState.timeState.seconds}"
+                    "${timerState.bossName} (${hourOfDay}) ${timerState.timeState.getMeridiem()} ${timerState.timeState.getTime12Hour()}:${timerState.timeState.minutes}:${timerState.timeState.seconds}"
                 }
             }
         }.launchIn(lifecycleScope)

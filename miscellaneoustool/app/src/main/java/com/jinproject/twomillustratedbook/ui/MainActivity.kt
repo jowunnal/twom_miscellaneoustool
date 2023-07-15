@@ -3,7 +3,6 @@ package com.jinproject.twomillustratedbook.ui
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -91,8 +90,8 @@ class MainActivity : AppCompatActivity() {
                     billingModule.queryPurchase { purchaseList ->
                         billingModule.approvePurchased(purchaseList = purchaseList)
 
-                        lifecycleScope.launch(Dispatchers.Main){
-                            launch {
+                        lifecycleScope.launch {
+                            launch(Dispatchers.Main) {
                                 if(billingModule.checkPurchased(purchaseList = purchaseList, productId = "ad_remove"))
                                     initAdView()
                             }
@@ -116,7 +115,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(errorCode: Int) {
-                Log.e("test","error : $errorCode")
                 billingCallback?.onFailure(errorCode)
             }
         })

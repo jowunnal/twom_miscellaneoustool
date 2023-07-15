@@ -19,9 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.jinproject.twomillustratedbook.ui.screen.compose.theme.MiscellaneousToolColor.Companion.blue
+import com.jinproject.twomillustratedbook.ui.screen.compose.theme.MiscellaneousToolColor.Companion.red
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
-import com.jinproject.twomillustratedbook.ui.screen.compose.theme.blue
-import com.jinproject.twomillustratedbook.ui.screen.compose.theme.red
 import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 
 @Stable
@@ -114,7 +114,7 @@ private fun DialogCustomContent(
                 Text(
                     text = dialogState.negativeMessage,
                     style = Typography.bodyLarge,
-                    color = blue,
+                    color = blue.color,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
             }
@@ -132,7 +132,7 @@ private fun DialogCustomContent(
                     Text(
                         text = dialogState.positiveMessage,
                         style = Typography.bodyLarge,
-                        color = red,
+                        color = red.color,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                 }

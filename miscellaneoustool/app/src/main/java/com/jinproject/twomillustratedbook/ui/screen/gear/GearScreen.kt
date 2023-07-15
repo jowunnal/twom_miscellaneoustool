@@ -44,8 +44,8 @@ import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultLay
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.HorizontalDivider
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.HorizontalSpacer
 import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
+import com.jinproject.twomillustratedbook.ui.screen.compose.theme.MiscellaneousToolColor.Companion.red
 import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
-import com.jinproject.twomillustratedbook.ui.screen.compose.theme.red
 import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 import com.jinproject.twomillustratedbook.utils.appendBoldText
 import com.jinproject.twomillustratedbook.utils.findActivity
@@ -230,7 +230,7 @@ private fun SettingIntervalItem(
     ) {
         Text(
             text = buildAnnotatedString {
-                appendBoldText(text = headerText, color = red)
+                appendBoldText(text = headerText, color = red.color)
                 append(" ${stringResource(id = R.string.alarm_setting_interval)}")
             },
             style = Typography.headlineSmall,
