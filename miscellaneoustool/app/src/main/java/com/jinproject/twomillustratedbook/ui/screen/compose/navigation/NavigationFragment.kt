@@ -83,7 +83,7 @@ class NavigationFragment : Fragment() {
     private fun loadRewardedAd() {
         RewardedAd.load(
             requireActivity(),
-            requireActivity().getString(R.string.reward_test_id),
+            requireActivity().getString(R.string.rewarded_Ad_UnitId),
             AdRequest.Builder().build(),
             object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {

@@ -78,10 +78,10 @@ class DropListAdapter(
                 } else {
                     val itemsFiltering = ArrayList<MonsterState>()
                     itemsUnfiltered.forEach { monster ->
-                        if (monster.name.contains(p0.toString()))
+                        if (monster.name.lowercase().contains(p0.toString().lowercase()))
                             itemsFiltering.add(monster)
                         monster.item.forEach { itemState ->
-                            if (itemState.name.contains(p0.toString()))
+                            if (itemState.name.lowercase().contains(p0.toString().lowercase()))
                                 itemsFiltering.add(monster)
                         }
                     }
