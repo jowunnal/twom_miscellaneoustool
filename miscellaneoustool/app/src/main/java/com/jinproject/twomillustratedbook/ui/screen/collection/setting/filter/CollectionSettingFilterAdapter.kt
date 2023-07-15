@@ -140,11 +140,11 @@ class CollectionSettingFilterAdapter @Inject constructor(@ActivityContext privat
 
                     itemsUnfiltered.forEach { collectionState ->
                         collectionState.stats.forEach { statState ->
-                            if (statState.name.contains(p0.toString()))
+                            if (statState.name.lowercase().contains(p0.toString().lowercase()))
                                 contentItemsFiltering.add(collectionState)
                         }
                         collectionState.items.forEach { itemState ->
-                            if (itemState.name.contains(p0.toString()))
+                            if (itemState.name.lowercase().contains(p0.toString().lowercase()))
                                 contentItemsFiltering.add(collectionState)
                         }
                     }

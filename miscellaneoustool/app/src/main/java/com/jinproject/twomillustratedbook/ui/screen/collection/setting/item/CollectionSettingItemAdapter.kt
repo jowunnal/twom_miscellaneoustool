@@ -116,7 +116,7 @@ class CollectionSettingItemAdapter @Inject constructor(@ActivityContext private 
                     val contentItemsFiltering = ArrayList<CollectionItemState>()
 
                     itemsUnfiltered.forEach { itemState ->
-                        if(itemState.name.contains(p0.toString()))
+                        if(itemState.name.lowercase().contains(p0.toString().lowercase()))
                             contentItemsFiltering.add(itemState)
                     }
 
