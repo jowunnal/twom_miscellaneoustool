@@ -16,18 +16,17 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.navigation.NavigationBarView
+import com.jinproject.features.core.BillingModule
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.ActivityMainBinding
-import com.jinproject.twomillustratedbook.ui.screen.compose.navigation.BillingModule
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
-    val binding get() = _binding!!
+    private val binding get() = _binding!!
 
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -83,41 +82,51 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initBillingModule() {
-        billingModule = BillingModule(this, lifeCycleScope = lifecycleScope,object: BillingModule.BillingCallback {
-            override fun onReady() {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    billingModule.getPurchasableProducts()
-                    billingModule.queryPurchase { purchaseList ->
-                        billingModule.approvePurchased(purchaseList = purchaseList)
+        billingModule = BillingModule(
+            this,
+            lifeCycleScope = lifecycleScope,
+            object : BillingModule.BillingCallback {
+                override fun onReady() {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        billingModule.getPurchasableProducts()
+                        billingModule.queryPurchase { purchaseList ->
+                            billingModule.approvePurchased(purchaseList = purchaseList)
 
-                        lifecycleScope.launch {
-                            launch(Dispatchers.Main) {
-                                if(billingModule.checkPurchased(purchaseList = purchaseList, productId = "ad_remove"))
-                                    initAdView()
-                            }
-                            launch {
-                                val purchasedProductIds = purchaseList.distinctBy { it.products }.map { it.products.first() }
-                                val purchasableProducts = billingModule.purchasableProducts.toList()
-                                billingModule.purchasableProducts.clear()
-                                billingModule.purchasableProducts.addAll(
-                                    purchasableProducts.filter { purchasableProduct ->
-                                        purchasableProduct.productId !in purchasedProductIds
-                                    }
-                                )
+                            lifecycleScope.launch {
+                                launch(Dispatchers.Main) {
+                                    if (billingModule.checkPurchased(
+                                            purchaseList = purchaseList,
+                                            productId = "ad_remove"
+                                        )
+                                    )
+                                        initAdView()
+                                }
+                                launch {
+                                    val purchasedProductIds =
+                                        purchaseList.distinctBy { it.products }
+                                            .map { it.products.first() }
+                                    val purchasableProducts =
+                                        billingModule.purchasableProducts.toList()
+                                    billingModule.purchasableProducts.clear()
+                                    billingModule.purchasableProducts.addAll(
+                                        purchasableProducts.filter { purchasableProduct ->
+                                            purchasableProduct.productId !in purchasedProductIds
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            override fun onSuccess(purchase: Purchase) {
-                billingCallback?.onSuccess(purchase)
-            }
+                override fun onSuccess(purchase: Purchase) {
+                    billingCallback?.onSuccess(purchase)
+                }
 
-            override fun onFailure(errorCode: Int) {
-                billingCallback?.onFailure(errorCode)
-            }
-        })
+                override fun onFailure(errorCode: Int) {
+                    billingCallback?.onFailure(errorCode)
+                }
+            })
     }
 
     private fun initAdView() {

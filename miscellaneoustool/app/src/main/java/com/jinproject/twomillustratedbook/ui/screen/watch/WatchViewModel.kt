@@ -3,10 +3,10 @@ package com.jinproject.twomillustratedbook.ui.screen.watch
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jinproject.design_compose.component.ButtonStatus
 import com.jinproject.domain.usecase.timer.SetOverlaySettingUsecase
-import com.jinproject.twomillustratedbook.ui.screen.alarm.item.TimerState
-import com.jinproject.twomillustratedbook.ui.screen.alarm.mapper.toTimerState
-import com.jinproject.twomillustratedbook.ui.screen.watch.item.ButtonStatus
+import com.jinproject.features.alarm.item.TimerState
+import com.jinproject.features.alarm.mapper.toTimerState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

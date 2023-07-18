@@ -50,9 +50,6 @@ android {
         dataBinding true
         compose true
     }
-    dataBinding{
-        enabled true
-    }
     composeOptions {
         kotlinCompilerExtensionVersion '1.4.6'
     }
@@ -60,9 +57,16 @@ android {
 }
 
 dependencies {
-    implementation implementation(project(':data'))
+    implementation(project(":data"))
     implementation(project(":domain"))
     implementation(project(":core"))
+    implementation(project(":features:collection"))
+    implementation(project(":features:droplist"))
+    implementation(project(":features:alarm"))
+    implementation(project(":features:core"))
+    implementation(project(":features:home"))
+    implementation(project(":design-compose"))
+    implementation project(path: ':design-ui')
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)

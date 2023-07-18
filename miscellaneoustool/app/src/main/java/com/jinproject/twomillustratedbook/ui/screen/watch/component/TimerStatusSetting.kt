@@ -17,11 +17,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
+import com.jinproject.design_compose.component.ButtonStatus
+import com.jinproject.design_compose.component.SelectionButton
+import com.jinproject.design_compose.theme.Typography
 import com.jinproject.twomillustratedbook.R
-import com.jinproject.twomillustratedbook.ui.screen.compose.component.SelectionButton
-import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
-import com.jinproject.twomillustratedbook.ui.screen.watch.item.ButtonStatus
-import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 
 @Composable
 fun TimeStatusSetting(

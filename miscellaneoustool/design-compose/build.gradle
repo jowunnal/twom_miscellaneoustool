@@ -1,0 +1,32 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+}
+
+android {
+    namespace 'com.jinproject.design_compose'
+    compileSdkVersion 34
+
+    defaultConfig {
+        minSdkVersion 26
+    }
+
+    buildFeatures{
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.4.6'
+    }
+}
+
+dependencies {
+    implementation project(path: ':design-ui')
+
+    implementation(libs.bumptech.glide)
+
+    implementation platform(libs.compose.bom)
+    androidTestImplementation(libs.compose.bom)
+    implementation(libs.bundles.compose)
+    debugImplementation(libs.compose.ui.tooling)
+}

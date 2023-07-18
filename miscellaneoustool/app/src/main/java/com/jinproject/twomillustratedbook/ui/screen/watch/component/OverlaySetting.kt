@@ -15,9 +15,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.chargemap.compose.numberpicker.NumberPicker
+import com.jinproject.design_compose.theme.MiscellaneousToolTheme
+import com.jinproject.design_compose.theme.Typography
 import com.jinproject.twomillustratedbook.R
-import com.jinproject.twomillustratedbook.ui.screen.compose.theme.MiscellaneousToolTheme
-import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
 
 @Composable
 fun OverlaySetting(

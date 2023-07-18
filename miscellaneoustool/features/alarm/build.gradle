@@ -1,0 +1,59 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.protobuf)
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
+}
+
+android {
+    namespace 'com.jinproject.features.alarm'
+    compileSdkVersion 34
+
+    defaultConfig {
+        minSdkVersion 26
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.4.6'
+    }
+
+}
+
+dependencies {
+    implementation project(":domain")
+    implementation project(":core")
+    implementation project(":features:core")
+    implementation project(path: ':design-ui')
+    implementation project(":design-compose")
+
+    implementation(libs.appcompat)
+    implementation(libs.constraintLayout)
+
+    implementation platform(libs.compose.bom)
+    androidTestImplementation(libs.compose.bom)
+    implementation(libs.bundles.compose)
+    debugImplementation(libs.compose.ui.tooling)
+
+    implementation(libs.bundles.hilt)
+    kapt(libs.dagger.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+
+    implementation(libs.bundles.lifecycle)
+
+    implementation(libs.protobuf)
+
+    // compose NumberPicker
+    implementation "com.chargemap.compose:numberpicker:1.0.3"
+}

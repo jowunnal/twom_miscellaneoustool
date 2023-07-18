@@ -6,10 +6,10 @@ import com.jinproject.domain.model.MonsterType
 import com.jinproject.domain.model.TimerModel
 import com.jinproject.domain.repository.DropListRepository
 import com.jinproject.domain.repository.TimerRepository
-import com.jinproject.twomillustratedbook.utils.day
-import com.jinproject.twomillustratedbook.utils.hour
-import com.jinproject.twomillustratedbook.utils.minute
-import com.jinproject.twomillustratedbook.utils.second
+import com.jinproject.core.util.day
+import com.jinproject.core.util.hour
+import com.jinproject.core.util.minute
+import com.jinproject.core.util.second
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult

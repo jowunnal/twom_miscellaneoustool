@@ -4,7 +4,7 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jinproject.domain.usecase.timer.SetIntervalSettingUsecase
-import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
+import com.jinproject.features.core.base.item.SnackBarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

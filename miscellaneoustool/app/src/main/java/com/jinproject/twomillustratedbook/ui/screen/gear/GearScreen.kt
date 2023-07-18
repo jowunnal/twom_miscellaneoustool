@@ -35,20 +35,20 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.chargemap.compose.numberpicker.NumberPicker
+import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
+import com.jinproject.design_compose.component.DefaultAppBar
+import com.jinproject.design_compose.component.DefaultButton
+import com.jinproject.design_compose.component.DefaultLayout
+import com.jinproject.design_compose.component.HorizontalDivider
+import com.jinproject.design_compose.component.HorizontalSpacer
+import com.jinproject.design_compose.component.VerticalSpacer
+import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.red
+import com.jinproject.design_compose.theme.Typography
+import com.jinproject.features.core.base.item.SnackBarMessage
+import com.jinproject.features.core.utils.appendBoldText
+import com.jinproject.features.core.utils.findActivity
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.MainActivity
-import com.jinproject.twomillustratedbook.ui.base.item.SnackBarMessage
-import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultAppBar
-import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultButton
-import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultLayout
-import com.jinproject.twomillustratedbook.ui.screen.compose.component.HorizontalDivider
-import com.jinproject.twomillustratedbook.ui.screen.compose.component.HorizontalSpacer
-import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
-import com.jinproject.twomillustratedbook.ui.screen.compose.theme.MiscellaneousToolColor.Companion.red
-import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
-import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
-import com.jinproject.twomillustratedbook.utils.appendBoldText
-import com.jinproject.twomillustratedbook.utils.findActivity
 
 
 @Composable
@@ -68,19 +68,21 @@ fun GearScreen(
 
     val callback = object: MainActivity.OnBillingCallback {
         override fun onSuccess(purchase: Purchase) {
-            gearViewModel::emitSnackBar.invoke(SnackBarMessage(
-                headerMessage = "${purchase.products.first()} 상품의 구매가 완료되었어요."
-            ))
+            gearViewModel::emitSnackBar.invoke(
+                SnackBarMessage(
+                    headerMessage = "${purchase.products.first()} 상품의 구매가 완료되었어요."
+                )
+            )
         }
 
         override fun onFailure(errorCode: Int) {
             Log.e("test","error : $errorCode")
             val snackBar = SnackBarMessage(
                 headerMessage = "구매 실패",
-                contentMessage = when(errorCode) {
+                contentMessage = when (errorCode) {
                     1 -> "취소를 하셨어요."
-                    2,3,4 -> "유효하지 않은 상품 이에요."
-                    5,6 -> "잘못된 상품 이에요."
+                    2, 3, 4 -> "유효하지 않은 상품 이에요."
+                    5, 6 -> "잘못된 상품 이에요."
                     7 -> "이미 보유하고 있는 상품 이에요."
                     else -> "네트워크 에러로 인해 실패했어요."
                 }

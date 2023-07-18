@@ -23,12 +23,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
+import com.jinproject.design_compose.component.DefaultButton
+import com.jinproject.design_compose.component.HorizontalSpacer
+import com.jinproject.design_compose.component.VerticalSpacer
+import com.jinproject.design_compose.theme.Typography
 import com.jinproject.twomillustratedbook.R
-import com.jinproject.twomillustratedbook.ui.screen.compose.component.DefaultButton
-import com.jinproject.twomillustratedbook.ui.screen.compose.component.HorizontalSpacer
-import com.jinproject.twomillustratedbook.ui.screen.compose.component.VerticalSpacer
-import com.jinproject.twomillustratedbook.ui.screen.compose.theme.Typography
-import com.jinproject.twomillustratedbook.utils.PreviewMiscellaneousToolTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -99,20 +99,22 @@ fun TimerBottomSheetContent(
         VerticalSpacer(height = 16.dp)
 
         Row() {
-            DefaultButton(content = stringResource(id = R.string.register_do), modifier = Modifier
-                .weight(1f)
-                .clickable {
-                    setSelectedMonsterOtaToTrue(1)
-                    onCloseBottomSheet()
-                }
+            DefaultButton(content = stringResource(id = R.string.register_do),
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+                        setSelectedMonsterOtaToTrue(1)
+                        onCloseBottomSheet()
+                    }
             )
             HorizontalSpacer(width = 8.dp)
-            DefaultButton(content = stringResource(id = R.string.delete_do), modifier = Modifier
-                .weight(1f)
-                .clickable {
-                    setSelectedMonsterOtaToTrue(0)
-                    onCloseBottomSheet()
-                }
+            DefaultButton(content = stringResource(id = R.string.delete_do),
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+                        setSelectedMonsterOtaToTrue(0)
+                        onCloseBottomSheet()
+                    }
             )
         }
     }
