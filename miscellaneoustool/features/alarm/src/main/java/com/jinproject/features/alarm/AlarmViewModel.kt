@@ -19,9 +19,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
@@ -68,8 +66,8 @@ class AlarmViewModel @Inject constructor(
     private val timerRepository: com.jinproject.domain.repository.TimerRepository,
     private val dropListRepository: com.jinproject.domain.repository.DropListRepository,
     private val setAlarmUsecase: SetAlarmUsecase
-) :
-    ViewModel() {
+) : ViewModel() {
+
     private val alarmManager: AlarmManager =
         context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -78,9 +76,6 @@ class AlarmViewModel @Inject constructor(
 
     private val _bottomSheetUiState = MutableStateFlow(AlarmBottomSheetUiState.getInitValue())
     val bottomSheetUiState get() = _bottomSheetUiState.asStateFlow()
-
-    private val _snackBarMessage = MutableSharedFlow<SnackBarMessage>()
-    val snackBarMessage get() = _snackBarMessage.asSharedFlow()
 
     init {
         getTimerList()
@@ -136,16 +131,18 @@ class AlarmViewModel @Inject constructor(
         }
     }
 
-    fun removeBossFromFrequentlyUsedList(bossName: String) {
+    fun removeBossFromFrequentlyUsedList(bossName: String, showSnackBar: suspend (SnackBarMessage) -> Unit) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
             if (throwable is IllegalArgumentException) {
-                emitSnackBar(
-                    SnackBarMessage(
-                        headerMessage = context.getString(
-                            R.string.message_throw_exceptions
+                viewModelScope.launch {
+                    showSnackBar(
+                        SnackBarMessage(
+                            headerMessage = context.getString(
+                                R.string.message_throw_exceptions
+                            )
                         )
                     )
-                )
+                }
             }
         }
         viewModelScope.launch(context = Dispatchers.IO + exceptionHandler) {
@@ -180,7 +177,7 @@ class AlarmViewModel @Inject constructor(
         state.copy(selectedBossName = bossName, timeState = TimeState.getInitValue())
     }
 
-    fun setAlarm(monsterName: String) =
+    fun setAlarm(monsterName: String, showSnackBar: suspend (SnackBarMessage) -> Unit) =
         setAlarmUsecase.invoke(
             monsterName = monsterName,
             monsDiedHour = bottomSheetUiState.value.timeState.hour,
@@ -207,20 +204,22 @@ class AlarmViewModel @Inject constructor(
                     intervalSecondTimerSetting = secondInterval
                 )
 
-                emitSnackBar(
-                    SnackBarMessage(
-                        headerMessage = "$monsterName ${
-                            context.getString(
-                                R.string.alarm_setted
-                            )
-                        }"
+                viewModelScope.launch {
+                    showSnackBar(
+                        SnackBarMessage(
+                            headerMessage = "$monsterName ${
+                                context.getString(
+                                    R.string.alarm_setted
+                                )
+                            }"
+                        )
                     )
-                )
+                }
             }
         ).catch { e ->
             when (e) {
                 is NoSuchElementException -> {
-                    emitSnackBar(
+                    showSnackBar(
                         SnackBarMessage(
                             headerMessage = context.getString(R.string.message_throw_no_such_element),
                             contentMessage = e.message.toString()
@@ -228,7 +227,7 @@ class AlarmViewModel @Inject constructor(
                     )
                 }
 
-                else -> emitSnackBar(
+                else -> showSnackBar(
                     SnackBarMessage(
                         headerMessage = context.getString(R.string.message_throw_exceptions)
                     )
@@ -284,10 +283,4 @@ class AlarmViewModel @Inject constructor(
 
     private fun deleteTimer(bossName: String) =
         viewModelScope.launch(Dispatchers.IO) { timerRepository.deleteTimer(bossName) }
-
-    private fun emitSnackBar(snackBarMessage: SnackBarMessage) {
-        viewModelScope.launch {
-            _snackBarMessage.emit(snackBarMessage)
-        }
-    }
 }

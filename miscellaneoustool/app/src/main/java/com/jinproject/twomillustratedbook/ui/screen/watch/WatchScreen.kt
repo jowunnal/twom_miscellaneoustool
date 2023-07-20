@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -64,7 +63,6 @@ private fun WatchScreen(
     uiState: WatchUiState,
     context: Context = LocalContext.current,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
     setWatchStatus: (ButtonStatus) -> Unit,
     setFontSize: (Int) -> Unit,
     setXPos: (Int) -> Unit,
@@ -83,8 +81,7 @@ private fun WatchScreen(
                 title = stringResource(id = R.string.watch_appbar_title),
                 onBackClick = onNavigatePopBackStack
             )
-        },
-        scaffoldState = scaffoldState
+        }
     ) {
         ModalBottomSheetLayout(
             sheetContent = {
@@ -101,10 +98,9 @@ private fun WatchScreen(
             sheetState = bottomSheetState,
             sheetShape = RoundedCornerShape(20.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(it)
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 TimeStatusSetting(
                     watchStatus = uiState.watchStatus,
@@ -149,6 +145,7 @@ private fun WatchScreen(
                 )
 
                 VerticalSpacer(height = 26.dp)
+
                 Text(
                     text = stringResource(id = R.string.watch_title_recently_bosslist),
                     style = Typography.bodyLarge,
@@ -180,6 +177,7 @@ private fun WatchScreen(
             }
         }
     }
+
 }
 
 private fun Context.startOverlayService(

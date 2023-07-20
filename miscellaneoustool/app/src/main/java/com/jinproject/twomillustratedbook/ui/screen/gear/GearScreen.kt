@@ -4,27 +4,20 @@ import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -49,6 +42,8 @@ import com.jinproject.features.core.utils.appendBoldText
 import com.jinproject.features.core.utils.findActivity
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.ui.MainActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -56,15 +51,12 @@ fun GearScreen(
     gearViewModel: GearViewModel = hiltViewModel(),
     context: Context = LocalContext.current,
     changeVisibilityBottomNavigationBar: (Boolean) -> Unit,
-    onNavigatePopBackStack: () -> Unit
+    onNavigatePopBackStack: () -> Unit,
+    showSnackBar: suspend (SnackBarMessage) -> Unit
 ) {
     changeVisibilityBottomNavigationBar(false)
 
     val gearUiState by gearViewModel.uiState.collectAsStateWithLifecycle()
-    val snackBarMessage by gearViewModel.snackBarMessage.collectAsStateWithLifecycle(
-        initialValue = SnackBarMessage.getInitValues(),
-        lifecycleOwner = LocalLifecycleOwner.current
-    )
 
     val callback = object: MainActivity.OnBillingCallback {
         override fun onSuccess(purchase: Purchase) {
@@ -103,40 +95,29 @@ fun GearScreen(
 
     GearScreen(
         gearUiState = gearUiState,
-        snackBarMessage = snackBarMessage,
         availableProducts = availableProducts,
         purchaseInApp = billingModule::purchase,
         setIntervalFirstTimerSetting = gearViewModel::setIntervalFirstTimerSetting,
         setIntervalSecondTimerSetting = gearViewModel::setIntervalSecondTimerSetting,
         setIntervalTimerSetting = gearViewModel::setIntervalTimerSetting,
         onNavigatePopBackStack = onNavigatePopBackStack,
-        emitSnackBar = gearViewModel::emitSnackBar
+        showSnackBar = showSnackBar
     )
 }
 
 @Composable
 private fun GearScreen(
     gearUiState: GearUiState,
-    snackBarMessage: SnackBarMessage,
     availableProducts: List<ProductDetails>,
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
     context: Context = LocalContext.current,
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
     purchaseInApp: (ProductDetails) -> Unit,
     setIntervalFirstTimerSetting: (Int) -> Unit,
     setIntervalSecondTimerSetting: (Int) -> Unit,
     setIntervalTimerSetting: () -> Unit,
     onNavigatePopBackStack: () -> Unit,
-    emitSnackBar: (SnackBarMessage) -> Unit
+    showSnackBar: suspend (SnackBarMessage) -> Unit
 ) {
-
-    LaunchedEffect(key1 = snackBarMessage) {
-        if(snackBarMessage.headerMessage.isNotBlank())
-            scaffoldState.snackbarHostState.showSnackbar(
-                message = snackBarMessage.headerMessage,
-                actionLabel = snackBarMessage.contentMessage,
-                duration = SnackbarDuration.Indefinite
-            )
-    }
 
     DefaultLayout(
         topBar = {
@@ -145,14 +126,7 @@ private fun GearScreen(
                 onBackClick = onNavigatePopBackStack
             )
         },
-        scaffoldState = scaffoldState
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-        ) {
+        content = {
             SettingIntervalItem(
                 headerText = stringResource(id = R.string.first),
                 pickerValue = gearUiState.intervalSecondTimer,
@@ -169,20 +143,22 @@ private fun GearScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        if (gearUiState.intervalFirstTimer < gearUiState.intervalSecondTimer) {
-                            emitSnackBar(
-                                SnackBarMessage(
-                                    headerMessage = context.getString(R.string.alarm_setting_interval_failure),
-                                    contentMessage = context.getString(R.string.alarm_setting_interval_failure_reason)
+                        coroutineScope.launch {
+                            if (gearUiState.intervalFirstTimer < gearUiState.intervalSecondTimer) {
+                                showSnackBar(
+                                    SnackBarMessage(
+                                        headerMessage = context.getString(R.string.alarm_setting_interval_failure),
+                                        contentMessage = context.getString(R.string.alarm_setting_interval_failure_reason)
+                                    )
                                 )
-                            )
-                        } else {
-                            setIntervalTimerSetting()
-                            emitSnackBar(
-                                SnackBarMessage(
-                                    headerMessage = context.getString(R.string.alarm_setting_interval_success)
+                            } else {
+                                setIntervalTimerSetting()
+                                showSnackBar(
+                                    SnackBarMessage(
+                                        headerMessage = context.getString(R.string.alarm_setting_interval_success)
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
             )
@@ -216,7 +192,7 @@ private fun GearScreen(
                 }
             }
         }
-    }
+    )
 }
 
 @Composable
@@ -257,15 +233,13 @@ private fun PreviewGearScreen() {
     PreviewMiscellaneousToolTheme {
         GearScreen(
             gearUiState = GearUiState.getInitValue(),
-            snackBarMessage = SnackBarMessage.getInitValues(),
             availableProducts = emptyList(),
             purchaseInApp = {},
-            scaffoldState = rememberScaffoldState(),
             setIntervalFirstTimerSetting = {},
             setIntervalSecondTimerSetting = {},
             setIntervalTimerSetting = {},
             onNavigatePopBackStack = {},
-            emitSnackBar = {}
+            showSnackBar = {}
         )
     }
 }

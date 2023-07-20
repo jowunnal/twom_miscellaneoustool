@@ -11,7 +11,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
@@ -41,29 +40,27 @@ fun AlarmScreen(
     changeVisibilityBottomNavigationBar: (Boolean) -> Unit,
     showRewardedAd: (() -> Unit) -> Unit,
     onNavigateToGear: () -> Unit,
-    onNavigateToWatch: () -> Unit
+    onNavigateToWatch: () -> Unit,
+    showSnackBar: suspend (SnackBarMessage) -> Unit
 ) {
     changeVisibilityBottomNavigationBar(true)
 
     val alarmUiState by alarmViewModel.uiState.collectAsStateWithLifecycle()
     val alarmBottomSheetUiState by alarmViewModel.bottomSheetUiState.collectAsStateWithLifecycle()
-    val snackBarMessage by alarmViewModel.snackBarMessage.collectAsStateWithLifecycle(
-        initialValue = SnackBarMessage.getInitValues(),
-        lifecycleOwner = LocalLifecycleOwner.current
-    )
 
     AlarmScreen(
         alarmUiState = alarmUiState,
         alarmBottomSheetUiState = alarmBottomSheetUiState,
-        snackBarMessage = snackBarMessage,
         addBossToFrequentlyUsedList = alarmViewModel::addBossToFrequentlyUsedList,
-        removeBossFromFrequentlyUsedList = alarmViewModel::removeBossFromFrequentlyUsedList,
+        removeBossFromFrequentlyUsedList = { bossName ->
+            alarmViewModel::removeBossFromFrequentlyUsedList.invoke(bossName, showSnackBar)
+        },
         onStartAlarm = { bossName ->
             if (Build.VERSION.SDK_INT >= 31) {
                 val alarmManager = context.getSystemService<AlarmManager>()!!
                 when {
                     alarmManager.canScheduleExactAlarms() -> {
-                        alarmViewModel::setAlarm.invoke(bossName)
+                        alarmViewModel::setAlarm.invoke(bossName, showSnackBar)
                     }
 
                     else -> {
@@ -71,7 +68,7 @@ fun AlarmScreen(
                     }
                 }
             } else {
-                alarmViewModel::setAlarm.invoke(bossName)
+                alarmViewModel::setAlarm.invoke(bossName, showSnackBar)
             }
         },
         onClearAlarm = alarmViewModel::clearAlarm,
@@ -92,10 +89,8 @@ fun AlarmScreen(
 private fun AlarmScreen(
     alarmUiState: AlarmUiState,
     alarmBottomSheetUiState: AlarmBottomSheetUiState,
-    snackBarMessage: SnackBarMessage,
     addBossToFrequentlyUsedList: (String) -> Unit,
     removeBossFromFrequentlyUsedList: (String) -> Unit,
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     onStartAlarm: (String) -> Unit,
     onClearAlarm: (Int, String) -> Unit,
@@ -125,24 +120,13 @@ private fun AlarmScreen(
             onDismissRequest = { showDialogState.value = false }
         )
 
-
-    LaunchedEffect(key1 = snackBarMessage) {
-        if (snackBarMessage.headerMessage.isNotBlank())
-            scaffoldState.snackbarHostState.showSnackbar(
-                message = snackBarMessage.headerMessage,
-                actionLabel = snackBarMessage.contentMessage,
-                duration = SnackbarDuration.Indefinite
-            )
-    }
-
     DefaultLayout(
         topBar = {
             AlarmTopAppBar(
                 onNavigateToGear = onNavigateToGear,
                 onNavigateToOverlaySetting = onNavigateToWatch
             )
-        },
-        scaffoldState = scaffoldState
+        }
     ) {
         ModalBottomSheetLayout(
             sheetContent = {
@@ -164,10 +148,9 @@ private fun AlarmScreen(
             sheetState = bottomSheetState,
             sheetShape = RoundedCornerShape(20.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(it)
-                    .padding(16.dp)
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 BossSelection(
                     bossNameList = alarmUiState.bossNameList,
@@ -272,7 +255,6 @@ private fun PreviewAlarmScreen() {
                 timeState = TimeState.getInitValue(),
                 selectedBossName = "은둔자",
             ),
-            snackBarMessage = SnackBarMessage.getInitValues(),
             setSelectedBossName = {},
             addBossToFrequentlyUsedList = {},
             removeBossFromFrequentlyUsedList = {},

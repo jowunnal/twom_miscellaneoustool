@@ -32,17 +32,20 @@ fun SnackBarHostCustom(
     modifier: Modifier = Modifier,
     disMissSnackBar: () -> Unit
 ){
-    SnackbarHost(
-        hostState = snackBarHostState,
-        modifier = modifier,
-        snackbar = {
-            SnackBarCustom(
-                headerMessage,
-                contentMessage,
-                disMissSnackBar
-            )
-        }
-    )
+    Column {
+        SnackbarHost(
+            hostState = snackBarHostState,
+            modifier = modifier,
+            snackbar = {
+                SnackBarCustom(
+                    headerMessage,
+                    contentMessage,
+                    disMissSnackBar
+                )
+            }
+        )
+        VerticalSpacer(height = 90.dp)
+    }
 }
 
 @Composable

@@ -36,7 +36,9 @@ import com.jinproject.design_compose.tu
 import com.jinproject.domain.model.WeekModel
 import com.jinproject.features.alarm.R
 import com.jinproject.features.alarm.item.TimeState
+import com.jinproject.features.core.utils.findActivity
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
@@ -119,7 +121,7 @@ fun AlarmBottomSheetContent(
                 modifier = Modifier
                     .weight(1f)
                     .clickable {
-                        /*val billingModule = (context.findActivity() as MainActivity).billingModule
+                        val billingModule = (context.findActivity() as MainActivity).billingModule
 
                         billingModule.queryPurchase { purchaseList ->
                             coroutineScope.launch(Dispatchers.Main) {
@@ -134,7 +136,7 @@ fun AlarmBottomSheetContent(
                                 } else
                                     onStartAlarm(selectedBossName)
                             }
-                        }*/
+                        }
                         onCloseBottomSheet()
                     }
             )
