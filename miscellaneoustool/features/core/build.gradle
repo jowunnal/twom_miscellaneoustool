@@ -29,7 +29,6 @@ dependencies {
     implementation project(":design-compose")
     implementation project(path: ':design-ui')
     implementation project(":core")
-    implementation project(":domain")
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
