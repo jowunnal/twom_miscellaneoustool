@@ -1,4 +1,4 @@
-<img src="https://img.shields.io/badge/Play Store-v2.1.0-#4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook">
+<img src="https://img.shields.io/badge/PlayStore-v2.1.0-#4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook">
 
 자세한 설명은 [깃블로그](https://jowunnal.github.io/categories/#projects "블로그 링크") 에 있습니다.
 
@@ -36,15 +36,15 @@
 
 ### Detail
 
-<img src="diagram/detail_design_diagram.PNG" />
+<img src="miscellaneoustool/diagram/detail_design_diagram.PNG" />
 
 ### Module
 
-<img src="diagram/module_diagram.PNG" />
+<img src="miscellaneoustool/diagram/module_diagram.PNG" />
 
 ### Database Logical Design
 
-<img src="diagram/db_logical_diagram.png" />
+<img src="miscellaneoustool/diagram/db_logical_diagram.png" />
 
 # Point
 
