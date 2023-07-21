@@ -1,0 +1,28 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.TwomMiscellaneousTools" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/dark_primary</item>
+        <item name="colorPrimaryVariant">@color/dark_primary_variants</item>
+        <item name="colorOnPrimary">@color/dark_onPrimary</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/dark_secondary</item>
+        <item name="colorSecondaryVariant">@color/dark_secondary_variants</item>
+        <item name="colorOnSecondary">@color/dark_onSecondary</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar" >false</item>
+        <!-- Customize your theme here. -->
+        <item name="colorError">@color/dark_error</item>
+        <item name="colorOnError">@color/dark_onError</item>
+        <item name="background">@color/dark_background</item>
+        <item name="colorOnBackground">@color/dark_onBackground</item>
+        <item name="colorSurface">@color/dark_surface</item>
+        <item name="colorOnSurface">@color/dark_onSurface</item>
+        <item name="colorSeperator">@color/white_gray</item>
+        <item name="colorHeader">@color/white_70</item>
+        <item name="colorIcon">@color/white_gray</item>
+        <item name="colorControlNormal">@color/white_100</item>
+    </style>
+
+</resources>

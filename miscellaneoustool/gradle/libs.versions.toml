@@ -127,6 +127,8 @@ android-navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref
 android-navigation-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidNavigationSafeargs" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 gms-google-service = { id = "com.google.gms.google-services", version.ref = "gmsGoogleServicePlugin" }
 junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "junitPlugin" }

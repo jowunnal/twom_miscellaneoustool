@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navi_droplist"
+    app:startDestination="@id/dropListMaps">
+    <fragment
+        android:id="@+id/dropListMaps"
+        android:name="com.jinproject.features.droplist.map.DropListMaps"
+        android:label="droplistmap"
+        tools:layout="@layout/droplistmap" >
+        <action
+            android:id="@+id/action_dropListMaps_to_dropList"
+            app:destination="@id/dropList" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dropList"
+        android:name="com.jinproject.features.droplist.monster.DropListMonster"
+        android:label="drop"
+        tools:layout="@layout/drop">
+        <argument
+            android:name="mapName"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
+</navigation>

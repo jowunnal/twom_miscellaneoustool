@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navi_collection"
+    app:startDestination="@id/collectionCategory">
+
+    <fragment
+        android:id="@+id/collectionCategory"
+        android:name="com.jinproject.features.collection.category.CollectionCategory"
+        android:label="collection_category"
+        tools:layout="@layout/collection_category" >
+        <action
+            android:id="@+id/action_collectionCategory_to_collectionList"
+            app:destination="@id/collectionList" />
+    </fragment>
+    <fragment
+        android:id="@+id/collectionList"
+        android:name="com.jinproject.features.collection.item.CollectionList"
+        android:label="Collection_list"
+        tools:layout="@layout/collection_list">
+        <argument
+            android:name="category"
+            app:argType="string"
+            android:defaultValue=""
+            />
+        <action
+            android:id="@+id/action_collectionList_to_collectionSetting"
+            app:destination="@id/collectionSetting" />
+    </fragment>
+    <fragment
+        android:id="@+id/collectionSetting"
+        android:name="com.jinproject.features.collection.setting.CollectionSetting"
+        android:label="collection_setting"
+        tools:layout="@layout/collection_setting">
+        <argument
+            android:name="category"
+            app:argType="string"
+            android:defaultValue=""
+            />
+        <action
+            android:id="@+id/action_collectionSetting_to_collectionSettingItem"
+            app:destination="@id/collectionSettingItem" />
+        <action
+            android:id="@+id/action_collectionSetting_to_collectionSettingFilter"
+            app:destination="@id/collectionSettingFilter" />
+    </fragment>
+    <fragment
+        android:id="@+id/collectionSettingFilter"
+        android:name="com.jinproject.features.collection.setting.filter.CollectionSettingFilter"
+        android:label="collection_setting_filter"
+        tools:layout="@layout/collection_list">
+        <argument
+            android:name="category"
+            app:argType="string"
+            android:defaultValue=""
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/collectionSettingItem"
+        android:name="com.jinproject.features.collection.setting.item.CollectionSettingItem"
+        android:label="collection_setting_item"
+        tools:layout="@layout/collection_setting_item_list">
+    </fragment>
+</navigation>

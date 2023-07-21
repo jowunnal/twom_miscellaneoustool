@@ -6,99 +6,27 @@
     app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.jinproject.twomillustratedbook.ui.screen.home.Home"
+        android:name="com.jinproject.features.home.Home"
         android:label="BookHome"
         tools:layout="@layout/home">
         <action
             android:id="@+id/action_homeFragment_to_dropListMaps"
-            app:destination="@id/dropListMaps" />
+            app:destination="@id/navi_droplist" />
         <action
             android:id="@+id/action_homeFragment_to_collectionCategory"
-            app:destination="@id/collectionCategory" />
+            app:destination="@id/navi_collection" />
         <action
             android:id="@+id/action_homeFragment_to_navigationFragment"
             app:destination="@id/navigationFragment" />
 
     </fragment>
-    <fragment
-        android:id="@+id/dropListMaps"
-        android:name="com.jinproject.twomillustratedbook.ui.screen.droplist.map.DropListMaps"
-        android:label="droplistmap"
-        tools:layout="@layout/droplistmap" >
-        <action
-            android:id="@+id/action_dropListMaps_to_dropList"
-            app:destination="@id/dropList" />
-    </fragment>
-    <fragment
-        android:id="@+id/collectionCategory"
-        android:name="com.jinproject.twomillustratedbook.ui.screen.collection.category.CollectionCategory"
-        android:label="collection_category"
-        tools:layout="@layout/collection_category" >
-        <action
-            android:id="@+id/action_collectionCategory_to_collectionList"
-            app:destination="@id/collectionList" />
-    </fragment>
-    <fragment
-        android:id="@+id/collectionList"
-        android:name="com.jinproject.twomillustratedbook.ui.screen.collection.item.CollectionList"
-        android:label="Collection_list"
-        tools:layout="@layout/collection_list">
-        <argument
-            android:name="category"
-            app:argType="string"
-            android:defaultValue=""
-            />
-        <action
-            android:id="@+id/action_collectionList_to_collectionSetting"
-            app:destination="@id/collectionSetting" />
-    </fragment>
-    <fragment
-        android:id="@+id/collectionSetting"
-        android:name="com.jinproject.twomillustratedbook.ui.screen.collection.setting.CollectionSetting"
-        android:label="collection_setting"
-        tools:layout="@layout/collection_setting">
-        <argument
-            android:name="category"
-            app:argType="string"
-            android:defaultValue=""
-            />
-        <action
-            android:id="@+id/action_collectionSetting_to_collectionSettingItem"
-            app:destination="@id/collectionSettingItem" />
-        <action
-            android:id="@+id/action_collectionSetting_to_collectionSettingFilter"
-            app:destination="@id/collectionSettingFilter" />
-    </fragment>
-    <fragment
-        android:id="@+id/collectionSettingFilter"
-        android:name="com.jinproject.twomillustratedbook.ui.screen.collection.setting.filter.CollectionSettingFilter"
-        android:label="collection_setting_filter"
-        tools:layout="@layout/collection_list">
-        <argument
-            android:name="category"
-            app:argType="string"
-            android:defaultValue=""
-            />
-    </fragment>
-    <fragment
-        android:id="@+id/collectionSettingItem"
-        android:name="com.jinproject.twomillustratedbook.ui.screen.collection.setting.item.CollectionSettingItem"
-        android:label="collection_setting_item"
-        tools:layout="@layout/collection_setting_item_list">
-    </fragment>
-    <fragment
-        android:id="@+id/dropList"
-        android:name="com.jinproject.twomillustratedbook.ui.screen.droplist.monster.DropListMonster"
-        android:label="drop"
-        tools:layout="@layout/drop">
-        <argument
-            android:name="mapName"
-            app:argType="string"
-            android:defaultValue=""/>
-    </fragment>
+
+    <include app:graph="@navigation/navi_collection"/>
+    <include app:graph="@navigation/navi_droplist"/>
+
     <fragment
         android:id="@+id/navigationFragment"
-        android:name="com.jinproject.twomillustratedbook.ui.screen.compose.navigation.NavigationFragment"
+        android:name="com.jinproject.twomillustratedbook.ui.screen.navigation.NavigationFragment"
         android:label="NavigationFragment" />
 
 </navigation>

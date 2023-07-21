@@ -1,4 +1,4 @@
-package com.jinproject.twomillustratedbook.utils
+package com.jinproject.core.util
 
 import java.util.Calendar
 

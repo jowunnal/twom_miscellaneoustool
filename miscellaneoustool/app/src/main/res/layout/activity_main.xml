@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ui.MainActivity"
-    >
+    tools:context=".ui.MainActivity">
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
@@ -14,7 +13,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         app:adSize="BANNER"
-        app:adUnitId="@string/my_UnitId"
+        app:adUnitId="@string/test_UnitId"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
