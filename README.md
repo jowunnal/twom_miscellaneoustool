@@ -1,6 +1,4 @@
-<div>
-	<img src="https://img.shields.io/badge/PlayStore-v2.1.0-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
-</div>
+<img src="https://img.shields.io/badge/PlayStore-v2.1.0-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
 
 자세한 설명은 [깃블로그](https://jowunnal.github.io/categories/#projects "블로그 링크") 에 있습니다.
 
