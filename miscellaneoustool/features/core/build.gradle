@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    id 'kotlin-kapt'
 }
 
 android {
@@ -22,7 +21,6 @@ android {
     }
 
     buildFeatures{
-        viewBinding true
         dataBinding true
     }
 }
@@ -40,12 +38,10 @@ dependencies {
     implementation platform(libs.compose.bom)
     androidTestImplementation(libs.compose.bom)
     implementation(libs.bundles.compose)
-    debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.bundles.billing)
     implementation(libs.bundles.lifecycle)
     implementation(libs.bundles.hilt)
     implementation(libs.bumptech.glide)
     implementation(libs.bundles.navigation)
-    implementation(libs.google.gms.services.ads)
 }

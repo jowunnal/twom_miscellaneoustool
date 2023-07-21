@@ -29,19 +29,23 @@ import com.jinproject.features.alarm.component.BossSelection
 import com.jinproject.features.alarm.component.InProgressTimerList
 import com.jinproject.features.alarm.item.TimeState
 import com.jinproject.features.alarm.item.TimerState
+import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.base.item.SnackBarMessage
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
 fun AlarmScreen(
+    billingModule: BillingModule,
     alarmViewModel: AlarmViewModel = hiltViewModel(),
     context: Context = LocalContext.current,
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
     changeVisibilityBottomNavigationBar: (Boolean) -> Unit,
     showRewardedAd: (() -> Unit) -> Unit,
     onNavigateToGear: () -> Unit,
     onNavigateToWatch: () -> Unit,
-    showSnackBar: suspend (SnackBarMessage) -> Unit
+    showSnackBar: (SnackBarMessage) -> Unit
 ) {
     changeVisibilityBottomNavigationBar(true)
 
@@ -60,7 +64,20 @@ fun AlarmScreen(
                 val alarmManager = context.getSystemService<AlarmManager>()!!
                 when {
                     alarmManager.canScheduleExactAlarms() -> {
-                        alarmViewModel::setAlarm.invoke(bossName, showSnackBar)
+                        billingModule.queryPurchase { purchaseList ->
+                            coroutineScope.launch(Dispatchers.Main) {
+                                if (billingModule.checkPurchased(
+                                        purchaseList = purchaseList,
+                                        productId = "ad_remove"
+                                    )
+                                ) {
+                                    showRewardedAd {
+                                        alarmViewModel::setAlarm.invoke(bossName, showSnackBar)
+                                    }
+                                } else
+                                    alarmViewModel::setAlarm.invoke(bossName, showSnackBar)
+                            }
+                        }
                     }
 
                     else -> {
@@ -79,8 +96,7 @@ fun AlarmScreen(
         setRecentlySelectedBossClassifiedChanged = alarmViewModel::setRecentlySelectedBossClassified,
         setRecentlySelectedBossNameChanged = alarmViewModel::setRecentlySelectedBossName,
         onNavigateToGear = onNavigateToGear,
-        onNavigateToWatch = onNavigateToWatch,
-        showRewardedAd = showRewardedAd
+        onNavigateToWatch = onNavigateToWatch
     )
 }
 
@@ -101,8 +117,7 @@ private fun AlarmScreen(
     setRecentlySelectedBossClassifiedChanged: (com.jinproject.domain.model.MonsterType) -> Unit,
     setRecentlySelectedBossNameChanged: (String) -> Unit,
     onNavigateToGear: () -> Unit,
-    onNavigateToWatch: () -> Unit,
-    showRewardedAd: (() -> Unit) -> Unit
+    onNavigateToWatch: () -> Unit
 ) {
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -141,8 +156,7 @@ private fun AlarmScreen(
                         coroutineScope.launch {
                             bottomSheetState.animateTo(ModalBottomSheetValue.Hidden)
                         }
-                    },
-                    showRewardedAd = showRewardedAd
+                    }
                 )
             },
             sheetState = bottomSheetState,
@@ -266,8 +280,7 @@ private fun PreviewAlarmScreen() {
             setRecentlySelectedBossClassifiedChanged = {},
             setRecentlySelectedBossNameChanged = {},
             onNavigateToGear = {},
-            onNavigateToWatch = {},
-            showRewardedAd = {}
+            onNavigateToWatch = {}
         )
     }
 }

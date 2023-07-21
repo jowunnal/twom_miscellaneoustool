@@ -1,4 +1,4 @@
-package com.jinproject.features.alarm.component
+package com.jinproject.features.watch.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,36 +21,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.chargemap.compose.numberpicker.NumberPicker
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.DefaultButton
 import com.jinproject.design_compose.component.HorizontalSpacer
 import com.jinproject.design_compose.component.VerticalSpacer
-import com.jinproject.design_compose.tu
-import com.jinproject.domain.model.WeekModel
-import com.jinproject.features.alarm.R
-import com.jinproject.features.alarm.item.TimeState
+import com.jinproject.design_compose.theme.Typography
+import com.jinproject.features.watch.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun AlarmBottomSheetContent(
-    timeState: TimeState,
-    selectedBossName: String,
+fun TimerBottomSheetContent(
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    setHourChanged: (Int) -> Unit,
-    setMinutesChanged: (Int) -> Unit,
-    setSecondsChanged: (Int) -> Unit,
-    onStartAlarm: (String) -> Unit,
-    onCloseBottomSheet: () -> Unit
+    selectedMonsterName: String,
+    onCloseBottomSheet: () -> Unit,
+    setSelectedMonsterOtaToTrue: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
+            .background(color = MaterialTheme.colorScheme.background)
             .padding(horizontal = 20.dp, vertical = 16.dp)
     ) {
         Row(
@@ -87,9 +78,8 @@ fun AlarmBottomSheetContent(
             }
         }
         Text(
-            text = selectedBossName,
-            fontSize = 18.tu,
-            fontWeight = FontWeight.ExtraBold,
+            text = selectedMonsterName,
+            style = Typography.headlineMedium,
             color = MaterialTheme.colorScheme.outline,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
@@ -99,83 +89,45 @@ fun AlarmBottomSheetContent(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            NumberPickerDefault(
-                timeState = timeState,
-                setHourChanged = setHourChanged,
-                setMinutesChanged = setMinutesChanged,
-                setSecondsChanged = setSecondsChanged
+            Text(
+                text = stringResource(id = R.string.watch_bottomsheet_title),
+                style = Typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
 
         VerticalSpacer(height = 16.dp)
 
-        Row {
-            DefaultButton(
-                content = stringResource(id = R.string.start_do),
+        Row() {
+            DefaultButton(content = stringResource(id = R.string.register_do),
                 modifier = Modifier
                     .weight(1f)
                     .clickable {
-                        onStartAlarm(selectedBossName)
+                        setSelectedMonsterOtaToTrue(1)
+                        onCloseBottomSheet()
+                    }
+            )
+            HorizontalSpacer(width = 8.dp)
+            DefaultButton(content = stringResource(id = R.string.delete_do),
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+                        setSelectedMonsterOtaToTrue(0)
                         onCloseBottomSheet()
                     }
             )
         }
-
     }
 }
 
-@Composable
-private fun NumberPickerDefault(
-    timeState: TimeState,
-    setHourChanged: (Int) -> Unit,
-    setMinutesChanged: (Int) -> Unit,
-    setSecondsChanged: (Int) -> Unit
-) {
-    NumberPicker(
-        dividersColor = MaterialTheme.colorScheme.primary,
-        value = timeState.hour,
-        onValueChange = { hour -> setHourChanged(hour) },
-        range = 0..23,
-        textStyle = TextStyle(color = MaterialTheme.colorScheme.outline)
-    )
-
-    HorizontalSpacer(width = 16.dp)
-
-    NumberPicker(
-        dividersColor = MaterialTheme.colorScheme.primary,
-        value = timeState.minutes,
-        onValueChange = { minutes -> setMinutesChanged(minutes) },
-        range = 0..59,
-        textStyle = TextStyle(color = MaterialTheme.colorScheme.outline)
-    )
-
-    HorizontalSpacer(width = 16.dp)
-
-    NumberPicker(
-        dividersColor = MaterialTheme.colorScheme.primary,
-        value = timeState.seconds,
-        onValueChange = { seconds -> setSecondsChanged(seconds) },
-        range = 0..59,
-        textStyle = TextStyle(color = MaterialTheme.colorScheme.outline)
-    )
-}
 
 @Preview(showBackground = true)
 @Composable
-private fun PreviewAlarmBottomSheetContent() =
+private fun PreviewTimerBottomSheetContent() =
     PreviewMiscellaneousToolTheme {
-        AlarmBottomSheetContent(
-            timeState = TimeState(
-                day = WeekModel.Mon,
-                hour = 13,
-                minutes = 20,
-                seconds = 34
-            ),
-            selectedBossName = "은둔자",
-            setHourChanged = {},
-            setMinutesChanged = {},
-            setSecondsChanged = {},
-            onStartAlarm = {},
-            onCloseBottomSheet = {}
+        TimerBottomSheetContent(
+            selectedMonsterName = "은둔자",
+            onCloseBottomSheet = {},
+            setSelectedMonsterOtaToTrue = {}
         )
     }

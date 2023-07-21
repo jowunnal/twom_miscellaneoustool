@@ -30,11 +30,5 @@ dependencies {
     implementation project(":core")
 
     implementation(libs.constraintLayout)
-
-    implementation platform(libs.compose.bom)
-    androidTestImplementation(libs.compose.bom)
-    implementation(libs.bundles.compose)
-    debugImplementation(libs.compose.ui.tooling)
-
     implementation(libs.bundles.hilt)
 }

@@ -1,4 +1,4 @@
-package com.jinproject.features.core.utils
+package com.jinproject.features.alarm
 
 import android.annotation.SuppressLint
 import android.app.NotificationManager

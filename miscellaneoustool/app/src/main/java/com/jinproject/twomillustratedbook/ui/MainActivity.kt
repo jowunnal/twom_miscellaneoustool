@@ -17,6 +17,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.navigation.NavigationBarView
 import com.jinproject.features.core.BillingModule
+import com.jinproject.features.core.listener.BottomNavigationController
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BottomNavigationController {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
 
@@ -162,5 +163,13 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         _binding = null
         super.onDestroy()
+    }
+
+    override fun hideBottomNavigation() {
+        binding.bottomNavigationView.visibility = View.GONE
+    }
+
+    override fun showBottomNavigation() {
+        binding.bottomNavigationView.visibility = View.VISIBLE
     }
 }

@@ -23,7 +23,7 @@
         android:theme="@style/Theme.TwomMiscellaneousTools">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/my_AppId" />
+            android:value="@string/test_AppId" />
 
         <activity
             android:name=".ui.MainActivity"
@@ -36,7 +36,7 @@
         </activity>
 
         <service
-            android:name="com.jinproject.features.alarm.service.OverlayService"
+            android:name="com.jinproject.features.watch.service.OverlayService"
             android:description="@string/현재시간항상보기" />
         <service
             android:name="com.jinproject.features.alarm.service.ReAlarmService"

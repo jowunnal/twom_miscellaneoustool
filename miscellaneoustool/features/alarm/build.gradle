@@ -2,9 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.protobuf)
-    id 'kotlin-kapt'
-    id 'kotlin-parcelize'
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -37,9 +36,6 @@ dependencies {
     implementation project(":features:core")
     implementation project(path: ':design-ui')
     implementation project(":design-compose")
-
-    implementation(libs.appcompat)
-    implementation(libs.constraintLayout)
 
     implementation platform(libs.compose.bom)
     androidTestImplementation(libs.compose.bom)

@@ -3,23 +3,28 @@ package com.jinproject.twomillustratedbook.ui.screen.navigation
 import android.app.AlarmManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.navigation.compose.rememberNavController
+import com.android.billingclient.api.Purchase
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -29,8 +34,13 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.jinproject.design_compose.component.SnackBarHostCustom
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
+import com.jinproject.features.core.base.item.SnackBarMessage
+import com.jinproject.features.core.utils.findActivity
 import com.jinproject.twomillustratedbook.R
+import com.jinproject.twomillustratedbook.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NavigationFragment : Fragment() {
@@ -39,6 +49,7 @@ class NavigationFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadRewardedAd()
+        hideTopBar()
     }
 
     override fun onCreateView(
@@ -67,33 +78,78 @@ class NavigationFragment : Fragment() {
     }
 
     @Composable
-    private fun Content() {
-        hideTopBar()
+    private fun Content(
+        coroutineScope: CoroutineScope = rememberCoroutineScope()
+    ) {
         val snackBarHostState = remember { SnackbarHostState() }
 
-        Scaffold(
-            snackbarHost = {
-                SnackBarHostCustom(headerMessage = snackBarHostState.currentSnackbarData?.message ?: "",
-                    contentMessage = snackBarHostState.currentSnackbarData?.actionLabel ?: "",
-                    snackBarHostState = snackBarHostState,
-                    disMissSnackBar = { snackBarHostState.currentSnackbarData?.dismiss() })
+        val showSnackBar = { snackBarMessage: SnackBarMessage ->
+            coroutineScope.launch {
+                snackBarHostState.showSnackbar(
+                    message = snackBarMessage.headerMessage,
+                    actionLabel = snackBarMessage.contentMessage,
+                    duration = SnackbarDuration.Indefinite
+                )
             }
-        ) { paddingValues ->
-            Column(modifier = Modifier
-                .padding(paddingValues)
-            ) {
+        }
+
+        val callback = object: MainActivity.OnBillingCallback {
+            override fun onSuccess(purchase: Purchase) {
+                showSnackBar(
+                    SnackBarMessage(
+                        headerMessage = "${purchase.products.first()} 상품의 구매가 완료되었어요."
+                    )
+                )
+            }
+
+            override fun onFailure(errorCode: Int) {
+                Log.e("test","error : $errorCode")
+                val snackBar = SnackBarMessage(
+                    headerMessage = "구매 실패",
+                    contentMessage = when (errorCode) {
+                        1 -> "취소를 하셨어요."
+                        2, 3, 4 -> "유효하지 않은 상품 이에요."
+                        5, 6 -> "잘못된 상품 이에요."
+                        7 -> "이미 보유하고 있는 상품 이에요."
+                        else -> "네트워크 에러로 인해 실패했어요."
+                    }
+                )
+                showSnackBar(snackBar)
+            }
+
+        }
+
+        val activity = (requireActivity().findActivity() as MainActivity).apply {
+            setBillingCallback(callback)
+        }
+        val billingModule = activity.billingModule
+
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = Color.Transparent
+        ) {
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                contentColor = Color.Transparent,
+                snackbarHost = {
+                    SnackBarHostCustom(headerMessage = snackBarHostState.currentSnackbarData?.message ?: "",
+                        contentMessage = snackBarHostState.currentSnackbarData?.actionLabel ?: "",
+                        snackBarHostState = snackBarHostState,
+                        disMissSnackBar = { snackBarHostState.currentSnackbarData?.dismiss() })
+                }
+            ) { paddingValues ->
                 NavigationGraph(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
                     navController = rememberNavController(),
+                    billingModule = billingModule,
                     changeVisibilityBottomNavigationBar = { bool -> changeVisibilityBottomNavigationBar(bool) },
                     showRewardedAd = { onResult ->
                         showRewardedAd(onResult = onResult)
                     },
                     showSnackBar = { snackBarMessage ->
-                        snackBarHostState.showSnackbar(
-                            message = snackBarMessage.headerMessage,
-                            actionLabel = snackBarMessage.contentMessage,
-                            duration = SnackbarDuration.Indefinite
-                        )
+                        showSnackBar(snackBarMessage)
                     }
                 )
             }
