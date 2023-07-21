@@ -1,4 +1,6 @@
-<img src="https://img.shields.io/badge/PlayStore-#4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook">
+<div>
+	<img src="https://img.shields.io/badge/PlayStore-v2.1.0-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
+</div>
 
 자세한 설명은 [깃블로그](https://jowunnal.github.io/categories/#projects "블로그 링크") 에 있습니다.
 
@@ -11,6 +13,10 @@
 몬스터가 죽고 난 뒤 재생성 시간을 계산할 필요 없이 편리하게 알람을 설정할수 있으며,
 
 화면의 Overlay 기능을 통해 지속적으로 현재시간과 몬스터 재생성 시간을 확인할 수 있습니다.
+
+현재 필리핀어, 미국어 에 대응하여 해외마켓과 한국마켓에 출시한 상태이며, 
+
+배너 및 리워드광고와 인앱결제가 포함된 어플입니다.
 
 # Operations
 
@@ -54,6 +60,7 @@
 - UI 컴포넌트들을 정의하고 재사용하여 가독성과 유지보수성을 향상시켰습니다.
 - 앞선 프로젝트에서 학습했던 내용들을 기반으로 MVVM 디자인 패턴을 적용시켰고 LiveData와 명령형 UI 방식을 Coroutines.Flow와 선언형 UI 방식으로 리펙토링 하였습니다.
 - Clean Architecture 를 적용하여 도메인 중심으로 앱을 설계하고, 프로젝트를 모듈단위로 나누어 관리했습니다.
+- 하드코딩된 문자들을 리소스로 분류하여 지역화에 대응하고, color, theme 리소스들을 정리한뒤 다크테마에 대응하였습니다.
 - 구글 플레이스토어에 출시하여 User Experience에 대해 고민하고, 실사용자의 피드백을 받아 지속적으로 유지보수 & 개선 해왔습니다.
 
 # Skill changed
@@ -65,14 +72,12 @@
  
 # UI
 
-![KakaoTalk_20230223_015847465_09](https://user-images.githubusercontent.com/75519689/220842625-c738a854-1e1e-484f-bfeb-4da4b8b575f8.jpg)
-![KakaoTalk_20230223_015847465_06](https://user-images.githubusercontent.com/75519689/220842371-0831c0c3-44ee-4c77-b21a-d6dc9b82fdec.jpg)
-![KakaoTalk_20230223_015847465_05](https://user-images.githubusercontent.com/75519689/220842369-cd54f511-182a-44f9-8342-92747a57d316.jpg)
-![KakaoTalk_20230223_015847465_04](https://user-images.githubusercontent.com/75519689/220842364-af3a9a00-c474-4f9a-a630-d8af683ea0cc.jpg)
-![KakaoTalk_20230223_015847465_08](https://user-images.githubusercontent.com/75519689/220842377-8ba5f4e9-efe0-4f0d-b980-ffa84c1b3bdb.jpg)
-![KakaoTalk_20230223_015847465_02](https://user-images.githubusercontent.com/75519689/220842379-e4783def-6deb-441a-869c-f9ecb3cf9058.jpg)
-![KakaoTalk_20230223_015847465_07](https://user-images.githubusercontent.com/75519689/220842797-3d463bdd-7e5f-4ed5-a75a-c7cbff3143ea.jpg)
-![KakaoTalk_20230223_015847465_03](https://user-images.githubusercontent.com/75519689/220842383-72f124dc-cdb3-4fa8-9104-3a732f66ae3d.jpg)
+<img src="miscellaneoustool/diagram/alarm.jpg" />
+
+<img src="miscellaneoustool/diagram/drop.jpg" />
+
+<img src="miscellaneoustool/diagram/collection.jpg" />
+
 
 # Version
 
