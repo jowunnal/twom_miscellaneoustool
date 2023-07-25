@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.domain.usecase.alarm.SetAlarmUsecase
+import com.jinproject.domain.usecase.timer.GetAlarmStoredBossUsecase
 import com.jinproject.features.alarm.item.AlarmItem
 import com.jinproject.features.alarm.item.TimeState
 import com.jinproject.features.alarm.item.TimerState
@@ -65,7 +66,8 @@ class AlarmViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val timerRepository: com.jinproject.domain.repository.TimerRepository,
     private val dropListRepository: com.jinproject.domain.repository.DropListRepository,
-    private val setAlarmUsecase: SetAlarmUsecase
+    private val setAlarmUsecase: SetAlarmUsecase,
+    private val getAlarmStoredBossUsecase: GetAlarmStoredBossUsecase
 ) : ViewModel() {
 
     private val alarmManager: AlarmManager =
@@ -83,18 +85,18 @@ class AlarmViewModel @Inject constructor(
     }
 
     private fun getRecentlySelectedBossInfo() {
-        timerRepository.getTimerPreferences().onEach { prefs ->
+        getAlarmStoredBossUsecase().onEach { alarmStoredBoss ->
             _uiState.update { state ->
                 state.copy(
                     recentlySelectedBossClassified = context.doOnLocaleLanguage(
-                        onKo = com.jinproject.domain.model.MonsterType.findByStoredName(prefs.recentlySelectedBossClassified).displayName,
-                        onElse = com.jinproject.domain.model.MonsterType.findByStoredName(prefs.recentlySelectedBossClassified).storedName
+                        onKo = com.jinproject.domain.model.MonsterType.findByStoredName(alarmStoredBoss.classified).displayName,
+                        onElse = com.jinproject.domain.model.MonsterType.findByStoredName(alarmStoredBoss.classified).storedName
                     ),
-                    recentlySelectedBossName = prefs.recentlySelectedBossName,
-                    frequentlyUsedBossList = prefs.frequentlyUsedBossListList
+                    recentlySelectedBossName = alarmStoredBoss.name,
+                    frequentlyUsedBossList = alarmStoredBoss.list
                 )
             }
-            getBossListByType(com.jinproject.domain.model.MonsterType.findByStoredName(prefs.recentlySelectedBossClassified))
+            getBossListByType(com.jinproject.domain.model.MonsterType.findByStoredName(alarmStoredBoss.classified))
         }.launchIn(viewModelScope)
     }
 

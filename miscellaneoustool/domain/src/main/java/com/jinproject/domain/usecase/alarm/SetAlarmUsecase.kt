@@ -1,12 +1,12 @@
 package com.jinproject.domain.usecase.alarm
 
-import com.jinproject.domain.model.TimerModel
-import com.jinproject.domain.repository.DropListRepository
-import com.jinproject.domain.repository.TimerRepository
 import com.jinproject.core.util.day
 import com.jinproject.core.util.hour
 import com.jinproject.core.util.minute
 import com.jinproject.core.util.second
+import com.jinproject.domain.model.TimerModel
+import com.jinproject.domain.repository.DropListRepository
+import com.jinproject.domain.repository.TimerRepository
 import kotlinx.coroutines.flow.zip
 import java.util.Calendar
 import javax.inject.Inject
@@ -78,10 +78,10 @@ class SetAlarmUsecase @Inject constructor(
                     gtime = monsterModel.genTime,
                     nextGtime = genTime
                 )
-            }.zip(timerRepository.getTimerPreferences()) { monsterAlarmModel, prefs ->
+            }.zip(timerRepository.getInterval()) { monsterAlarmModel, interval ->
                 makeAlarm(
-                    prefs.intervalFirstTimerSetting,
-                    prefs.intervalSecondTimerSetting,
+                    interval.first,
+                    interval.second,
                     monsterAlarmModel
                 )
             }

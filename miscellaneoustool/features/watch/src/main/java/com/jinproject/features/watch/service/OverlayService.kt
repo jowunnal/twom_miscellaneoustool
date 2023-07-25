@@ -20,12 +20,15 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.domain.repository.TimerRepository
+import com.jinproject.domain.usecase.timer.GetOverlaySettingUsecase
 import com.jinproject.features.alarm.item.TimerState
 import com.jinproject.features.alarm.mapper.toTimerState
 import com.jinproject.features.watch.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -36,11 +39,16 @@ import java.util.Date
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OverlayService: LifecycleService() {
+class OverlayService : LifecycleService() {
     private var wm: WindowManager? = null
     private var mView: View? = null
     private var notificationManager: NotificationManager? = null
-    @Inject lateinit var timerRepository: TimerRepository
+
+    @Inject
+    lateinit var timerRepository: TimerRepository
+
+    @Inject
+    lateinit var getOverlaySettingUsecase: GetOverlaySettingUsecase
 
     override fun onCreate() {
         super.onCreate()
@@ -58,18 +66,24 @@ class OverlayService: LifecycleService() {
 
         createNotificationChannel()
 
-        val notification = NotificationCompat.Builder(applicationContext, "WatchNotificationChannel")
-            .setPriority(NotificationCompat.PRIORITY_LOW)
-            .setSmallIcon(R.mipmap.ic_main)
-            .setContentTitle(getString(R.string.service_overlay_running))
-            .addAction(R.drawable.img_delete_alarm, getString(R.string.turnoff), exitPendingIntent)
-            .build()
+        val notification =
+            NotificationCompat.Builder(applicationContext, "WatchNotificationChannel")
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setSmallIcon(R.mipmap.ic_main)
+                .setContentTitle(getString(R.string.service_overlay_running))
+                .addAction(
+                    R.drawable.img_delete_alarm,
+                    getString(R.string.turnoff),
+                    exitPendingIntent
+                )
+                .build()
 
         startForeground(999, notification)
 
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         wm = getSystemService(WINDOW_SERVICE) as WindowManager
         mView = inflater.inflate(R.layout.alarm_tv_onotherapps, null)
+
         val params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -79,7 +93,43 @@ class OverlayService: LifecycleService() {
         ).apply {
             gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
         }
-        wm!!.addView(mView,params)
+        wm!!.addView(mView, params)
+
+        getOverlaySettingUsecase()
+            .flowOn(Dispatchers.IO)
+            .onEach { overlaySetting ->
+                mView?.findViewById<TextView>(R.id.tv_onOtherApps)?.textSize =
+                    overlaySetting.fontSize.toFloat()
+                mView?.findViewById<TextView>(R.id.tv_currentTimes)?.textSize =
+                    overlaySetting.fontSize.toFloat()
+
+                wm!!.updateViewLayout(
+                    mView,
+                    params.apply {
+                        x = overlaySetting.xPos
+                        y = overlaySetting.yPos
+                    }
+                )
+
+            }.flowOn(Dispatchers.Main)
+            .launchIn(lifecycleScope)
+
+        timerRepository.getTimer().map { timerModels ->
+            timerModels.filter { timerModel ->
+                timerModel.isOverlayOnOrNot
+            }.map { timerModel -> timerModel.toTimerState() }
+        }.flowOn(Dispatchers.IO)
+            .onEach { timerStates ->
+                mView?.findViewById<TextView>(R.id.tv_onOtherApps)?.text =
+                    timerStates.joinToString("\n") { timerState ->
+                        val hourOfDay = this@OverlayService.doOnLocaleLanguage(
+                            onKo = timerState.timeState.day.displayOnKo,
+                            onElse = timerState.timeState.day.displayOnElse
+                        )
+                        "${timerState.bossName} (${hourOfDay}) ${timerState.timeState.getMeridiem()} ${timerState.timeState.getTime12Hour()}:${timerState.timeState.minutes}:${timerState.timeState.seconds}"
+                    }
+            }.flowOn(Dispatchers.Main)
+            .launchIn(lifecycleScope)
     }
 
     private fun createNotificationChannel() {
@@ -108,63 +158,13 @@ class OverlayService: LifecycleService() {
         if (intent?.getBooleanExtra("status", false) == true)
             stopSelf()
 
-        val list = intent?.getParcelableArrayListExtra<TimerState>("timerList")
-        var fontSize = intent?.getIntExtra("fontSize",14)
-
-        lifecycleScope.launch {
-            launch(Dispatchers.Main) {
-                while (true) {
-                    mView?.findViewById<TextView>(R.id.tv_currentTimes)?.text =
-                        SimpleDateFormat("a hh:mm:ss").format(Date(System.currentTimeMillis()))
-                    delay(1000)
-                }
+        lifecycleScope.launch(Dispatchers.Main) {
+            while (true) {
+                mView?.findViewById<TextView>(R.id.tv_currentTimes)?.text =
+                    SimpleDateFormat("a hh:mm:ss").format(Date(System.currentTimeMillis()))
+                delay(1000)
             }
         }
-
-        timerRepository.getTimerPreferences()
-            .flowOn(Dispatchers.IO)
-            .onEach { timer ->
-                mView?.findViewById<TextView>(R.id.tv_onOtherApps)?.textSize = fontSize?.toFloat() ?: timer.fontSize.toFloat()
-                mView?.findViewById<TextView>(R.id.tv_currentTimes)?.textSize = fontSize?.toFloat() ?: timer.fontSize.toFloat()
-            }
-            .flowOn(Dispatchers.Main)
-            .launchIn(lifecycleScope)
-
-        timerRepository.getTimer().map { timerModels ->
-            timerModels.filter { timerModel ->
-                timerModel.isOverlayOnOrNot
-            }.map { timerModel -> timerModel.toTimerState() }
-        }.onEach { timerStates ->
-            mView?.findViewById<TextView>(R.id.tv_onOtherApps)?.text = kotlin.runCatching { StringBuilder().apply {
-                for (item in list!!) {
-                    val hourOfDay = this@OverlayService.doOnLocaleLanguage(onKo = item.timeState.day.displayOnKo, onElse = item.timeState.day.displayOnElse)
-                    append("${item.bossName} (${hourOfDay}) ${item.timeState.getMeridiem()} ${item.timeState.getTime12Hour()}:${item.timeState.minutes}:${item.timeState.seconds}\n")
-                }
-            }.toString() }.getOrElse {
-                timerStates.joinToString("\n") { timerState ->
-                    val hourOfDay = this@OverlayService.doOnLocaleLanguage(onKo = timerState.timeState.day.displayOnKo, onElse = timerState.timeState.day.displayOnElse)
-                    "${timerState.bossName} (${hourOfDay}) ${timerState.timeState.getMeridiem()} ${timerState.timeState.getTime12Hour()}:${timerState.timeState.minutes}:${timerState.timeState.seconds}"
-                }
-            }
-        }.launchIn(lifecycleScope)
-
-        val xPos = intent?.getIntExtra("xPos", 0) ?: 0
-        val yPos = intent?.getIntExtra("yPos", 0) ?: 0
-
-        val params = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-            PixelFormat.TRANSLUCENT
-        ).apply {
-            gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
-            x = xPos
-            y = yPos
-        }
-
-        wm!!.removeView(mView)
-        wm!!.addView(mView, params)
 
         return START_STICKY
     }
@@ -172,7 +172,7 @@ class OverlayService: LifecycleService() {
     override fun onDestroy() {
         if (wm != null) {
             if (mView != null) {
-                wm!!.removeView(mView); // View 초기화
+                wm!!.removeView(mView)
                 wm = null
                 mView = null
             }

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jinproject.design_compose.component.ButtonStatus
+import com.jinproject.domain.usecase.timer.GetOverlaySettingUsecase
 import com.jinproject.domain.usecase.timer.SetOverlaySettingUsecase
 import com.jinproject.features.alarm.item.TimerState
 import com.jinproject.features.alarm.mapper.toTimerState
@@ -43,7 +44,8 @@ data class WatchUiState(
 @HiltViewModel
 class WatchViewModel @Inject constructor(
     private val timerRepository: com.jinproject.domain.repository.TimerRepository,
-    private val setOverlaySettingUsecase: SetOverlaySettingUsecase
+    private val setOverlaySettingUsecase: SetOverlaySettingUsecase,
+    private val getOverlaySettingUsecase: GetOverlaySettingUsecase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(WatchUiState.getInitValue())
@@ -55,13 +57,13 @@ class WatchViewModel @Inject constructor(
     }
 
     private fun getRecentlySelectedBossInfo() {
-        timerRepository.getTimerPreferences().onEach { prefs ->
+        getOverlaySettingUsecase().onEach { overlaySetting ->
             _uiState.update { state ->
                 state.copy(
-                    frequentlyUsedBossList = prefs.frequentlyUsedBossListList,
-                    fontSize = prefs.fontSize,
-                    xPos = prefs.xPos,
-                    yPos = prefs.yPos
+                    frequentlyUsedBossList = overlaySetting.frequentlyUsedBossList,
+                    fontSize = overlaySetting.fontSize,
+                    xPos = overlaySetting.xPos,
+                    yPos = overlaySetting.yPos
                 )
             }
         }.launchIn(viewModelScope)

@@ -1,13 +1,18 @@
 package com.jinproject.domain.repository
 
-import com.jinproject.core.TimerPreferences
 import com.jinproject.domain.model.MonsterType
 import com.jinproject.domain.model.TimerModel
+import com.jinproject.domain.usecase.timer.AlarmStoredBoss
+import com.jinproject.domain.usecase.timer.Interval
+import com.jinproject.domain.usecase.timer.OverlaySetting
 import kotlinx.coroutines.flow.Flow
 
 interface TimerRepository {
 
-    fun getTimerPreferences(): Flow<TimerPreferences>
+    fun getOverlaySetting(): Flow<OverlaySetting>
+    fun getInterval(): Flow<Interval>
+
+    fun getAlarmStoredBoss(): Flow<AlarmStoredBoss>
     suspend fun addBossToFrequentlyUsedList(bossName: String)
     suspend fun setBossToFrequentlyUsedList(bossList: List<String>)
     suspend fun setRecentlySelectedBossClassified(bossClassified: MonsterType)

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -28,6 +29,7 @@ android {
 dependencies {
     implementation project(":design-compose")
     implementation project(path: ':design-ui')
+    implementation project(":domain")
     implementation project(":core")
 
     implementation(libs.core.ktx)

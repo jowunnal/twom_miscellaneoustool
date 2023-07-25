@@ -47,8 +47,6 @@ dependencies {
 
     implementation(libs.bundles.lifecycle)
 
-    implementation(libs.protobuf)
-
     implementation(libs.billing.ktx)
 
     // compose NumberPicker

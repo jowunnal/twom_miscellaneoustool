@@ -3,6 +3,7 @@ package com.jinproject.features.gear
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jinproject.domain.usecase.timer.GetIntervalUsecase
 import com.jinproject.domain.usecase.timer.SetIntervalSettingUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,8 +29,8 @@ data class GearUiState(
 
 @HiltViewModel
 class GearViewModel @Inject constructor(
-    private val timerRepository: com.jinproject.domain.repository.TimerRepository,
-    private val setIntervalSettingUsecase: SetIntervalSettingUsecase
+    private val setIntervalSettingUsecase: SetIntervalSettingUsecase,
+    private val getIntervalUsecase: GetIntervalUsecase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(GearUiState.getInitValue())
@@ -39,11 +40,11 @@ class GearViewModel @Inject constructor(
         getIntervalTimerSettings()
     }
 
-    private fun getIntervalTimerSettings() = timerRepository.getTimerPreferences().onEach { prefs ->
+    private fun getIntervalTimerSettings() = getIntervalUsecase().onEach { interval ->
         _uiState.update { state ->
             state.copy(
-                intervalFirstTimer = prefs.intervalFirstTimerSetting,
-                intervalSecondTimer = prefs.intervalSecondTimerSetting
+                intervalFirstTimer = interval.first,
+                intervalSecondTimer = interval.second
             )
         }
     }.launchIn(viewModelScope)

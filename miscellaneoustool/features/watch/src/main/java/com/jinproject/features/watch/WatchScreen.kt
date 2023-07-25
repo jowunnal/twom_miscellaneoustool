@@ -25,7 +25,6 @@ import com.jinproject.design_compose.component.DefaultButton
 import com.jinproject.design_compose.component.DefaultLayout
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.theme.Typography
-import com.jinproject.features.alarm.item.TimerState
 import com.jinproject.features.watch.component.OverlaySetting
 import com.jinproject.features.watch.component.TimeStatusSetting
 import com.jinproject.features.watch.component.TimerBottomSheetContent
@@ -106,11 +105,7 @@ private fun WatchScreen(
                     setWatchStatus = setWatchStatus,
                     startOverlayService = { status ->
                         context.startOverlayService(
-                            status = status,
-                            fontSize = uiState.fontSize,
-                            timerList = uiState.timerList,
-                            xPos = uiState.xPos,
-                            yPos = uiState.yPos
+                            status = status
                         )
                     }
                 )
@@ -132,14 +127,6 @@ private fun WatchScreen(
                         .fillMaxWidth()
                         .clickable {
                             setTimerSetting()
-                            if (uiState.watchStatus == ButtonStatus.ON)
-                                context.startOverlayService(
-                                    status = false,
-                                    fontSize = uiState.fontSize,
-                                    timerList = uiState.timerList,
-                                    xPos = uiState.xPos,
-                                    yPos = uiState.yPos
-                                )
                         }
                 )
 
@@ -180,25 +167,13 @@ private fun WatchScreen(
 }
 
 private fun Context.startOverlayService(
-    status: Boolean,
-    fontSize: Int,
-    timerList: List<TimerState>,
-    xPos: Int,
-    yPos: Int
+    status: Boolean
 ) = this.startForegroundService(
     Intent(
         this,
         OverlayService::class.java
     ).apply {
         putExtra("status", status)
-        putExtra("fontSize", fontSize)
-        if (timerList.isNotEmpty())
-            putParcelableArrayListExtra(
-                "timerList",
-                timerList as ArrayList
-            )
-        putExtra("xPos", xPos)
-        putExtra("yPos", yPos)
     }
 )
 

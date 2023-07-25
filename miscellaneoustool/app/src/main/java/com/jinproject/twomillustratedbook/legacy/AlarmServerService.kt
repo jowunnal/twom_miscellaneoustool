@@ -1,4 +1,4 @@
-package com.jinproject.features.alarm.service
+package com.jinproject.twomillustratedbook.legacy
 
 /*
 @AndroidEntryPoint
