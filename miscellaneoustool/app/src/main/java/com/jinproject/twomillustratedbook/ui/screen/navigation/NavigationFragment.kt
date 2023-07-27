@@ -15,6 +15,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -48,7 +49,7 @@ class NavigationFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        loadRewardedAd()
+
         hideTopBar()
     }
 
@@ -130,7 +131,7 @@ class NavigationFragment : Fragment() {
         ) {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
-                contentColor = Color.Transparent,
+                backgroundColor = MaterialTheme.colorScheme.background,
                 snackbarHost = {
                     SnackBarHostCustom(headerMessage = snackBarHostState.currentSnackbarData?.message ?: "",
                         contentMessage = snackBarHostState.currentSnackbarData?.actionLabel ?: "",
@@ -146,7 +147,7 @@ class NavigationFragment : Fragment() {
                     billingModule = billingModule,
                     changeVisibilityBottomNavigationBar = { bool -> changeVisibilityBottomNavigationBar(bool) },
                     showRewardedAd = { onResult ->
-                        showRewardedAd(onResult = onResult)
+                        onResult()
                     },
                     showSnackBar = { snackBarMessage ->
                         showSnackBar(snackBarMessage)
@@ -169,7 +170,7 @@ class NavigationFragment : Fragment() {
     private fun loadRewardedAd() {
         RewardedAd.load(
             requireActivity(),
-            requireActivity().getString(R.string.rewarded_Ad_UnitId),
+            requireActivity().getString(R.string.reward_test_id),
             AdRequest.Builder().build(),
             object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {

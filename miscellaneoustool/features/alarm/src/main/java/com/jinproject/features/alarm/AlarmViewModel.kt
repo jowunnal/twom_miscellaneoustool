@@ -179,7 +179,7 @@ class AlarmViewModel @Inject constructor(
         state.copy(selectedBossName = bossName, timeState = TimeState.getInitValue())
     }
 
-    fun setAlarm(monsterName: String, showSnackBar: suspend (SnackBarMessage) -> Unit) =
+    fun setAlarm(monsterName: String, showSnackBar: suspend (SnackBarMessage) -> Unit, backToAlarmIntent: Intent) =
         setAlarmUsecase.invoke(
             monsterName = monsterName,
             monsDiedHour = bottomSheetUiState.value.timeState.hour,
@@ -193,7 +193,8 @@ class AlarmViewModel @Inject constructor(
                         imgName = monsterAlarmModel.img,
                         code = monsterAlarmModel.code
                     ),
-                    intervalFirstTimerSetting = firstInterval
+                    intervalFirstTimerSetting = firstInterval,
+                    backToAlarmIntent = backToAlarmIntent
                 )
 
                 makeAlarm(
@@ -203,7 +204,8 @@ class AlarmViewModel @Inject constructor(
                         imgName = monsterAlarmModel.img,
                         code = monsterAlarmModel.code + 300
                     ),
-                    intervalSecondTimerSetting = secondInterval
+                    intervalSecondTimerSetting = secondInterval,
+                    backToAlarmIntent = backToAlarmIntent
                 )
 
                 viewModelScope.launch {
@@ -241,14 +243,17 @@ class AlarmViewModel @Inject constructor(
         nextGenTime: Long,
         item: AlarmItem,
         intervalFirstTimerSetting: Int = 0,
-        intervalSecondTimerSetting: Int = 0
+        intervalSecondTimerSetting: Int = 0,
+        backToAlarmIntent: Intent
     ) {
-        val notifyIntentImmediately = Intent(context, AlarmReceiver::class.java)
-        notifyIntentImmediately.putExtra("name", item.name)
-        notifyIntentImmediately.putExtra("img", item.imgName)
-        notifyIntentImmediately.putExtra("code", item.code)
-        notifyIntentImmediately.putExtra("first", intervalFirstTimerSetting)
-        notifyIntentImmediately.putExtra("second", intervalSecondTimerSetting)
+        val notifyIntentImmediately = Intent(context, AlarmReceiver::class.java).apply {
+            putExtra("name", item.name)
+            putExtra("img", item.imgName)
+            putExtra("code", item.code)
+            putExtra("first", intervalFirstTimerSetting)
+            putExtra("second", intervalSecondTimerSetting)
+            putExtra("backToAlarmIntent", backToAlarmIntent)
+        }
 
         val notifyPendingIntent = PendingIntent.getBroadcast(
             context,

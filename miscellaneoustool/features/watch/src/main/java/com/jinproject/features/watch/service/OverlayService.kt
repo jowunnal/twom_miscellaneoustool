@@ -21,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.domain.repository.TimerRepository
 import com.jinproject.domain.usecase.timer.GetOverlaySettingUsecase
+import com.jinproject.features.alarm.createChannel
 import com.jinproject.features.alarm.item.TimerState
 import com.jinproject.features.alarm.mapper.toTimerState
 import com.jinproject.features.watch.R
@@ -42,7 +43,6 @@ import javax.inject.Inject
 class OverlayService : LifecycleService() {
     private var wm: WindowManager? = null
     private var mView: View? = null
-    private var notificationManager: NotificationManager? = null
 
     @Inject
     lateinit var timerRepository: TimerRepository
@@ -62,9 +62,6 @@ class OverlayService : LifecycleService() {
             exitIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        createNotificationChannel()
 
         val notification =
             NotificationCompat.Builder(applicationContext, "WatchNotificationChannel")
@@ -132,20 +129,6 @@ class OverlayService : LifecycleService() {
             .launchIn(lifecycleScope)
     }
 
-    private fun createNotificationChannel() {
-        val name = getString(R.string.channel_name)
-        val descriptionText = getString(R.string.channel_description)
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel("WatchNotificationChannel", name, importance).apply {
-            description = descriptionText
-            setShowBadge(true)
-            enableLights(false)
-            lockscreenVisibility = Notification.VISIBILITY_SECRET
-            lightColor = Color.BLUE
-        }
-        notificationManager?.createNotificationChannel(channel)
-    }
-
     override fun onBind(p0: Intent): IBinder? {
         super.onBind(p0)
         return null
@@ -177,7 +160,6 @@ class OverlayService : LifecycleService() {
                 mView = null
             }
         }
-        notificationManager = null
         super.onDestroy()
     }
 }

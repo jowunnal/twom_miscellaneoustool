@@ -38,6 +38,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AlarmScreen(
     billingModule: BillingModule,
+    backToAlarmIntent: Intent,
     alarmViewModel: AlarmViewModel = hiltViewModel(),
     context: Context = LocalContext.current,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
@@ -72,10 +73,10 @@ fun AlarmScreen(
                                     )
                                 ) {
                                     showRewardedAd {
-                                        alarmViewModel::setAlarm.invoke(bossName, showSnackBar)
+                                        alarmViewModel::setAlarm.invoke(bossName, showSnackBar, backToAlarmIntent)
                                     }
                                 } else
-                                    alarmViewModel::setAlarm.invoke(bossName, showSnackBar)
+                                    alarmViewModel::setAlarm.invoke(bossName, showSnackBar, backToAlarmIntent)
                             }
                         }
                     }
@@ -85,7 +86,7 @@ fun AlarmScreen(
                     }
                 }
             } else {
-                alarmViewModel::setAlarm.invoke(bossName, showSnackBar)
+                alarmViewModel::setAlarm.invoke(bossName, showSnackBar, backToAlarmIntent)
             }
         },
         onClearAlarm = alarmViewModel::clearAlarm,

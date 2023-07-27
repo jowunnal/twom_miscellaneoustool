@@ -1,11 +1,13 @@
 package com.jinproject.features.alarm
 
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.drawable.IconCompat
 import com.jinproject.features.alarm.service.ReAlarmService
@@ -18,26 +20,28 @@ fun NotificationManager.sendNotification(
     code: Int,
     context: Context,
     intervalFirstTimerSetting: Int = 0,
-    intervalSecondTimerSetting: Int = 0
+    intervalSecondTimerSetting: Int = 0,
+    backToAlarmIntent: Intent
 ) {
-    //val contentIntent = Intent(context, MainActivity::class.java)
-    val alarmIntent = Intent(context, ReAlarmService::class.java).apply {
+
+    val backToAlarmPendingIntent = PendingIntent.getActivity(
+        context,
+        code,
+        backToAlarmIntent,
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
+    val reAlarmIntent = Intent(context, ReAlarmService::class.java).apply {
         putExtra("name", name)
         putExtra("code", code)
     }
 
-    val alarmPendingIntent = PendingIntent.getService(
+    val reAlarmPendingIntent = PendingIntent.getService(
         context,
         code,
-        alarmIntent,
+        reAlarmIntent,
         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
-    /*val pendingIntent = PendingIntent.getActivity(
-        context,
-        code,
-        contentIntent,
-        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    )*/
 
     val assetManager = context.assets
     val inputStream = assetManager.open("img/monster/$img.png")
@@ -45,9 +49,9 @@ fun NotificationManager.sendNotification(
 
     val builder = NotificationCompat.Builder(context, "TwomBossAlarm")
         .setSmallIcon(IconCompat.createWithBitmap(bitMap))
-        .setContentTitle("알람")
+        .setContentTitle(context.getString(R.string.alarm))
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        //.setContentIntent(pendingIntent)
+        .setContentIntent(backToAlarmPendingIntent)
         .setAutoCancel(true)
         .setLargeIcon(bitMap)
 
@@ -55,13 +59,46 @@ fun NotificationManager.sendNotification(
         .append(context.getString(R.string.alarm_message_head) + name + context.getString(R.string.alarm_message_body))
 
     if (code < 300) {
-        builder.setContentText(alarmMessage.append(intervalFirstTimerSetting.toString() + context.getString(R.string.alarm_message_tail)).toString())
+        builder.setContentText(
+            alarmMessage.append(
+                intervalFirstTimerSetting.toString() + context.getString(
+                    R.string.alarm_message_tail
+                )
+            ).toString()
+        )
     } else {
-        builder.setContentText(alarmMessage.append(intervalSecondTimerSetting.toString() + context.getString(R.string.alarm_message_tail)).toString())
-        builder.addAction(R.drawable.img_add_alarm, context.getString(R.string.alarm_regeneration), alarmPendingIntent)
+        builder.setContentText(
+            alarmMessage.append(
+                intervalSecondTimerSetting.toString() + context.getString(
+                    R.string.alarm_message_tail
+                )
+            ).toString()
+        )
+        builder.addAction(
+            R.drawable.img_add_alarm,
+            context.getString(R.string.alarm_regeneration),
+            reAlarmPendingIntent
+        )
     }
     notify(code, builder.build())
 
+}
+
+fun NotificationManager.createChannel(
+    context: Context
+) {
+    val name = context.getString(R.string.channel_name)
+    val descriptionText = context.getString(R.string.channel_description)
+    val importance = NotificationManager.IMPORTANCE_DEFAULT
+    val channel = NotificationChannel("TwomBossAlarm", name, importance).apply {
+        description = descriptionText
+        enableVibration(true)
+        setShowBadge(true)
+        enableLights(true)
+        lightColor = Color.BLUE
+    }
+
+    createNotificationChannel(channel)
 }
 
 fun NotificationManager.cancelNotification(id: Int) {

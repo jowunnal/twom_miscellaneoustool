@@ -70,7 +70,7 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
                         findNavController().navigate(action)
                     }
 
-                    R.id.home -> findNavController().popBackStack()
+                    android.R.id.home -> findNavController().popBackStack()
                 }
             }
         )

@@ -41,10 +41,11 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="delete_something">: Are you sure you want to delete it?</string>
-    <string name="hour">hour</string>
-    <string name="minute">minutes</string>
-    <string name="second">seconds</string>
+    <string name="hour">:</string>
+    <string name="minute">:</string>
+    <string name="second"> </string>
     <string name="turnoff">Turn off</string>
+    <string name="alarm">Alarm</string>
 
     <!-- Snackbar Message -->
     <string name="message_throw_no_such_element">The item has not found in Database</string>
