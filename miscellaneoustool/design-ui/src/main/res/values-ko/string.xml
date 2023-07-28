@@ -61,7 +61,7 @@
     <string name="alarm_classify_boss">보스 분류</string>
     <string name="alarm_present_bosslist">현재 진행중인 알람 내역</string>
     <string name="alarm_setted">의 알람이 설정되었습니다.</string>
-    <string name="alarm_message_head">띵동~ &lt;</string>
+    <string name="alarm_message_head">띵동~ &#10; &lt;</string>
     <string name="alarm_message_body">&gt; 젠타임</string>
     <string name="alarm_message_tail">분전 입니다.</string>
     <string name="alarm_regeneration">알람 재생성</string>

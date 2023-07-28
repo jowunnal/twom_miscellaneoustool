@@ -58,8 +58,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
-        if (intent != null) {
-            when (intent.getStringExtra("screen")) {
+        intent?.let { notNullIntent ->
+            when (notNullIntent.getStringExtra("screen")) {
                 "alarm" -> {
                     val navigationBarView =
                         (supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment)

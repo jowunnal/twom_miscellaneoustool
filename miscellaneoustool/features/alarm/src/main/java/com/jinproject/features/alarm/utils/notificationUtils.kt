@@ -1,4 +1,4 @@
-package com.jinproject.features.alarm
+package com.jinproject.features.alarm.utils
 
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
@@ -14,14 +14,14 @@ import com.jinproject.features.alarm.service.ReAlarmService
 import com.jinproject.features.core.R
 
 @SuppressLint("DiscouragedApi")
-fun NotificationManager.sendNotification(
+internal fun NotificationManager.sendNotification(
     name: String,
     img: String,
     code: Int,
     context: Context,
     intervalFirstTimerSetting: Int = 0,
     intervalSecondTimerSetting: Int = 0,
-    backToAlarmIntent: Intent
+    backToAlarmIntent: Intent?
 ) {
 
     val backToAlarmPendingIntent = PendingIntent.getActivity(
@@ -34,6 +34,7 @@ fun NotificationManager.sendNotification(
     val reAlarmIntent = Intent(context, ReAlarmService::class.java).apply {
         putExtra("name", name)
         putExtra("code", code)
+        backToAlarmIntent?.let { putExtra("backToAlarmIntent", it) }
     }
 
     val reAlarmPendingIntent = PendingIntent.getService(
@@ -50,7 +51,7 @@ fun NotificationManager.sendNotification(
     val builder = NotificationCompat.Builder(context, "TwomBossAlarm")
         .setSmallIcon(IconCompat.createWithBitmap(bitMap))
         .setContentTitle(context.getString(R.string.alarm))
-        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        .setPriority(NotificationCompat.PRIORITY_HIGH)
         .setContentIntent(backToAlarmPendingIntent)
         .setAutoCancel(true)
         .setLargeIcon(bitMap)
@@ -61,17 +62,13 @@ fun NotificationManager.sendNotification(
     if (code < 300) {
         builder.setContentText(
             alarmMessage.append(
-                intervalFirstTimerSetting.toString() + context.getString(
-                    R.string.alarm_message_tail
-                )
+                " $intervalFirstTimerSetting ${context.getString(R.string.alarm_message_tail)}"
             ).toString()
         )
     } else {
         builder.setContentText(
             alarmMessage.append(
-                intervalSecondTimerSetting.toString() + context.getString(
-                    R.string.alarm_message_tail
-                )
+                " $intervalSecondTimerSetting ${context.getString(R.string.alarm_message_tail)}"
             ).toString()
         )
         builder.addAction(
@@ -84,12 +81,12 @@ fun NotificationManager.sendNotification(
 
 }
 
-fun NotificationManager.createChannel(
+internal fun NotificationManager.createChannel(
     context: Context
 ) {
     val name = context.getString(R.string.channel_name)
     val descriptionText = context.getString(R.string.channel_description)
-    val importance = NotificationManager.IMPORTANCE_DEFAULT
+    val importance = NotificationManager.IMPORTANCE_HIGH
     val channel = NotificationChannel("TwomBossAlarm", name, importance).apply {
         description = descriptionText
         enableVibration(true)
@@ -101,6 +98,6 @@ fun NotificationManager.createChannel(
     createNotificationChannel(channel)
 }
 
-fun NotificationManager.cancelNotification(id: Int) {
+internal fun NotificationManager.cancelNotification(id: Int) {
     cancel(id)
 }

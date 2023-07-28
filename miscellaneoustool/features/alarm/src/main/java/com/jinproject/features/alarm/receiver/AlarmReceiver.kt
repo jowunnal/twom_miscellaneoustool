@@ -5,8 +5,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.jinproject.core.util.getParcelableExtraOnVersion
-import com.jinproject.features.alarm.createChannel
-import com.jinproject.features.alarm.sendNotification
+import com.jinproject.features.alarm.utils.createChannel
+import com.jinproject.features.alarm.utils.sendNotification
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +26,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val code = p1.getIntExtra("code", 0)
         val intervalFirstTimeSetting = p1.getIntExtra("first",0)
         val intervalSecondTimeSetting = p1.getIntExtra("second",0)
-        val backToAlarmIntent = p1.getParcelableExtraOnVersion<Intent>(key = "backToAlarmIntent")!!
+        val backToAlarmIntent = p1.getParcelableExtraOnVersion<Intent>(key = "backToAlarmIntent")
 
         if (code > 300) {
             notificationManager.sendNotification(

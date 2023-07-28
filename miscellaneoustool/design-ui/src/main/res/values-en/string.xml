@@ -61,8 +61,8 @@
     <string name="alarm_classify_boss">Boss Classified</string>
     <string name="alarm_present_bosslist">Current progress alarm history</string>
     <string name="alarm_setted">\'s alarm has been set</string>
-    <string name="alarm_message_head">Ding dong~ &lt;</string>
-    <string name="alarm_message_body">&gt; will be spawned in </string>
+    <string name="alarm_message_head">Ding dong~ &#10; &lt;</string>
+    <string name="alarm_message_body">&gt; will be spawned in</string>
     <string name="alarm_message_tail">minutes.</string>
     <string name="alarm_regeneration">Regeneration</string>
 

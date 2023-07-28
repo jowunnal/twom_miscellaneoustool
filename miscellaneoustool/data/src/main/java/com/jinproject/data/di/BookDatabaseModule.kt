@@ -42,8 +42,13 @@ object BookDatabaseModule {
             onKo = "database/db_twom_2.db",
             onElse = "database/db_twom_2_eng.db"
         )
+        val migration = context.doOnLocaleLanguage(
+            onKo = BookDatabase.MIGRATION_1_2_KOR,
+            onElse = BookDatabase.MIGRATION_1_2_ELSE
+        )
         return Room.databaseBuilder(context, BookDatabase::class.java,"BookDatabase")
             .createFromAsset(assetName)
+            .addMigrations(migration)
             .build()
     }
 }
