@@ -1,5 +1,5 @@
 <a href="https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook">
-	<img src="https://img.shields.io/badge/PlayStore-v2.1.0-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
+	<img src="https://img.shields.io/badge/PlayStore-v2.1.1-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
 </a>
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-1.8.20-blue.svg)](https://kotlinlang.org)
@@ -7,8 +7,6 @@
 [![Android Studio](https://img.shields.io/badge/Android%20Studio-2022.3.1%20%28Giraff%29-green)](https://developer.android.com/studio)
 [![minSdkVersion](https://img.shields.io/badge/minSdkVersion-26-red)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
 [![targetSdkVersion](https://img.shields.io/badge/targetSdkVersion-34-orange)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
-
-<br/>
 
 자세한 설명은 [깃블로그](https://jowunnal.github.io/categories/#projects "블로그 링크") 에 있습니다.
 
@@ -63,8 +61,7 @@
 # Point
 
 - 데이터베이스를 직접 설계하고, Jetpack - Room 라이브러리를 이용하여 정의된 DML로 Local DB 와 통신 하였습니다.
-- 안드로이드 배터리 정책에 의한 Idle 상태에 대응하여 백그라운드 작업을 수행하였습니다.
-- Service, Broadcast Receiver 와 SystemService에서 관리되는 AlarmManagerService로 알람 기능을 구현했습니다.
+- 안드로이드 배터리 정책에 의한 Idle 상태에 대응하여 Service, Broadcast Receiver 와 SystemService에서 관리되는 AlarmManagerService로 알람 기능을 구현했습니다.
 - UI 컴포넌트들을 정의하고 재사용하여 가독성과 유지보수성을 향상시켰습니다.
 - 앞선 프로젝트에서 학습했던 내용들을 기반으로 MVVM 디자인 패턴을 적용시켰고 LiveData와 명령형 UI 방식을 Coroutines.Flow와 선언형 UI 방식으로 리펙토링 하였습니다.
 - Clean Architecture 를 적용하여 도메인 중심으로 앱을 설계하고, 프로젝트를 모듈단위로 나누어 관리했습니다.
@@ -76,14 +73,12 @@
  - AndroidView -> Compose
  - LiveData -> Flow
  - SharedPreferences -> DataStore ( proto )
- - Google Recommened Architecture -> Clean Architecture
+ - Spaghetti -> Google Recommened Architecture -> Clean Architecture
  
 # UI
 
-<img src="miscellaneoustool/diagram/alarm.jpg" />
-<img src="miscellaneoustool/diagram/droplist.jpg" />
-<img src="miscellaneoustool/diagram/collection.jpg" />
-
+<img src="miscellaneoustool/diagram/alarm.jpg" /> <img src="miscellaneoustool/diagram/droplist.jpg" /> <img src="miscellaneoustool/diagram/collection.jpg" />
+<img src="miscellaneoustool/diagram/alarm_eng.jpg" /> <img src="miscellaneoustool/diagram/droplist_eng.jpg" /> <img src="miscellaneoustool/diagram/collection_eng.jpg" />
 
 # Version
 
@@ -131,4 +126,4 @@
  - 서버기능이 삭제되었습니다.
  - 신규몬스터, 아이템도감이 대응되었습니다.
 
-이후 버전은 Release로 관리하였습니다.
+__이후 버전은 Release로 관리하였습니다.__
