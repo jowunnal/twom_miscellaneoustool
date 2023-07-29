@@ -1,15 +1,15 @@
 package com.jinproject.domain.usecase.alarm
 
-import com.jinproject.core.TimerPreferences
+import com.jinproject.core.util.day
+import com.jinproject.core.util.hour
+import com.jinproject.core.util.minute
+import com.jinproject.core.util.second
 import com.jinproject.domain.model.MonsterModel
 import com.jinproject.domain.model.MonsterType
 import com.jinproject.domain.model.TimerModel
 import com.jinproject.domain.repository.DropListRepository
 import com.jinproject.domain.repository.TimerRepository
-import com.jinproject.core.util.day
-import com.jinproject.core.util.hour
-import com.jinproject.core.util.minute
-import com.jinproject.core.util.second
+import com.jinproject.domain.usecase.timer.Interval
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
@@ -56,8 +56,8 @@ class SetAlarmUsecaseTest : BehaviorSpec() {
                         )
                     }
 
-                    every { timerRepository.getTimerPreferences() } returns flow {
-                        emit(TimerPreferences.getDefaultInstance())
+                    every { timerRepository.getInterval() } returns flow {
+                        emit(Interval(first = 0, second = 0))
                     }
 
                     and("이전에 등록한 알람이 있었을 때") {
@@ -84,7 +84,7 @@ class SetAlarmUsecaseTest : BehaviorSpec() {
                                 coVerify(exactly = 1) {
                                     dropListRepository.getMonsInfo(monsterName)
                                     timerRepository.getTimer()
-                                    timerRepository.getTimerPreferences()
+                                    timerRepository.getInterval()
                                     setAlarmUsecase.invoke(
                                         monsterName = monsterName,
                                         monsDiedHour = cal.hour,
@@ -124,7 +124,7 @@ class SetAlarmUsecaseTest : BehaviorSpec() {
                                 coVerify(exactly = 1) {
                                     dropListRepository.getMonsInfo(monsterName)
                                     timerRepository.getTimer()
-                                    timerRepository.getTimerPreferences()
+                                    timerRepository.getInterval()
                                     setAlarmUsecase.invoke(
                                         monsterName = monsterName,
                                         monsDiedHour = cal.hour,

@@ -37,6 +37,8 @@ abstract class BaseFragment<VB : ViewDataBinding> : Fragment() {
     open fun subScribeUi() = Unit
 
     open fun initView() {
+        showOrHideTopBar()
+        showOrHideBottomNavigationBar()
         initState()
         subScribeUi()
     }
@@ -55,19 +57,13 @@ abstract class BaseFragment<VB : ViewDataBinding> : Fragment() {
         initView()
     }
 
-    override fun onStart() {
-        super.onStart()
-        showOrHideTopBar()
-        showOrHideBottomNavigationBar()
-    }
-
-    fun showOrHideTopBar() {
+    private fun showOrHideTopBar() {
         (requireActivity() as AppCompatActivity).supportActionBar?.run {
             if (topBarVisibility) show() else hide()
         }
     }
 
-    fun showOrHideBottomNavigationBar() {
+    private fun showOrHideBottomNavigationBar() {
         if (bottomNavigationBarVisibility)
             bottomNavigationController?.showBottomNavigation()
         else

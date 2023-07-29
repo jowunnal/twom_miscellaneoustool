@@ -1,13 +1,9 @@
 package com.jinproject.features.watch.service
 
 import android.annotation.SuppressLint
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.PixelFormat
 import android.os.IBinder
 import android.view.Gravity
@@ -21,14 +17,11 @@ import androidx.lifecycle.lifecycleScope
 import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.domain.repository.TimerRepository
 import com.jinproject.domain.usecase.timer.GetOverlaySettingUsecase
-import com.jinproject.features.alarm.item.TimerState
 import com.jinproject.features.alarm.mapper.toTimerState
 import com.jinproject.features.watch.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -40,9 +33,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class OverlayService : LifecycleService() {
-    private var wm: WindowManager? = null
     private var mView: View? = null
-    private var notificationManager: NotificationManager? = null
 
     @Inject
     lateinit var timerRepository: TimerRepository
@@ -62,9 +53,6 @@ class OverlayService : LifecycleService() {
             exitIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        createNotificationChannel()
 
         val notification =
             NotificationCompat.Builder(applicationContext, "WatchNotificationChannel")
@@ -81,7 +69,7 @@ class OverlayService : LifecycleService() {
         startForeground(999, notification)
 
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        wm = getSystemService(WINDOW_SERVICE) as WindowManager
+        val wm = getSystemService(WINDOW_SERVICE) as WindowManager
         mView = inflater.inflate(R.layout.alarm_tv_onotherapps, null)
 
         val params = WindowManager.LayoutParams(
@@ -93,7 +81,7 @@ class OverlayService : LifecycleService() {
         ).apply {
             gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
         }
-        wm!!.addView(mView, params)
+        wm.addView(mView, params)
 
         getOverlaySettingUsecase()
             .flowOn(Dispatchers.IO)
@@ -103,7 +91,7 @@ class OverlayService : LifecycleService() {
                 mView?.findViewById<TextView>(R.id.tv_currentTimes)?.textSize =
                     overlaySetting.fontSize.toFloat()
 
-                wm!!.updateViewLayout(
+                wm.updateViewLayout(
                     mView,
                     params.apply {
                         x = overlaySetting.xPos
@@ -132,20 +120,6 @@ class OverlayService : LifecycleService() {
             .launchIn(lifecycleScope)
     }
 
-    private fun createNotificationChannel() {
-        val name = getString(R.string.channel_name)
-        val descriptionText = getString(R.string.channel_description)
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel("WatchNotificationChannel", name, importance).apply {
-            description = descriptionText
-            setShowBadge(true)
-            enableLights(false)
-            lockscreenVisibility = Notification.VISIBILITY_SECRET
-            lightColor = Color.BLUE
-        }
-        notificationManager?.createNotificationChannel(channel)
-    }
-
     override fun onBind(p0: Intent): IBinder? {
         super.onBind(p0)
         return null
@@ -170,14 +144,9 @@ class OverlayService : LifecycleService() {
     }
 
     override fun onDestroy() {
-        if (wm != null) {
-            if (mView != null) {
-                wm!!.removeView(mView)
-                wm = null
-                mView = null
-            }
+        if (mView != null) {
+            mView = null
         }
-        notificationManager = null
         super.onDestroy()
     }
 }

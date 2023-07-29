@@ -17,8 +17,8 @@ android {
         applicationId "com.jinproject.twomillustratedbook"
         minSdkVersion 26
         targetSdkVersion 34
-        versionCode 29
-        versionName "2.1.0"
+        versionCode 30
+        versionName "2.1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -88,15 +88,11 @@ dependencies {
 
     implementation(libs.bundles.lifecycle)
 
-    implementation(libs.protobuf)
-
     testImplementation (libs.JUnit)
     androidTestImplementation (libs.test.ext)
     androidTestImplementation (libs.test.espresso)
 
     implementation(libs.google.gms.services.ads)
-
-    implementation(libs.bumptech.glide)
 
     implementation(libs.bundles.billing)
 
@@ -106,9 +102,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:20.2.2'
     implementation 'com.google.firebase:firebase-messaging:23.1.2'
     implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.9.6'
-
-    // compose NumberPicker
-    implementation "com.chargemap.compose:numberpicker:1.0.3"
 }
 
 kapt{

@@ -15,7 +15,6 @@
     <string name="stat">Stat</string>
 
     <string name="home_header">Twom Miscellaneous Tool</string>
-    <string name="version">v2.0.3</string>
 
     <string name="input_price_hint">Input Price</string>
     <string name="setting_item"><u>Change Item Setting</u></string>
@@ -41,10 +40,11 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="delete_something">: Are you sure you want to delete it?</string>
-    <string name="hour">hour</string>
-    <string name="minute">minutes</string>
-    <string name="second">seconds</string>
+    <string name="hour">:</string>
+    <string name="minute">:</string>
+    <string name="second"> </string>
     <string name="turnoff">Turn off</string>
+    <string name="alarm">Alarm</string>
 
     <!-- Snackbar Message -->
     <string name="message_throw_no_such_element">The item has not found in Database</string>
@@ -60,8 +60,8 @@
     <string name="alarm_classify_boss">Boss Classified</string>
     <string name="alarm_present_bosslist">Current progress alarm history</string>
     <string name="alarm_setted">\'s alarm has been set</string>
-    <string name="alarm_message_head">Ding dong~ &lt;</string>
-    <string name="alarm_message_body">&gt; will be spawned in </string>
+    <string name="alarm_message_head">Ding dong~ &#10; &lt;</string>
+    <string name="alarm_message_body">&gt; will be spawned in</string>
     <string name="alarm_message_tail">minutes.</string>
     <string name="alarm_regeneration">Regeneration</string>
 

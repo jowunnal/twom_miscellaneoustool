@@ -90,12 +90,26 @@ fun InProgressTimerList(
                             text = item.timeState.getTime12Hour().toString(),
                             color = MaterialTheme.colorScheme.onBackground
                         )
-                        append("${stringResource(id = R.string.hour)} ")
+                        append(
+                            "${
+                                context.doOnLocaleLanguage(
+                                    onKo = stringResource(id = R.string.hour),
+                                    onElse = " :"
+                                )
+                            } "
+                        )
                         appendBoldText(
                             text = item.timeState.minutes.toString(),
                             color = MaterialTheme.colorScheme.onBackground
                         )
-                        append("${stringResource(id = R.string.minute)} ")
+                        append(
+                            "${
+                                context.doOnLocaleLanguage(
+                                    onKo = stringResource(id = R.string.minute),
+                                    onElse = " :"
+                                )
+                            } "
+                        )
                         appendBoldText(
                             text = item.timeState.seconds.toString(),
                             color = MaterialTheme.colorScheme.onBackground

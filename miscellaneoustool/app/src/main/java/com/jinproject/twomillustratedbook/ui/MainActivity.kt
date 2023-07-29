@@ -1,6 +1,7 @@
 package com.jinproject.twomillustratedbook.ui
 
 import android.Manifest
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -8,6 +9,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.android.billingclient.api.Purchase
@@ -33,13 +36,18 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
         ActivityResultContracts.RequestPermission()
     ) { result ->
         if (result.not()) {
-            Toast.makeText(applicationContext, getString(R.string.authority_alarm_failure), Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                applicationContext,
+                getString(R.string.authority_alarm_failure),
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
     private var billingCallback: OnBillingCallback? = null
     fun setBillingCallback(listener: OnBillingCallback) {
         billingCallback = listener
     }
+
     interface OnBillingCallback {
         fun onSuccess(purchase: Purchase)
         fun onFailure(errorCode: Int)
@@ -47,13 +55,43 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
 
     lateinit var billingModule: BillingModule
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        intent?.let { notNullIntent ->
+            when (notNullIntent.getStringExtra("screen")) {
+                "alarm" -> {
+                    val navigationBarView =
+                        (supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment)
+                    val navController = navigationBarView.navController
+
+                    val navOptions = NavOptions.Builder()
+                        .setPopUpTo(
+                            navController.graph.findStartDestination().id,
+                            inclusive = false,
+                            saveState = true
+                        )
+                        .setEnterAnim(R.animator.nav_default_enter_anim)
+                        .setExitAnim(R.animator.nav_default_exit_anim)
+                        .setPopEnterAnim(R.animator.nav_default_pop_enter_anim)
+                        .setPopExitAnim(R.animator.nav_default_pop_exit_anim)
+                        .build()
+
+                    if (navController.currentBackStackEntry?.destination?.id != R.id.navigationFragment) {
+                        navController.navigate(R.id.navigationFragment, null, navOptions)
+                    }
+                }
+            }
+        }
+    }
+
     override fun onResume() {
-        if(billingModule.isReady) {
+        super.onResume()
+        if (billingModule.isReady) {
             billingModule.queryPurchase { purchaseList ->
                 billingModule.approvePurchased(purchaseList = purchaseList)
             }
         }
-        super.onResume()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +101,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
         initBillingModule()
         initTopBar()
         initBottomNavigationBar()
-        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU)
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU)
             permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
     }
 
@@ -75,7 +113,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
     }
 
     private fun initBottomNavigationBar() {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         binding.bottomNavigationView.apply {
             setupWithNavController(navHostFragment.navController)
             labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_UNLABELED

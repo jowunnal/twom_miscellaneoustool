@@ -2,20 +2,22 @@ package com.jinproject.features.alarm.service
 
 import android.app.AlarmManager
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.PixelFormat
 import android.os.IBinder
+import android.view.LayoutInflater
+import android.view.WindowManager
 import android.widget.Toast
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import com.jinproject.core.util.getParcelableExtraOnVersion
 import com.jinproject.core.util.hour
 import com.jinproject.core.util.minute
 import com.jinproject.core.util.second
 import com.jinproject.domain.usecase.alarm.SetAlarmUsecase
 import com.jinproject.features.alarm.item.AlarmItem
-import com.jinproject.features.alarm.receiver.AlarmReceiver
+import com.jinproject.features.alarm.utils.makeAlarm
 import com.jinproject.features.core.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -26,6 +28,7 @@ import javax.inject.Inject
 class ReAlarmService : LifecycleService() {
     @Inject lateinit var setAlarmUsecase: SetAlarmUsecase
     private var notificationManager: NotificationManager? = null
+    private val alarmManager by lazy { getSystemService(Context.ALARM_SERVICE) as AlarmManager }
 
     override fun onCreate() {
         super.onCreate()
@@ -37,8 +40,10 @@ class ReAlarmService : LifecycleService() {
 
         val code = intent?.getIntExtra("code", 0)!!
         notificationManager?.cancel(code)
+        notificationManager?.cancel(code - 300)
 
         val monsterName = intent.getStringExtra("name")!!
+        val backToAlarmIntent = intent.getParcelableExtraOnVersion<Intent>("backToAlarmIntent")
         val cal = Calendar.getInstance()
 
         setAlarmUsecase.invoke(
@@ -47,24 +52,29 @@ class ReAlarmService : LifecycleService() {
             monsDiedMin = cal.minute,
             monsDiedSec = cal.second,
             makeAlarm = { intervalFirst, intervalSecond, monsterAlarmModel ->
-                makeAlarm(
+
+                alarmManager.makeAlarm(
+                    context = this,
                     nextGenTime = (monsterAlarmModel.nextGtime - intervalFirst * 60000),
                     item = AlarmItem(
                         monsterAlarmModel.name,
                         monsterAlarmModel.img,
                         monsterAlarmModel.code
                     ),
-                    intervalFirstTimerSetting = intervalFirst
+                    intervalFirstTimerSetting = intervalFirst,
+                    backToAlarmIntent = backToAlarmIntent
                 )
 
-                makeAlarm(
+                alarmManager.makeAlarm(
+                    context = this,
                     nextGenTime = (monsterAlarmModel.nextGtime - intervalSecond * 60000),
                     item = AlarmItem(
                         monsterAlarmModel.name,
                         monsterAlarmModel.img,
                         monsterAlarmModel.code + 300
                     ),
-                    intervalSecondTimerSetting = intervalSecond
+                    intervalSecondTimerSetting = intervalSecond,
+                    backToAlarmIntent = backToAlarmIntent
                 )
                 Toast.makeText(this,"$monsterName ${getString(R.string.alarm_setted)}",Toast.LENGTH_LONG).show()
                 stopSelf()
@@ -77,36 +87,6 @@ class ReAlarmService : LifecycleService() {
     override fun onBind(intent: Intent): IBinder? {
         super.onBind(intent)
         return null
-    }
-
-    private fun makeAlarm(
-        nextGenTime: Long,
-        item: AlarmItem,
-        intervalFirstTimerSetting: Int = 0,
-        intervalSecondTimerSetting: Int = 0
-    ) {
-        val notifyIntentImmediately = Intent(this, AlarmReceiver::class.java)
-        notifyIntentImmediately.putExtra("name", item.name)
-        notifyIntentImmediately.putExtra("img", item.imgName)
-        notifyIntentImmediately.putExtra("code", item.code)
-        notifyIntentImmediately.putExtra("first", intervalFirstTimerSetting)
-        notifyIntentImmediately.putExtra("second", intervalSecondTimerSetting)
-
-        val notifyPendingIntent = PendingIntent.getBroadcast(
-            this,
-            item.code,
-            notifyIntentImmediately,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        alarmManager.setAlarmClock(
-            AlarmManager.AlarmClockInfo(
-                nextGenTime,
-                notifyPendingIntent
-            ), notifyPendingIntent
-        )
     }
 
     override fun onDestroy() {

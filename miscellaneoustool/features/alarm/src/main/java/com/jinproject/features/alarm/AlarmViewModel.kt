@@ -15,6 +15,7 @@ import com.jinproject.features.alarm.item.TimeState
 import com.jinproject.features.alarm.item.TimerState
 import com.jinproject.features.alarm.mapper.toTimerState
 import com.jinproject.features.alarm.receiver.AlarmReceiver
+import com.jinproject.features.alarm.utils.makeAlarm
 import com.jinproject.features.core.base.item.SnackBarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -161,6 +162,22 @@ class AlarmViewModel @Inject constructor(
                 timerModel.toTimerState()
             })
         }
+    }.catch { e ->
+        when(e) {
+            is IllegalStateException -> {
+                _uiState.update { state ->
+                    state.copy(
+                        timerList = listOf(
+                            TimerState(
+                                id = 0,
+                                bossName = "실패",
+                                timeState = TimeState.getInitValue()
+                            )
+                        )
+                    )
+                }
+            }
+        }
     }.launchIn(viewModelScope)
 
     fun setHourChanged(hour: Int) = _bottomSheetUiState.update { state ->
@@ -179,31 +196,36 @@ class AlarmViewModel @Inject constructor(
         state.copy(selectedBossName = bossName, timeState = TimeState.getInitValue())
     }
 
-    fun setAlarm(monsterName: String, showSnackBar: suspend (SnackBarMessage) -> Unit) =
+    fun setAlarm(monsterName: String, showSnackBar: suspend (SnackBarMessage) -> Unit, backToAlarmIntent: Intent) =
         setAlarmUsecase.invoke(
             monsterName = monsterName,
             monsDiedHour = bottomSheetUiState.value.timeState.hour,
             monsDiedMin = bottomSheetUiState.value.timeState.minutes,
             monsDiedSec = bottomSheetUiState.value.timeState.seconds,
             makeAlarm = { firstInterval, secondInterval, monsterAlarmModel ->
-                makeAlarm(
+
+                alarmManager.makeAlarm(
+                    context = context,
                     nextGenTime = monsterAlarmModel.nextGtime - firstInterval * 60000,
                     item = AlarmItem(
                         name = monsterAlarmModel.name,
                         imgName = monsterAlarmModel.img,
                         code = monsterAlarmModel.code
                     ),
-                    intervalFirstTimerSetting = firstInterval
+                    intervalFirstTimerSetting = firstInterval,
+                    backToAlarmIntent = backToAlarmIntent
                 )
 
-                makeAlarm(
+                alarmManager.makeAlarm(
+                    context = context,
                     nextGenTime = monsterAlarmModel.nextGtime - secondInterval * 60000,
                     item = AlarmItem(
                         name = monsterAlarmModel.name,
                         imgName = monsterAlarmModel.img,
                         code = monsterAlarmModel.code + 300
                     ),
-                    intervalSecondTimerSetting = secondInterval
+                    intervalSecondTimerSetting = secondInterval,
+                    backToAlarmIntent = backToAlarmIntent
                 )
 
                 viewModelScope.launch {
@@ -236,34 +258,6 @@ class AlarmViewModel @Inject constructor(
                 )
             }
         }.launchIn(viewModelScope)
-
-    private fun makeAlarm(
-        nextGenTime: Long,
-        item: AlarmItem,
-        intervalFirstTimerSetting: Int = 0,
-        intervalSecondTimerSetting: Int = 0
-    ) {
-        val notifyIntentImmediately = Intent(context, AlarmReceiver::class.java)
-        notifyIntentImmediately.putExtra("name", item.name)
-        notifyIntentImmediately.putExtra("img", item.imgName)
-        notifyIntentImmediately.putExtra("code", item.code)
-        notifyIntentImmediately.putExtra("first", intervalFirstTimerSetting)
-        notifyIntentImmediately.putExtra("second", intervalSecondTimerSetting)
-
-        val notifyPendingIntent = PendingIntent.getBroadcast(
-            context,
-            item.code,
-            notifyIntentImmediately,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        alarmManager.setAlarmClock(
-            AlarmManager.AlarmClockInfo(
-                nextGenTime,
-                notifyPendingIntent
-            ), notifyPendingIntent
-        )
-    }
 
     fun clearAlarm(code: Int, bossName: String) {
         deleteAlarm(code)

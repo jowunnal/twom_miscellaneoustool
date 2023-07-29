@@ -30,19 +30,34 @@ import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.ligh
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_scrim
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_secondary
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_surface
+import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.red
 
 @Stable
 private val DarkColorPalette = darkColorScheme(
     primary = dark_primary.color,
     onPrimary = dark_onPrimary.color,
+    primaryContainer = red.color,
+    onPrimaryContainer = red.color,
     secondary = dark_secondary.color,
     onSecondary = dark_onSecondary.color,
+    secondaryContainer = red.color,
+    onSecondaryContainer = red.color,
+    tertiary = red.color,
+    onTertiary = red.color,
+    tertiaryContainer = red.color,
+    onTertiaryContainer = red.color,
     background = dark_background.color,
     onBackground = dark_onBackground.color,
     surface = dark_surface.color,
     onSurface = dark_onSurface.color,
+    surfaceVariant = red.color,
+    onSurfaceVariant = red.color,
+    inverseSurface = red.color,
+    inverseOnSurface = red.color,
     error = dark_error.color,
+    errorContainer = red.color,
     onError = dark_onError.color,
+    onErrorContainer = red.color,
     scrim = dark_scrim.color,
     outline = dark_outline.color
 )

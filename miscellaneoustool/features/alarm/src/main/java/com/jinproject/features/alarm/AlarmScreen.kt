@@ -38,6 +38,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AlarmScreen(
     billingModule: BillingModule,
+    backToAlarmIntent: Intent,
     alarmViewModel: AlarmViewModel = hiltViewModel(),
     context: Context = LocalContext.current,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
@@ -51,6 +52,17 @@ fun AlarmScreen(
 
     val alarmUiState by alarmViewModel.uiState.collectAsStateWithLifecycle()
     val alarmBottomSheetUiState by alarmViewModel.bottomSheetUiState.collectAsStateWithLifecycle()
+
+    if(alarmUiState.timerList.isNotEmpty()) {
+        if(alarmUiState.timerList.first().bossName == "실패") {
+            showSnackBar(
+                SnackBarMessage(
+                    headerMessage = "데이터를 불러오는데 실패했어요.",
+                    contentMessage = "업데이트가 아닌 삭제후 설치를 진행해주세요."
+                )
+            )
+        }
+    }
 
     AlarmScreen(
         alarmUiState = alarmUiState,
@@ -72,10 +84,10 @@ fun AlarmScreen(
                                     )
                                 ) {
                                     showRewardedAd {
-                                        alarmViewModel::setAlarm.invoke(bossName, showSnackBar)
+                                        alarmViewModel::setAlarm.invoke(bossName, showSnackBar, backToAlarmIntent)
                                     }
                                 } else
-                                    alarmViewModel::setAlarm.invoke(bossName, showSnackBar)
+                                    alarmViewModel::setAlarm.invoke(bossName, showSnackBar, backToAlarmIntent)
                             }
                         }
                     }
@@ -85,7 +97,7 @@ fun AlarmScreen(
                     }
                 }
             } else {
-                alarmViewModel::setAlarm.invoke(bossName, showSnackBar)
+                alarmViewModel::setAlarm.invoke(bossName, showSnackBar, backToAlarmIntent)
             }
         },
         onClearAlarm = alarmViewModel::clearAlarm,

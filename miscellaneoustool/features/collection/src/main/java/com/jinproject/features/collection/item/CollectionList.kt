@@ -70,7 +70,7 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
                         findNavController().navigate(action)
                     }
 
-                    R.id.home -> findNavController().popBackStack()
+                    android.R.id.home -> findNavController().popBackStack()
                 }
             }
         )
@@ -95,7 +95,7 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
                         removeMenuProvider(collectionMenu)
                         addMenuProvider(basicMenu)
                     }
-                    R.id.home -> cancelDeleteItemMode()
+                    android.R.id.home -> cancelDeleteItemMode()
                 }
             }
         )
@@ -177,7 +177,7 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
 
     override fun subScribeUi() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 collectionViewModel.uiState.collectLatest { uiState ->
                     collectionListAdapter.setItems(
                         items = uiState.collectionList,
@@ -209,7 +209,7 @@ class CollectionList : BaseFragment<CollectionListBinding>() {
     }
 
     private fun addMenuProvider(menuProvider: MenuProvider) {
-        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner, Lifecycle.State.CREATED)
     }
 
     private fun removeMenuProvider(menuProvider: MenuProvider) {

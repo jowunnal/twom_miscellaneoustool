@@ -48,7 +48,7 @@ class CollectionSetting : BaseFragment<CollectionSettingBinding>() {
                     }
                     return true
                 }
-            }, viewLifecycleOwner, Lifecycle.State.RESUMED
+            }, viewLifecycleOwner, Lifecycle.State.CREATED
         )
     }
 }
