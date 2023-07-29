@@ -53,6 +53,17 @@ fun AlarmScreen(
     val alarmUiState by alarmViewModel.uiState.collectAsStateWithLifecycle()
     val alarmBottomSheetUiState by alarmViewModel.bottomSheetUiState.collectAsStateWithLifecycle()
 
+    if(alarmUiState.timerList.isNotEmpty()) {
+        if(alarmUiState.timerList.first().bossName == "실패") {
+            showSnackBar(
+                SnackBarMessage(
+                    headerMessage = "데이터를 불러오는데 실패했어요.",
+                    contentMessage = "업데이트가 아닌 삭제후 설치를 진행해주세요."
+                )
+            )
+        }
+    }
+
     AlarmScreen(
         alarmUiState = alarmUiState,
         alarmBottomSheetUiState = alarmBottomSheetUiState,

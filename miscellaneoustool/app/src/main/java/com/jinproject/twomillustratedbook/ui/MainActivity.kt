@@ -132,26 +132,28 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
                         billingModule.queryPurchase { purchaseList ->
                             billingModule.approvePurchased(purchaseList = purchaseList)
 
-                            launch(Dispatchers.Main) {
-                                if (billingModule.checkPurchased(
-                                        purchaseList = purchaseList,
-                                        productId = "ad_remove"
+                            lifecycleScope.launch {
+                                launch(Dispatchers.Main) {
+                                    if (billingModule.checkPurchased(
+                                            purchaseList = purchaseList,
+                                            productId = "ad_remove"
+                                        )
                                     )
-                                )
-                                    initAdView()
-                            }
-                            launch {
-                                val purchasedProductIds =
-                                    purchaseList.distinctBy { it.products }
-                                        .map { it.products.first() }
-                                val purchasableProducts =
-                                    billingModule.purchasableProducts.toList()
-                                billingModule.purchasableProducts.clear()
-                                billingModule.purchasableProducts.addAll(
-                                    purchasableProducts.filter { purchasableProduct ->
-                                        purchasableProduct.productId !in purchasedProductIds
-                                    }
-                                )
+                                        initAdView()
+                                }
+                                launch {
+                                    val purchasedProductIds =
+                                        purchaseList.distinctBy { it.products }
+                                            .map { it.products.first() }
+                                    val purchasableProducts =
+                                        billingModule.purchasableProducts.toList()
+                                    billingModule.purchasableProducts.clear()
+                                    billingModule.purchasableProducts.addAll(
+                                        purchasableProducts.filter { purchasableProduct ->
+                                            purchasableProduct.productId !in purchasedProductIds
+                                        }
+                                    )
+                                }
                             }
                         }
                     }

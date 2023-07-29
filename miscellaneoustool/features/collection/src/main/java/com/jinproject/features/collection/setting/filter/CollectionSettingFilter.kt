@@ -81,7 +81,7 @@ class CollectionSettingFilter : BaseFragment<CollectionListBinding>() {
 
     override fun subScribeUi() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 collectionViewModel.uiState.collectLatest { uiState ->
                     collectionSettingFilterAdapter.setItems(
                         items = uiState.collectionList
@@ -127,7 +127,7 @@ class CollectionSettingFilter : BaseFragment<CollectionListBinding>() {
                     return true
                 }
 
-            }, viewLifecycleOwner, Lifecycle.State.RESUMED
+            }, viewLifecycleOwner, Lifecycle.State.CREATED
         )
     }
 }

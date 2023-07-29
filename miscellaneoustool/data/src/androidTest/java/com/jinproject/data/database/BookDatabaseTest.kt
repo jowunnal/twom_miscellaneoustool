@@ -1,8 +1,6 @@
 package com.jinproject.data.database
 
-import androidx.room.migration.Migration
 import androidx.room.testing.MigrationTestHelper
-import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -15,22 +13,6 @@ import java.io.IOException
 @RunWith(AndroidJUnit4::class)
 class BookDatabaseTest {
     private val TEST_DB = "db_twom_2.db"
-    val MIGRATION_1_2_KOR = object : Migration(1,2) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            database.apply {
-                execSQL("update Monster set monsType = 'Mini Boss' where monsType = 'named'")
-                execSQL("update Monster set monsType = 'Semi Boss' where monsType = 'boss'")
-                execSQL("update Monster set monsType = 'World Boss' where monsType = 'bigboss'")
-                execSQL("insert into Monster values ('플라타니스타', 52, 0, 'platanista', 'World Boss')")
-                execSQL("insert into MonsLiveAtMap values ('플라타니스타', '모르포시즈 정원')")
-                execSQL("insert into MonsDropItem VALUES ('플라타니스타', '현자주기')")
-                execSQL("insert into MonsDropItem VALUES ('플라타니스타', '주문서S')")
-                execSQL("insert into MonsDropItem VALUES ('플라타니스타', '오래된주문서')")
-                execSQL("insert into MonsDropItem VALUES ('플라타니스타', '윙프릴의보물')")
-                execSQL("update Maps set mapImgName = 'platanista' where mapName = '모르포시즈 정원'")
-            }
-        }
-    }
 
     @get:Rule
     val helper: MigrationTestHelper = MigrationTestHelper(
@@ -58,6 +40,6 @@ class BookDatabaseTest {
             close()
         }
 
-        db = helper.runMigrationsAndValidate(TEST_DB, 2, true, MIGRATION_1_2_KOR)
+        db = helper.runMigrationsAndValidate(TEST_DB, 2, true, BookDatabase.MIGRATION_1_2_KOR)
     }
 }

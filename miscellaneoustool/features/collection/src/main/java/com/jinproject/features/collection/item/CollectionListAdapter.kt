@@ -1,7 +1,6 @@
 package com.jinproject.features.collection.item
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,24 +16,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jinproject.features.collection.R
 import com.jinproject.features.collection.databinding.CollectionListItemBinding
 import com.jinproject.features.collection.item.item.CollectionState
-import dagger.hilt.android.qualifiers.ActivityContext
 import java.text.DecimalFormat
 import javax.inject.Inject
 
-class CollectionListAdapter @Inject constructor(@ActivityContext private val context: Context) :
+class CollectionListAdapter @Inject constructor() :
     ListAdapter<CollectionState, CollectionListAdapter.BookViewHolder>(diffUtil), Filterable,
     com.jinproject.features.core.listener.OnClickedListener,
     com.jinproject.features.core.listener.OnLongClickedListener {
 
     private var itemsUnfiltered: MutableList<CollectionState> = mutableListOf()
     private var onClickedListener: com.jinproject.features.core.listener.OnClickedListener? = null
-    private var onLongClickedListener: com.jinproject.features.core.listener.OnLongClickedListener? = null
+    private var onLongClickedListener: com.jinproject.features.core.listener.OnLongClickedListener? =
+        null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
         val binding = CollectionListItemBinding.inflate(LayoutInflater.from(parent.context))
         return BookViewHolder(
             binding = binding,
-            context = context,
             onClicked = onClickedListener,
             onLongClicked = onLongClickedListener
         )
@@ -82,7 +80,7 @@ class CollectionListAdapter @Inject constructor(@ActivityContext private val con
     }
 
     fun setItemCheck(pos: Int) {
-        val state = when(getItem(pos).isCheck) {
+        val state = when (getItem(pos).isCheck) {
             CollectionState.CheckState.CHECKED -> CollectionState.CheckState.UNCHECKED
             CollectionState.CheckState.UNCHECKED -> CollectionState.CheckState.CHECKED
             CollectionState.CheckState.INVISIBLE -> CollectionState.CheckState.INVISIBLE
@@ -95,7 +93,9 @@ class CollectionListAdapter @Inject constructor(@ActivityContext private val con
         submitList(old)
     }
 
-    fun getItemCheck() = kotlin.runCatching { currentList.first().isCheck != CollectionState.CheckState.INVISIBLE }.getOrDefault(true)
+    fun getItemCheck() =
+        kotlin.runCatching { currentList.first().isCheck != CollectionState.CheckState.INVISIBLE }
+            .getOrDefault(true)
 
     fun getCheckedItems(): List<Int> =
         currentList
@@ -112,10 +112,9 @@ class CollectionListAdapter @Inject constructor(@ActivityContext private val con
 
     class BookViewHolder(
         private val binding: CollectionListItemBinding,
-        private val context: Context,
         private val onClicked: com.jinproject.features.core.listener.OnClickedListener?,
         private val onLongClicked: com.jinproject.features.core.listener.OnLongClickedListener?
-    ): RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         private var viewHolderLifecycleOwner: LifecycleOwner? = null
 
@@ -123,7 +122,7 @@ class CollectionListAdapter @Inject constructor(@ActivityContext private val con
             with(binding) {
                 containerInBook.apply {
                     minWidth = context.applicationContext.resources.displayMetrics.widthPixels
-                    setPadding(16,0,16,0)
+                    setPadding(16, 0, 16, 0)
                     setOnLongClickListener {
                         onLongClicked?.setOnLongClickedListener(adapterPosition)
                         true
@@ -133,9 +132,9 @@ class CollectionListAdapter @Inject constructor(@ActivityContext private val con
                     }
                 }
             }
-            with(itemView) {
+            itemView.apply {
                 doOnAttach {
-                    viewHolderLifecycleOwner = itemView.findViewTreeLifecycleOwner()
+                    viewHolderLifecycleOwner = this.findViewTreeLifecycleOwner()
                 }
                 doOnDetach {
                     viewHolderLifecycleOwner = null
@@ -166,12 +165,13 @@ class CollectionListAdapter @Inject constructor(@ActivityContext private val con
                         )
                     ).toString()
                 }
-                price =  DecimalFormat("###,###").format(item.items.fold(0) { acc, collectionItemState ->
-                    acc + collectionItemState.count * collectionItemState.price
-                })
+                price =
+                    DecimalFormat("###,###").format(item.items.fold(0) { acc, collectionItemState ->
+                        acc + collectionItemState.count * collectionItemState.price
+                    })
             }
 
-            when(item.isCheck) {
+            when (item.isCheck) {
                 CollectionState.CheckState.UNCHECKED -> {
                     with(binding) {
                         imgCheck.visibility = View.VISIBLE
@@ -181,6 +181,7 @@ class CollectionListAdapter @Inject constructor(@ActivityContext private val con
                         tvPrice.alpha = 1f
                     }
                 }
+
                 CollectionState.CheckState.CHECKED -> {
                     with(binding) {
                         imgCheck.visibility = View.VISIBLE
@@ -190,6 +191,7 @@ class CollectionListAdapter @Inject constructor(@ActivityContext private val con
                         tvPrice.alpha = 0.3f
                     }
                 }
+
                 CollectionState.CheckState.INVISIBLE -> {
                     with(binding) {
                         imgCheck.visibility = View.INVISIBLE
@@ -219,7 +221,7 @@ class CollectionListAdapter @Inject constructor(@ActivityContext private val con
 
                 if (p0.toString().isEmpty()) {
                     val old = itemsUnfiltered.toMutableList()
-                    val new = old.map{ it.copy() }
+                    val new = old.map { it.copy() }
                     result.values = new
                 } else {
                     val contentItemsFiltering = ArrayList<CollectionState>()
@@ -249,15 +251,14 @@ class CollectionListAdapter @Inject constructor(@ActivityContext private val con
     }
 
     companion object {
-        val diffUtil = object: DiffUtil.ItemCallback<CollectionState>() {
+        val diffUtil = object : DiffUtil.ItemCallback<CollectionState>() {
             override fun areItemsTheSame(
                 oldItem: CollectionState,
                 newItem: CollectionState
             ): Boolean =
-                if(oldItem.isCheck != newItem.isCheck){
+                if (oldItem.isCheck != newItem.isCheck) {
                     false
-                }
-                else{
+                } else {
                     oldItem.id == newItem.id
                 }
 

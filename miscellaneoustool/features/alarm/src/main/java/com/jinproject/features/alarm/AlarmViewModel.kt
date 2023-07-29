@@ -162,6 +162,22 @@ class AlarmViewModel @Inject constructor(
                 timerModel.toTimerState()
             })
         }
+    }.catch { e ->
+        when(e) {
+            is IllegalStateException -> {
+                _uiState.update { state ->
+                    state.copy(
+                        timerList = listOf(
+                            TimerState(
+                                id = 0,
+                                bossName = "실패",
+                                timeState = TimeState.getInitValue()
+                            )
+                        )
+                    )
+                }
+            }
+        }
     }.launchIn(viewModelScope)
 
     fun setHourChanged(hour: Int) = _bottomSheetUiState.update { state ->
@@ -187,6 +203,7 @@ class AlarmViewModel @Inject constructor(
             monsDiedMin = bottomSheetUiState.value.timeState.minutes,
             monsDiedSec = bottomSheetUiState.value.timeState.seconds,
             makeAlarm = { firstInterval, secondInterval, monsterAlarmModel ->
+
                 alarmManager.makeAlarm(
                     context = context,
                     nextGenTime = monsterAlarmModel.nextGtime - firstInterval * 60000,

@@ -82,7 +82,7 @@ class CollectionSettingItem : BaseFragment<CollectionSettingItemListBinding>() {
 
     override fun subScribeUi() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModel.uiState.collectLatest { state ->
                     val scrollPos = binding.itemList.layoutManager?.onSaveInstanceState()
 
@@ -128,7 +128,7 @@ class CollectionSettingItem : BaseFragment<CollectionSettingItemListBinding>() {
                     }
                     return true
                 }
-            }, viewLifecycleOwner, Lifecycle.State.RESUMED
+            }, viewLifecycleOwner, Lifecycle.State.CREATED
         )
     }
 }

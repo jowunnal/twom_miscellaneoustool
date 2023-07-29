@@ -49,7 +49,6 @@ class NavigationFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         hideTopBar()
     }
 
@@ -69,13 +68,13 @@ class NavigationFragment : Fragment() {
     }
 
     override fun onResume() {
+        super.onResume()
         if(Build.VERSION.SDK_INT >= 31) {
             val alarmManager = requireActivity().getSystemService(AlarmManager::class.java)
             if (!alarmManager.canScheduleExactAlarms()) {
                 Toast.makeText(requireContext(),"권한을 거부하시면 정확한 알람을 받으실 수 없습니다.", Toast.LENGTH_LONG).show()
             }
         }
-        super.onResume()
     }
 
     @Composable
@@ -147,7 +146,7 @@ class NavigationFragment : Fragment() {
                     billingModule = billingModule,
                     changeVisibilityBottomNavigationBar = { bool -> changeVisibilityBottomNavigationBar(bool) },
                     showRewardedAd = { onResult ->
-                        onResult()
+                        showRewardedAd(onResult)
                     },
                     showSnackBar = { snackBarMessage ->
                         showSnackBar(snackBarMessage)
@@ -170,7 +169,7 @@ class NavigationFragment : Fragment() {
     private fun loadRewardedAd() {
         RewardedAd.load(
             requireActivity(),
-            requireActivity().getString(R.string.reward_test_id),
+            requireActivity().getString(R.string.rewarded_Ad_UnitId),
             AdRequest.Builder().build(),
             object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {

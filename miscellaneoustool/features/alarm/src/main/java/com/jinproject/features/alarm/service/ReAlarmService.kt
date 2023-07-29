@@ -40,6 +40,7 @@ class ReAlarmService : LifecycleService() {
 
         val code = intent?.getIntExtra("code", 0)!!
         notificationManager?.cancel(code)
+        notificationManager?.cancel(code - 300)
 
         val monsterName = intent.getStringExtra("name")!!
         val backToAlarmIntent = intent.getParcelableExtraOnVersion<Intent>("backToAlarmIntent")

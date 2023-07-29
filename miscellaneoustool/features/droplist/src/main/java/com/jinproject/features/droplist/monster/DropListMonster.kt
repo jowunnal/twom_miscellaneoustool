@@ -90,6 +90,6 @@ class DropListMonster : BaseFragment<DropBinding>() {
                 }
                 return true
             }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        }, viewLifecycleOwner, Lifecycle.State.CREATED)
     }
 }
