@@ -2,11 +2,11 @@
 	<img src="https://img.shields.io/badge/PlayStore-v2.1.0-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
 </a>
 
-![Kotlin](https://img.shields.io/badge/Kotlin-1.8.20-blue.svg)](https://kotlinlang.org)
-![Gradle](https://img.shields.io/badge/gradle-7.4.2-green.svg)](https://gradle.org/)
-![Android Studio](https://img.shields.io/badge/Android%20Studio-2022.3.1%20%28Giraff%29-green)](https://developer.android.com/studio)
-![minSdkVersion](https://img.shields.io/badge/minSdkVersion-26-red)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
-![targetSdkVersion](https://img.shields.io/badge/targetSdkVersion-34-orange)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
+[![Kotlin](https://img.shields.io/badge/Kotlin-1.8.20-blue.svg)](https://kotlinlang.org)
+[![Gradle](https://img.shields.io/badge/gradle-7.4.2-green.svg)](https://gradle.org/)
+[![Android Studio](https://img.shields.io/badge/Android%20Studio-2022.3.1%20%28Giraff%29-green)](https://developer.android.com/studio)
+[![minSdkVersion](https://img.shields.io/badge/minSdkVersion-26-red)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
+[![targetSdkVersion](https://img.shields.io/badge/targetSdkVersion-34-orange)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
 
 <br/>
 
