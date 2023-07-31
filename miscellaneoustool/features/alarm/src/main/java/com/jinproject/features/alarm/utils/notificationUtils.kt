@@ -81,7 +81,7 @@ internal fun NotificationManager.sendNotification(
 
 }
 
-internal fun NotificationManager.createChannel(
+fun NotificationManager.createChannel(
     context: Context
 ) {
     val name = context.getString(R.string.channel_name)

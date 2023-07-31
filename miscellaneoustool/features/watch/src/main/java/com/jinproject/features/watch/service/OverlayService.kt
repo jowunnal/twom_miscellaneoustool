@@ -1,6 +1,7 @@
 package com.jinproject.features.watch.service
 
 import android.annotation.SuppressLint
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -18,6 +19,7 @@ import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.domain.repository.TimerRepository
 import com.jinproject.domain.usecase.timer.GetOverlaySettingUsecase
 import com.jinproject.features.alarm.mapper.toTimerState
+import com.jinproject.features.alarm.utils.createChannel
 import com.jinproject.features.watch.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -53,9 +55,11 @@ class OverlayService : LifecycleService() {
             exitIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createChannel(this)
 
         val notification =
-            NotificationCompat.Builder(applicationContext, "WatchNotificationChannel")
+            NotificationCompat.Builder(applicationContext, "TwomBossAlarm")
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setSmallIcon(R.mipmap.ic_main)
                 .setContentTitle(getString(R.string.service_overlay_running))
