@@ -19,9 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
@@ -88,15 +86,6 @@ fun SelectionButton(
         }
     )
 
-    val buttonText by remember {
-        derivedStateOf{
-            when(buttonStatus) {
-                ButtonStatus.ON -> textYes
-                ButtonStatus.OFF -> textNo
-            }
-        }
-    }
-
     BoxWithConstraints(
         modifier = modifier
             .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(35.dp))
@@ -146,7 +135,7 @@ fun SelectionButton(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = buttonText,
+                text = buttonStatus.displayName,
                 color = MaterialTheme.colorScheme.onPrimary,
                 style = Typography.bodyLarge,
                 textAlign = TextAlign.Center

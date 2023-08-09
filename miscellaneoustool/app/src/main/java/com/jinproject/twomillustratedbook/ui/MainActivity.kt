@@ -24,7 +24,6 @@ import com.jinproject.features.core.listener.BottomNavigationController
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -90,6 +89,13 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
         if (billingModule.isReady) {
             billingModule.queryPurchase { purchaseList ->
                 billingModule.approvePurchased(purchaseList = purchaseList)
+
+                if (!billingModule.checkPurchased(
+                        purchaseList = purchaseList,
+                        productId = "ad_remove"
+                    )
+                )
+                    binding.adView.visibility = View.GONE
             }
         }
     }
@@ -127,34 +133,9 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
             lifeCycleScope = lifecycleScope,
             object : BillingModule.BillingCallback {
                 override fun onReady() {
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        billingModule.getPurchasableProducts()
-                        billingModule.queryPurchase { purchaseList ->
-                            billingModule.approvePurchased(purchaseList = purchaseList)
-
-                            lifecycleScope.launch {
-                                launch(Dispatchers.Main) {
-                                    if (billingModule.checkPurchased(
-                                            purchaseList = purchaseList,
-                                            productId = "ad_remove"
-                                        )
-                                    )
-                                        initAdView()
-                                }
-                                launch {
-                                    val purchasedProductIds =
-                                        purchaseList.distinctBy { it.products }
-                                            .map { it.products.first() }
-                                    val purchasableProducts =
-                                        billingModule.purchasableProducts.toList()
-                                    billingModule.purchasableProducts.clear()
-                                    billingModule.purchasableProducts.addAll(
-                                        purchasableProducts.filter { purchasableProduct ->
-                                            purchasableProduct.productId !in purchasedProductIds
-                                        }
-                                    )
-                                }
-                            }
+                    lifecycleScope.launch {
+                        billingModule.getPurchasableProducts {
+                            initAdView()
                         }
                     }
                 }
@@ -172,29 +153,19 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
     private fun initAdView() {
         MobileAds.initialize(this) { }
         val adRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
-        binding.adView.visibility = View.VISIBLE
-        binding.adView.adListener = object : AdListener() {
-            override fun onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-            }
+        binding.apply {
+            adView.loadAd(adRequest)
+            adView.visibility = View.VISIBLE
+            adView.adListener = object : AdListener() {
+                override fun onAdLoaded() {}
 
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                // Code to be executed when an ad request fails.
-            }
+                override fun onAdFailedToLoad(adError: LoadAdError) {}
 
-            override fun onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
-            }
+                override fun onAdOpened() {}
 
-            override fun onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
-            }
+                override fun onAdClicked() {}
 
-            override fun onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
+                override fun onAdClosed() {}
             }
         }
     }

@@ -36,6 +36,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class OverlayService : LifecycleService() {
     private var mView: View? = null
+    private val wm by lazy { getSystemService(WINDOW_SERVICE) as WindowManager }
 
     @Inject
     lateinit var timerRepository: TimerRepository
@@ -73,7 +74,6 @@ class OverlayService : LifecycleService() {
         startForeground(999, notification)
 
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val wm = getSystemService(WINDOW_SERVICE) as WindowManager
         mView = inflater.inflate(R.layout.alarm_tv_onotherapps, null)
 
         val params = WindowManager.LayoutParams(
@@ -133,8 +133,10 @@ class OverlayService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 
-        if (intent?.getBooleanExtra("status", false) == true)
+        if (intent?.getBooleanExtra("status", false) == true) {
+            wm.removeView(mView)
             stopSelf()
+        }
 
         lifecycleScope.launch(Dispatchers.Main) {
             while (true) {

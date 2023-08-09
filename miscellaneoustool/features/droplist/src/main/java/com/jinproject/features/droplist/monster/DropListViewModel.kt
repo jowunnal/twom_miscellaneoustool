@@ -38,7 +38,7 @@ class DropListViewModel @Inject constructor(
             _uiState.update { state ->
                 state.copy(monster = monsterModelList.map { monsterModel ->
                     monsterModel.toMonsterState()
-                }.sortedWith(compareBy { monsterState -> monsterState.level }))
+                }.sorted())
             }
         }.catch { e ->
             Log.d("test", "exception : ${e.message}\n ${e.printStackTrace()}")

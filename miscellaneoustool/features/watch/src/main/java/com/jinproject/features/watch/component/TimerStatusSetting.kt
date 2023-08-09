@@ -55,7 +55,7 @@ fun TimeStatusSetting(
             onClickYes = {
                 when (checkAuthorityDrawOverlays(context) { intent ->
                     permissionLauncher.launch(intent)
-                }) {
+                } && watchStatus != ButtonStatus.OFF) {
                     true -> {
                         startOverlayService(true)
                         setWatchStatus(ButtonStatus.OFF)
@@ -67,7 +67,7 @@ fun TimeStatusSetting(
             onClickNo = {
                 when (checkAuthorityDrawOverlays(context) { intent ->
                     permissionLauncher.launch(intent)
-                }) {
+                } && watchStatus != ButtonStatus.ON) {
                     true -> {
                         startOverlayService(false)
                         setWatchStatus(ButtonStatus.ON)

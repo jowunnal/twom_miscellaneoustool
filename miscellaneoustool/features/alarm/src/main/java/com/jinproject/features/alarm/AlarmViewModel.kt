@@ -227,20 +227,18 @@ class AlarmViewModel @Inject constructor(
                     intervalSecondTimerSetting = secondInterval,
                     backToAlarmIntent = backToAlarmIntent
                 )
-
-                viewModelScope.launch {
-                    showSnackBar(
-                        SnackBarMessage(
-                            headerMessage = "$monsterName ${
-                                context.getString(
-                                    R.string.alarm_setted
-                                )
-                            }"
-                        )
-                    )
-                }
             }
-        ).catch { e ->
+        ).onEach {
+            showSnackBar(
+                SnackBarMessage(
+                    headerMessage = "$monsterName ${
+                        context.getString(
+                            R.string.alarm_setted
+                        )
+                    }"
+                )
+            )
+        }.catch { e ->
             when (e) {
                 is NoSuchElementException -> {
                     showSnackBar(

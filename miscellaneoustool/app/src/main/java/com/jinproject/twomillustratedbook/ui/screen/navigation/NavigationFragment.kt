@@ -66,7 +66,6 @@ class NavigationFragment : Fragment() {
             }
         }
     }
-
     override fun onResume() {
         super.onResume()
         if(Build.VERSION.SDK_INT >= 31) {
@@ -166,55 +165,45 @@ class NavigationFragment : Fragment() {
         (requireActivity() as AppCompatActivity).supportActionBar?.hide()
     }
 
-    private fun loadRewardedAd() {
+    private fun loadRewardedAd(onResult:() -> Unit) {
         RewardedAd.load(
             requireActivity(),
-            requireActivity().getString(R.string.rewarded_Ad_UnitId),
+            requireActivity().getString(R.string.reward_test_id),
             AdRequest.Builder().build(),
             object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Log.d("test","rewardAd Failed")
                     mRewardedAd = null
                 }
 
                 override fun onAdLoaded(rewardedAd: RewardedAd) {
+                    Log.d("test","rewardAd loaded")
                     mRewardedAd = rewardedAd
                     mRewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
-                        override fun onAdClicked() {
-                            // Called when a click is recorded for an ad.
-                        }
+                        override fun onAdClicked() {}
 
                         override fun onAdDismissedFullScreenContent() {
-                            // Called when ad is dismissed.
-                            // Set the ad reference to null so you don't show the ad a second time.
                             mRewardedAd = null
                         }
 
                         override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                            // Called when ad fails to show.
                             mRewardedAd = null
                         }
 
-                        override fun onAdImpression() {
-                            // Called when an impression is recorded for an ad.
-                        }
+                        override fun onAdImpression() {}
 
-                        override fun onAdShowedFullScreenContent() {
-                            // Called when ad is shown.
-                        }
+                        override fun onAdShowedFullScreenContent() {}
+                    }
+
+                    mRewardedAd?.show(requireActivity()) {
+                        onResult()
                     }
                 }
             })
     }
 
     private fun showRewardedAd(onResult:() -> Unit) {
-        mRewardedAd?.let { ad ->
-            ad.show(requireActivity()) {
-                onResult()
-            }
-        } ?: run {
-            loadRewardedAd()
-            onResult()
-        }
+        loadRewardedAd(onResult = onResult)
     }
 
     override fun onDestroy() {

@@ -9,6 +9,13 @@ enum class MonsterType(
     BOSS(displayName = "보스", storedName = "Semi Boss"),
     BIGBOSS(displayName = "대형보스", storedName = "World Boss");
 
+    fun getPriority() = when(this) {
+        NORMAL -> 1
+        NAMED -> 2
+        BOSS -> 3
+        BIGBOSS -> 4
+    }
+
     companion object {
         fun findByDisplayName(displayName: String) = values().find { type -> type.displayName == displayName } ?: NAMED
 

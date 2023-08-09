@@ -1,5 +1,7 @@
 package com.jinproject.features.watch
 
+import android.app.NotificationManager
+import android.content.Context
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +11,7 @@ import com.jinproject.domain.usecase.timer.SetOverlaySettingUsecase
 import com.jinproject.features.alarm.item.TimerState
 import com.jinproject.features.alarm.mapper.toTimerState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -29,26 +32,36 @@ data class WatchUiState(
     val yPos:Int
 ) {
     companion object {
-        fun getInitValue() = WatchUiState(
+        fun getInitValue(context: Context) = WatchUiState(
             frequentlyUsedBossList = emptyList(),
             selectedMonsterName = "",
             timerList = emptyList(),
-            watchStatus = ButtonStatus.OFF,
+            watchStatus = checkOverlayServiceState(context),
             fontSize = 14,
             xPos = 0,
             yPos = 0
         )
+
+        private fun checkOverlayServiceState(context: Context): ButtonStatus {
+            val notificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            return notificationManager.activeNotifications.find { it.id == 999 }?.let {
+                ButtonStatus.ON
+            } ?: ButtonStatus.OFF
+        }
     }
 }
 
 @HiltViewModel
 class WatchViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val timerRepository: com.jinproject.domain.repository.TimerRepository,
     private val setOverlaySettingUsecase: SetOverlaySettingUsecase,
     private val getOverlaySettingUsecase: GetOverlaySettingUsecase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(WatchUiState.getInitValue())
+    private val _uiState = MutableStateFlow(WatchUiState.getInitValue(context))
     val uiState get() = _uiState.asStateFlow()
 
     init {
