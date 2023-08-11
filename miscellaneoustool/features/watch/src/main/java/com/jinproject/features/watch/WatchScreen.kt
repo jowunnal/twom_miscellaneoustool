@@ -87,7 +87,7 @@ private fun WatchScreen(
                     selectedMonsterName = uiState.selectedMonsterName,
                     onCloseBottomSheet = {
                         coroutineScope.launch {
-                            bottomSheetState.animateTo(ModalBottomSheetValue.Hidden)
+                            bottomSheetState.hide()
                         }
                     },
                     setSelectedMonsterOtaToTrue = setSelectedMonsterOtaToTrue
@@ -146,7 +146,7 @@ private fun WatchScreen(
                     modifier = Modifier.fillMaxWidth(),
                     maxItemsInEachRow = 3,
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalArrangement = Arrangement.Center
                 ) {
                     uiState.frequentlyUsedBossList.forEach { item ->
                         BossSelectionItem(
@@ -154,7 +154,7 @@ private fun WatchScreen(
                             onClickBossItem = {
                                 coroutineScope.launch {
                                     setSelectedMonsterName(item)
-                                    bottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                                    bottomSheetState.show()
                                 }
                             }
                         )

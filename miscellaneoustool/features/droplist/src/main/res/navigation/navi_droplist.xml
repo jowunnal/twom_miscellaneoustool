@@ -11,7 +11,11 @@
         tools:layout="@layout/droplistmap" >
         <action
             android:id="@+id/action_dropListMaps_to_dropList"
-            app:destination="@id/dropList" />
+            app:destination="@id/dropList"
+            app:enterAnim="@anim/nav_enter"
+            app:exitAnim="@anim/nav_exit"
+            app:popEnterAnim="@anim/nav_pop_enter"
+            app:popExitAnim="@anim/nav_pop_exit"/>
     </fragment>
 
     <fragment

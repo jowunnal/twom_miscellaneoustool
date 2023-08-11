@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace 'com.jinproject.features.collection'
-    compileSdkVersion 34
+    compileSdk 34
 
     defaultConfig {
         minSdkVersion 26

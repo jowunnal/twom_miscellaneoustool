@@ -66,6 +66,12 @@ class NavigationFragment : Fragment() {
             }
         }
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        loadRewardedAd()
+    }
+
     override fun onResume() {
         super.onResume()
         if(Build.VERSION.SDK_INT >= 31) {
@@ -165,25 +171,24 @@ class NavigationFragment : Fragment() {
         (requireActivity() as AppCompatActivity).supportActionBar?.hide()
     }
 
-    private fun loadRewardedAd(onResult:() -> Unit) {
+    private fun loadRewardedAd() {
         RewardedAd.load(
             requireActivity(),
             requireActivity().getString(R.string.reward_test_id),
             AdRequest.Builder().build(),
             object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
-                    Log.d("test","rewardAd Failed")
                     mRewardedAd = null
                 }
 
                 override fun onAdLoaded(rewardedAd: RewardedAd) {
-                    Log.d("test","rewardAd loaded")
                     mRewardedAd = rewardedAd
                     mRewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
                         override fun onAdClicked() {}
 
                         override fun onAdDismissedFullScreenContent() {
                             mRewardedAd = null
+                            loadRewardedAd()
                         }
 
                         override fun onAdFailedToShowFullScreenContent(p0: AdError) {
@@ -194,16 +199,17 @@ class NavigationFragment : Fragment() {
 
                         override fun onAdShowedFullScreenContent() {}
                     }
-
-                    mRewardedAd?.show(requireActivity()) {
-                        onResult()
-                    }
                 }
             })
     }
 
     private fun showRewardedAd(onResult:() -> Unit) {
-        loadRewardedAd(onResult = onResult)
+        mRewardedAd?.show(requireActivity()) {
+            onResult()
+        } ?: run {
+            loadRewardedAd()
+            onResult()
+        }
     }
 
     override fun onDestroy() {

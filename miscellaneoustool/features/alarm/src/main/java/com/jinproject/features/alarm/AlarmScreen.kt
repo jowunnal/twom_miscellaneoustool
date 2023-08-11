@@ -53,8 +53,8 @@ fun AlarmScreen(
     val alarmUiState by alarmViewModel.uiState.collectAsStateWithLifecycle()
     val alarmBottomSheetUiState by alarmViewModel.bottomSheetUiState.collectAsStateWithLifecycle()
 
-    if(alarmUiState.timerList.isNotEmpty()) {
-        if(alarmUiState.timerList.first().bossName == "실패") {
+    if (alarmUiState.timerList.isNotEmpty()) {
+        if (alarmUiState.timerList.first().bossName == "실패") {
             showSnackBar(
                 SnackBarMessage(
                     headerMessage = "데이터를 불러오는데 실패했어요.",
@@ -80,14 +80,21 @@ fun AlarmScreen(
                             coroutineScope.launch(Dispatchers.Main) {
                                 if (billingModule.checkPurchased(
                                         purchaseList = purchaseList,
-                                        productId = "ad_remove"
-                                    )
-                                ) {
+                                        productId = "ad_remove")
+                                )
                                     showRewardedAd {
-                                        alarmViewModel::setAlarm.invoke(bossName, showSnackBar, backToAlarmIntent)
+                                        alarmViewModel::setAlarm.invoke(
+                                            bossName,
+                                            showSnackBar,
+                                            backToAlarmIntent
+                                        )
                                     }
-                                } else
-                                    alarmViewModel::setAlarm.invoke(bossName, showSnackBar, backToAlarmIntent)
+                                else
+                                    alarmViewModel::setAlarm.invoke(
+                                        bossName,
+                                        showSnackBar,
+                                        backToAlarmIntent
+                                    )
                             }
                         }
                     }
@@ -166,7 +173,7 @@ private fun AlarmScreen(
                     onStartAlarm = onStartAlarm,
                     onCloseBottomSheet = {
                         coroutineScope.launch {
-                            bottomSheetState.animateTo(ModalBottomSheetValue.Hidden)
+                            bottomSheetState.hide()
                         }
                     }
                 )
@@ -174,9 +181,10 @@ private fun AlarmScreen(
             sheetState = bottomSheetState,
             sheetShape = RoundedCornerShape(20.dp)
         ) {
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 BossSelection(
                     bossNameList = alarmUiState.bossNameList,
@@ -186,7 +194,7 @@ private fun AlarmScreen(
                     onClickBossItem = { bossName ->
                         coroutineScope.launch {
                             setSelectedBossName(bossName)
-                            bottomSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                            bottomSheetState.show()
                         }
                     },
                     addBossToFrequentlyUsedList = addBossToFrequentlyUsedList,

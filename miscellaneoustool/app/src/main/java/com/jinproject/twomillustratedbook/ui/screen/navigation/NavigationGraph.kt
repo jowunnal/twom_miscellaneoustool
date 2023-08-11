@@ -1,6 +1,9 @@
 package com.jinproject.twomillustratedbook.ui.screen.navigation
 
 import android.content.Intent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,7 +31,21 @@ fun NavigationGraph(
         startDestination = NavigationItem.Alarm.route,
         modifier = modifier
     ) {
-        composable(route = NavigationItem.Alarm.route) {
+        composable(
+            route = NavigationItem.Alarm.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(durationMillis = 300, easing = LinearOutSlowInEasing)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(durationMillis = 250, easing = LinearOutSlowInEasing)
+                )
+            }
+        ) {
             AlarmScreen(
                 billingModule = billingModule,
                 backToAlarmIntent = Intent(LocalContext.current, MainActivity::class.java ).apply {
@@ -44,7 +61,21 @@ fun NavigationGraph(
             )
         }
 
-        composable(route = NavigationItem.Gear.route) {
+        composable(
+            route = NavigationItem.Gear.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(durationMillis = 300, easing = LinearOutSlowInEasing)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(durationMillis = 250, easing = LinearOutSlowInEasing)
+                )
+            }
+        ) {
             GearScreen(
                 billingModule = billingModule,
                 changeVisibilityBottomNavigationBar = changeVisibilityBottomNavigationBar,
@@ -53,7 +84,21 @@ fun NavigationGraph(
             )
         }
 
-        composable(route = NavigationItem.Watch.route) {
+        composable(
+            route = NavigationItem.Watch.route,
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(durationMillis = 300, easing = LinearOutSlowInEasing)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(durationMillis = 250, easing = LinearOutSlowInEasing)
+                )
+            }
+        ) {
             WatchScreen(
                 changeVisibilityBottomNavigationBar = changeVisibilityBottomNavigationBar,
                 onNavigatePopBackStack = { navController.popBackStack() }

@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'com.jinproject.design_compose'
-    compileSdkVersion 34
+    compileSdk 34
 
     defaultConfig {
         minSdkVersion 26
@@ -16,7 +16,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.4.6'
+        kotlinCompilerExtensionVersion '1.5.1'
     }
 }
 
@@ -26,7 +26,7 @@ dependencies {
     implementation(libs.bumptech.glide)
 
     implementation platform(libs.compose.bom)
-    androidTestImplementation(libs.compose.bom)
+    androidTestImplementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
     debugImplementation(libs.compose.ui.tooling)
 }

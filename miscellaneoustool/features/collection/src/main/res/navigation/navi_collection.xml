@@ -12,7 +12,11 @@
         tools:layout="@layout/collection_category" >
         <action
             android:id="@+id/action_collectionCategory_to_collectionList"
-            app:destination="@id/collectionList" />
+            app:destination="@id/collectionList"
+            app:enterAnim="@anim/nav_enter"
+            app:exitAnim="@anim/nav_exit"
+            app:popEnterAnim="@anim/nav_pop_enter"
+            app:popExitAnim="@anim/nav_pop_exit" />
     </fragment>
     <fragment
         android:id="@+id/collectionList"
@@ -26,7 +30,11 @@
             />
         <action
             android:id="@+id/action_collectionList_to_collectionSetting"
-            app:destination="@id/collectionSetting" />
+            app:destination="@id/collectionSetting"
+            app:enterAnim="@anim/nav_enter"
+            app:exitAnim="@anim/nav_exit"
+            app:popEnterAnim="@anim/nav_pop_enter"
+            app:popExitAnim="@anim/nav_pop_exit" />
     </fragment>
     <fragment
         android:id="@+id/collectionSetting"
@@ -40,10 +48,18 @@
             />
         <action
             android:id="@+id/action_collectionSetting_to_collectionSettingItem"
-            app:destination="@id/collectionSettingItem" />
+            app:destination="@id/collectionSettingItem"
+            app:enterAnim="@anim/nav_enter"
+            app:exitAnim="@anim/nav_exit"
+            app:popEnterAnim="@anim/nav_pop_enter"
+            app:popExitAnim="@anim/nav_pop_exit"/>
         <action
             android:id="@+id/action_collectionSetting_to_collectionSettingFilter"
-            app:destination="@id/collectionSettingFilter" />
+            app:destination="@id/collectionSettingFilter"
+            app:enterAnim="@anim/nav_enter"
+            app:exitAnim="@anim/nav_exit"
+            app:popEnterAnim="@anim/nav_pop_enter"
+            app:popExitAnim="@anim/nav_pop_exit"/>
     </fragment>
     <fragment
         android:id="@+id/collectionSettingFilter"
