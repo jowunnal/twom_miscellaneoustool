@@ -1,8 +1,8 @@
 <a href="https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook">
-	<img src="https://img.shields.io/badge/PlayStore-v2.1.1-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
+	<img src="https://img.shields.io/badge/PlayStore-v2.1.4-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
 </a>
 
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.8.20-blue.svg)](https://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/Kotlin-1.9.0-blue.svg)](https://kotlinlang.org)
 [![Gradle](https://img.shields.io/badge/gradle-7.4.2-green.svg)](https://gradle.org/)
 [![Android Studio](https://img.shields.io/badge/Android%20Studio-2022.3.1%20%28Giraff%29-green)](https://developer.android.com/studio)
 [![minSdkVersion](https://img.shields.io/badge/minSdkVersion-26-red)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
@@ -81,7 +81,7 @@
 
 <img src="miscellaneoustool/diagram/alarm_eng.jpg" /> <img src="miscellaneoustool/diagram/droplist_eng.jpg" /> <img src="miscellaneoustool/diagram/collection_eng.jpg" />
 
-# Version
+# Release Version Management
 
 ### 1.0~1.2
 - 알람을 정확한시간동작 에서 5분전 동작으로 변경후 재등록
