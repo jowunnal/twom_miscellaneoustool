@@ -6,11 +6,16 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
@@ -22,11 +27,12 @@ import com.jinproject.design_compose.component.DialogCustom
 import com.jinproject.design_compose.component.DialogState
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.VerticalSpacer
+import com.jinproject.design_compose.theme.Typography
 import com.jinproject.domain.model.WeekModel
 import com.jinproject.features.alarm.component.AlarmBottomSheetContent
 import com.jinproject.features.alarm.component.AlarmTopAppBar
 import com.jinproject.features.alarm.component.BossSelection
-import com.jinproject.features.alarm.component.InProgressTimerList
+import com.jinproject.features.alarm.component.InProgressTimerItem
 import com.jinproject.features.alarm.item.TimeState
 import com.jinproject.features.alarm.item.TimerState
 import com.jinproject.features.core.BillingModule
@@ -80,7 +86,8 @@ fun AlarmScreen(
                             coroutineScope.launch(Dispatchers.Main) {
                                 if (billingModule.checkPurchased(
                                         purchaseList = purchaseList,
-                                        productId = "ad_remove")
+                                        productId = "ad_remove"
+                                    )
                                 )
                                     showRewardedAd {
                                         alarmViewModel::setAlarm.invoke(
@@ -181,44 +188,59 @@ private fun AlarmScreen(
             sheetState = bottomSheetState,
             sheetShape = RoundedCornerShape(20.dp)
         ) {
-            Column(
+            LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                BossSelection(
-                    bossNameList = alarmUiState.bossNameList,
-                    recentlySelectedBossClassified = alarmUiState.recentlySelectedBossClassified,
-                    recentlySelectedBossName = alarmUiState.recentlySelectedBossName,
-                    frequentlyUsedBossList = alarmUiState.frequentlyUsedBossList,
-                    onClickBossItem = { bossName ->
-                        coroutineScope.launch {
-                            setSelectedBossName(bossName)
-                            bottomSheetState.show()
-                        }
-                    },
-                    addBossToFrequentlyUsedList = addBossToFrequentlyUsedList,
-                    removeBossFromFrequentlyUsedList = removeBossFromFrequentlyUsedList,
-                    setRecentlySelectedBossClassifiedChanged = setRecentlySelectedBossClassifiedChanged,
-                    setRecentlySelectedBossNameChanged = setRecentlySelectedBossNameChanged,
-                    onOpenDialog = { dialogState ->
-                        dialogUiState.value = dialogState
-                        showDialogState.value = true
-                    },
-                    onCloseDialog = { showDialogState.value = false }
-                )
-                VerticalSpacer(height = 20.dp)
-                HorizontalDivider()
-                InProgressTimerList(
-                    timerStateList = alarmUiState.timerList,
-                    onClearAlarm = onClearAlarm,
-                    onOpenDialog = { dialogState ->
-                        dialogUiState.value = dialogState
-                        showDialogState.value = true
-                    },
-                    onCloseDialog = { showDialogState.value = false }
-                )
-                Spacer(modifier = Modifier.weight(1f))
+                item {
+                    BossSelection(
+                        bossNameList = alarmUiState.bossNameList,
+                        recentlySelectedBossClassified = alarmUiState.recentlySelectedBossClassified,
+                        recentlySelectedBossName = alarmUiState.recentlySelectedBossName,
+                        frequentlyUsedBossList = alarmUiState.frequentlyUsedBossList,
+                        onClickBossItem = { bossName ->
+                            coroutineScope.launch {
+                                setSelectedBossName(bossName)
+                                bottomSheetState.show()
+                            }
+                        },
+                        addBossToFrequentlyUsedList = addBossToFrequentlyUsedList,
+                        removeBossFromFrequentlyUsedList = removeBossFromFrequentlyUsedList,
+                        setRecentlySelectedBossClassifiedChanged = setRecentlySelectedBossClassifiedChanged,
+                        setRecentlySelectedBossNameChanged = setRecentlySelectedBossNameChanged,
+                        onOpenDialog = { dialogState ->
+                            dialogUiState.value = dialogState
+                            showDialogState.value = true
+                        },
+                        onCloseDialog = { showDialogState.value = false }
+                    )
+                    VerticalSpacer(height = 20.dp)
+                    HorizontalDivider()
+                }
+                item {
+                    androidx.compose.material3.Text(
+                        text = stringResource(id = R.string.alarm_present_bosslist),
+                        style = Typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                    VerticalSpacer(height = 20.dp)
+                }
+                items(
+                    alarmUiState.timerList,
+                    key = { item -> item.id }) { item: TimerState ->
+                    InProgressTimerItem(
+                        timerState = item,
+                        onClearAlarm = onClearAlarm,
+                        onOpenDialog = { dialogState ->
+                            dialogUiState.value = dialogState
+                            showDialogState.value = true
+                        },
+                        onCloseDialog = { showDialogState.value = false }
+                    )
+                }
             }
         }
     }

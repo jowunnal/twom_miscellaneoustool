@@ -28,10 +28,19 @@
 
         <TextView
             style="@style/body_small"
+            android:id="@+id/version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/version"
+            tools:text="v"
             app:layout_constraintStart_toEndOf="@id/tv_home_header"
+            app:layout_constraintBottom_toTopOf="@id/sv_home" />
+
+        <TextView
+            style="@style/body_small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/version"
+            app:layout_constraintStart_toEndOf="@id/version"
             app:layout_constraintBottom_toTopOf="@id/sv_home" />
 
         <ScrollView

@@ -3,7 +3,6 @@ package com.jinproject.twomillustratedbook.ui.screen.navigation
 import android.app.AlarmManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -108,18 +107,18 @@ class NavigationFragment : Fragment() {
             }
 
             override fun onFailure(errorCode: Int) {
-                Log.e("test","error : $errorCode")
-                val snackBar = SnackBarMessage(
-                    headerMessage = "구매 실패",
-                    contentMessage = when (errorCode) {
-                        1 -> "취소를 하셨어요."
-                        2, 3, 4 -> "유효하지 않은 상품 이에요."
-                        5, 6 -> "잘못된 상품 이에요."
-                        7 -> "이미 보유하고 있는 상품 이에요."
-                        else -> "네트워크 에러로 인해 실패했어요."
-                    }
+                showSnackBar(
+                    SnackBarMessage(
+                        headerMessage = "구매 실패",
+                        contentMessage = when (errorCode) {
+                            1 -> "취소를 하셨어요."
+                            2, 3, 4 -> "유효하지 않은 상품 이에요."
+                            5, 6 -> "잘못된 상품 이에요."
+                            7 -> "이미 보유하고 있는 상품 이에요."
+                            else -> "네트워크 에러로 인해 실패했어요."
+                        }
+                    )
                 )
-                showSnackBar(snackBar)
             }
 
         }
@@ -174,7 +173,7 @@ class NavigationFragment : Fragment() {
     private fun loadRewardedAd() {
         RewardedAd.load(
             requireActivity(),
-            requireActivity().getString(R.string.reward_test_id),
+            requireActivity().getString(R.string.rewarded_Ad_UnitId),
             AdRequest.Builder().build(),
             object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {

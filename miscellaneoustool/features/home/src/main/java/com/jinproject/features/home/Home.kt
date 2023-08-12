@@ -34,17 +34,11 @@ class Home : BaseFragment<HomeBinding>(){
                         - 광고제거 구매시 상단광고와 알람시 발생하는 전면광고가 제거됩니다.
                         - 개발자에게 후원을 할 수 있습니다.
 
-                    # 2.1.0 수정안
-                    - 전체적인 UX가 개선됬습니다.
-                    - 성능 이슈 및 코드 안정화 작업이 수행됬습니다.
+                    # 2.1.4 수정
+                    - UX가 개선되었어요. 좀더 완성도를 높이는 작업이 수행되었어요.
                     
                 """.trimIndent(),
             onElse = """
-                # New on ver.2.1.0
-                - You can search collections with no more concerns about capital letter.
-                - Alarm u set has been changed to shown by 12 clock.
-                - Updated for being stable.
-                
                 # Intro
                 
                 1. Collection List
@@ -67,6 +61,9 @@ class Home : BaseFragment<HomeBinding>(){
                     - finally you can remove advertisement by supporting developer
                     
                 Thanks for using App! Enjoy it
+                
+                # On v2.1.4
+                    - For increasing perfection, fixed things about UX
             """.trimIndent()
         )
     }

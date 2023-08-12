@@ -1,7 +1,6 @@
 package com.jinproject.features.core
 
 import android.app.Activity
-import android.util.Log
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.android.billingclient.api.AcknowledgePurchaseParams
@@ -85,7 +84,7 @@ class BillingModule(
 
                 override fun onBillingServiceDisconnected() {
                     initBillingClient(maxCount - 1)
-                    Log.e("test", "disconnected")
+                    //Log.e("test", "disconnected")
                 }
             })
         }
@@ -186,7 +185,7 @@ class BillingModule(
                         .setPurchaseToken(purchase.purchaseToken)
                         .build()
                 withContext(Dispatchers.IO) {
-                    billingClient.consumeAsync(consumeParams) { result, token ->
+                    billingClient.consumeAsync(consumeParams) { result, _ ->
                         if (result.responseCode == BillingClient.BillingResponseCode.OK) {
                             callback.onSuccess(purchase)
                         } else {

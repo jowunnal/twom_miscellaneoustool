@@ -129,9 +129,9 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
 
     private fun initBillingModule() {
         billingModule = BillingModule(
-            this,
+            context = this,
             lifeCycleScope = lifecycleScope,
-            object : BillingModule.BillingCallback {
+            callback = object : BillingModule.BillingCallback {
                 override fun onReady() {
                     lifecycleScope.launch {
                         billingModule.getPurchasableProducts {

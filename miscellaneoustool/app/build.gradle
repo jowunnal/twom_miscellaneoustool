@@ -10,15 +10,15 @@ plugins {
 
 android {
     namespace 'com.jinproject.twomillustratedbook'
-    compileSdkVersion 34
+    compileSdk 34
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.jinproject.twomillustratedbook"
         minSdkVersion 26
         targetSdkVersion 34
-        versionCode 32
-        versionName "2.1.3"
+        versionCode 33
+        versionName "2.1.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

@@ -72,6 +72,7 @@ private fun WatchScreen(
 ) {
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val scrollState = rememberScrollState()
 
     DefaultLayout(
         topBar = {
@@ -99,6 +100,7 @@ private fun WatchScreen(
             Column(modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp, vertical = 8.dp)
+                .verticalScroll(scrollState)
             ) {
                 TimeStatusSetting(
                     watchStatus = uiState.watchStatus,
