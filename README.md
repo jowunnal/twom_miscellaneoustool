@@ -33,7 +33,8 @@
 
 # Stacks
 
- - Compose
+ - Kotlin
+ - Compose & AndroidView
  - Kotlin.Coroutines.Flow
  - Databinding
  - Navigation ( Single Activity )
@@ -43,6 +44,21 @@
  - Service
  - BroadcastReceiver
  - Hilt
+ - GooglePlay(In-App-Purchase)
+ - Admob
+ - Notification
+
+# Point
+
+- DB 개념&논리 설계 후 Room Library 사용하여 DML(Data Manipulation Lanage) 로 통신
+- 안드로이드 백그라운드 정책 가이드라인에 따라 Notification 으로 알람 기능 구현
+- 스파게티 코드에서 MVVM & Clean 아키텍쳐 적용하여 모듈화
+- LiveData → Coroutines.Flow & AndroidView 일부를 Compose로 Refactoring
+- 재사용 가능한 단위의 UI Component로 나누어 코드 개선
+- ListAdapter와 RecyclerView로 정보들을 보여주고, 갤러리 처럼 삭제 기능 구현
+- Foreground Service에서 Overlay 로 현재시간과 진행중인 몬스터 알람 노출
+- Localization 으로 다국어(미국,필리핀,한국) 마켓 서비스 & 다크테마 대응
+- PlayStore에 출시(2022.03) 하여 지속적으로 User 의 FeedBack으로 개선 작업
 
 # Architecture ( Clean + MVVM )
 
@@ -58,21 +74,11 @@
 
 <img src="miscellaneoustool/diagram/db_logical_diagram.png" />
 
-# Point
-
-- 데이터베이스를 직접 설계하고, Jetpack - Room 라이브러리를 이용하여 정의된 DML로 Local DB 와 통신 하였습니다.
-- 안드로이드 배터리 정책에 의한 Idle 상태에 대응하여 Service, Broadcast Receiver 와 SystemService에서 관리되는 AlarmManagerService로 알람 기능을 구현했습니다.
-- UI 컴포넌트들을 정의하고 재사용하여 가독성과 유지보수성을 향상시켰습니다.
-- 앞선 프로젝트에서 학습했던 내용들을 기반으로 MVVM 디자인 패턴을 적용시켰고 LiveData와 명령형 UI 방식을 Coroutines.Flow와 선언형 UI 방식으로 리펙토링 하였습니다.
-- Clean Architecture 를 적용하여 도메인 중심으로 앱을 설계하고, 프로젝트를 모듈단위로 나누어 관리했습니다.
-- 하드코딩된 문자들을 리소스로 분류하여 지역화에 대응하고, color, theme 리소스들을 정리한뒤 다크테마에 대응하였습니다.
-- 구글 플레이스토어에 출시하여 User Experience에 대해 고민하고, 실사용자의 피드백을 받아 지속적으로 유지보수 & 개선 해왔습니다.
-
 # Skill changed
 
- - AndroidView -> Compose
+ - AndroidView -> Compose (일부 혼용 - 두가지 방법 모두 알아야 하기 때문)
  - LiveData -> Flow
- - SharedPreferences -> DataStore ( proto )
+ - SharedPreferences -> DataStore ( proto3 )
  - Spaghetti -> Google Recommened Architecture -> Clean Architecture
  
 # UI
@@ -81,7 +87,7 @@
 
 <img src="miscellaneoustool/diagram/alarm_eng.jpg" /> <img src="miscellaneoustool/diagram/droplist_eng.jpg" /> <img src="miscellaneoustool/diagram/collection_eng.jpg" />
 
-# Release Version Management
+# Past Release Version History
 
 ### 1.0~1.2
 - 알람을 정확한시간동작 에서 5분전 동작으로 변경후 재등록
