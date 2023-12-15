@@ -1,12 +1,9 @@
 package com.jinproject.twomillustratedbook.ui.screen.navigation
 
-import android.app.AlarmManager
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -24,6 +21,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.fragment.findNavController
 import com.android.billingclient.api.Purchase
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
@@ -31,7 +29,6 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.jinproject.design_compose.component.SnackBarHostCustom
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.features.core.base.item.SnackBarMessage
@@ -69,16 +66,6 @@ class NavigationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadRewardedAd()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if(Build.VERSION.SDK_INT >= 31) {
-            val alarmManager = requireActivity().getSystemService(AlarmManager::class.java)
-            if (!alarmManager.canScheduleExactAlarms()) {
-                Toast.makeText(requireContext(),"권한을 거부하시면 정확한 알람을 받으실 수 없습니다.", Toast.LENGTH_LONG).show()
-            }
-        }
     }
 
     @Composable
@@ -127,6 +114,7 @@ class NavigationFragment : Fragment() {
             setBillingCallback(callback)
         }
         val billingModule = activity.billingModule
+        val startDestination = findNavController().currentBackStackEntry?.arguments?.getString("start") ?: "alarm"
 
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -146,9 +134,9 @@ class NavigationFragment : Fragment() {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues),
-                    navController = rememberNavController(),
+                    navHostController = rememberNavController(),
+                    startDestination = startDestination,
                     billingModule = billingModule,
-                    changeVisibilityBottomNavigationBar = { bool -> changeVisibilityBottomNavigationBar(bool) },
                     showRewardedAd = { onResult ->
                         showRewardedAd(onResult)
                     },
@@ -158,12 +146,6 @@ class NavigationFragment : Fragment() {
                 )
             }
         }
-    }
-
-    private fun changeVisibilityBottomNavigationBar(bottomNavigationBarVisibility: Boolean) {
-        requireActivity()
-            .findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-            .visibility = if (bottomNavigationBarVisibility) View.VISIBLE else View.GONE
     }
 
     private fun hideTopBar() {

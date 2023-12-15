@@ -2,7 +2,6 @@ package com.jinproject.features.watch.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
-import com.jinproject.design_compose.component.DefaultButton
+import com.jinproject.design_compose.component.TextButton
 import com.jinproject.design_compose.component.HorizontalSpacer
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.theme.Typography
@@ -99,22 +98,22 @@ fun TimerBottomSheetContent(
         VerticalSpacer(height = 16.dp)
 
         Row() {
-            DefaultButton(content = stringResource(id = R.string.register_do),
+            TextButton(text = stringResource(id = R.string.register_do),
                 modifier = Modifier
-                    .weight(1f)
-                    .clickable {
-                        setSelectedMonsterOtaToTrue(1)
-                        onCloseBottomSheet()
-                    }
+                    .weight(1f),
+                onClick =  {
+                    setSelectedMonsterOtaToTrue(1)
+                    onCloseBottomSheet()
+                }
             )
             HorizontalSpacer(width = 8.dp)
-            DefaultButton(content = stringResource(id = R.string.delete_do),
+            TextButton(text = stringResource(id = R.string.delete_do),
                 modifier = Modifier
-                    .weight(1f)
-                    .clickable {
-                        setSelectedMonsterOtaToTrue(0)
-                        onCloseBottomSheet()
-                    }
+                    .weight(1f),
+                onClick =  {
+                    setSelectedMonsterOtaToTrue(0)
+                    onCloseBottomSheet()
+                }
             )
         }
     }

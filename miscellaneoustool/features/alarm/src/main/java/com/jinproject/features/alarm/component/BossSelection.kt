@@ -1,9 +1,6 @@
 package com.jinproject.features.alarm.component
 
 import android.content.Context
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -24,9 +21,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
-import com.jinproject.design_compose.component.DefaultButton
 import com.jinproject.design_compose.component.DialogState
 import com.jinproject.design_compose.component.DropDownMenuCustom
+import com.jinproject.design_compose.component.TextButton
+import com.jinproject.design_compose.component.TextCombinedButton
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.theme.Typography
 import com.jinproject.domain.model.MonsterType
@@ -140,16 +138,15 @@ private fun BossSelectionHeader(
             }
         }
         VerticalSpacer(height = 20.dp)
-        DefaultButton(
-            content = stringResource(id = R.string.addition_do),
+        TextButton(
+            text = stringResource(id = R.string.addition_do),
             modifier = Modifier
-                .fillMaxWidth()
-                .clickable { addBossToFrequentlyUsedList(recentlySelectedBossName) }
+                .fillMaxWidth(),
+            onClick = { addBossToFrequentlyUsedList(recentlySelectedBossName) }
         )
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun BossSelectionItem(
     bossName: String,
@@ -159,28 +156,25 @@ private fun BossSelectionItem(
     onOpenDialog: (DialogState) -> Unit,
     onCloseDialog: () -> Unit
 ) {
-    DefaultButton(
+    TextCombinedButton(
         content = bossName,
         modifier = Modifier
-            .padding(vertical = 8.dp)
-            .combinedClickable(
-                onClick = { onClickBossItem(bossName) },
-                onLongClick = {
-                    onOpenDialog(
-                        DialogState(
-                            header = "$bossName ${context.getString(R.string.delete_something)}",
-                            positiveMessage = context.getString(R.string.yes),
-                            negativeMessage = context.getString(R.string.no),
-                            onPositiveCallback = {
-                                removeBossFromFrequentlyUsedList(bossName)
-                                onCloseDialog()
-                            },
-                            onNegativeCallback = { onCloseDialog() }
-                        )
-                    )
-                }
-            ),
-        style = Typography.bodyLarge
+            .padding(vertical = 8.dp),
+        onClick = { onClickBossItem(bossName) },
+        onLongClick = {
+            onOpenDialog(
+                DialogState(
+                    header = "$bossName ${context.getString(R.string.delete_something)}",
+                    positiveMessage = context.getString(R.string.yes),
+                    negativeMessage = context.getString(R.string.no),
+                    onPositiveCallback = {
+                        removeBossFromFrequentlyUsedList(bossName)
+                        onCloseDialog()
+                    },
+                    onNegativeCallback = { onCloseDialog() }
+                )
+            )
+        },
     )
 }
 

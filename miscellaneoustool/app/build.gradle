@@ -67,6 +67,7 @@ dependencies {
     implementation(project(":features:gear"))
     implementation(project(":features:core"))
     implementation(project(":features:home"))
+    implementation(project(":features:symbol"))
     implementation(project(":design-compose"))
     implementation project(path: ':design-ui')
 

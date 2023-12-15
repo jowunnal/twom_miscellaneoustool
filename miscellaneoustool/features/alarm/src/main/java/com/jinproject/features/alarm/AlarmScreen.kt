@@ -48,14 +48,11 @@ fun AlarmScreen(
     alarmViewModel: AlarmViewModel = hiltViewModel(),
     context: Context = LocalContext.current,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    changeVisibilityBottomNavigationBar: (Boolean) -> Unit,
     showRewardedAd: (() -> Unit) -> Unit,
     onNavigateToGear: () -> Unit,
     onNavigateToWatch: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit
 ) {
-    changeVisibilityBottomNavigationBar(true)
-
     val alarmUiState by alarmViewModel.uiState.collectAsStateWithLifecycle()
     val alarmBottomSheetUiState by alarmViewModel.bottomSheetUiState.collectAsStateWithLifecycle()
 
@@ -193,7 +190,7 @@ private fun AlarmScreen(
                     .fillMaxWidth()
                     .padding(vertical = 8.dp, horizontal = 16.dp),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 item {
                     BossSelection(

@@ -1,7 +1,6 @@
 package com.jinproject.features.gear
 
 import android.content.Context
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,10 +25,10 @@ import com.android.billingclient.api.ProductDetails
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.DefaultAppBar
-import com.jinproject.design_compose.component.DefaultButton
 import com.jinproject.design_compose.component.DefaultLayout
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.HorizontalSpacer
+import com.jinproject.design_compose.component.TextButton
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.red
 import com.jinproject.design_compose.theme.Typography
@@ -42,12 +41,9 @@ import com.jinproject.features.core.utils.appendBoldText
 fun GearScreen(
     billingModule: BillingModule,
     gearViewModel: GearViewModel = hiltViewModel(),
-    changeVisibilityBottomNavigationBar: (Boolean) -> Unit,
     onNavigatePopBackStack: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit
 ) {
-    changeVisibilityBottomNavigationBar(false)
-
     val gearUiState by gearViewModel.uiState.collectAsStateWithLifecycle()
 
     GearScreen(
@@ -94,27 +90,27 @@ private fun GearScreen(
                 onPickerValueChange = { minutes -> setIntervalFirstTimerSetting(minutes) }
 
             )
-            DefaultButton(
-                content = stringResource(id = R.string.apply_do),
+            TextButton(
+                text = stringResource(id = R.string.apply_do),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        if (gearUiState.intervalFirstTimer < gearUiState.intervalSecondTimer) {
-                            showSnackBar(
-                                SnackBarMessage(
-                                    headerMessage = context.getString(R.string.alarm_setting_interval_failure),
-                                    contentMessage = context.getString(R.string.alarm_setting_interval_failure_reason)
-                                )
+                    .fillMaxWidth(),
+                onClick = {
+                    if (gearUiState.intervalFirstTimer < gearUiState.intervalSecondTimer) {
+                        showSnackBar(
+                            SnackBarMessage(
+                                headerMessage = context.getString(R.string.alarm_setting_interval_failure),
+                                contentMessage = context.getString(R.string.alarm_setting_interval_failure_reason)
                             )
-                        } else {
-                            setIntervalTimerSetting()
-                            showSnackBar(
-                                SnackBarMessage(
-                                    headerMessage = context.getString(R.string.alarm_setting_interval_success)
-                                )
+                        )
+                    } else {
+                        setIntervalTimerSetting()
+                        showSnackBar(
+                            SnackBarMessage(
+                                headerMessage = context.getString(R.string.alarm_setting_interval_success)
                             )
-                        }
+                        )
                     }
+                }
             )
 
             VerticalSpacer(height = 30.dp)
@@ -133,13 +129,13 @@ private fun GearScreen(
                     VerticalSpacer(height = 30.dp)
                 }
                 itemsIndexed(availableProducts) { index, product ->
-                    DefaultButton(
-                        content = "${product.name} ${stringResource(id = R.string.somethingdo)}",
+                    TextButton(
+                        text = "${product.name} ${stringResource(id = R.string.somethingdo)}",
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                purchaseInApp(product)
-                            }
+                            .fillMaxWidth(),
+                        onClick = {
+                            purchaseInApp(product)
+                        }
                     )
                     if (index != availableProducts.lastIndex)
                         VerticalSpacer(height = 8.dp)
