@@ -19,6 +19,12 @@
         android:icon="@drawable/icon_droplist"
         app:showAsAction="always"
         />
+    <item android:id="@+id/navi_symbol"
+        android:title="symbol"
+        android:enabled="true"
+        android:icon="@drawable/ic_guild_symbol"
+        app:showAsAction="always"
+        />
     <item android:id="@+id/navigationFragment"
         android:title="alarm"
         android:enabled="true"

@@ -24,6 +24,7 @@ kotest = "5.6.0"
 mockk = "1.13.5"
 gms-service-ads = "22.2.0"
 glide = "4.15.1"
+coil = "2.5.0"
 billing-version = "6.0.1"
 
 # plugin
@@ -92,6 +93,9 @@ google-gms-services-ads = { group = "com.google.android.gms", name = "play-servi
 
 # Glide
 bumptech-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+
+# Coil
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
 # Test
 jUnit = { group = "junit", name = "junit", version.ref = "junit" }
