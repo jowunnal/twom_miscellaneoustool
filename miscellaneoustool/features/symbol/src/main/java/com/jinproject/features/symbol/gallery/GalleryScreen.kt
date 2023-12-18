@@ -6,7 +6,6 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -145,7 +144,6 @@ private suspend fun getImageFromContentProvider(
             val idColumn = cursor.getColumnIndexOrThrow(MTImage.IMAGE_COLUMNS_ID)
 
             val id = cursor.getLong(idColumn)
-            Log.d("test", "id: $id")
             val contentUri = ContentUris.withAppendedId(imageUri, id).toString()
 
             imageList.add(

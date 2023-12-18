@@ -3,6 +3,7 @@ package com.jinproject.features.symbol.gallery.component
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -37,17 +38,18 @@ fun GalleryAppBar(
                 .align(Alignment.Center),
         )
         DescriptionText(
-            text = "전송",
+            text = "변환하기",
             modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .clickable {
-                    if(visibility == 1f)
+                    if (visibility == 1f)
                         navigateToGuildMark()
                 }
                 .padding(horizontal = 4.dp)
                 .graphicsLayer {
                     alpha = visibility
                 },
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }

@@ -43,13 +43,14 @@ fun BottomBarText(
 fun HeadlineText(
     modifier: Modifier = Modifier,
     text: String,
-    maxLines: Int = 1
+    maxLines: Int = 1,
+    color: Color = MaterialTheme.colorScheme.onBackground
 ) {
     DefaultText(
         modifier = modifier,
         text = text,
-        style = MaterialTheme.typography.headlineLarge,
-        color = MaterialTheme.colorScheme.onBackground,
+        style = MaterialTheme.typography.headlineSmall,
+        color = color,
         maxLines = maxLines
     )
 }
@@ -58,13 +59,14 @@ fun HeadlineText(
 fun DescriptionText(
     modifier: Modifier = Modifier,
     text: String,
+    color: Color = MaterialTheme.colorScheme.onBackground
 ) {
     DefaultText(
         modifier = modifier,
         text = text,
         style = MaterialTheme.typography.bodySmall,
         overflow = Ellipsis,
-        color = MaterialTheme.colorScheme.onBackground,
+        color = color,
         maxLines = Int.MAX_VALUE,
     )
 }
@@ -73,12 +75,13 @@ fun DescriptionText(
 fun FooterText(
     modifier: Modifier = Modifier,
     text: String,
+    color: Color = MaterialTheme.colorScheme.onBackground
 ) {
     DefaultText(
         modifier = modifier,
         text = text,
         style = MaterialTheme.typography.labelSmall,
-        color = MaterialTheme.colorScheme.onBackground,
+        color = color,
         maxLines = Int.MAX_VALUE,
     )
 }

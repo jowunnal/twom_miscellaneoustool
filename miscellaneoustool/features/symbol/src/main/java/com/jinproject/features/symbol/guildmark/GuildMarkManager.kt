@@ -2,26 +2,33 @@ package com.jinproject.features.symbol.guildmark
 
 import android.graphics.Bitmap
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import com.jinproject.features.symbol.areColorsSimilar
 import kotlin.math.roundToInt
-import kotlin.math.sqrt
 
 @Composable
 fun rememberGuildMarkManager(
     bitMap: Bitmap,
+    slider: Float,
 ): GuildMarkManager {
 
     val state = remember {
         GuildMarkManager().apply {
             setColors(bitMap)
         }
+    }
+
+    SideEffect {
+        state.setSliderPos(slider)
     }
 
     return state
@@ -34,25 +41,97 @@ class GuildMarkManager(
     var selectedColor by mutableStateOf(Color.Unspecified)
         private set
 
-    var originColors = mutableStateListOf(IntArray(cellCount))
+    var originColors = mutableStateListOf<Int>()
 
     val filteredCellColors
         get() = if (selectedColor == Color.Unspecified)
             originColors
         else
-            originColors.map { row ->
-                row.map { color ->
-                    if (color == selectedColor.toArgb()) {
-                        color
-                    } else
-                        Color.White.toArgb()
-                }.toIntArray()
+            originColors.map { color ->
+                if (color == selectedColor.toArgb()) {
+                    color
+                } else
+                    Color.White.toArgb()
             }
 
     var standardColors = mutableStateListOf<Int>()
         private set
 
-    fun List<IntArray>.distinctColors(): List<Int> {
+    private var threshold by mutableDoubleStateOf(0.0)
+    private val list by lazy { ArrayList<IntArray>(cellCount) }
+
+    fun selectColor(color: Color) {
+        selectedColor = color
+    }
+
+    fun setSliderPos(pos: Float) {
+        threshold = pos.toDouble()
+        setPlatte()
+    }
+
+    fun setColors(bitMap: Bitmap) {
+        var width = 0
+        var height = 0
+        if (bitMap.width > bitMap.height) {
+            width = cellCount
+            height = (bitMap.height * (width / bitMap.width.toFloat())).roundToInt()
+        } else {
+            height = cellCount
+            width = (bitMap.width * (height / bitMap.height.toFloat())).roundToInt()
+        }
+
+        val colors = IntArray(width * height)
+        val resizedBitMap = Bitmap.createScaledBitmap(bitMap, width, height, true)
+        resizedBitMap.getPixels(colors, 0, width, 0, 0, width, height)
+
+        val intArray = IntArray(cellCount) { Color.White.toArgb() }
+        var row = 0
+
+        list.clear()
+
+        if (width == cellCount) {
+            val diff = width - height
+            repeat(diff / 2) {
+                list.add(IntArray(cellCount))
+            }
+            colors.forEachIndexed { index, color ->
+                if (index % width == 0 && index != 0) {
+                    list.add(intArray.clone())
+                    row = 0
+                }
+                intArray[row++] = color
+            }
+            repeat(diff / 2 + diff % 2) {
+                list.add(IntArray(cellCount))
+            }
+        } else {
+            val diff = height - width
+            row = diff / 2
+            colors.forEachIndexed { index, color ->
+                if (index % width == 0 && index != 0) {
+                    list.add(intArray.clone())
+                    row = diff / 2
+                }
+
+                intArray[row++] = color
+            }
+        }
+
+        setPlatte()
+    }
+
+    private fun setPlatte() {
+        val distinctColors = list.distinctColors().sorted()
+        standardColors.clear()
+        standardColors.addAll(distinctColors.distinct())
+
+        val filteredColors = list.flatFilteredColorList(distinctColors)
+
+        originColors.clear()
+        originColors.addAll(filteredColors)
+    }
+
+    private fun List<IntArray>.distinctColors(): List<Int> {
         val colorList = arrayListOf<Int>()
         for (colors in this) {
             for (color in colors) {
@@ -60,7 +139,7 @@ class GuildMarkManager(
                     var isSimilar = false
                     run loop@{
                         colorList.forEach { c ->
-                            if (areColorsSimilar(c, color)) {
+                            if (areColorsSimilar(c, color, threshold)) {
                                 isSimilar = true
                                 return@loop
                             }
@@ -77,75 +156,19 @@ class GuildMarkManager(
         return colorList
     }
 
-    fun selectColor(color: Color) {
-        selectedColor = color
-    }
-
-    fun setColors(bitMap: Bitmap) {
-        var width = 0
-        var height = 0
-        if(bitMap.width > bitMap.height) {
-            width = cellCount
-            height = (bitMap.height * (width / bitMap.width.toFloat())).roundToInt()
-        } else {
-            height = cellCount
-            width = (bitMap.width * (height / bitMap.height.toFloat())).roundToInt()
-        }
-        val resizedBitMap = Bitmap.createScaledBitmap(bitMap, cellCount, cellCount, true)
-
-        val list = ArrayList<IntArray>()
-        repeat(cellCount) { row ->
-            val intArray = IntArray(cellCount)
-            repeat(cellCount) { col ->
-                intArray[col] = kotlin.runCatching {
-                    resizedBitMap.getPixel(col, row)
-                }.getOrElse {
-                    Color.White.toArgb()
-                }
-            }
-            list.add(intArray)
-        }
-        //Log.d("test","aa")
-
-        standardColors.clear()
-        standardColors.addAll(list.distinctColors().sorted())
-
-        val filteredColors = list.map { row ->
+    private fun ArrayList<IntArray>.flatFilteredColorList(distinctColors: List<Int>) =
+        this.flatMap { row ->
             val intArray = IntArray(row.size)
 
             row.forEachIndexed { index, cell ->
-                for (c in standardColors) {
-                    if (areColorsSimilar(c, cell)) {
+                for (c in distinctColors) {
+                    if (areColorsSimilar(c, cell, threshold)) {
                         intArray[index] = c
                         break
                     }
                 }
             }
 
-            intArray
+            intArray.toList()
         }
-        originColors.clear()
-        originColors.addAll(filteredColors)
-    }
-
-    private fun calculateColorDistance(color1: Int, color2: Int): Double {
-        val red1 = android.graphics.Color.red(color1)
-        val green1 = android.graphics.Color.green(color1)
-        val blue1 = android.graphics.Color.blue(color1)
-
-        val red2 = android.graphics.Color.red(color2)
-        val green2 = android.graphics.Color.green(color2)
-        val blue2 = android.graphics.Color.blue(color2)
-
-        val deltaRed = (red1 - red2).toDouble()
-        val deltaGreen = (green1 - green2).toDouble()
-        val deltaBlue = (blue1 - blue2).toDouble()
-
-        return sqrt(deltaRed * deltaRed + deltaGreen * deltaGreen + deltaBlue * deltaBlue)
-    }
-
-    fun areColorsSimilar(color1: Int, color2: Int, threshold: Double = 0.0): Boolean {
-        val distance = calculateColorDistance(color1, color2)
-        return distance <= threshold
-    }
 }

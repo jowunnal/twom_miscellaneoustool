@@ -51,7 +51,7 @@ fun DetailScreen(
             loading = {
                 GalleryProgressIndicator()
             },
-            contentScale = ContentScale.FillHeight,
+            contentScale = ContentScale.Fit,
             modifier = androidx.compose.ui.Modifier
                 .fillMaxSize(),
             placeHolderPreview = R.drawable.ic_x,
