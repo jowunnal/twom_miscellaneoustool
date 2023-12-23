@@ -19,6 +19,8 @@
     <string name="input_price_hint">Input Price</string>
     <string name="setting_item"><u>Change Item Setting</u></string>
     <string name="setting_filter"><u>Change Filtering Setting</u></string>
+    <string name="new_version_message">Latest version has been published.\nPlease update App to new version.</string>
+    <string name="new_version_button">Go to update</string>
 
     <string name="price">Price</string>
     <string name="delete">Delete</string>
@@ -45,6 +47,11 @@
     <string name="second"> </string>
     <string name="turnoff">Turn off</string>
     <string name="alarm">Alarm</string>
+    <string name="convert">Convert</string>
+    <string name="image">Image</string>
+    <string name="very_high">High</string>
+    <string name="color_precision">Color Precision</string>
+    <string name="very_low">Low</string>
 
     <!-- Snackbar Message -->
     <string name="message_throw_no_such_element">The item has not found in Database</string>
@@ -81,6 +88,33 @@
     <string name="watch_setting_move_x">Horizontal Axis Move</string>
     <string name="watch_setting_move_y">Vertical Axis Move</string>
     <string name="watch_setting_title">Always see the current time</string>
+
+    <!-- symbol strings -->
+    <string name="symbol_gallery_topbar">Gallery</string>
+    <string name="symbol_headline">Guild Mark Symbol!\nMake it conveniently for now</string>
+    <string name="symbol_headline_content">This is an example of the original image before conversion.</string>
+    <string name="symbol_description">After loading the image, it is displayed on the screen in pixel units.\nYou will no longer have a hard time creating your guild mark.\nYou can make a more accurate conversion if you remove the background of the image in advance.\nThe closer the image is to a square ratio, the better the quality.</string>
+    <string name="symbol_description_content">the converted image will be shown as an example.\nPlease note that the image may differ from the actual converted form.</string>
+    <string name="symbol_footer">A small fee is charged per load for this product.\nYou can convert the loaded image to a smaller size and provide a preview to check if it is accurate.\nIf you like the loaded image, please proceed with the next process. \nThis product cannot be canceled after payment, so please decide carefully!
+        \n\nThe developer does not collect any information about users.\nConvert images in the storage safely without worry.</string>
+    <string name="symbol_button_getImage">Load image</string>
+    <string name="symbol_permission_headline">Permission to read images has not been granted.</string>
+    <string name="symbol_permission_content">If you do not accept permission, you cannot use the function.</string>
+
+    <string name="symbol_preview_topbar">Expected image</string>
+    <string name="symbol_preview_expectation">This is the expected and converted image form.</string>
+    <string name="symbol_preview_expectation_double">This is the 2x enlarged form of the expected and converted image form.</string>
+    <string name="symbol_preview_dialog_headline">Are you sure you want to convert?</string>
+    <string name="symbol_preview_dialog_content">It is not possible to cancel your subscription for this product.\nPlease check the expected image carefully and make a decision carefully.</string>
+
+    <string name="symbol_guildMark_expectation_image">Expected image</string>
+    <string name="symbol_guildMark_used_color">Used colors</string>
+    <string name="symbol_guildMark_overlay_running">The guildmark palette overlay is running.</string>
+    <string name="symbol_guildMark_permission_headline">Mangyaring tanggapin ang pahintulot na gumuhit sa iba pang mga app.</string>
+    <string name="symbol_guildMark_permission_content">Kung hindi ka tumanggap ng pahintulot, hindi mo magagamit ang serbisyo ng overlay.</string>
+    <string name="symbol_guildMark_description">Kung aalis ka sa kasalukuyang screen, ipapakita ito bilang isang overlay.\nTiyaking tumanggap ng pahintulot na gumuhit sa iba pang mga app!</string>
+
+    <string name="symbol_detail_appbar">Image Details</string>
 
     <!-- service strings -->
     <string name="service_overlay_running">The current time always view is running.</string>
