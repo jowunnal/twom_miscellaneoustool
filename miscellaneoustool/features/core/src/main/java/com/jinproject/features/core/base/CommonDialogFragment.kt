@@ -15,7 +15,8 @@ class CommonDialogFragment private constructor(
     private val message: String? = "",
     private val positiveButtonText: String,
     private val negativeButtonText: String,
-    private val listener: Listener
+    private val listener: Listener,
+    private val enabled: Boolean = true,
 ) : DialogFragment() {
 
     private lateinit var binding: DialogCommonBinding
@@ -47,15 +48,29 @@ class CommonDialogFragment private constructor(
             etPrice.visibility = View.GONE
         }
 
-        btnPositive.text = positiveButtonText
-        btnPositive.setOnClickListener {
-            listener.onPositiveButtonClick(etPrice.text.toString())
-            dismissAllowingStateLoss()
+        if(!enabled)
+            isCancelable = false
+
+        if(positiveButtonText.isBlank())
+            btnPositive.visibility = View.GONE
+        else {
+            btnPositive.text = positiveButtonText
+            btnPositive.setOnClickListener {
+                listener.onPositiveButtonClick(etPrice.text.toString())
+                if(enabled)
+                    dismissAllowingStateLoss()
+            }
         }
-        btnNegative.text = negativeButtonText
-        btnNegative.setOnClickListener {
-            listener.onNegativeButtonClick()
-            dismissAllowingStateLoss()
+
+        if(negativeButtonText.isBlank())
+            btnNegative.visibility = View.GONE
+        else {
+            btnNegative.text = negativeButtonText
+            btnNegative.setOnClickListener {
+                listener.onNegativeButtonClick()
+                if(enabled)
+                    dismissAllowingStateLoss()
+            }
         }
     }
 
@@ -73,14 +88,16 @@ class CommonDialogFragment private constructor(
             message: String?,
             positiveButtonText: String,
             negativeButtonText: String,
-            listener: Listener
+            listener: Listener,
+            enabled: Boolean = true,
         ) {
             CommonDialogFragment(
                 title = title,
                 message = message,
                 positiveButtonText = positiveButtonText,
                 negativeButtonText = negativeButtonText,
-                listener = listener
+                listener = listener,
+                enabled = enabled,
             ).show(fragmentManager, TAG)
         }
     }

@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.jinproject.features.collection.R
+import com.jinproject.design_ui.R
 import com.jinproject.features.collection.databinding.CollectionSettingItemListBinding
 import com.jinproject.features.core.BaseFragment
 import com.jinproject.features.core.base.CommonDialogFragment
@@ -63,10 +63,19 @@ class CollectionSettingItem : BaseFragment<CollectionSettingItemListBinding>() {
                                     price = kotlin.runCatching { value.toInt() }.onFailure { e ->
                                         when (e) {
                                             is NumberFormatException -> {
-                                                Toast.makeText(requireContext(), requireContext().getString(R.string.out_of_item_price), Toast.LENGTH_LONG).show()
+                                                Toast.makeText(
+                                                    requireContext(),
+                                                    requireContext().getString(R.string.out_of_item_price),
+                                                    Toast.LENGTH_LONG
+                                                ).show()
                                             }
+
                                             else -> {
-                                                Toast.makeText(requireContext(), "${e.message}", Toast.LENGTH_LONG).show()
+                                                Toast.makeText(
+                                                    requireContext(),
+                                                    "${e.message}",
+                                                    Toast.LENGTH_LONG
+                                                ).show()
                                             }
                                         }
                                     }.getOrDefault(0)

@@ -1,4 +1,4 @@
-package com.jinproject.design_compose
+package com.jinproject.features.symbol
 
 import org.junit.Test
 

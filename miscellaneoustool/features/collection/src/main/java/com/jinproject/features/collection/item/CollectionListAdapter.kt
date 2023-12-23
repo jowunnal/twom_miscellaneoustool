@@ -13,7 +13,7 @@ import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.jinproject.features.collection.R
+import com.jinproject.design_ui.R
 import com.jinproject.features.collection.databinding.CollectionListItemBinding
 import com.jinproject.features.collection.item.item.CollectionState
 import java.text.DecimalFormat

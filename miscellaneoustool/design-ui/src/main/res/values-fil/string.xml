@@ -19,6 +19,8 @@
     <string name="input_price_hint">ilagay ang presyo</string>
     <string name="setting_item"><u>Baguhin ang mga setting ng item</u></string>
     <string name="setting_filter"><u>Baguhin ang pag-filter ng item</u></string>
+    <string name="new_version_message">Nai-publish na ang pinakabagong bersyon.\nPaki-update ang App sa bagong bersyon.</string>
+    <string name="new_version_button">Go to update</string>
 
     <string name="price">Price</string>
     <string name="delete">Delete</string>
@@ -45,6 +47,11 @@
     <string name="second"> </string>
     <string name="turnoff">Turn off</string>
     <string name="alarm">Alarm</string>
+    <string name="convert">magbalik-loob</string>
+    <string name="image">larawan</string>
+    <string name="very_high">Napakataas</string>
+    <string name="color_precision">Katumpakan ng Kulay</string>
+    <string name="very_low">Napakababa</string>
 
     <!-- Snackbar Message -->
     <string name="message_throw_no_such_element">Walang tugmang data.</string>
@@ -81,6 +88,33 @@
     <string name="watch_setting_move_x">Horizontal Axis Move</string>
     <string name="watch_setting_move_y">Vertical Axis Move</string>
     <string name="watch_setting_title">Always see the current time</string>
+
+    <!-- symbol strings -->
+    <string name="symbol_gallery_topbar">Gallery</string>
+    <string name="symbol_headline">Simbolo ng Guild Mark!\nGawin itong maginhawa sa ngayon</string>
+    <string name="symbol_headline_content">Ito ay isang halimbawa ng orihinal na larawan bago ang conversion.</string>
+    <string name="symbol_description">Pagkatapos i-load ang larawan, ipinapakita ito sa screen sa mga pixel unit.\nHindi ka na mahihirapang gumawa ng iyong guild mark.\nMaaari kang gumawa ng mas tumpak na conversion kung aalisin mo ang background ng larawan nang maaga.\nKung mas malapit ang larawan sa isang parisukat na ratio, mas mahusay ang kalidad.</string>
+    <string name="symbol_description_content">ang na-convert na imahe ay ipapakita bilang isang halimbawa.\nPakitandaan na ang larawan ay maaaring iba mula sa aktwal na na-convert na form.</string>
+    <string name="symbol_footer">Ang isang maliit na bayad ay sinisingil sa bawat pag-load para sa produktong ito.\nMaaari mong i-convert ang na-load na larawan sa isang mas maliit na sukat at magbigay ng isang preview upang suriin kung ito ay tumpak.\nKung gusto mo ang na-load na larawan, mangyaring magpatuloy sa susunod na proseso. \nHindi maaaring kanselahin ang produktong ito pagkatapos ng pagbabayad, kaya mangyaring magdesisyon nang mabuti!
+        \n\nAng developer ay hindi nangongolekta ng anumang impormasyon tungkol sa mga user.\nI-convert ang mga larawan sa storage nang ligtas nang walang pag-aalala.</string>
+    <string name="symbol_button_getImage">Mag-load ng larawan</string>
+    <string name="symbol_permission_headline">Ang pahintulot na basahin ang mga larawan ay hindi ibinigay.</string>
+    <string name="symbol_permission_content">Kung hindi ka tumatanggap ng pahintulot, hindi mo magagamit ang function.</string>
+
+    <string name="symbol_preview_topbar">Inaasahang imahe</string>
+    <string name="symbol_preview_expectation">Ito ang inaasahan at na-convert na anyo ng imahe.</string>
+    <string name="symbol_preview_expectation_double">Ito ang 2x na pinalaki na anyo ng inaasahan at na-convert na anyo ng imahe.</string>
+    <string name="symbol_preview_dialog_headline">Sigurado ka bang gusto mong mag-convert?</string>
+    <string name="symbol_preview_dialog_content">Hindi posibleng kanselahin ang iyong subscription para sa produktong ito.\nPakisuri nang mabuti ang inaasahang larawan at gumawa ng desisyon nang mabuti.</string>
+
+    <string name="symbol_guildMark_expectation_image">Inaasahang imahe</string>
+    <string name="symbol_guildMark_used_color">Mga ginamit na kulay</string>
+    <string name="symbol_guildMark_overlay_running">Gumagana ang guildmark palette overlay.</string>
+    <string name="symbol_guildMark_permission_headline">Please accept permission to draw over other apps.</string>
+    <string name="symbol_guildMark_permission_content">If you do not accept permission, you will not be able to use the overlay service.</string>
+    <string name="symbol_guildMark_description">If you leave the current screen, it is displayed as an overlay.\nBe sure to accept permission to draw on other apps!</string>
+
+    <string name="symbol_detail_appbar">Mga Detalye ng Larawan</string>
 
     <!-- service strings -->
     <string name="service_overlay_running">Ang kasalukuyang view ng oras ay palaging gumagana.</string>

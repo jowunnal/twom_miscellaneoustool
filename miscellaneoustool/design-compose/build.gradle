@@ -11,12 +11,20 @@ android {
         minSdkVersion 26
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+
     buildFeatures{
         compose true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.5.1'
+        kotlinCompilerExtensionVersion '1.5.4'
     }
 }
 
@@ -29,4 +37,5 @@ dependencies {
     androidTestImplementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
     debugImplementation(libs.compose.ui.tooling)
+    implementation(libs.coil)
 }

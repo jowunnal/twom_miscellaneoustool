@@ -13,11 +13,13 @@
     <string name="item_name">아이템이름</string>
     <string name="stat">스텟</string>
     <string name="home_header">아이모 잡학도구</string>
-    <string name="version" translatable="false">2.1.4</string>
+    <string name="version" translatable="false">2.2.0</string>
 
     <string name="input_price_hint">가격 입력</string>
     <string name="setting_item"><u>아이템 설정 변경</u></string>
     <string name="setting_filter"><u>필터링 설정 변경</u></string>
+    <string name="new_version_message">최신 버전이 출시되었어요.\n업데이트를 해주세요.</string>
+    <string name="new_version_button">업데이트 하러 가기</string>
 
     <!-- base strings -->
     <string name="price">가격</string>
@@ -45,6 +47,11 @@
     <string name="second">초</string>
     <string name="turnoff">끄기</string>
     <string name="alarm">알람</string>
+    <string name="convert">변환하기</string>
+    <string name="image">이미지</string>
+    <string name="very_high">매우 높음</string>
+    <string name="color_precision">색상 정밀도</string>
+    <string name="very_low">매우 낮음</string>
 
     <!-- Snackbar Message -->
     <string name="message_throw_no_such_element">일치하는 데이터가 없습니다.</string>
@@ -83,6 +90,33 @@
     <string name="watch_setting_move_x">가로축 이동</string>
     <string name="watch_setting_move_y">세로축 이동</string>
     <string name="watch_setting_title">현재 시간 항상 보기</string>
+
+    <!-- symbol strings -->
+    <string name="symbol_gallery_topbar">갤러리</string>
+    <string name="symbol_headline">길드 마크 심볼!\n이제 편리하게 만드세요.</string>
+    <string name="symbol_headline_content">변환 전의 원본 이미지에 대한 예시 에요.</string>
+    <string name="symbol_description">이미지를 불러온 후, 픽셀 단위로 사용된 색상들과 함께 화면에 보여 드려요.\n더 이상 어렵게 길드마크를 만들지 않게 될 거에요.\n이미지의 배경을 미리 제거해주시면 좀 더 정확한 변환을 할 수 있어요.\n이미지는 정사각형 비율에 가까울수록 더 품질이 좋아져요.</string>
+    <string name="symbol_description_content">변환 후의 이미지를 예시로 보여 드리고 있어요.\n해당 이미지는 실제 변환한 형태와 다를 수 있음을 유의해주세요.</string>
+    <string name="symbol_footer">본 상품은 1회 불러오기당 소액의 요금이 과금되요.\n불러온 이미지가 정확한지 작은 사이즈로 변환해서 미리보기를 제공해 드리고 있어요.\n불러온 이미지가 마음에 드신다면 이후 과정을 진행해 주세요.\n결제 이후 청약철회가 불가능한 상품이니 신중하게 결정해주세요!
+        \n\n개발자는 사용자의 그 어떠한 정보도 수집하고 있지 않아요.\n걱정없이 안전하게 저장소의 이미지를 변환해보세요.</string>
+    <string name="symbol_button_getImage">이미지 불러오기</string>
+    <string name="symbol_permission_headline">이미지 읽기 권한이 수락되지 않았어요.</string>
+    <string name="symbol_permission_content">권한을 수락 하지 않으면 기능을 이용 하실 수 없어요.</string>
+    
+    <string name="symbol_preview_topbar">예상 이미지</string>
+    <string name="symbol_preview_expectation">예상되는 변환된 이미지의 형태에요.</string>
+    <string name="symbol_preview_expectation_double">예상되는 변환된 이미지의 2배 확대된 형태에요.</string>
+    <string name="symbol_preview_dialog_headline">정말 변환 하시겠어요?</string>
+    <string name="symbol_preview_dialog_content">해당 상품은 청약 철회가 불가능 해요.\n예상 되는 이미지를 잘 확인한 후 신중 하게 결정해 주세요.</string>
+
+    <string name="symbol_guildMark_expectation_image">예상되는 이미지</string>
+    <string name="symbol_guildMark_used_color">사용된 색상</string>
+    <string name="symbol_guildMark_overlay_running">길드마크 팔레트 오버레이가 실행중 입니다.</string>
+    <string name="symbol_guildMark_permission_headline">다른앱 위에 그리기 권한을 수락해 주세요.</string>
+    <string name="symbol_guildMark_permission_content">권한을 수락하지 않으시면 오버레이 서비스를 이용할 수 없어요.</string>
+    <string name="symbol_guildMark_description">현재 화면을 이탈하시면 오버레이로 보여드리고 있어요.\n꼭 다른앱 위에 그리기 권한을 수락해 주세요!</string>
+
+    <string name="symbol_detail_appbar">이미지 상세</string>
 
     <!-- service strings -->
     <string name="service_overlay_running">현재시간 항상 보기가 실행중입니다.</string>

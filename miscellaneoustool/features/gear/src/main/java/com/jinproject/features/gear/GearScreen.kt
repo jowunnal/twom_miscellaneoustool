@@ -1,17 +1,17 @@
 package com.jinproject.features.gear
 
 import android.content.Context
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,13 +26,14 @@ import com.android.billingclient.api.ProductDetails
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.DefaultAppBar
-import com.jinproject.design_compose.component.DefaultButton
 import com.jinproject.design_compose.component.DefaultLayout
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.HorizontalSpacer
+import com.jinproject.design_compose.component.TextButton
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.red
 import com.jinproject.design_compose.theme.Typography
+import com.jinproject.design_ui.R
 import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.core.utils.appendBoldText
@@ -42,17 +43,14 @@ import com.jinproject.features.core.utils.appendBoldText
 fun GearScreen(
     billingModule: BillingModule,
     gearViewModel: GearViewModel = hiltViewModel(),
-    changeVisibilityBottomNavigationBar: (Boolean) -> Unit,
     onNavigatePopBackStack: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit
 ) {
-    changeVisibilityBottomNavigationBar(false)
-
     val gearUiState by gearViewModel.uiState.collectAsStateWithLifecycle()
 
     GearScreen(
         gearUiState = gearUiState,
-        availableProducts = billingModule.purchasableProducts,
+        getPurchasableProducts = billingModule::getPurchasableProducts,
         purchaseInApp = billingModule::purchase,
         setIntervalFirstTimerSetting = gearViewModel::setIntervalFirstTimerSetting,
         setIntervalSecondTimerSetting = gearViewModel::setIntervalSecondTimerSetting,
@@ -65,7 +63,7 @@ fun GearScreen(
 @Composable
 private fun GearScreen(
     gearUiState: GearUiState,
-    availableProducts: List<ProductDetails>,
+    getPurchasableProducts: suspend (List<BillingModule.Product>) -> List<ProductDetails?>?,
     context: Context = LocalContext.current,
     purchaseInApp: (ProductDetails) -> Unit,
     setIntervalFirstTimerSetting: (Int) -> Unit,
@@ -74,6 +72,20 @@ private fun GearScreen(
     onNavigatePopBackStack: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit
 ) {
+    val purchasableProducts = remember {
+        mutableStateListOf<ProductDetails>()
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        getPurchasableProducts(
+            listOf(
+                BillingModule.Product.AD_REMOVE,
+                BillingModule.Product.SUPPORT
+            )
+        )?.let { productDetails ->
+            purchasableProducts.addAll(productDetails.filterNotNull())
+        }
+    }
 
     DefaultLayout(
         topBar = {
@@ -94,56 +106,54 @@ private fun GearScreen(
                 onPickerValueChange = { minutes -> setIntervalFirstTimerSetting(minutes) }
 
             )
-            DefaultButton(
-                content = stringResource(id = R.string.apply_do),
+            TextButton(
+                text = stringResource(id = R.string.apply_do),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        if (gearUiState.intervalFirstTimer < gearUiState.intervalSecondTimer) {
-                            showSnackBar(
-                                SnackBarMessage(
-                                    headerMessage = context.getString(R.string.alarm_setting_interval_failure),
-                                    contentMessage = context.getString(R.string.alarm_setting_interval_failure_reason)
-                                )
+                    .fillMaxWidth(),
+                onClick = {
+                    if (gearUiState.intervalFirstTimer < gearUiState.intervalSecondTimer) {
+                        showSnackBar(
+                            SnackBarMessage(
+                                headerMessage = context.getString(R.string.alarm_setting_interval_failure),
+                                contentMessage = context.getString(R.string.alarm_setting_interval_failure_reason)
                             )
-                        } else {
-                            setIntervalTimerSetting()
-                            showSnackBar(
-                                SnackBarMessage(
-                                    headerMessage = context.getString(R.string.alarm_setting_interval_success)
-                                )
+                        )
+                    } else {
+                        setIntervalTimerSetting()
+                        showSnackBar(
+                            SnackBarMessage(
+                                headerMessage = context.getString(R.string.alarm_setting_interval_success)
                             )
-                        }
+                        )
                     }
+                }
             )
 
             VerticalSpacer(height = 30.dp)
-            LazyColumn {
-                item {
-                    HorizontalDivider()
+
+            HorizontalDivider()
+            VerticalSpacer(height = 8.dp)
+            Text(
+                text = stringResource(id = R.string.billing_purchase),
+                style = Typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentSize()
+            )
+            VerticalSpacer(height = 30.dp)
+
+            purchasableProducts.forEachIndexed { index, product ->
+                TextButton(
+                    text = "${product.name} ${stringResource(id = R.string.somethingdo)}",
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    onClick = {
+                        purchaseInApp(product)
+                    }
+                )
+                if (index != purchasableProducts.lastIndex)
                     VerticalSpacer(height = 8.dp)
-                    Text(
-                        text = stringResource(id = R.string.billing_purchase),
-                        style = Typography.headlineSmall,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentSize()
-                    )
-                    VerticalSpacer(height = 30.dp)
-                }
-                itemsIndexed(availableProducts) { index, product ->
-                    DefaultButton(
-                        content = "${product.name} ${stringResource(id = R.string.somethingdo)}",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                purchaseInApp(product)
-                            }
-                    )
-                    if (index != availableProducts.lastIndex)
-                        VerticalSpacer(height = 8.dp)
-                }
             }
         }
     )
@@ -187,7 +197,7 @@ private fun PreviewGearScreen() {
     PreviewMiscellaneousToolTheme {
         GearScreen(
             gearUiState = GearUiState.getInitValue(),
-            availableProducts = emptyList(),
+            getPurchasableProducts = { emptyList() },
             purchaseInApp = {},
             setIntervalFirstTimerSetting = {},
             setIntervalSecondTimerSetting = {},

@@ -55,7 +55,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textColor="@color/blue"
+                android:textColor="@color/red"
                 tools:text="취소" />
 
             <View
@@ -70,7 +70,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textColor="@color/red"
+                android:textColor="@color/blue"
                 tools:text="변경" />
         </LinearLayout>
 

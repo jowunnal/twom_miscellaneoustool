@@ -1,5 +1,7 @@
 package com.jinproject.data.repository
 
+import android.net.Uri
+import android.util.Log
 import com.jinproject.data.datasource.cache.CacheCollectionDataSource
 import com.jinproject.data.datasource.cache.database.dao.CollectionDao
 import com.jinproject.data.mapper.fromItemsToItemModel
@@ -10,8 +12,10 @@ import com.jinproject.domain.model.ItemModel
 import com.jinproject.domain.repository.CollectionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.zip
 import javax.inject.Inject
 
@@ -54,5 +58,12 @@ class CollectionRepositoryImpl @Inject constructor(
     override suspend fun deleteFilter(id: Int) {
         cacheCollectionDataSource.deleteFilter(id)
     }
+
+    override suspend fun setSymbolUri(uri: Uri) {
+        cacheCollectionDataSource.setSymbolUri(uri)
+    }
+
+    override fun getSymbolUri(): Flow<List<String>> =
+        cacheCollectionDataSource.getSymbolUri()
 
 }

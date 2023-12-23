@@ -1,10 +1,12 @@
 package com.jinproject.design_compose.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.ripple.rememberRipple
@@ -22,8 +24,65 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
-import com.jinproject.design_compose.R
+import com.jinproject.design_ui.R
 import com.jinproject.design_compose.theme.Typography
+
+@Composable
+fun OneButtonAppBar(
+    buttonAlignment: Alignment,
+    @DrawableRes icon: Int,
+    onClick: () -> Unit,
+    content: @Composable BoxScope.() -> Unit,
+) {
+    DefaultAppBar(
+        content = {
+            DefaultIconButton(
+                modifier = Modifier
+                    .align(buttonAlignment),
+                icon = icon,
+                onClick = onClick,
+                iconTint = MaterialTheme.colorScheme.onSurface,
+                interactionSource = remember { MutableInteractionSource() }
+            )
+            content()
+        }
+    )
+}
+
+@Composable
+fun BackButtonTitleAppBar(
+    onClick: () -> Unit,
+    title: String
+) {
+    DefaultAppBar(
+        content = {
+            DefaultIconButton(
+                modifier = Modifier
+                    .align(Alignment.CenterStart),
+                icon = R.drawable.ic_arrow_left,
+                onClick = onClick,
+                iconTint = MaterialTheme.colorScheme.onSurface,
+                interactionSource = remember { MutableInteractionSource() }
+            )
+            AppBarText(text = title, modifier = Modifier.align(Alignment.Center))
+        }
+    )
+}
+
+@Composable
+fun DefaultAppBar(
+    modifier: Modifier = Modifier,
+    content: @Composable BoxScope.() -> Unit,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .shadow(4.dp, RectangleShape, clip = false)
+            .background(MaterialTheme.colorScheme.surface)
+    ) {
+        content()
+    }
+}
 
 @Composable
 fun DefaultAppBar(

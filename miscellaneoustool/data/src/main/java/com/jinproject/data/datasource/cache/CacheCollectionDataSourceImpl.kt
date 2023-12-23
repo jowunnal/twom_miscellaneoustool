@@ -1,5 +1,8 @@
 package com.jinproject.data.datasource.cache
 
+import android.net.Uri
+import android.util.Log
+import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import com.jinproject.data.CollectionPreferences
 import kotlinx.coroutines.flow.Flow
@@ -44,4 +47,15 @@ class CacheCollectionDataSourceImpl @Inject constructor(
                 .build()
         }
     }
+
+    override suspend fun setSymbolUri(uri: Uri) {
+        dataStorePrefs.updateData { prefs ->
+            prefs.toBuilder().addStoredSymbolUri(uri.toString()).build()
+        }
+    }
+
+    override fun getSymbolUri(): Flow<List<String>> =
+        collectionPreferences.transform { prefs ->
+            emit(prefs.storedSymbolUriList)
+        }
 }

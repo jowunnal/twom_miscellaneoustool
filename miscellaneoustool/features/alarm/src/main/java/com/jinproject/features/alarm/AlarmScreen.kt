@@ -5,13 +5,22 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,6 +37,7 @@ import com.jinproject.design_compose.component.DialogState
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.theme.Typography
+import com.jinproject.design_ui.R
 import com.jinproject.domain.model.WeekModel
 import com.jinproject.features.alarm.component.AlarmBottomSheetContent
 import com.jinproject.features.alarm.component.AlarmTopAppBar
@@ -38,7 +48,6 @@ import com.jinproject.features.alarm.item.TimerState
 import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.base.item.SnackBarMessage
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
@@ -48,14 +57,11 @@ fun AlarmScreen(
     alarmViewModel: AlarmViewModel = hiltViewModel(),
     context: Context = LocalContext.current,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    changeVisibilityBottomNavigationBar: (Boolean) -> Unit,
     showRewardedAd: (() -> Unit) -> Unit,
     onNavigateToGear: () -> Unit,
     onNavigateToWatch: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit
 ) {
-    changeVisibilityBottomNavigationBar(true)
-
     val alarmUiState by alarmViewModel.uiState.collectAsStateWithLifecycle()
     val alarmBottomSheetUiState by alarmViewModel.bottomSheetUiState.collectAsStateWithLifecycle()
 
@@ -82,13 +88,19 @@ fun AlarmScreen(
                 val alarmManager = context.getSystemService<AlarmManager>()!!
                 when {
                     alarmManager.canScheduleExactAlarms() -> {
-                        billingModule.queryPurchase { purchaseList ->
-                            coroutineScope.launch(Dispatchers.Main) {
+                        coroutineScope.launch {
+                            billingModule.queryPurchaseAsync()?.let { purchasedList ->
                                 if (billingModule.checkPurchased(
-                                        purchaseList = purchaseList,
+                                        purchaseList = purchasedList,
                                         productId = "ad_remove"
                                     )
                                 )
+                                    alarmViewModel::setAlarm.invoke(
+                                        bossName,
+                                        showSnackBar,
+                                        backToAlarmIntent
+                                    )
+                                else
                                     showRewardedAd {
                                         alarmViewModel::setAlarm.invoke(
                                             bossName,
@@ -96,12 +108,6 @@ fun AlarmScreen(
                                             backToAlarmIntent
                                         )
                                     }
-                                else
-                                    alarmViewModel::setAlarm.invoke(
-                                        bossName,
-                                        showSnackBar,
-                                        backToAlarmIntent
-                                    )
                             }
                         }
                     }
@@ -193,7 +199,7 @@ private fun AlarmScreen(
                     .fillMaxWidth()
                     .padding(vertical = 8.dp, horizontal = 16.dp),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 item {
                     BossSelection(

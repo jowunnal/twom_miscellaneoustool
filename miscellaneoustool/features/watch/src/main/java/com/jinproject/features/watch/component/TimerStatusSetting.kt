@@ -1,9 +1,6 @@
 package com.jinproject.features.watch.component
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Row
@@ -21,7 +18,8 @@ import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.ButtonStatus
 import com.jinproject.design_compose.component.SelectionButton
 import com.jinproject.design_compose.theme.Typography
-import com.jinproject.features.watch.R
+import com.jinproject.design_ui.R
+import com.jinproject.features.core.utils.checkAuthorityDrawOverlays
 
 @Composable
 fun TimeStatusSetting(
@@ -77,22 +75,6 @@ fun TimeStatusSetting(
                 }
             }
         )
-    }
-}
-
-private fun checkAuthorityDrawOverlays(
-    context: Context,
-    registerForActivityResult: (Intent) -> Unit
-): Boolean { // 다른앱 위에 그리기 체크 : true = 권한있음 , false = 권한없음
-    return if (!Settings.canDrawOverlays(context)) {
-        val intent = Intent(
-            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-            Uri.parse("package:" + context.packageName)
-        )
-        registerForActivityResult(intent)
-        false
-    } else {
-        true
     }
 }
 

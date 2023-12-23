@@ -21,8 +21,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.ButtonStatus
 import com.jinproject.design_compose.component.DefaultAppBar
-import com.jinproject.design_compose.component.DefaultButton
 import com.jinproject.design_compose.component.DefaultLayout
+import com.jinproject.design_compose.component.TextButton
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.theme.Typography
 import com.jinproject.features.watch.component.OverlaySetting
@@ -31,15 +31,13 @@ import com.jinproject.features.watch.component.TimerBottomSheetContent
 import com.jinproject.features.watch.service.OverlayService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import com.jinproject.design_ui.R
 
 @Composable
 fun WatchScreen(
-    changeVisibilityBottomNavigationBar: (Boolean) -> Unit,
     watchViewModel: WatchViewModel = hiltViewModel(),
     onNavigatePopBackStack: () -> Unit
 ) {
-    changeVisibilityBottomNavigationBar(false)
-
     val uiState by watchViewModel.uiState.collectAsStateWithLifecycle()
 
     WatchScreen(
@@ -97,10 +95,11 @@ private fun WatchScreen(
             sheetState = bottomSheetState,
             sheetShape = RoundedCornerShape(20.dp)
         ) {
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .verticalScroll(scrollState)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .verticalScroll(scrollState)
             ) {
                 TimeStatusSetting(
                     watchStatus = uiState.watchStatus,
@@ -123,13 +122,13 @@ private fun WatchScreen(
                     setYPos = setYPos
                 )
 
-                DefaultButton(
-                    content = stringResource(id = R.string.set_do),
+                TextButton(
+                    text = stringResource(id = R.string.set_do),
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            setTimerSetting()
-                        }
+                        .fillMaxWidth(),
+                    onClick = {
+                        setTimerSetting()
+                    }
                 )
 
                 VerticalSpacer(height = 26.dp)
@@ -179,8 +178,6 @@ private fun Context.startOverlayService(
     }
 )
 
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun BossSelectionItem(
     bossName: String,
@@ -191,12 +188,9 @@ private fun BossSelectionItem(
             .padding(vertical = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        DefaultButton(
-            content = bossName,
-            modifier = Modifier.combinedClickable(
-                onClick = { onClickBossItem(bossName) }
-            ),
-            style = Typography.bodyLarge
+        TextButton(
+            text = bossName,
+            onClick = { onClickBossItem(bossName) },
         )
     }
 }

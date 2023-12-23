@@ -8,18 +8,7 @@
         android:id="@+id/homeFragment"
         android:name="com.jinproject.features.home.Home"
         android:label="BookHome"
-        tools:layout="@layout/home">
-        <action
-            android:id="@+id/action_homeFragment_to_dropListMaps"
-            app:destination="@id/navi_droplist" />
-        <action
-            android:id="@+id/action_homeFragment_to_collectionCategory"
-            app:destination="@id/navi_collection" />
-        <action
-            android:id="@+id/action_homeFragment_to_navigationFragment"
-            app:destination="@id/navigationFragment" />
-
-    </fragment>
+        tools:layout="@layout/home"/>
 
     <include app:graph="@navigation/navi_collection"/>
     <include app:graph="@navigation/navi_droplist"/>
@@ -27,6 +16,23 @@
     <fragment
         android:id="@+id/navigationFragment"
         android:name="com.jinproject.twomillustratedbook.ui.screen.navigation.NavigationFragment"
-        android:label="NavigationFragment" />
+        android:label="NavigationFragment">
+        <argument
+            android:name="start"
+            app:argType="string"
+            android:defaultValue="alarm"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navi_symbol"
+        android:name="com.jinproject.twomillustratedbook.ui.screen.navigation.NavigationFragment"
+        android:label="NavigationFragment">
+        <argument
+            android:name="start"
+            app:argType="string"
+            android:defaultValue="symbolGraph"
+            />
+    </fragment>
 
 </navigation>

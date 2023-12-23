@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jinproject.features.core.BaseFragment
-import com.jinproject.features.droplist.R
 import com.jinproject.features.droplist.databinding.DropBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -58,13 +57,13 @@ class DropListMonster : BaseFragment<DropBinding>() {
     private fun addMenuProvider() {
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.book_option_menu, menu)
+                menuInflater.inflate(com.jinproject.design_ui.R.menu.book_option_menu, menu)
                 setMenuColorOnDarkMode(menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
-                    R.id.icon_search -> {
+                    com.jinproject.design_ui.R.id.icon_search -> {
                         val searchManager =
                             requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
                         menuItem.actionView = androidx.appcompat.widget.SearchView(requireActivity())

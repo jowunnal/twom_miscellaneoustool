@@ -11,7 +11,7 @@ import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.drawable.IconCompat
 import com.jinproject.features.alarm.service.ReAlarmService
-import com.jinproject.features.core.R
+import com.jinproject.design_ui.R
 
 @SuppressLint("DiscouragedApi")
 internal fun NotificationManager.sendNotification(

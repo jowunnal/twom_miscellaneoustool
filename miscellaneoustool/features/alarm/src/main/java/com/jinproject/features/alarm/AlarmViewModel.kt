@@ -8,6 +8,7 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jinproject.core.util.doOnLocaleLanguage
+import com.jinproject.design_ui.R
 import com.jinproject.domain.usecase.alarm.SetAlarmUsecase
 import com.jinproject.domain.usecase.timer.GetAlarmStoredBossUsecase
 import com.jinproject.features.alarm.item.AlarmItem

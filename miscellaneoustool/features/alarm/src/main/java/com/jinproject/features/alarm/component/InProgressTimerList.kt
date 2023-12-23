@@ -21,7 +21,7 @@ import com.jinproject.design_compose.component.DialogState
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.theme.Typography
 import com.jinproject.domain.model.WeekModel
-import com.jinproject.features.alarm.R
+import com.jinproject.design_ui.R
 import com.jinproject.features.alarm.item.TimeState
 import com.jinproject.features.alarm.item.TimerState
 import com.jinproject.features.core.utils.appendBoldText

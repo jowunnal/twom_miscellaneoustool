@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
-import com.jinproject.features.alarm.R
+import com.jinproject.design_ui.R
 
 @Composable
 fun AlarmTopAppBar(

@@ -24,7 +24,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.5.1'
+        kotlinCompilerExtensionVersion '1.5.4'
     }
 
 }
@@ -47,7 +47,7 @@ dependencies {
 
     implementation(libs.bundles.lifecycle)
 
-    implementation(libs.billing.ktx)
+    implementation(libs.bundles.billing)
 
     // compose NumberPicker
     implementation "com.chargemap.compose:numberpicker:1.0.3"

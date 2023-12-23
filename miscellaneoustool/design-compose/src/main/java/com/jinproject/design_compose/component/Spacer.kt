@@ -11,6 +11,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
+fun ColumnScope.VerticalWeightSpacer(
+    float: Float
+) {
+    Spacer(Modifier.weight(float))
+}
+
+@Composable
 fun VerticalSpacer(
     height: Dp,
     modifier: Modifier = Modifier,
@@ -21,6 +28,13 @@ fun VerticalSpacer(
 @Suppress("FunctionName")
 fun LazyListScope.VerticalSpacerItem(height: Dp) {
     item { VerticalSpacer(height) }
+}
+
+@Composable
+fun RowScope.HorizontalWeightSpacer(
+    float: Float
+) {
+    Spacer(Modifier.weight(float))
 }
 
 @Composable
