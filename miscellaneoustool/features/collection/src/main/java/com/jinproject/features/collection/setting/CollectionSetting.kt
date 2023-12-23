@@ -7,7 +7,7 @@ import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.jinproject.features.collection.R
+import com.jinproject.design_ui.R
 import com.jinproject.features.collection.databinding.CollectionSettingBinding
 import com.jinproject.features.core.BaseFragment
 

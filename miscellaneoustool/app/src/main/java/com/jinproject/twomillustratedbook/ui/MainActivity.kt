@@ -2,6 +2,8 @@ package com.jinproject.twomillustratedbook.ui
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -19,7 +21,12 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.navigation.NavigationBarView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.jinproject.features.core.BillingModule
+import com.jinproject.features.core.base.CommonDialogFragment
 import com.jinproject.features.core.listener.BottomNavigationController
 import com.jinproject.twomillustratedbook.R
 import com.jinproject.twomillustratedbook.databinding.ActivityMainBinding
@@ -37,7 +44,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
         if (result.not()) {
             Toast.makeText(
                 applicationContext,
-                getString(R.string.authority_alarm_failure),
+                getString(com.jinproject.design_ui.R.string.authority_alarm_failure),
                 Toast.LENGTH_LONG
             ).show()
         }
@@ -70,10 +77,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
                             inclusive = false,
                             saveState = true
                         )
-                        .setEnterAnim(R.animator.nav_default_enter_anim)
-                        .setExitAnim(R.animator.nav_default_exit_anim)
-                        .setPopEnterAnim(R.animator.nav_default_pop_enter_anim)
-                        .setPopExitAnim(R.animator.nav_default_pop_exit_anim)
+                        .setEnterAnim(androidx.navigation.ui.R.animator.nav_default_enter_anim)
+                        .setExitAnim(androidx.navigation.ui.R.animator.nav_default_exit_anim)
+                        .setPopEnterAnim(androidx.navigation.ui.R.animator.nav_default_pop_enter_anim)
+                        .setPopExitAnim(androidx.navigation.ui.R.animator.nav_default_pop_exit_anim)
                         .build()
 
                     if (navController.currentBackStackEntry?.destination?.id != R.id.navigationFragment) {
@@ -87,15 +94,17 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
     override fun onResume() {
         super.onResume()
         if (billingModule.isReady) {
-            billingModule.queryPurchase { purchaseList ->
-                billingModule.approvePurchased(purchaseList = purchaseList)
+            lifecycleScope.launch {
+                billingModule.queryPurchaseAsync()?.let { purchasedList ->
+                    billingModule.approvePurchased(purchasedList)
 
-                if (!billingModule.checkPurchased(
-                        purchaseList = purchaseList,
-                        productId = "ad_remove"
+                    if (billingModule.checkPurchased(
+                            purchaseList = purchasedList,
+                            productId = BillingModule.Product.AD_REMOVE.id
+                        )
                     )
-                )
-                    binding.adView.visibility = View.GONE
+                        binding.adView.visibility = View.GONE
+                }
             }
         }
     }
@@ -107,15 +116,16 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
         initBillingModule()
         initTopBar()
         initBottomNavigationBar()
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
             permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        getLatestVersion()
     }
 
     private fun initTopBar() {
         setSupportActionBar(binding.bookToolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_arrow_left)
+        supportActionBar!!.setHomeAsUpIndicator(com.jinproject.design_ui.R.drawable.ic_arrow_left)
     }
 
     private fun initBottomNavigationBar() {
@@ -134,9 +144,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
             callback = object : BillingModule.BillingCallback {
                 override fun onReady() {
                     lifecycleScope.launch {
-                        billingModule.getPurchasableProducts {
-                            initAdView()
-                        }
+                        billingModule.getPurchasableProducts(listOf(BillingModule.Product.AD_REMOVE))
+                            ?.let {
+                                it.first()?.let {
+                                    initAdView()
+                                }
+                            }
                     }
                 }
 
@@ -168,6 +181,59 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
                 override fun onAdClosed() {}
             }
         }
+    }
+
+    private fun getLatestVersion() {
+        val ref = FirebaseDatabase.getInstance().getReference("version")
+
+        ref.addListenerForSingleValueEvent(
+            object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                        packageManager.getPackageInfo(
+                            packageName,
+                            PackageManager.PackageInfoFlags.of(0L)
+                        )
+                    else
+                        packageManager.getPackageInfo(
+                            packageName,
+                            0
+                        )
+
+                    if (snapshot.value.toString() != packageInfo.versionName)
+                        CommonDialogFragment.show(
+                            fragmentManager = supportFragmentManager,
+                            title = getString(com.jinproject.design_ui.R.string.new_version_message),
+                            message = null,
+                            positiveButtonText = getString(com.jinproject.design_ui.R.string.new_version_button),
+                            negativeButtonText = "",
+                            listener = object : CommonDialogFragment.Listener() {
+                                override fun onPositiveButtonClick(value: String) {
+                                    requireLatestVersionOnMarket()
+                                }
+                            },
+                            enabled = false
+                        )
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+
+            }
+        )
+    }
+
+    private fun requireLatestVersionOnMarket() {
+        val uriString = "market://details?id=$packageName"
+
+        startActivity(
+            Intent(Intent.ACTION_VIEW).apply {
+                setPackage("com.android.vending")
+                data = Uri.parse(uriString)
+                putExtra("overlay", true)
+                putExtra("callerId", packageName)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+        )
     }
 
     override fun onDestroy() {

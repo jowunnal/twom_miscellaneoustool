@@ -14,7 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.jinproject.features.collection.R
+import com.jinproject.design_ui.R
 import com.jinproject.features.collection.databinding.CollectionListBinding
 import com.jinproject.features.collection.item.item.CollectionMenu
 import com.jinproject.features.collection.item.item.CollectionState

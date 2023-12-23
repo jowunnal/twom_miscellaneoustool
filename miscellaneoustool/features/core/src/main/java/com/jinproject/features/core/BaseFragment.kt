@@ -26,7 +26,7 @@ abstract class BaseFragment<VB : ViewDataBinding> : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        if(context is BottomNavigationController) {
+        if (context is BottomNavigationController) {
             bottomNavigationController = context
         }
     }
@@ -71,10 +71,14 @@ abstract class BaseFragment<VB : ViewDataBinding> : Fragment() {
     }
 
     fun setMenuColorOnDarkMode(menu: Menu) {
-        when(AppCompatDelegate.getDefaultNightMode()) {
+        when (AppCompatDelegate.getDefaultNightMode()) {
             AppCompatDelegate.MODE_NIGHT_UNSPECIFIED -> {
                 val typed = TypedValue()
-                requireActivity().theme.resolveAttribute(R.attr.colorHeader, typed, true)
+                requireActivity().theme.resolveAttribute(
+                    com.jinproject.design_ui.R.attr.colorHeader,
+                    typed,
+                    true
+                )
                 menu.forEach { item ->
                     item.icon?.apply {
                         setTint(typed.data)
@@ -82,6 +86,7 @@ abstract class BaseFragment<VB : ViewDataBinding> : Fragment() {
                     }
                 }
             }
+
             else -> {}
         }
     }
