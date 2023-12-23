@@ -24,23 +24,20 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
-import com.jinproject.design_compose.R
+import com.jinproject.design_ui.R
 import com.jinproject.design_compose.theme.Typography
 
 @Composable
 fun OneButtonAppBar(
-    modifierAppBar: Modifier = Modifier,
-    modifierButton: Modifier = Modifier,
     buttonAlignment: Alignment,
     @DrawableRes icon: Int,
     onClick: () -> Unit,
     content: @Composable BoxScope.() -> Unit,
 ) {
     DefaultAppBar(
-        modifier = modifierAppBar,
         content = {
             DefaultIconButton(
-                modifier = modifierButton
+                modifier = Modifier
                     .align(buttonAlignment),
                 icon = icon,
                 onClick = onClick,
@@ -48,6 +45,26 @@ fun OneButtonAppBar(
                 interactionSource = remember { MutableInteractionSource() }
             )
             content()
+        }
+    )
+}
+
+@Composable
+fun BackButtonTitleAppBar(
+    onClick: () -> Unit,
+    title: String
+) {
+    DefaultAppBar(
+        content = {
+            DefaultIconButton(
+                modifier = Modifier
+                    .align(Alignment.CenterStart),
+                icon = R.drawable.ic_arrow_left,
+                onClick = onClick,
+                iconTint = MaterialTheme.colorScheme.onSurface,
+                interactionSource = remember { MutableInteractionSource() }
+            )
+            AppBarText(text = title, modifier = Modifier.align(Alignment.Center))
         }
     )
 }

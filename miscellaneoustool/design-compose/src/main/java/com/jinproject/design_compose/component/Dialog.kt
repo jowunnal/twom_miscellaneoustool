@@ -80,10 +80,7 @@ private fun DialogCustomContent(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = dialogState.header,
-                    style = Typography.bodyLarge
-                )
+                DescriptionLargeText(text = dialogState.header)
             }
             VerticalSpacer(height = 12.dp)
             if(dialogState.content.isNotBlank())
@@ -91,10 +88,7 @@ private fun DialogCustomContent(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Text(
-                        text = dialogState.content,
-                        style = Typography.bodySmall
-                    )
+                    DescriptionSmallText(text = dialogState.content)
                 }
         }
         HorizontalDivider()

@@ -77,7 +77,6 @@ fun DefaultButton(
 
     Column(
         modifier = modifier
-            .fillMaxWidth()
             .clip(RoundedCornerShape(100.dp))
             .background(backgroundColor)
             .padding(contentPaddingValues)
@@ -103,7 +102,6 @@ fun DefaultCombinedButton(
     onDoubleClick: () -> Unit,
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    style: TextStyle = Typography.bodyLarge,
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
     contentPaddingValues: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
     content: @Composable () -> Unit,
@@ -114,7 +112,6 @@ fun DefaultCombinedButton(
 
     Column(
         modifier = modifier
-            .fillMaxWidth()
             .clip(RoundedCornerShape(100.dp))
             .background(backgroundColor)
             .padding(contentPaddingValues)
@@ -160,7 +157,7 @@ private class AvoidDuplicationClickEvent(
 @Composable
 private fun PreviewDefaultIconButton() = MiscellaneousToolTheme {
     DefaultIconButton(
-        icon = R.drawable.ic_arrow_left,
+        icon = com.jinproject.design_ui.R.drawable.ic_arrow_left,
         onClick = {},
         iconTint = MaterialTheme.colorScheme.onSurface,
     )

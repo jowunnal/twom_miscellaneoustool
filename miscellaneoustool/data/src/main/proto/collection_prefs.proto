@@ -5,4 +5,5 @@ option java_multiple_files = true;
 
 message CollectionPreferences {
   repeated int32 filtered_collection_list = 1;
+  repeated string stored_symbol_uri = 2;
 }

@@ -2,6 +2,9 @@ package com.jinproject.features.core
 
 import android.app.Activity
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
@@ -13,10 +16,9 @@ import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
-import com.android.billingclient.api.QueryPurchaseHistoryParams
 import com.android.billingclient.api.QueryPurchasesParams
 import com.android.billingclient.api.queryProductDetails
-import com.android.billingclient.api.queryPurchaseHistory
+import com.android.billingclient.api.queryPurchasesAsync
 import com.jinproject.features.core.BillingModule.Product.Companion.findProductById
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,7 +29,6 @@ import kotlinx.coroutines.withContext
  * @param context 결제 객체생성에 필요
  * @param lifeCycleScope 수행될 코루틴 스쿠프
  * @param callback 결제 수행 콜백
- * @property purchasableProducts 구입 가능한 상품들
  * @property isReady 결제를 수행하기에 준비된 상태인지의 여부
  */
 @Stable
@@ -37,8 +38,8 @@ class BillingModule(
     private val callback: BillingCallback
 ) {
 
-    val purchasableProducts = ArrayList<ProductDetails>()
     var isReady: Boolean = false
+    var consumeProductCallBack: (() -> Boolean)? by mutableStateOf(null)
 
     private val purChasedUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
         when (billingResult.responseCode) {
@@ -57,6 +58,7 @@ class BillingModule(
 
             else -> {
                 callback.onFailure(billingResult.responseCode)
+                consumeProductCallBack = null
             }
         }
     }
@@ -91,21 +93,18 @@ class BillingModule(
     }
 
     /**
-     * 구매 가능한 상품 목록을 조회
-     * @param initAdView 광고제거 를 구매하지 않은 경우, 광고를 게재 콜백
+     * 구매가능한 상품이면 상품정보를 가져오는 함수
+     * @param product : 상품
+     * @return 상품정보 또는 구매 가능한 상품이 아닌 경우 null
      */
     suspend fun getPurchasableProducts(
-        initAdView: () -> Unit
-    ) {
-        val productList = ArrayList<QueryProductDetailsParams.Product>().apply {
-            Product.values().forEach { product ->
-                add(
-                    QueryProductDetailsParams.Product.newBuilder()
-                        .setProductId(product.id)
-                        .setProductType(product.type)
-                        .build()
-                )
-            }
+        products: List<Product>,
+    ): List<ProductDetails?>? {
+        val productList = products.map { product ->
+            QueryProductDetailsParams.Product.newBuilder()
+                .setProductId(product.id)
+                .setProductType(product.type)
+                .build()
         }
 
         val params = QueryProductDetailsParams.newBuilder()
@@ -117,47 +116,29 @@ class BillingModule(
         }
 
         if (productDetailsResult.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-
-            queryPurchase { purchaseList ->
-
-                val totalProducts =
-                    productDetailsResult.productDetailsList?.filter { productDetail ->
-                        productDetail.productId.findProductById() != null
-                    } ?: emptyList()
-
-                val purchasedProductIds = purchaseList.distinctBy {
-                    it.products
-                }.map {
-                    it.products.first()
+            return productDetailsResult.productDetailsList?.map { product ->
+                require(product.productId.findProductById() != null) {
+                    "플레이 콘솔의 상품목록에 없는 상품이거나 Product 클래스의 요소에 선언 되지 않았습니다."
                 }
-
-                //Log.d("test",purchasedProductIds.map{it.findProductById()}.toString())
-
-                val purchasableProducts = totalProducts.filter { purchasableProduct ->
-                    purchasableProduct.productId !in purchasedProductIds
-                }
-
-                this.purchasableProducts.addAll(
-                    purchasableProducts
-                )
-
-                if (checkPurchased(
-                        purchaseList = purchaseList,
-                        productId = "ad_remove"
-                    )
-                )
-                    withContext(Dispatchers.Main) {
-                        initAdView()
+                when (product.productId.findProductById()!!.isConsume) {
+                    true -> product
+                    false -> {
+                        if (queryPurchaseAsync()?.find { it.products.first() == product.productId } == null) {
+                            product
+                        } else
+                            null
                     }
+                }
             }
         }
+
+        return null
     }
 
     /**
      * 구매 수행
      * @param productDetails : 구매 가능한 상품
      */
-
     fun purchase(productDetails: ProductDetails) {
         val productDetailsParamsList = listOf(
             BillingFlowParams.ProductDetailsParams.newBuilder()
@@ -188,8 +169,10 @@ class BillingModule(
                     billingClient.consumeAsync(consumeParams) { result, _ ->
                         if (result.responseCode == BillingClient.BillingResponseCode.OK) {
                             callback.onSuccess(purchase)
+                            consumeProductCallBack = { true }
                         } else {
                             callback.onFailure(result.responseCode)
+                            consumeProductCallBack = { false }
                         }
                     }
                 }
@@ -215,30 +198,34 @@ class BillingModule(
     }
 
     /**
-     * 구매 기록 조회
-     * @param doOnPurchaseList 구매 기록에 따라 처리할 콜백
+     * 구매 가져 오기
+     * @return 구매한 product의 id값으로 변환된 구매 목록 반환, 구매한 것 이 없다면 null
      */
-    fun queryPurchase(doOnPurchaseList: suspend (List<Purchase>) -> Unit) {
+    suspend fun queryPurchaseAsync(): List<Purchase>? {
         val params = QueryPurchasesParams.newBuilder()
             .setProductType(BillingClient.ProductType.INAPP)
             .build()
 
-        billingClient.queryPurchasesAsync(params) { billingResult, purchaseList ->
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                lifeCycleScope.launch {
-                    doOnPurchaseList(purchaseList)
-                }
+        val queryAsyncResult = billingClient.queryPurchasesAsync(params)
+
+        return if (queryAsyncResult.billingResult.responseCode == BillingClient.BillingResponseCode.OK)
+            queryAsyncResult.purchasesList.map { record ->
+                Purchase(record.originalJson, record.signature)
             }
-        }
+        else
+            null
     }
 
+
     /**
-     * 결제 재확인(승인)
+     * 비소비성 제품에 한하여 결제 재확인(승인)
      * @param purchaseList 구매 목록
      */
     suspend fun approvePurchased(purchaseList: List<Purchase>) {
         purchaseList.forEach { purchase ->
-            if (!purchase.isAcknowledged && purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+            if (!purchase.isAcknowledged && purchase.purchaseState == Purchase.PurchaseState.PURCHASED && !purchase.products.first()
+                    .findProductById()!!.isConsume
+            ) {
                 handlePurchase(
                     purchase = purchase,
                     purchase.products.first().findProductById()!!.isConsume
@@ -248,24 +235,17 @@ class BillingModule(
     }
 
     /**
-     * 구매 목록의 상품들이 구매했는지의 여부를 확인
+     * 구매 목록내에서 구매 처리가 완료되었는지 확인
      * @param purchaseList 구매 목록
      * @param productId 비교할 상품 id
+     * @return 구매한적이 있으면 true, 없으면 false
      */
     fun checkPurchased(purchaseList: List<Purchase>, productId: String): Boolean =
-        purchaseList.none { purchase ->
+        purchaseList.find { purchase ->
             (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) && purchase.products.contains(
                 productId
             )
-        }
-
-
-    suspend fun queryPurchaseLatest() {
-        val params = QueryPurchaseHistoryParams.newBuilder()
-            .setProductType(BillingClient.ProductType.INAPP)
-
-        return withContext(Dispatchers.IO) { billingClient.queryPurchaseHistory(params.build()) }
-    }
+        } != null
 
     interface BillingCallback {
         fun onReady()
@@ -275,11 +255,12 @@ class BillingModule(
 
     enum class Product(val id: String, val type: String, val isConsume: Boolean) {
         AD_REMOVE("ad_remove", BillingClient.ProductType.INAPP, false),
-        SUPPORT("support", BillingClient.ProductType.INAPP, true);
+        SUPPORT("support", BillingClient.ProductType.INAPP, true),
+        SYMBOL_GM("symbol_guild_mark", BillingClient.ProductType.INAPP, true);
 
         companion object {
             fun String.findProductById() =
-                kotlin.runCatching { values().find { value -> value.id == this } }.getOrNull()
+                kotlin.runCatching { entries.find { value -> value.id == this } }.getOrNull()
         }
     }
 }

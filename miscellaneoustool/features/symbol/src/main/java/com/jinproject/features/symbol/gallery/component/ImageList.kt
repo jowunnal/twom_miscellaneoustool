@@ -51,17 +51,14 @@ import com.jinproject.design_compose.component.pushrefresh.PushRefreshIndicator
 import com.jinproject.design_compose.component.pushrefresh.pushRefresh
 import com.jinproject.design_compose.component.pushrefresh.rememberPushRefreshState
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
-import com.jinproject.features.symbol.R
 import com.jinproject.features.symbol.gallery.GalleryPreviewParameters
-import com.jinproject.features.symbol.gallery.MTImage
 import com.jinproject.features.symbol.gallery.MTImageList
 import kotlin.math.roundToInt
 
 @Composable
 internal fun ImageList(
     list: MTImageList,
-    clickedImage: MTImage,
-    setClickedImage: (MTImage) -> Unit,
+    setClickedImage: (Long) -> Unit,
     isRefreshing: Boolean,
     modifier: Modifier = Modifier,
     configuration: Configuration = LocalConfiguration.current,
@@ -76,9 +73,9 @@ internal fun ImageList(
         maxHeight = 200f,
         isRefreshing = isRefreshing,
     )
-    val isClickedItem by remember(clickedImage) {
+    val isClickedItem by remember(list) {
         derivedStateOf {
-            clickedImage.id >= 0L
+            list.clickedId >= 0L
         }
     }
     val backgroundColor = MaterialTheme.colorScheme.background
@@ -95,7 +92,7 @@ internal fun ImageList(
             Box(modifier = Modifier) {
                 SubcomposeAsyncImageWithPreview(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(list.images.find { it.id == clickedImage.id }?.uri)
+                        .data(list.images.find { it.id == list.clickedId }?.uri)
                         .build(),
                     contentDescription = "Image",
                     loading = {
@@ -107,20 +104,20 @@ internal fun ImageList(
                         .height(perHeight)
                         .align(Alignment.Center)
                         .padding(10.dp),
-                    placeHolderPreview = R.drawable.ic_x,
+                    placeHolderPreview = com.jinproject.design_ui.R.drawable.ic_x,
                 )
                 Canvas(
                     modifier = Modifier
                         .size(16.dp)
                         .clickable {
-                            if (clickedImage.id != -1L)
-                                setClickedImage(MTImage.getInitValues())
+                            if (list.clickedId != -1L)
+                                setClickedImage(-1L)
                         }
                         .clip(RoundedCornerShape(2.5.dp))
                         .background(MaterialTheme.colorScheme.onSurfaceVariant)
                         .align(Alignment.TopEnd),
                 ) {
-                    ResourcesCompat.getDrawable(context.resources, R.drawable.ic_x, context.theme)
+                    ResourcesCompat.getDrawable(context.resources, com.jinproject.design_ui.R.drawable.ic_x, context.theme)
                         ?.toBitmap(size.width.roundToInt(), size.height.roundToInt())
                         ?.asImageBitmap()?.let { imageBitmap ->
                             drawImage(imageBitmap, colorFilter = ColorFilter.tint(backgroundColor))
@@ -133,7 +130,7 @@ internal fun ImageList(
             columns = GridCells.Fixed(cellColumnsCount),
             state = lazyGridState,
             modifier = Modifier,
-            contentPadding = PaddingValues(vertical = 10.dp)
+            contentPadding = PaddingValues(vertical = 8.dp)
         ) {
             items(list.images, key = { image -> image.id }) { image ->
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -151,23 +148,24 @@ internal fun ImageList(
                             .height(perHeight)
                             .align(Alignment.Center)
                             .clickable {
-                                if (clickedImage.id == -1L)
-                                    setClickedImage(image)
-                                else if (clickedImage.id == image.id)
-                                    setClickedImage(MTImage.getInitValues())
+                                if (list.clickedId == -1L)
+                                    setClickedImage(image.id)
+                                else if (list.clickedId  == image.id)
+                                    setClickedImage(-1L)
                             }
                             .graphicsLayer {
-                                alpha = if (clickedImage.id == image.id) 0.3f else 1f
+                                alpha = if (list.clickedId == image.id) 0.3f else 1f
                             },
-                        placeHolderPreview = R.drawable.ic_x,
+                        placeHolderPreview = com.jinproject.design_ui.R.drawable.ic_x,
                     )
 
                     Canvas(
                         modifier = Modifier
-                            .size(16.dp)
+                            .size(24.dp)
                             .clickable {
                                 navigateToImageDetail(image.uri)
                             }
+                            .padding(4.dp)
                             .clip(RoundedCornerShape(2.5.dp))
                             .background(MaterialTheme.colorScheme.onSurfaceVariant)
                             .padding(4.dp)
@@ -214,7 +212,6 @@ private fun PreviewFeedList(
     ImageList(
         list = imageList,
         isRefreshing = false,
-        clickedImage = MTImage(-1L,""),
         setClickedImage = {},
         modifier = Modifier,
         lazyGridState = state,

@@ -117,6 +117,7 @@ fun NavigationGraph(
         }
 
         symbolNavGraph(
+            billingModule = billingModule,
             navController = navController,
             showSnackBar = showSnackBar,
             setBottomBarVisibility = { visibility ->

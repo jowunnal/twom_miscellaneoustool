@@ -7,7 +7,8 @@ import com.jinproject.features.symbol.ImageListPreviewData
 internal class GalleryPreviewParameters: PreviewParameterProvider<MTImageList> {
     override val values: Sequence<MTImageList> = sequenceOf(
         MTImageList(
-            images = ImageListPreviewData.items
+            images = ImageListPreviewData.items,
+            clickedId = -1L,
         )
     )
 }

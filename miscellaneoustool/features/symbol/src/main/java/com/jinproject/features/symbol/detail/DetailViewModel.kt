@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailViewModel @Inject constructor(
+open class DetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
 ): ViewModel() {
     private val _imageDetailState: MutableStateFlow<Uri> =
@@ -23,7 +23,7 @@ class DetailViewModel @Inject constructor(
         getImageDetail()
     }
 
-    private fun getImageDetail() {
+    fun getImageDetail() {
         val uri = savedStateHandle.get<String>(DetailImageUri)
 
         uri?.let {

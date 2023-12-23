@@ -56,7 +56,23 @@ fun HeadlineText(
 }
 
 @Composable
-fun DescriptionText(
+fun DescriptionLargeText(
+    modifier: Modifier = Modifier,
+    text: String,
+    color: Color = MaterialTheme.colorScheme.onBackground
+) {
+    DefaultText(
+        modifier = modifier,
+        text = text,
+        style = MaterialTheme.typography.bodyLarge,
+        overflow = Ellipsis,
+        color = color,
+        maxLines = Int.MAX_VALUE,
+    )
+}
+
+@Composable
+fun DescriptionSmallText(
     modifier: Modifier = Modifier,
     text: String,
     color: Color = MaterialTheme.colorScheme.onBackground
@@ -146,7 +162,7 @@ private fun PreviewHeadlineText() = MiscellaneousToolTheme {
 @Composable
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 private fun PreviewDescriptionText() = MiscellaneousToolTheme {
-    DescriptionText(
+    DescriptionSmallText(
         text = "이렇게 보입니다. 길어도 이렇게 계속 잘 보이게 됩니다. 짤리지 않고 쭈우우욱",
     )
 }

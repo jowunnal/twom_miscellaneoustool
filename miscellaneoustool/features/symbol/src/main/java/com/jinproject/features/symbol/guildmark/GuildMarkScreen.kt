@@ -1,12 +1,12 @@
 package com.jinproject.features.symbol.guildmark
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
-import android.os.Build
-import android.provider.MediaStore
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -17,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -25,44 +26,41 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.jinproject.design_compose.component.DefaultAppBar
+import com.jinproject.design_compose.component.BackButtonTitleAppBar
 import com.jinproject.design_compose.component.DefaultLayout
+import com.jinproject.design_compose.component.DescriptionSmallText
 import com.jinproject.design_compose.component.HeadlineText
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
+import com.jinproject.design_ui.R
 import com.jinproject.features.core.base.item.SnackBarMessage
-import com.jinproject.features.symbol.R
+import com.jinproject.features.core.utils.checkAuthorityDrawOverlays
+import com.jinproject.features.symbol.detail.DetailViewModel
+import com.jinproject.features.symbol.getBitmapFromContentUri
 import com.jinproject.features.symbol.guildmark.component.ColorSlider
 import com.jinproject.features.symbol.guildmark.component.ImagePixels
 import com.jinproject.features.symbol.guildmark.component.UsedColorInPixels
 
 @Composable
-fun GuildMarkScreen(
-    context: Context = LocalContext.current,
-    guildMarkViewModel: GuildMarkViewModel = hiltViewModel(),
+internal fun GuildMarkScreen(
+    guildMarkViewModel: DetailViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit,
 ) {
     val imageUri by guildMarkViewModel.imageDetailState.collectAsStateWithLifecycle()
 
-    val bitMap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        ImageDecoder.decodeBitmap(
-            ImageDecoder.createSource(context.contentResolver, imageUri)
-        ) { decoder, info, source ->
-            decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
-            decoder.isMutableRequired = true
-            if (info.size.width > 500 || info.size.height > 500)
-                decoder.setTargetSampleSize(2)
-        }
-    } else
-        MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
-
     GuildMarkScreen(
-        bitMap = bitMap,
+        imageUri = imageUri,
         popBackStack = popBackStack,
         showSnackBar = showSnackBar,
     )
@@ -70,8 +68,10 @@ fun GuildMarkScreen(
 
 @Composable
 private fun GuildMarkScreen(
+    context: Context = LocalContext.current,
     configuration: Configuration = LocalConfiguration.current,
-    bitMap: Bitmap,
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    imageUri: Uri,
     popBackStack: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit,
 ) {
@@ -79,9 +79,51 @@ private fun GuildMarkScreen(
     var slider by remember {
         mutableFloatStateOf(0f)
     }
+    val bitMap = getBitmapFromContentUri(
+        context = context,
+        imageUri = imageUri.toString(),
+    )
 
     val guildMarkManager = rememberGuildMarkManager(bitMap = bitMap, slider = slider)
     val itemWidth = (configuration.screenWidthDp / 12).dp
+
+    val permissionLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode != Activity.RESULT_OK)
+                showSnackBar(
+                    SnackBarMessage(
+                        headerMessage = context.getString(R.string.symbol_guildMark_permission_headline),
+                        contentMessage = context.getString(R.string.symbol_guildMark_permission_content),
+                    )
+                )
+        }
+
+    DisposableEffect(key1 = Unit) {
+        val intent = Intent(
+            context,
+            SymbolOverlayService::class.java
+        )
+
+        val observer = LifecycleEventObserver { source, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                if (checkAuthorityDrawOverlays(context = context) { intent ->
+                        permissionLauncher.launch(intent)
+                    }
+                )
+                    context.startForegroundService(
+                        intent.apply {
+                            putExtra(SymbolOverlayService.IMAGE_URI, imageUri.toString())
+                            putExtra(SymbolOverlayService.IMAGE_THRESHOLD, slider)
+                        }
+                    )
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     DefaultLayout(
         modifier = Modifier
@@ -94,9 +136,9 @@ private fun GuildMarkScreen(
                 }
             ),
         topBar = {
-            DefaultAppBar(
-                title = "사진",
-                onBackClick = popBackStack
+            BackButtonTitleAppBar(
+                title = stringResource(id = R.string.image),
+                onClick = popBackStack,
             )
         }
     ) {
@@ -123,20 +165,26 @@ private fun GuildMarkScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentWidth(),
-            text = "예상되는 이미지"
+            text = stringResource(id = R.string.symbol_guildMark_expectation_image)
         )
         VerticalSpacer(height = 20.dp)
         ImagePixels(guildMarkManager = guildMarkManager, modifier = Modifier.size(2.dp))
+        VerticalSpacer(height = 50.dp)
+        DescriptionSmallText(
+            text = stringResource(id = R.string.symbol_guildMark_description),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentWidth(),
+        )
+        VerticalSpacer(height = 50.dp)
     }
 }
 
 @Preview(heightDp = 1000)
 @Composable
 private fun PreviewGuildMarkScreen() = MiscellaneousToolTheme {
-    val context = LocalContext.current
-    val bitMapSample = BitmapFactory.decodeResource(context.resources, R.drawable.test)
     GuildMarkScreen(
-        bitMap = bitMapSample,
+        imageUri = "".toUri(),
         popBackStack = {},
         showSnackBar = {}
     )

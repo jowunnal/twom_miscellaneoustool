@@ -25,7 +25,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.5.1'
+        kotlinCompilerExtensionVersion '1.5.4'
     }
 
 }
@@ -37,6 +37,9 @@ dependencies {
     implementation project(path: ':design-ui')
     implementation project(":design-compose")
 
+    implementation(libs.appcompat)
+    implementation(libs.constraintLayout)
+
     implementation platform(libs.compose.bom)
     androidTestImplementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
@@ -47,6 +50,8 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
 
     implementation(libs.bundles.lifecycle)
+
+    implementation(libs.bundles.billing)
 
     implementation(libs.coil)
 }

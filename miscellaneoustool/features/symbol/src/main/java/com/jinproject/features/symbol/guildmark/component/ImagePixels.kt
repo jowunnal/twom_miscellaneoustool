@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
-import com.jinproject.features.symbol.R
+import com.jinproject.design_ui.R
 import com.jinproject.features.symbol.guildmark.GuildMarkManager
 import com.jinproject.features.symbol.guildmark.rememberGuildMarkManager
 
