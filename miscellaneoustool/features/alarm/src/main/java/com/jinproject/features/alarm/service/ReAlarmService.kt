@@ -18,7 +18,7 @@ import com.jinproject.core.util.second
 import com.jinproject.domain.usecase.alarm.SetAlarmUsecase
 import com.jinproject.features.alarm.item.AlarmItem
 import com.jinproject.features.alarm.utils.makeAlarm
-import com.jinproject.features.core.R
+import com.jinproject.design_ui.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import java.util.Calendar

@@ -31,6 +31,7 @@ import com.jinproject.features.watch.component.TimerBottomSheetContent
 import com.jinproject.features.watch.service.OverlayService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import com.jinproject.design_ui.R
 
 @Composable
 fun WatchScreen(
@@ -177,8 +178,6 @@ private fun Context.startOverlayService(
     }
 )
 
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun BossSelectionItem(
     bossName: String,

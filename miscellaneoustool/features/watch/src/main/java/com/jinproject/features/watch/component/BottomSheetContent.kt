@@ -27,7 +27,7 @@ import com.jinproject.design_compose.component.TextButton
 import com.jinproject.design_compose.component.HorizontalSpacer
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.theme.Typography
-import com.jinproject.features.watch.R
+import com.jinproject.design_ui.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

@@ -28,7 +28,7 @@ import com.jinproject.design_compose.component.TextCombinedButton
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.theme.Typography
 import com.jinproject.domain.model.MonsterType
-import com.jinproject.features.alarm.R
+import com.jinproject.design_ui.R
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

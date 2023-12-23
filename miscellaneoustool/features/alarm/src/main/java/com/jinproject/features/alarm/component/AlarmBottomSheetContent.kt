@@ -31,7 +31,7 @@ import com.jinproject.design_compose.component.TextButton
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.tu
 import com.jinproject.domain.model.WeekModel
-import com.jinproject.features.alarm.R
+import com.jinproject.design_ui.R
 import com.jinproject.features.alarm.item.TimeState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

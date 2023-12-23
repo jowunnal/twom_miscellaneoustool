@@ -16,11 +16,11 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.jinproject.core.util.doOnLocaleLanguage
+import com.jinproject.design_ui.R
 import com.jinproject.domain.repository.TimerRepository
 import com.jinproject.domain.usecase.timer.GetOverlaySettingUsecase
 import com.jinproject.features.alarm.mapper.toTimerState
 import com.jinproject.features.alarm.utils.createChannel
-import com.jinproject.features.watch.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -74,7 +74,7 @@ class OverlayService : LifecycleService() {
         startForeground(999, notification)
 
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        mView = inflater.inflate(R.layout.alarm_tv_onotherapps, null)
+        mView = inflater.inflate(com.jinproject.features.watch.R.layout.alarm_tv_onotherapps, null)
 
         val params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -90,9 +90,9 @@ class OverlayService : LifecycleService() {
         getOverlaySettingUsecase()
             .flowOn(Dispatchers.IO)
             .onEach { overlaySetting ->
-                mView?.findViewById<TextView>(R.id.tv_onOtherApps)?.textSize =
+                mView?.findViewById<TextView>(com.jinproject.features.watch.R.id.tv_onOtherApps)?.textSize =
                     overlaySetting.fontSize.toFloat()
-                mView?.findViewById<TextView>(R.id.tv_currentTimes)?.textSize =
+                mView?.findViewById<TextView>(com.jinproject.features.watch.R.id.tv_currentTimes)?.textSize =
                     overlaySetting.fontSize.toFloat()
 
                 wm.updateViewLayout(
@@ -112,7 +112,7 @@ class OverlayService : LifecycleService() {
             }.map { timerModel -> timerModel.toTimerState() }
         }.flowOn(Dispatchers.IO)
             .onEach { timerStates ->
-                mView?.findViewById<TextView>(R.id.tv_onOtherApps)?.text =
+                mView?.findViewById<TextView>(com.jinproject.features.watch.R.id.tv_onOtherApps)?.text =
                     timerStates.joinToString("\n") { timerState ->
                         val hourOfDay = this@OverlayService.doOnLocaleLanguage(
                             onKo = timerState.timeState.day.displayOnKo,
@@ -140,7 +140,7 @@ class OverlayService : LifecycleService() {
 
         lifecycleScope.launch(Dispatchers.Main) {
             while (true) {
-                mView?.findViewById<TextView>(R.id.tv_currentTimes)?.text =
+                mView?.findViewById<TextView>(com.jinproject.features.watch.R.id.tv_currentTimes)?.text =
                     SimpleDateFormat("a hh:mm:ss").format(Date(System.currentTimeMillis()))
                 delay(1000)
             }
