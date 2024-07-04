@@ -3,9 +3,6 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission
-        android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"
-        android:minSdkVersion="34" />
 
     <application>
         <service
@@ -15,7 +12,7 @@
             android:foregroundServiceType="specialUse">
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="explanation_for_special_use" />
+                android:value="For overlay view of the 12*12 pixels from image on the window because this service support making guild mark in other app(game)" />
         </service>
     </application>
 </manifest>

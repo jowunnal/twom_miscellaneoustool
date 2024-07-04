@@ -1,10 +1,12 @@
 package com.jinproject.features.symbol.guildmark
 
+import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
 import android.graphics.PixelFormat
+import android.os.Build
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.WindowManager
@@ -56,7 +58,6 @@ import com.jinproject.features.symbol.createChannel
 import com.jinproject.features.symbol.getBitmapFromContentUri
 import com.jinproject.features.symbol.guildmark.component.ImagePixels
 import com.jinproject.features.symbol.guildmark.component.UsedColorInPixels
-import com.jinproject.features.symbol.startForegroundOnBuildVersion
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -66,11 +67,10 @@ import kotlinx.coroutines.launch
 class SymbolOverlayService : LifecycleService() {
     private var mView: ComposeView? = null
     private val wm by lazy { getSystemService(WINDOW_SERVICE) as WindowManager }
-    private var xPos = 0f
-    private var yPos = 0f
     private var sliderThreshold by mutableFloatStateOf(0f)
     private var imageUri by mutableStateOf("")
 
+    @SuppressLint("WrongConstant")
     override fun onCreate() {
         super.onCreate()
 
@@ -83,11 +83,10 @@ class SymbolOverlayService : LifecycleService() {
             .setPriority(NotificationCompat.PRIORITY_LOW).setSmallIcon(R.mipmap.ic_main)
             .setContentTitle(getString(R.string.symbol_guildMark_overlay_running)).build()
 
-        startForegroundOnBuildVersion(
-            channelId = CHANNEL_ID,
-            notification = notification,
-            serviceType = FOREGROUND_SERVICE_TYPE_SPECIAL_USE
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+            startForeground(CHANNEL_ID, notification, FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+        else
+            startForeground(CHANNEL_ID, notification)
 
         inflateOverlayView()
         addViewOnWindowManager()

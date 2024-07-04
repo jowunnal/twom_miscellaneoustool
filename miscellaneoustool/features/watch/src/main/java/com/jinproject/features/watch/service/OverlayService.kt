@@ -5,7 +5,9 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.graphics.PixelFormat
+import android.os.Build
 import android.os.IBinder
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -44,6 +46,7 @@ class OverlayService : LifecycleService() {
     @Inject
     lateinit var getOverlaySettingUsecase: GetOverlaySettingUsecase
 
+    @SuppressLint("WrongConstant")
     override fun onCreate() {
         super.onCreate()
 
@@ -71,7 +74,12 @@ class OverlayService : LifecycleService() {
                 )
                 .build()
 
-        startForeground(999, notification)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+            startForeground(999, notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
+            )
+        else
+            startForeground(999, notification)
 
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         mView = inflater.inflate(com.jinproject.features.watch.R.layout.alarm_tv_onotherapps, null)

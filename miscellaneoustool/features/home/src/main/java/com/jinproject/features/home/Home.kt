@@ -33,9 +33,14 @@ class Home : BaseFragment<HomeBinding>(){
                     4. 인앱결제가 추가되었습니다.
                         - 광고제거 구매시 상단광고와 알람시 발생하는 전면광고가 제거됩니다.
                         - 개발자에게 후원을 할 수 있습니다.
+                        
+                    5. 길드 마크 심볼 만들기 기능이 추가되었어요.
+                        - 하단바의 G 아이콘을 클릭하면 길드 마크 심볼 생성하기 화면으로 이동 가능해요.
+                        - 특정 이미지를 선택하여 12*12 픽셀 형태로 변환해 드리는 기능이에요.
+                        - 해당 콘텐츠는 소액의 과금이 발생하니, 반드시 제공되는 미리보기를 확인한 후 진행해 주세요.
 
-                    # 2.1.4 수정
-                    - UX가 개선되었어요. 좀더 완성도를 높이는 작업이 수행되었어요.
+                    # ${getString(com.jinproject.design_ui.R.string.version)} 수정
+                    - 현재시간 항상 보기 서비스가 안드로이드 14 버전에 대응되도록 수정되었어요.
                     
                 """.trimIndent(),
             onElse = """
@@ -62,8 +67,8 @@ class Home : BaseFragment<HomeBinding>(){
                     
                 Thanks for using App! Enjoy it
                 
-                # On v2.1.4
-                    - For increasing perfection, fixed things about UX
+                # On ${getString(com.jinproject.design_ui.R.string.version)}
+                    - Updated about overlayService target on Android 14
             """.trimIndent()
         )
     }
