@@ -1,26 +1,9 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
-
+    id("jinProject.android.library")
 }
 
 android {
-    namespace 'com.jinproject.domain'
-    compileSdk 33
-
-    defaultConfig {
-        minSdkVersion 26
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
+    namespace = "com.jinproject.domain"
 
     testOptions {
         unitTests.all {
@@ -39,7 +22,6 @@ dependencies {
 
     testImplementation(libs.bundles.kotest)
     testImplementation(libs.dagger.hilt.android.test)
-    kaptTest(libs.dagger.hilt.compiler)
 
     testImplementation(libs.bundles.testing)
 

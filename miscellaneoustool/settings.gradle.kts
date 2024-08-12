@@ -1,0 +1,33 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "miscellaneoustool"
+
+include(":app")
+include(":domain")
+include(":core")
+include(":data")
+include(":features")
+include(":features:collection")
+include(":features:droplist")
+include(":features:alarm")
+include(":features:core")
+include(":features:home")
+include(":design-compose")
+include(":design-ui")
+include(":features:gear")
+include(":features:watch")
+include(":features:symbol")
