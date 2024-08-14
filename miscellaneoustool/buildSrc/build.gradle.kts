@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation(libs.gradle.android)
     implementation(libs.gradle.kotlin)
+    implementation(libs.gradle.kotlin.compose)
     implementation(libs.gradle.hilt)
     implementation(libs.gradle.google.devtools.ksp)
     implementation(libs.gradle.google.gms.google.services)
@@ -34,13 +35,13 @@ gradlePlugin {
             id = "jinProject.android.feature"
             implementationClass = "gradle.plugin.android.AndroidFeaturePlugin"
         }
-        register("androidParcelize") {
-            id = "jinProject.android.parcelize"
-            implementationClass = "gradle.plugin.android.AndroidParcelizePlugin"
-        }
-        register("androidGmsService") {
+        register("googleGms") {
             id = "jinProject.android.gms-services"
-            implementationClass = "gradle.plugin.android.AndroidGmsServicePlugin"
+            implementationClass = "gradle.plugin.google.GoogleGmsPlugin"
+        }
+        register("googleFirebase") {
+            id = "jinProject.android.firebase"
+            implementationClass = "gradle.plugin.google.GoogleFirebasePlugin"
         }
         register("androidProtobuf") {
             id = "jinProject.android.protobuf"

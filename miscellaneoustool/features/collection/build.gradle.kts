@@ -1,6 +1,5 @@
 plugins {
     id("jinProject.android.feature")
-    id("jinProject.android.parcelize")
     alias(libs.plugins.android.navigation.safeargs.kotlin)
 }
 

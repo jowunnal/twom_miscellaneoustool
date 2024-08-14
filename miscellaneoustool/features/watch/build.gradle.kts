@@ -7,7 +7,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.appcompat)
+    implementation(project(":features:alarm"))
     implementation(libs.constraintLayout)
 
     implementation(libs.billing.ktx)

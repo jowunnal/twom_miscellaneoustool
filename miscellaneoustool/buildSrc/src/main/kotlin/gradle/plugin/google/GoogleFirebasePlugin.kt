@@ -1,16 +1,16 @@
-package gradle.plugin.android
+package gradle.plugin.google
 
 import gradle.plugin.extension.getVersionCatalog
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
-class AndroidGmsServicePlugin : Plugin<Project> {
+class GoogleFirebasePlugin: Plugin<Project> {
+
     override fun apply(target: Project) = with(target) {
         val libs = getVersionCatalog()
 
         with(pluginManager) {
-            apply("com.google.gms.google-services")
             apply("com.google.firebase.crashlytics")
         }
 

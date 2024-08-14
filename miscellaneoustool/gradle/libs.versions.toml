@@ -6,18 +6,17 @@ appCompat = "1.6.1"
 billing = "6.1.0"
 coreKtx = "1.12.0"
 coil = "2.5.0"
-composeAdaptive = "1.0.0-alpha08"
-composeAdaptiveNavigationSuite = "1.0.0-alpha05"
-composeBom = "2023.10.01"
-composeCompiler = "1.5.4"
-composeFoundation = "1.5.4"
+composeAdaptive = "1.0.0-beta04"
+composeAdaptiveNavigationSuite = "1.0.0-alpha07"
+composeBom = "2024.06.00"
+composeFoundation = "1.6.8"
 constraintLayout = "2.1.4"
-dagger = "2.49"
+dagger = "2.51.1"
 datastore = "1.1.0"
 espresso = "3.5.1"
-firebaseBom = "30.2.0"
+firebaseBom = "32.3.1"
 glide = "4.15.1"
-gms-service-ads = "22.2.0"
+gms-service-ads = "23.2.0"
 hilt = "1.2.0"
 junit = "4.13.2"
 junit-jupiter = "5.9.3"
@@ -30,31 +29,29 @@ material = "1.11.0"
 mockk = "1.13.5"
 navigation = "2.7.0"
 protobuf = "3.25.0"
-room = "2.5.2"
+room = "2.6.1"
 
 # plugin
-androidNavigationSafeargs = "2.5.3"
+androidNavigationSafeargs = "2.7.7"
 androidStudioGradlePlugin = "8.3.0"
-crashlyticsGradlePlugin = "3.0.2"
-gmsGoogleServicePlugin = "4.4.0"
+gmsGoogleServicePlugin = "4.4.2"
+firebaseCrashlyticsPlugin = "3.0.2"
 junitPlugin = "1.9.3.0"
-kotlin = "1.9.20"
-kotlinKsp = "1.9.20-1.0.14"
+kotlin = "2.0.10"
+kotlinKsp = "2.0.10-1.0.24"
 protobufPlugin = "0.9.4"
 
 [libraries]
 
-# Gradle
+# Gradle Plugin
 gradle-android = { group = "com.android.tools.build", name = "gradle", version.ref = "androidStudioGradlePlugin" }
 gradle-google-devtools-ksp = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "kotlinKsp" }
-gradle-google-firebase-crashlytics = { group = "com.google.firebase.crashlytics", name = "com.google.firebase.crashlytics.gradle.plugin", version.ref = "crashlyticsGradlePlugin" }
-gradle-google-gms-google-services = { group = "com.google.gms.google-services", name = "com.google.gms.google-services.gradle.plugin", version.ref = "gmsGoogleServicePlugin" }
+gradle-google-gms-google-services = { module = "com.google.gms:google-services", version.ref = "gmsGoogleServicePlugin" }
+gradle-google-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsPlugin" }
 gradle-hilt = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "dagger" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-gradle-protobuf = { group = "com.google.protobuf", name = "protobuf-gradle-plugin", version.ref = "protobufPlugin"}
-
-# Ads
-google-gms-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "gms-service-ads" }
+gradle-kotlin-compose = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+gradle-protobuf = { group = "com.google.protobuf", name = "protobuf-gradle-plugin", version.ref = "protobufPlugin" }
 
 # Androidx
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
@@ -97,14 +94,16 @@ dagger-hilt-android-test = { group = "com.google.dagger", name = "hilt-android-t
 datastore = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
 
 # Firebase
-firebase-bom = {group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom"}
-firebase-core = {group = "com.google.firebase", name = "firebase-core"}
-firebase-crashlytics-buildtools = {group = "com.google.firebase", name = "firebase-crashlytics-buildtools"}
-firebase-database = {group = "com.google.firebase", name = "firebase-database"}
-firebase-messaging = {group = "com.google.firebase", name = "firebase-messaging"}
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database-ktx" }
 
 # Glide
 bumptech-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+
+# Gms
+google-gms-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "gms-service-ads" }
 
 # Hilt
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt" }
@@ -137,7 +136,7 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlin-coroutine" }
 io-kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
 io-kotest-junit = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
-io-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk"}
+io-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 jUnit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit-jupiter" }
 junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit-jupiter" }
@@ -150,8 +149,7 @@ billing = ["billing-client", "billing-ktx"]
 compose = ["compose-material3", "compose-material", "compose-foundation", "compose-ui", "compose-ui-preview", "compose-viewBinding"]
 composeAdaptive = ["compose-material3-adaptive", "compose-material3-adaptive-layout", "compose-material3-adaptive-navigation-suite"]
 coroutines = ["coroutines-core"]
-firebase = ["firebase-core", "firebase-crashlytics-buildtools", "firebase-database", "firebase-messaging"]
-hilt = ["dagger-hilt-android"]
+firebase = ["firebase-analytics", "firebase-crashlytics", "firebase-database"]
 kotest = ["io-kotest-junit", "io-kotest-assertions"]
 lifecycle = ["lifecycle-compose", "lifecycle-viewmodel-ktx", "lifecycle-runtime-ktx", "lifecycle-runtime-compose", "lifecycle-service"]
 navigation = ["navigation-fragment", "navigation-ui"]
@@ -159,16 +157,4 @@ testing = ["jUnit", "junit-jupiter-api", "io-mockk"]
 
 [plugins]
 
-android-application = { id = "com.android.application", version.ref = "androidStudioGradlePlugin" }
-android-library = { id = "com.android.library", version.ref = "androidStudioGradlePlugin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-android-navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "androidNavigationSafeargs" }
 android-navigation-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidNavigationSafeargs" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
-kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlinKsp" }
-kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
-protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
-gms-google-service = { id = "com.google.gms.google-services", version.ref = "gmsGoogleServicePlugin" }
-junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "junitPlugin" }

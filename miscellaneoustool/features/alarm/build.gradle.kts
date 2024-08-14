@@ -1,6 +1,6 @@
 plugins {
     id("jinProject.android.feature")
-    id("jinProject.android.parcelize")
+    kotlin("plugin.parcelize")
 }
 
 android {

@@ -1,8 +1,5 @@
 plugins {
     id("jinProject.android.application")
-    id("jinProject.android.compose")
-    id("jinProject.android.parcelize")
-    id("jinProject.android.gms-services")
     alias(libs.plugins.android.navigation.safeargs.kotlin)
 }
 
@@ -14,11 +11,6 @@ android {
         targetSdk = 34
         versionCode = 35
         versionName = "2.2.1"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     buildFeatures {
@@ -51,8 +43,6 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
 
     implementation(libs.bundles.lifecycle)
-
-    implementation(libs.google.gms.services.ads)
 
     implementation(libs.bundles.billing)
 }

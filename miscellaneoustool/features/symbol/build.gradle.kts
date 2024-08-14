@@ -1,6 +1,6 @@
 plugins {
     id("jinProject.android.feature")
-    id("jinProject.android.parcelize")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -8,7 +8,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.appcompat)
     implementation(libs.constraintLayout)
 
     implementation(libs.bundles.billing)

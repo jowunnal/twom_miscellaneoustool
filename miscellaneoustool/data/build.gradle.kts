@@ -14,6 +14,7 @@ android {
             it.useJUnitPlatform()
         }
     }
+
     sourceSets {
         getByName("androidTest").assets.srcDir("$projectDir/schemas")
     }
