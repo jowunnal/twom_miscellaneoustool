@@ -1,6 +1,6 @@
 plugins {
     id("jinProject.android.application")
-    alias(libs.plugins.android.navigation.safeargs.kotlin)
+    id("jinProject.android.safeArgs")
 }
 
 android {
