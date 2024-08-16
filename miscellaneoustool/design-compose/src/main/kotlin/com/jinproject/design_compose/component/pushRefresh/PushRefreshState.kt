@@ -1,9 +1,10 @@
-package com.jinproject.design_compose.component.pushrefresh
+package com.jinproject.design_compose.component.pushRefresh
 
 import androidx.compose.animation.core.animate
 import androidx.compose.foundation.MutatorMutex
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -12,19 +13,21 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun rememberPushRefreshState(
-    maxHeight: Float,
-    isRefreshing: Boolean,
     onRefresh: () -> Unit,
+    isRefreshing: Boolean,
+    threshold: Dp = PushRefreshState.DEFAULT_THRESHOLD,
     density: Density = LocalDensity.current,
 ): PushRefreshState {
 
-    val maxHeightPx = with(density) {
-        maxHeight.toDp().toPx()
+    val thresholdPx = with(density) {
+        threshold.toPx()
     }
 
     val scope = rememberCoroutineScope()
@@ -32,13 +35,13 @@ fun rememberPushRefreshState(
     val state = remember {
         PushRefreshState(
             onRefresh = onRefresh,
-            maxHeight = maxHeightPx,
+            threshold = thresholdPx,
             scope = scope
         )
     }
 
     SideEffect {
-        state.setIsRefreshState(isRefreshing)
+        state.setRefresh(isRefreshing)
     }
 
     return state
@@ -47,23 +50,24 @@ fun rememberPushRefreshState(
 
 class PushRefreshState(
     val onRefresh: () -> Unit,
-    val maxHeight: Float,
+    private val threshold: Float,
     private val scope: CoroutineScope,
 ) {
-    private var _offset by mutableFloatStateOf(0f)
+    private var offset by mutableFloatStateOf(0f)
     private var isRefreshing by mutableStateOf(false)
+    private val adjustedPushedOffset by derivedStateOf {
+        offset * 1f
+    }
 
-    private val offset get() = _offset
-
-    val progress get() = (-offset / maxHeight).coerceAtMost(1f)
+    val progress get() = offset / threshold
 
     fun onPush(delta: Float): Float {
         if (isRefreshing)
             return 0f
 
-        val newOffset = (_offset + delta).coerceIn(-maxHeight, 0f)
-        val consumed = newOffset - _offset
-        _offset = newOffset
+        val newOffset = (offset - delta).coerceIn(0f .. threshold)
+        val consumed = -(newOffset - offset)
+        offset = newOffset
 
         return consumed
     }
@@ -77,7 +81,7 @@ class PushRefreshState(
         }
 
         val consumed = when {
-            _offset == 0f -> 0f
+            offset == 0f -> 0f
             velocity > 0f -> 0f
             else -> velocity
         }
@@ -92,12 +96,12 @@ class PushRefreshState(
     private fun animateIndicatorTo(target: Float = 0f) = scope.launch {
         mutatorMutex.mutate {
             animate(initialValue = offset, targetValue = target) { value, _ ->
-                _offset = value
+                offset = value
             }
         }
     }
 
-    fun setIsRefreshState(bool: Boolean) {
+    fun setRefresh(bool: Boolean) {
         if (isRefreshing != bool) {
             isRefreshing = bool
 
@@ -105,5 +109,9 @@ class PushRefreshState(
                 animateIndicatorTo()
             }
         }
+    }
+
+    companion object {
+        val DEFAULT_THRESHOLD = 80.dp
     }
 }

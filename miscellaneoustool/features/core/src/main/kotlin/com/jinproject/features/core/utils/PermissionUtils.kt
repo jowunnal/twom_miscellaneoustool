@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 
 fun checkAuthorityDrawOverlays(
     context: Context,
-    registerForActivityResult: (Intent) -> Unit
+    registerForActivityResult: (Intent) -> Unit,
 ): Boolean { // 다른앱 위에 그리기 체크 : true = 권한있음 , false = 권한없음
     return if (!Settings.canDrawOverlays(context)) {
         val intent = Intent(
@@ -30,6 +30,13 @@ fun checkPermissions(
     onGranted: () -> Unit,
     permissionLauncher: ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>,
 ) {
+    val granted = permissions.filter { permission ->
+        ContextCompat.checkSelfPermission(
+            context,
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
     val deniedPermissions = permissions.filter { permission ->
         ContextCompat.checkSelfPermission(
             context,
@@ -37,7 +44,7 @@ fun checkPermissions(
         ) == PackageManager.PERMISSION_DENIED
     }
 
-    if(deniedPermissions.isEmpty())
+    if (granted.isNotEmpty())
         onGranted()
     else
         permissionLauncher.launch(deniedPermissions.toTypedArray())

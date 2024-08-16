@@ -50,7 +50,7 @@ class NavigationFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
@@ -69,7 +69,7 @@ class NavigationFragment : Fragment() {
 
     @Composable
     private fun Content(
-        coroutineScope: CoroutineScope = rememberCoroutineScope()
+        coroutineScope: CoroutineScope = rememberCoroutineScope(),
     ) {
         val snackBarHostState = remember { SnackbarHostState() }
 
@@ -83,37 +83,39 @@ class NavigationFragment : Fragment() {
             }
         }
 
-        val callback = object: MainActivity.OnBillingCallback {
-            override fun onSuccess(purchase: Purchase) {
-                showSnackBar(
-                    SnackBarMessage(
-                        headerMessage = "${purchase.products.first()} 상품의 구매가 완료되었어요."
+        val callback = remember {
+            object : MainActivity.OnBillingCallback {
+                override fun onSuccess(purchase: Purchase) {
+                    showSnackBar(
+                        SnackBarMessage(
+                            headerMessage = "${purchase.products.first()} 상품의 구매가 완료되었어요."
+                        )
                     )
-                )
-            }
+                }
 
-            override fun onFailure(errorCode: Int) {
-                showSnackBar(
-                    SnackBarMessage(
-                        headerMessage = "구매 실패",
-                        contentMessage = when (errorCode) {
-                            1 -> "취소를 하셨어요."
-                            2, 3, 4 -> "유효하지 않은 상품 이에요."
-                            5, 6 -> "잘못된 상품 이에요."
-                            7 -> "이미 보유하고 있는 상품 이에요."
-                            else -> "네트워크 에러로 인해 실패했어요."
-                        }
+                override fun onFailure(errorCode: Int) {
+                    showSnackBar(
+                        SnackBarMessage(
+                            headerMessage = "구매 실패",
+                            contentMessage = when (errorCode) {
+                                1 -> "취소를 하셨어요."
+                                2, 3, 4 -> "유효하지 않은 상품 이에요."
+                                5, 6 -> "잘못된 상품 이에요."
+                                7 -> "이미 보유하고 있는 상품 이에요."
+                                else -> "네트워크 에러로 인해 실패했어요."
+                            }
+                        )
                     )
-                )
+                }
             }
-
         }
 
         val activity = (requireActivity().findActivity() as MainActivity).apply {
             setBillingCallback(callback)
         }
-        val billingModule = activity.billingModule
-        val startDestination = findNavController().currentBackStackEntry?.arguments?.getString("start") ?: "alarm"
+        val billingModule = remember(activity) { activity.billingModule }
+        val startDestination =
+            findNavController().currentBackStackEntry?.arguments?.getString("start") ?: "alarm"
 
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -123,7 +125,8 @@ class NavigationFragment : Fragment() {
                 modifier = Modifier.fillMaxSize(),
                 backgroundColor = MaterialTheme.colorScheme.background,
                 snackbarHost = {
-                    SnackBarHostCustom(headerMessage = snackBarHostState.currentSnackbarData?.message ?: "",
+                    SnackBarHostCustom(headerMessage = snackBarHostState.currentSnackbarData?.message
+                        ?: "",
                         contentMessage = snackBarHostState.currentSnackbarData?.actionLabel ?: "",
                         snackBarHostState = snackBarHostState,
                         disMissSnackBar = { snackBarHostState.currentSnackbarData?.dismiss() })
@@ -183,7 +186,7 @@ class NavigationFragment : Fragment() {
             })
     }
 
-    private fun showRewardedAd(onResult:() -> Unit) {
+    private fun showRewardedAd(onResult: () -> Unit) {
         mRewardedAd?.show(requireActivity()) {
             onResult()
         } ?: run {

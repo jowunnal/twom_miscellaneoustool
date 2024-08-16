@@ -72,6 +72,22 @@ fun DescriptionLargeText(
 }
 
 @Composable
+fun DescriptionMediumText(
+    modifier: Modifier = Modifier,
+    text: String,
+    color: Color = MaterialTheme.colorScheme.onBackground
+) {
+    DefaultText(
+        modifier = modifier,
+        text = text,
+        style = MaterialTheme.typography.bodyMedium,
+        overflow = Ellipsis,
+        color = color,
+        maxLines = Int.MAX_VALUE,
+    )
+}
+
+@Composable
 fun DescriptionSmallText(
     modifier: Modifier = Modifier,
     text: String,

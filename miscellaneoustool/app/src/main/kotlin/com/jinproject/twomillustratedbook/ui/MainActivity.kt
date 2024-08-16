@@ -140,17 +140,15 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
     private fun initBillingModule() {
         billingModule = BillingModule(
             context = this,
-            lifeCycleScope = lifecycleScope,
+            lifecycleScope = lifecycleScope,
             callback = object : BillingModule.BillingCallback {
-                override fun onReady() {
-                    lifecycleScope.launch {
-                        billingModule.getPurchasableProducts(listOf(BillingModule.Product.AD_REMOVE))
-                            ?.let {
-                                it.first()?.let {
-                                    initAdView()
-                                }
+                override suspend fun onReady() {
+                    billingModule.getPurchasableProducts(listOf(BillingModule.Product.AD_REMOVE))
+                        ?.let {
+                            it.first()?.let {
+                                initAdView()
                             }
-                    }
+                        }
                 }
 
                 override fun onSuccess(purchase: Purchase) {

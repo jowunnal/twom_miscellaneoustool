@@ -1,7 +1,8 @@
 package com.jinproject.features.symbol.symbol
 
-import android.Manifest
-import android.app.Activity
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.READ_MEDIA_IMAGES
+import android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.BitmapFactory
@@ -35,10 +36,13 @@ import com.jinproject.features.symbol.guildmark.component.ImagePixels
 import com.jinproject.features.symbol.guildmark.rememberGuildMarkManager
 import com.jinproject.features.symbol.symbol.component.SymbolLayout
 
-private val MediaStorePermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-    Manifest.permission.READ_MEDIA_IMAGES
-else
-    Manifest.permission.WRITE_EXTERNAL_STORAGE
+internal val MediaStorePermissionSet =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        setOf(READ_MEDIA_IMAGES, READ_MEDIA_VISUAL_USER_SELECTED)
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+        setOf(READ_MEDIA_IMAGES)
+    else
+        setOf(READ_EXTERNAL_STORAGE)
 
 @Composable
 internal fun SymbolScreen(
@@ -48,31 +52,45 @@ internal fun SymbolScreen(
     navigateToGallery: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit,
 ) {
+    val activityForResultLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
+            if (checkAuthorityDrawOverlays(
+                    context = context
+                ) { intent ->
+                    showSnackBar(
+                        SnackBarMessage(
+                            headerMessage = context.getString(R.string.symbol_guildMark_permission_headline),
+                            contentMessage = context.getString(R.string.symbol_guildMark_permission_content),
+                        )
+                    )
+                }
+            )
+                navigateToGallery()
+        }
+
     val permissionLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions()) { results ->
             val deniedPermissions = results.filter { !it.value }
-            deniedPermissions.forEach { result ->
-                if (result.key == MediaStorePermission)
-                    showSnackBar(
-                        SnackBarMessage(
-                            headerMessage = context.getString(R.string.symbol_permission_headline),
-                            contentMessage = context.getString(R.string.symbol_permission_content)
-                        )
-                    )
-            }
-        }
 
-    val activityForResultLauncher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode != Activity.RESULT_OK)
-                showSnackBar(
-                    SnackBarMessage(
-                        headerMessage = context.getString(R.string.symbol_guildMark_permission_headline),
-                        contentMessage = context.getString(R.string.symbol_guildMark_permission_content),
-                    )
+            if (results.filter { it.value }.isNotEmpty()) {
+                if (checkAuthorityDrawOverlays(
+                        context = context
+                    ) { intent ->
+                        activityForResultLauncher.launch(intent)
+                    }
                 )
-            else
-                navigateToGallery()
+                    navigateToGallery()
+            } else {
+                deniedPermissions.forEach { result ->
+                    if (result.key in MediaStorePermissionSet)
+                        showSnackBar(
+                            SnackBarMessage(
+                                headerMessage = context.getString(R.string.symbol_permission_headline),
+                                contentMessage = context.getString(R.string.symbol_permission_content)
+                            )
+                        )
+                }
+            }
         }
 
     val imageSize = configuration.screenWidthDp / 2.5
@@ -119,9 +137,7 @@ internal fun SymbolScreen(
                 onClick = {
                     checkPermissions(
                         context = context,
-                        permissions = setOf(
-                            MediaStorePermission,
-                        ),
+                        permissions = MediaStorePermissionSet,
                         onGranted = {
                             if (checkAuthorityDrawOverlays(
                                     context = context
@@ -130,6 +146,7 @@ internal fun SymbolScreen(
                                 }
                             )
                                 navigateToGallery()
+
                         },
                         permissionLauncher = permissionLauncher,
                     )

@@ -2,9 +2,6 @@ package com.jinproject.features.core
 
 import android.app.Activity
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
@@ -21,32 +18,39 @@ import com.android.billingclient.api.queryProductDetails
 import com.android.billingclient.api.queryPurchasesAsync
 import com.jinproject.features.core.BillingModule.Product.Companion.findProductById
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
  * 결제 관리 모듈 클래스
  * @param context 결제 객체생성에 필요
- * @param lifeCycleScope 수행될 코루틴 스쿠프
+ * @param lifecycleScope 수행될 코루틴 스쿠프
  * @param callback 결제 수행 콜백
  * @property isReady 결제를 수행하기에 준비된 상태인지의 여부
  */
 @Stable
 class BillingModule(
     private val context: Activity,
-    private val lifeCycleScope: LifecycleCoroutineScope,
-    private val callback: BillingCallback
+    private val lifecycleScope: LifecycleCoroutineScope,
+    private val callback: BillingCallback,
 ) {
 
     var isReady: Boolean = false
-    var consumeProductCallBack: (() -> Boolean)? by mutableStateOf(null)
+
+    private var _isConsumeProduct: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val consumeProduct = _isConsumeProduct.asStateFlow()
+
+    fun updateIsConsumeProduct(bool: Boolean) = _isConsumeProduct.update { bool }
 
     private val purChasedUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
         when (billingResult.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
                 if (purchases != null) {
                     for (purchase in purchases) {
-                        lifeCycleScope.launch(Dispatchers.IO) {
+                        lifecycleScope.launch(Dispatchers.IO) {
                             handlePurchase(
                                 purchase,
                                 purchase.products.first().findProductById()!!.isConsume
@@ -58,7 +62,7 @@ class BillingModule(
 
             else -> {
                 callback.onFailure(billingResult.responseCode)
-                consumeProductCallBack = null
+                _isConsumeProduct.update { false }
             }
         }
     }
@@ -77,8 +81,10 @@ class BillingModule(
             billingClient.startConnection(object : BillingClientStateListener {
                 override fun onBillingSetupFinished(billingResult: BillingResult) {
                     if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                        callback.onReady()
-                        isReady = true
+                        lifecycleScope.launch {
+                            callback.onReady()
+                            isReady = true
+                        }
                     } else {
                         callback.onFailure(billingResult.responseCode)
                     }
@@ -86,7 +92,6 @@ class BillingModule(
 
                 override fun onBillingServiceDisconnected() {
                     initBillingClient(maxCount - 1)
-                    //Log.e("test", "disconnected")
                 }
             })
         }
@@ -169,10 +174,10 @@ class BillingModule(
                     billingClient.consumeAsync(consumeParams) { result, _ ->
                         if (result.responseCode == BillingClient.BillingResponseCode.OK) {
                             callback.onSuccess(purchase)
-                            consumeProductCallBack = { true }
+                            _isConsumeProduct.update { true }
                         } else {
                             callback.onFailure(result.responseCode)
-                            consumeProductCallBack = { false }
+                            _isConsumeProduct.update { false }
                         }
                     }
                 }
@@ -248,7 +253,7 @@ class BillingModule(
         } != null
 
     interface BillingCallback {
-        fun onReady()
+        suspend fun onReady()
         fun onSuccess(purchase: Purchase)
         fun onFailure(errorCode: Int)
     }

@@ -6,23 +6,28 @@ object ImageListPreviewData {
     val items: List<MTImage> = listOf(
         MTImage(
             id = 0,
-            uri = ""
+            uri = "",
+            modifiedDate = "",
         ),
         MTImage(
             id = 1,
-            uri = ""
+            uri = "",
+            modifiedDate = "",
         ),
         MTImage(
             id = 2,
-            uri = ""
+            uri = "",
+            modifiedDate = "",
         ),
         MTImage(
             id = 3,
-            uri = ""
+            uri = "",
+            modifiedDate = "",
         ),
         MTImage(
             id = 4,
-            uri = ""
+            uri = "",
+            modifiedDate = "",
         ),
     )
 }

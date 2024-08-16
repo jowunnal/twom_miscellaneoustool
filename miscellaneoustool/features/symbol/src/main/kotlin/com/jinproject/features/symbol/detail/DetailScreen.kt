@@ -14,7 +14,7 @@ import coil.request.ImageRequest
 import com.jinproject.design_compose.component.BackButtonTitleAppBar
 import com.jinproject.design_compose.component.DefaultLayout
 import com.jinproject.design_compose.component.SubcomposeAsyncImageWithPreview
-import com.jinproject.design_compose.component.pushrefresh.GalleryProgressIndicator
+import com.jinproject.design_compose.component.pushRefresh.MTProgressIndicatorRotating
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.features.core.base.item.SnackBarMessage
 
@@ -51,7 +51,7 @@ private fun DetailScreen(
                 .build(),
             contentDescription = "Image",
             loading = {
-                GalleryProgressIndicator()
+                MTProgressIndicatorRotating()
             },
             contentScale = ContentScale.Fit,
             modifier = androidx.compose.ui.Modifier

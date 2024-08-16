@@ -1,4 +1,4 @@
-package com.jinproject.design_compose.component.pushrefresh
+package com.jinproject.design_compose.component.pushRefresh
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,7 +19,7 @@ fun Modifier.pushRefresh(
 )
 
 
-fun Modifier.pushRefresh(
+private fun Modifier.pushRefresh(
     onPush: (pushDelta: Float) -> Float,
     onRelease: suspend (flingVelocity: Float) -> Float,
     enabled: Boolean = true,

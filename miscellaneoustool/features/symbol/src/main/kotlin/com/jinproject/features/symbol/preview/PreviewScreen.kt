@@ -37,7 +37,7 @@ import com.jinproject.design_compose.component.SubcomposeAsyncImageWithPreview
 import com.jinproject.design_compose.component.TextButton
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.component.VerticalWeightSpacer
-import com.jinproject.design_compose.component.pushrefresh.GalleryProgressIndicator
+import com.jinproject.design_compose.component.pushRefresh.MTProgressIndicatorRotating
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.design_ui.R
 import com.jinproject.features.core.BillingModule
@@ -68,17 +68,23 @@ internal fun PreviewScreen(
             purchasableProducts.addAll(productDetails.filterNotNull())
         }
     }
+    
+    val isSymbolPaid by billingModule.consumeProduct.collectAsStateWithLifecycle()
+
+    LaunchedEffect(isSymbolPaid) {
+        if (isSymbolPaid) {
+            detailViewModel.setPaidImageUri()
+            navigateToGuildMark(imageUri.toString())
+            billingModule.updateIsConsumeProduct(false)
+        }
+    }
 
     PreviewScreen(
         imageUri = imageUri,
         purchaseInApp = billingModule::purchase,
         purchasableProducts = purchasableProducts,
-        symbolBillingCallback = billingModule::consumeProductCallBack.invoke(),
-        setSymbolBillingCallback = { billingModule.consumeProductCallBack = null },
-        setPaidImageUri = detailViewModel::setPaidImageUri,
         popBackStack = popBackStack,
         showSnackBar = showSnackBar,
-        navigateToGuildMark = navigateToGuildMark
     )
 }
 
@@ -89,12 +95,8 @@ private fun PreviewScreen(
     configuration: Configuration = LocalConfiguration.current,
     purchasableProducts: List<ProductDetails>,
     purchaseInApp: (ProductDetails) -> Unit,
-    symbolBillingCallback: (() -> Boolean)?,
-    setSymbolBillingCallback: () -> Unit,
-    setPaidImageUri: () -> Unit,
     popBackStack: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit,
-    navigateToGuildMark: (String) -> Unit,
 ) {
     val guildMarkManager = rememberGuildMarkManager(
         bitMap = getBitmapFromContentUri(imageUri = imageUri.toString(), context = context),
@@ -114,13 +116,6 @@ private fun PreviewScreen(
             onDismissRequest = { showDialogState = false }
         )
 
-    if (symbolBillingCallback?.invoke() == true) {
-        setPaidImageUri()
-        navigateToGuildMark(imageUri.toString())
-        showDialogState = false
-        setSymbolBillingCallback()
-    }
-
     DefaultLayout(topBar = {
         BackButtonTitleAppBar(
             title = stringResource(id = R.string.symbol_preview_topbar),
@@ -133,7 +128,7 @@ private fun PreviewScreen(
                 .build(),
             contentDescription = "Image",
             loading = {
-                GalleryProgressIndicator()
+                MTProgressIndicatorRotating()
             },
             contentScale = ContentScale.Fit,
             modifier = Modifier
@@ -203,11 +198,7 @@ private fun PreviewPreviewScreen() = MiscellaneousToolTheme {
         imageUri = Uri.EMPTY,
         purchaseInApp = {},
         purchasableProducts = emptyList(),
-        symbolBillingCallback = { false },
-        setSymbolBillingCallback = {},
-        setPaidImageUri = {},
         popBackStack = {},
         showSnackBar = {},
-        navigateToGuildMark = {}
     )
 }

@@ -1,4 +1,4 @@
-package com.jinproject.design_compose.component.pushrefresh
+package com.jinproject.design_compose.component.pushRefresh
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.LinearEasing
@@ -27,47 +27,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun PushRefreshIndicator(
+fun MTProgressIndicatorRotating(
     modifier: Modifier = Modifier,
-    state: PushRefreshState,
-    isRefreshing: Boolean,
 ) {
     Box(
         modifier = modifier
-            .fillMaxWidth()
-            .height(
-                if (isRefreshing) {
-                    state.maxHeight.dp
-                } else
-                    (state.progress * state.maxHeight).dp
-            )
-            .background(
-                color = MaterialTheme.colorScheme.surface,
-            ),
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface),
         contentAlignment = Alignment.Center
     ) {
-        Crossfade(
-            targetState = isRefreshing,
-            animationSpec = tween(100),
-            label = "CrossFade Refreshing"
-        ) { isRefreshing ->
-            if (isRefreshing) {
-                GalleryProgressIndicatorRotating()
-            } else {
-                GalleryProgressIndicator(state.progress)
-            }
-        }
+        MTProgressIndicatorInfiniteRotating()
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PullRefreshIndicator(
+fun MTPullRefreshIndicator(
     modifier: Modifier = Modifier,
     state: PullRefreshState,
     isRefreshing: Boolean,
@@ -88,9 +70,9 @@ fun PullRefreshIndicator(
             label = "CrossFade Refreshing"
         ) { isRefreshing ->
             if (isRefreshing) {
-                GalleryProgressIndicatorRotating()
+                MTProgressIndicatorInfiniteRotating()
             } else {
-                GalleryProgressIndicator(
+                MTProgressIndicatorRotatingByParam(
                     progress = state.progress,
                 )
             }
@@ -99,23 +81,45 @@ fun PullRefreshIndicator(
 }
 
 @Composable
-fun GalleryProgressIndicator(
+fun MTPushRefreshIndicator(
     modifier: Modifier = Modifier,
+    state: PushRefreshState,
+    isRefreshing: Boolean,
 ) {
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(
+                if (isRefreshing) {
+                    144.dp
+                } else
+                    (state.progress * 144).dp
+            )
+            .background(
+                color = MaterialTheme.colorScheme.surface,
+            ),
         contentAlignment = Alignment.Center
     ) {
-        GalleryProgressIndicatorRotating()
+        Crossfade(
+            targetState = isRefreshing,
+            animationSpec = tween(100),
+            label = "CrossFade Refreshing"
+        ) { isRefreshing ->
+            if (isRefreshing) {
+                MTProgressIndicatorInfiniteRotating()
+            } else {
+                MTProgressIndicatorRotatingByParam(state.progress)
+            }
+        }
     }
 }
 
 @Composable
-private fun GalleryProgressIndicator(
+private fun MTProgressIndicatorRotatingByParam(
     progress: Float,
     modifier: Modifier = Modifier,
     counter: Int = 8,
-    color: Color = MaterialTheme.colorScheme.onBackground,
+    color: Color = MaterialTheme.colorScheme.onSurface,
 ) {
     Canvas(modifier = modifier) {
 
@@ -123,7 +127,7 @@ private fun GalleryProgressIndicator(
             width = 1.dp.toPx(),
         )
 
-        val offset = GalleryProgressIndicatorOffset(
+        val offset = MTProgressIndicatorOffset(
             centerOffset = Offset(center.x, center.y),
             radius = 10.dp.toPx()
         )
@@ -146,10 +150,10 @@ private fun GalleryProgressIndicator(
 }
 
 @Composable
-private fun GalleryProgressIndicatorRotating(
+fun MTProgressIndicatorInfiniteRotating(
     modifier: Modifier = Modifier,
     counter: Int = 8,
-    color: Color = MaterialTheme.colorScheme.onBackground,
+    color: Color = MaterialTheme.colorScheme.onSurface,
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "infinite Transition")
     val rotationAnimation by infiniteTransition.animateFloat(
@@ -168,7 +172,7 @@ private fun GalleryProgressIndicatorRotating(
             width = 1.dp.toPx(),
         )
 
-        val offset = GalleryProgressIndicatorOffset(
+        val offset = MTProgressIndicatorOffset(
             centerOffset = Offset(center.x, center.y),
             radius = 10.dp.toPx()
         )
@@ -213,14 +217,42 @@ private fun GalleryProgressIndicatorRotating(
     }
 }
 
-private class GalleryProgressIndicatorOffset(
+private class MTProgressIndicatorOffset(
     private val centerOffset: Offset,
-    private val radius: Float
+    private val radius: Float,
 ) {
     fun getPoint(ceta: Double): Offset {
         return Offset(
             x = centerOffset.x + radius * cos(Math.toRadians(ceta).toFloat()),
             y = centerOffset.y + radius * sin(Math.toRadians(ceta).toFloat())
+        )
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun PreviewStepMateProgressIndicatorInfiniteRotating() = PreviewMiscellaneousToolTheme {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(320.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        MTProgressIndicatorInfiniteRotating()
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun PreviewStepMateProgressIndicatorRotatingByParam() = PreviewMiscellaneousToolTheme {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(320.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        MTProgressIndicatorRotatingByParam(
+            0.5f
         )
     }
 }
