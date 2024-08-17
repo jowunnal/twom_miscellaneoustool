@@ -19,8 +19,11 @@
     <string name="input_price_hint">Input Price</string>
     <string name="setting_item"><u>Change Item Setting</u></string>
     <string name="setting_filter"><u>Change Filtering Setting</u></string>
-    <string name="new_version_message">Latest version has been published.\nPlease update App to new version.</string>
-    <string name="new_version_button">Go to update</string>
+    <string name="new_version_message">Installation of the latest version has been completed.\nWould you like to proceed with the update?</string>
+    <string name="new_version_positive_button">Yes, please.</string>
+    <string name="new_version_negative_button">No, thanks.</string>
+    <string name="deny_new_version_update">The update was rejected. If it is not the latest version, smooth use may be difficult.</string>
+    <string name="updating_new_version">A new version update is in progress. Let you know when it is completed.</string>
 
     <string name="price">Price</string>
     <string name="delete">Delete</string>

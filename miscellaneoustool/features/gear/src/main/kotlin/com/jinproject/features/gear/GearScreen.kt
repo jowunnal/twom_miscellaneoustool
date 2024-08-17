@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,12 +27,13 @@ import com.chargemap.compose.numberpicker.NumberPicker
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.DefaultAppBar
 import com.jinproject.design_compose.component.DefaultLayout
+import com.jinproject.design_compose.component.DescriptionAnnotatedLargeText
+import com.jinproject.design_compose.component.DescriptionLargeText
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.HorizontalSpacer
-import com.jinproject.design_compose.component.TextButton
 import com.jinproject.design_compose.component.VerticalSpacer
+import com.jinproject.design_compose.component.button.TextButton
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.red
-import com.jinproject.design_compose.theme.Typography
 import com.jinproject.design_ui.R
 import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.base.item.SnackBarMessage
@@ -106,10 +107,12 @@ private fun GearScreen(
                 onPickerValueChange = { minutes -> setIntervalFirstTimerSetting(minutes) }
 
             )
+            VerticalSpacer(height = 20.dp)
             TextButton(
                 text = stringResource(id = R.string.apply_do),
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
                 onClick = {
                     if (gearUiState.intervalFirstTimer < gearUiState.intervalSecondTimer) {
                         showSnackBar(
@@ -132,12 +135,9 @@ private fun GearScreen(
             VerticalSpacer(height = 30.dp)
 
             HorizontalDivider()
-            VerticalSpacer(height = 8.dp)
-            Text(
-                text = stringResource(id = R.string.billing_purchase),
-                style = Typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier
+            VerticalSpacer(height = 16.dp)
+            DescriptionLargeText(
+                text = stringResource(id = R.string.billing_purchase), modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentSize()
             )
@@ -147,13 +147,14 @@ private fun GearScreen(
                 TextButton(
                     text = "${product.name} ${stringResource(id = R.string.somethingdo)}",
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
                     onClick = {
                         purchaseInApp(product)
                     }
                 )
                 if (index != purchasableProducts.lastIndex)
-                    VerticalSpacer(height = 8.dp)
+                    VerticalSpacer(height = 12.dp)
             }
         }
     )
@@ -170,14 +171,10 @@ private fun SettingIntervalItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = buildAnnotatedString {
-                appendBoldText(text = headerText, color = red.color)
-                append(" ${stringResource(id = R.string.alarm_setting_interval)}")
-            },
-            style = Typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onBackground
-        )
+        DescriptionAnnotatedLargeText(text = buildAnnotatedString {
+            appendBoldText(text = headerText, color = red.color)
+            append(" ${stringResource(id = R.string.alarm_setting_interval)}")
+        })
         HorizontalSpacer(width = 16.dp)
         NumberPicker(
             value = pickerValue,

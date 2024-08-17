@@ -10,9 +10,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -21,14 +20,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
+import com.jinproject.design_compose.component.DescriptionLargeText
 import com.jinproject.design_compose.component.DialogState
 import com.jinproject.design_compose.component.DropDownMenuCustom
-import com.jinproject.design_compose.component.TextButton
-import com.jinproject.design_compose.component.TextCombinedButton
+import com.jinproject.design_compose.component.button.TextButton
+import com.jinproject.design_compose.component.button.TextCombinedButton
 import com.jinproject.design_compose.component.VerticalSpacer
-import com.jinproject.design_compose.theme.Typography
-import com.jinproject.domain.model.MonsterType
 import com.jinproject.design_ui.R
+import com.jinproject.domain.model.MonsterType
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -56,11 +55,10 @@ fun BossSelection(
         )
 
         VerticalSpacer(height = 16.dp)
-        Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.scrim)
+        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.scrim)
         VerticalSpacer(height = 16.dp)
-        Text(
+        DescriptionLargeText(
             text = stringResource(id = R.string.watch_title_recently_bosslist),
-            style = Typography.headlineSmall,
             color = MaterialTheme.colorScheme.outline,
             modifier = Modifier
                 .fillMaxWidth()

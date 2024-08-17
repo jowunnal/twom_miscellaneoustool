@@ -26,7 +26,7 @@
         android:theme="@style/Theme.TwomMiscellaneousTools">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/test_AppId" />
+            android:value="@string/my_AppId" />
 
         <activity
             android:name=".ui.MainActivity"

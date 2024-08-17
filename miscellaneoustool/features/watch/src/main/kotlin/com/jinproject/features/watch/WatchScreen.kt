@@ -2,10 +2,22 @@ package com.jinproject.features.watch
 
 import android.content.Context
 import android.content.Intent
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,16 +34,16 @@ import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.ButtonStatus
 import com.jinproject.design_compose.component.DefaultAppBar
 import com.jinproject.design_compose.component.DefaultLayout
-import com.jinproject.design_compose.component.TextButton
 import com.jinproject.design_compose.component.VerticalSpacer
+import com.jinproject.design_compose.component.button.TextButton
 import com.jinproject.design_compose.theme.Typography
+import com.jinproject.design_ui.R
 import com.jinproject.features.watch.component.OverlaySetting
 import com.jinproject.features.watch.component.TimeStatusSetting
 import com.jinproject.features.watch.component.TimerBottomSheetContent
 import com.jinproject.features.watch.service.OverlayService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import com.jinproject.design_ui.R
 
 @Composable
 fun WatchScreen(
@@ -111,7 +123,7 @@ private fun WatchScreen(
                     }
                 )
 
-                VerticalSpacer(height = 20.dp)
+                VerticalSpacer(height = 60.dp)
 
                 OverlaySetting(
                     fontSize = uiState.fontSize,
@@ -121,7 +133,7 @@ private fun WatchScreen(
                     setXPos = setXPos,
                     setYPos = setYPos
                 )
-
+                VerticalSpacer(height = 16.dp)
                 TextButton(
                     text = stringResource(id = R.string.set_do),
                     modifier = Modifier
@@ -131,7 +143,7 @@ private fun WatchScreen(
                     }
                 )
 
-                VerticalSpacer(height = 26.dp)
+                VerticalSpacer(height = 60.dp)
 
                 Text(
                     text = stringResource(id = R.string.watch_title_recently_bosslist),

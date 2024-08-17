@@ -8,6 +8,7 @@ import android.provider.Settings
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,11 +33,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.DefaultLayout
+import com.jinproject.design_compose.component.DescriptionLargeText
 import com.jinproject.design_compose.component.DialogCustom
 import com.jinproject.design_compose.component.DialogState
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.VerticalSpacer
-import com.jinproject.design_compose.theme.Typography
 import com.jinproject.design_ui.R
 import com.jinproject.domain.model.WeekModel
 import com.jinproject.features.alarm.component.AlarmBottomSheetContent
@@ -227,10 +228,13 @@ private fun AlarmScreen(
                     HorizontalDivider()
                 }
                 item {
-                    androidx.compose.material3.Text(
+                    VerticalSpacer(height = 20.dp)
+                    DescriptionLargeText(
                         text = stringResource(id = R.string.alarm_present_bosslist),
-                        style = Typography.headlineSmall,
-                        color = MaterialTheme.colorScheme.outline
+                        color = MaterialTheme.colorScheme.outline,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth()
                     )
                     VerticalSpacer(height = 20.dp)
                 }

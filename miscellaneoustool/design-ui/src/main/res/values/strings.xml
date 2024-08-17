@@ -13,13 +13,17 @@
     <string name="item_name">아이템이름</string>
     <string name="stat">스텟</string>
     <string name="home_header">아이모 잡학도구</string>
-    <string name="version" translatable="false">2.2.1</string>
+    <string name="version" translatable="false">2.2.2</string>
 
     <string name="input_price_hint">가격 입력</string>
     <string name="setting_item"><u>아이템 설정 변경</u></string>
     <string name="setting_filter"><u>필터링 설정 변경</u></string>
-    <string name="new_version_message">최신 버전이 출시되었어요.\n업데이트를 해주세요.</string>
-    <string name="new_version_button">업데이트 하러 가기</string>
+
+    <string name="new_version_message">최신 버전 설치가 완료되었어요.\n업데이트를 진행하시겠어요?</string>
+    <string name="new_version_positive_button">네, 진행할게요.</string>
+    <string name="new_version_negative_button">아니요, 하고싶지않아요.</string>
+    <string name="deny_new_version_update">업데이트가 거절됬어요. 최신버전이 아닌 경우 원활한 사용이 어려울 수 있어요.</string>
+    <string name="updating_new_version">새 버전 업데이트가 진행중이에요. 완료되면 알려드릴게요.</string>
 
     <!-- base strings -->
     <string name="price">가격</string>

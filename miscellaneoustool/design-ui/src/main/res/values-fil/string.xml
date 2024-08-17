@@ -19,8 +19,12 @@
     <string name="input_price_hint">ilagay ang presyo</string>
     <string name="setting_item"><u>Baguhin ang mga setting ng item</u></string>
     <string name="setting_filter"><u>Baguhin ang pag-filter ng item</u></string>
-    <string name="new_version_message">Nai-publish na ang pinakabagong bersyon.\nPaki-update ang App sa bagong bersyon.</string>
-    <string name="new_version_button">Go to update</string>
+
+    <string name="new_version_message">Nakumpleto na ang pag-install ng pinakabagong bersyon.\nGusto mo bang magpatuloy sa pag-update?</string>
+    <string name="new_version_positive_button">Oo, pakiusap.</string>
+    <string name="new_version_negative_button">Hindi, salamat.</string>
+    <string name="deny_new_version_update">Tinanggihan ang update. Kung hindi ito ang pinakabagong bersyon, maaaring mahirap ang maayos na paggamit.</string>
+    <string name="updating_new_version">May kasalukuyang pag-update ng bagong bersyon. Ipapaalam ko sa iyo kapag nakumpleto na ito.</string>
 
     <string name="price">Price</string>
     <string name="delete">Delete</string>

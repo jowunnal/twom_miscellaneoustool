@@ -54,6 +54,7 @@ value class MiscellaneousToolColor private constructor(val color: Color){
         val light_background = white
         val light_onBackground = lightBlack
         val light_surface = white
+        val light_surfaceVariant = grey_700
         val light_onSurface = lightBlack
         val light_onSurfaceVariant = grey_400
         val light_scrim = grey_600
@@ -70,6 +71,7 @@ value class MiscellaneousToolColor private constructor(val color: Color){
         val dark_background = black // 컨테이너 색상
         val dark_onBackground = grey_600
         val dark_surface = lightBlack // 상단바 색상
+        val dark_surfaceVariant = grey_800
         val dark_onSurface = grey_600
         val dark_onSurfaceVariant = grey_200
         val dark_scrim = grey_300

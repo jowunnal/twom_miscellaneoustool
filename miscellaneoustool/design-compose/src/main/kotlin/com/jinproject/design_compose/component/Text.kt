@@ -5,6 +5,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -102,6 +103,84 @@ fun DescriptionSmallText(
         maxLines = Int.MAX_VALUE,
     )
 }
+
+@Composable
+fun DefaultAnnotatedText(
+    modifier: Modifier = Modifier,
+    text: AnnotatedString,
+    style: TextStyle,
+    color: Color = MaterialTheme.colorScheme.onSurface,
+    textAlign: TextAlign = TextAlign.Start,
+    overflow: TextOverflow = TextOverflow.Clip,
+    maxLines: Int = 1,
+    onTextLayout: (TextLayoutResult) -> Unit = {},
+) {
+    Text(
+        text = text,
+        modifier = modifier,
+        style = style,
+        color = color,
+        textAlign = textAlign,
+        overflow = overflow,
+        maxLines = maxLines,
+        onTextLayout = onTextLayout,
+    )
+}
+
+@Composable
+fun DescriptionAnnotatedLargeText(
+    modifier: Modifier = Modifier,
+    text: AnnotatedString,
+    color: Color = MaterialTheme.colorScheme.onSurface,
+    textAlign: TextAlign = TextAlign.Start,
+) {
+    DefaultAnnotatedText(
+        modifier = modifier,
+        text = text,
+        style = MaterialTheme.typography.bodyLarge,
+        textAlign = textAlign,
+        overflow = Ellipsis,
+        color = color,
+        maxLines = Int.MAX_VALUE,
+    )
+}
+
+@Composable
+fun DescriptionAnnotatedMediumText(
+    modifier: Modifier = Modifier,
+    text: AnnotatedString,
+    color: Color = MaterialTheme.colorScheme.onSurface,
+    textAlign: TextAlign = TextAlign.Start,
+) {
+    DefaultAnnotatedText(
+        modifier = modifier,
+        text = text,
+        style = MaterialTheme.typography.bodyMedium,
+        textAlign = textAlign,
+        overflow = Ellipsis,
+        color = color,
+        maxLines = Int.MAX_VALUE,
+    )
+}
+
+@Composable
+fun DescriptionAnnotatedSmallText(
+    modifier: Modifier = Modifier,
+    text: AnnotatedString,
+    color: Color = MaterialTheme.colorScheme.onSurface,
+    textAlign: TextAlign = TextAlign.Start,
+) {
+    DefaultAnnotatedText(
+        modifier = modifier,
+        text = text,
+        style = MaterialTheme.typography.bodySmall,
+        textAlign = textAlign,
+        overflow = Ellipsis,
+        color = color,
+        maxLines = Int.MAX_VALUE,
+    )
+}
+
 
 @Composable
 fun FooterText(

@@ -34,7 +34,7 @@ import com.jinproject.design_compose.component.DialogCustom
 import com.jinproject.design_compose.component.DialogState
 import com.jinproject.design_compose.component.FooterText
 import com.jinproject.design_compose.component.SubcomposeAsyncImageWithPreview
-import com.jinproject.design_compose.component.TextButton
+import com.jinproject.design_compose.component.button.TextButton
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.component.VerticalWeightSpacer
 import com.jinproject.design_compose.component.pushRefresh.MTProgressIndicatorRotating

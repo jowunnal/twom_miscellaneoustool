@@ -1,4 +1,4 @@
-package com.jinproject.design_compose.component
+package com.jinproject.design_compose.component.button
 
 import android.os.SystemClock
 import androidx.annotation.DrawableRes
@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
+import com.jinproject.design_ui.R
 
 @Composable
 fun DefaultIconButton(
@@ -184,7 +185,7 @@ private class AvoidDuplicationClickEvent(
 @Composable
 private fun PreviewDefaultIconButton() = MiscellaneousToolTheme {
     DefaultIconButton(
-        icon = com.jinproject.design_ui.R.drawable.ic_arrow_left,
+        icon = R.drawable.ic_arrow_left,
         onClick = {},
         iconTint = MaterialTheme.colorScheme.onSurface,
         iconSize = 16.dp

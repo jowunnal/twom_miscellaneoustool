@@ -49,9 +49,9 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
-import com.jinproject.design_compose.component.DefaultIconButton
 import com.jinproject.design_compose.component.HorizontalWeightSpacer
 import com.jinproject.design_compose.component.VerticalSpacer
+import com.jinproject.design_compose.component.button.DefaultIconButton
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.design_ui.R
 import com.jinproject.features.symbol.createChannel
@@ -199,7 +199,7 @@ class SymbolOverlayService : LifecycleService() {
                                     scaleY = topBarState
                                     alpha = topBarState
                                 }
-                                .background(Color.Gray)
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
                         ) {
                             HorizontalWeightSpacer(float = 1f)
                             DefaultIconButton(
@@ -207,14 +207,16 @@ class SymbolOverlayService : LifecycleService() {
                                 onClick = {
                                     guildMarkManager.selectColor(Color.Unspecified)
                                 },
-                                iconTint = Color.White
+                                iconTint = MaterialTheme.colorScheme.surface,
+                                backgroundTint = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                             DefaultIconButton(
                                 icon = R.drawable.ic_x,
                                 onClick = {
                                     stopSelf()
                                 },
-                                iconTint = Color.White
+                                iconTint = MaterialTheme.colorScheme.surface,
+                                backgroundTint = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }

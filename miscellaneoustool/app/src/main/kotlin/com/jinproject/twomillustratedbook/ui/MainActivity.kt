@@ -2,8 +2,6 @@ package com.jinproject.twomillustratedbook.ui
 
 import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -21,10 +19,13 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.navigation.NavigationBarView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.base.CommonDialogFragment
 import com.jinproject.features.core.listener.BottomNavigationController
@@ -37,6 +38,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity(), BottomNavigationController {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
+    private val appUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
 
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -91,6 +93,18 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initBillingModule()
+        initTopBar()
+        initBottomNavigationBar()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        checkNewUpdateIsAvailable()
+    }
+
     override fun onResume() {
         super.onResume()
         if (billingModule.isReady) {
@@ -107,18 +121,14 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
                 }
             }
         }
-    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        initBillingModule()
-        initTopBar()
-        initBottomNavigationBar()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        getLatestVersion()
+        appUpdateManager
+            .appUpdateInfo
+            .addOnSuccessListener { appUpdateInfo ->
+                if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                    requireInstallingNotUpdatedYet()
+                }
+            }
     }
 
     private fun initTopBar() {
@@ -181,57 +191,80 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
         }
     }
 
-    private fun getLatestVersion() {
-        val ref = FirebaseDatabase.getInstance().getReference("version")
+    private val requestInAppUpdatingLauncher =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                installUpdatedListener = InstallStateUpdatedListener { state ->
+                    when(state.installStatus()) {
+                        InstallStatus.DOWNLOADED -> {
+                            requireInstallingNotUpdatedYet()
+                        }
+                        else -> {}
+                    }
+                }
+                installUpdatedListener?.let { listener ->
+                    appUpdateManager.registerListener(listener)
+                    Snackbar.make(this.window.decorView.rootView,getString(com.jinproject.design_ui.R.string.updating_new_version),Snackbar.LENGTH_LONG).show()
+                }
+            } else {
+                sendMessageIfDenyUpdate()
+            }
+        }
 
-        ref.addListenerForSingleValueEvent(
-            object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                        packageManager.getPackageInfo(
-                            packageName,
-                            PackageManager.PackageInfoFlags.of(0L)
-                        )
-                    else
-                        packageManager.getPackageInfo(
-                            packageName,
-                            0
-                        )
+    private fun checkNewUpdateIsAvailable() {
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
 
-                    if (snapshot.value.toString() != packageInfo.versionName)
-                        CommonDialogFragment.show(
-                            fragmentManager = supportFragmentManager,
-                            title = getString(com.jinproject.design_ui.R.string.new_version_message),
-                            message = null,
-                            positiveButtonText = getString(com.jinproject.design_ui.R.string.new_version_button),
-                            negativeButtonText = "",
-                            listener = object : CommonDialogFragment.Listener() {
-                                override fun onPositiveButtonClick(value: String) {
-                                    requireLatestVersionOnMarket()
-                                }
-                            },
-                            enabled = false
-                        )
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                requestInAppUpdate()
+            }
+        }
+    }
+
+    private var installUpdatedListener: InstallStateUpdatedListener? = null
+
+    private fun requestInAppUpdate() {
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
+            appUpdateManager.startUpdateFlowForResult(
+                appUpdateInfo,
+                requestInAppUpdatingLauncher,
+                AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build()
+            )
+        }
+    }
+
+    private fun requireInstallingNotUpdatedYet() {
+        installUpdatedListener?.let { listener ->
+            appUpdateManager.unregisterListener(listener)
+            installUpdatedListener = null
+        }
+
+        // 앱 재시작 및 업데이트 반영 요청
+        CommonDialogFragment.show(
+            fragmentManager = supportFragmentManager,
+            title = getString(com.jinproject.design_ui.R.string.new_version_message),
+            message = null,
+            positiveButtonText = getString(com.jinproject.design_ui.R.string.new_version_positive_button),
+            negativeButtonText = getString(com.jinproject.design_ui.R.string.new_version_negative_button),
+            listener = object : CommonDialogFragment.Listener() {
+                override fun onPositiveButtonClick(value: String) {
+                    appUpdateManager.completeUpdate()
                 }
 
-                override fun onCancelled(error: DatabaseError) {}
-
-            }
+                override fun onNegativeButtonClick() {
+                    sendMessageIfDenyUpdate()
+                }
+            },
         )
     }
 
-    private fun requireLatestVersionOnMarket() {
-        val uriString = "market://details?id=$packageName"
+    private fun sendMessageIfDenyUpdate() {
+        Snackbar.make(this.window.decorView.rootView,getString(com.jinproject.design_ui.R.string.deny_new_version_update),Snackbar.LENGTH_LONG).show()
 
-        startActivity(
-            Intent(Intent.ACTION_VIEW).apply {
-                setPackage("com.android.vending")
-                data = Uri.parse(uriString)
-                putExtra("overlay", true)
-                putExtra("callerId", packageName)
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-        )
+        installUpdatedListener?.let { listener ->
+            appUpdateManager.unregisterListener(listener)
+            installUpdatedListener = null
+        }
     }
 
     override fun onDestroy() {

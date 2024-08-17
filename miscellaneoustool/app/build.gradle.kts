@@ -9,8 +9,8 @@ android {
     defaultConfig {
         applicationId = "com.jinproject.twomillustratedbook"
         targetSdk = 34
-        versionCode = 35
-        versionName = "2.2.1"
+        versionCode = 48
+        versionName = "2.2.2"
     }
 
     buildFeatures {
@@ -29,7 +29,6 @@ dependencies {
     implementation(project(":features:watch"))
     implementation(project(":features:gear"))
     implementation(project(":features:core"))
-    implementation(project(":features:home"))
     implementation(project(":features:symbol"))
     implementation(project(":design-compose"))
     implementation(project(":design-ui"))
@@ -45,4 +44,5 @@ dependencies {
     implementation(libs.bundles.lifecycle)
 
     implementation(libs.bundles.billing)
+    implementation(libs.bundles.playInAppUpdate)
 }

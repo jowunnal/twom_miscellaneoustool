@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.HorizontalSpacer
-import com.jinproject.design_compose.component.TextButton
+import com.jinproject.design_compose.component.button.TextButton
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.tu
 import com.jinproject.domain.model.WeekModel

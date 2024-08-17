@@ -48,8 +48,7 @@ class CommonDialogFragment private constructor(
             etPrice.visibility = View.GONE
         }
 
-        if(!enabled)
-            isCancelable = false
+        isCancelable = enabled
 
         if(positiveButtonText.isBlank())
             btnPositive.visibility = View.GONE

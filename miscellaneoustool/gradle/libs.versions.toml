@@ -28,6 +28,7 @@ lifecycle-common = "2.6.1"
 material = "1.11.0"
 mockk = "1.13.5"
 navigation = "2.7.0"
+playInApp = "2.1.0"
 protobuf = "3.25.0"
 room = "2.6.1"
 
@@ -45,7 +46,7 @@ protobufPlugin = "0.9.4"
 
 # Gradle Plugin
 gradle-android = { group = "com.android.tools.build", name = "gradle", version.ref = "androidStudioGradlePlugin" }
-gradle-androidx-navigation-safe-args = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "androidNavigationSafeargs"}
+gradle-androidx-navigation-safe-args = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "androidNavigationSafeargs" }
 gradle-google-devtools-ksp = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "kotlinKsp" }
 gradle-google-gms-google-services = { module = "com.google.gms:google-services", version.ref = "gmsGoogleServicePlugin" }
 gradle-google-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsPlugin" }
@@ -125,6 +126,10 @@ navigation-compose = { group = "androidx.navigation", name = "navigation-compose
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 
+# Play In App
+play-app-update = { module = "com.google.android.play:app-update", version.ref = "playInApp" }
+play-app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "playInApp" }
+
 # Protobuf
 protobuf = { group = "com.google.protobuf", name = "protobuf-javalite", version.ref = "protobuf" }
 
@@ -155,5 +160,6 @@ kotest = ["io-kotest-junit", "io-kotest-assertions"]
 lifecycle = ["lifecycle-compose", "lifecycle-viewmodel-ktx", "lifecycle-runtime-ktx", "lifecycle-runtime-compose", "lifecycle-service"]
 navigation = ["navigation-fragment", "navigation-ui"]
 testing = ["jUnit", "junit-jupiter-api", "io-mockk"]
+playInAppUpdate = ["play-app-update", "play-app-update-ktx"]
 
 [plugins]

@@ -19,6 +19,7 @@ import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_scrim
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_secondary
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_surface
+import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_surfaceVariant
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_background
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_error
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_onBackground
@@ -52,7 +53,7 @@ private val DarkColorPalette = darkColorScheme(
     onBackground = dark_onBackground.color,
     surface = dark_surface.color,
     onSurface = dark_onSurface.color,
-    surfaceVariant = red.color,
+    surfaceVariant = dark_surfaceVariant.color,
     onSurfaceVariant = dark_onSurfaceVariant.color,
     inverseSurface = red.color,
     inverseOnSurface = red.color,
@@ -73,6 +74,7 @@ private val LightColorPalette = lightColorScheme(
     background = light_background.color,
     onBackground = light_onBackground.color,
     surface = light_surface.color,
+    surfaceVariant = light_onSurfaceVariant.color,
     onSurface = light_onSurface.color,
     onSurfaceVariant = light_onSurfaceVariant.color,
     error = light_error.color,
