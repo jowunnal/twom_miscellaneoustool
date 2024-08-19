@@ -65,16 +65,16 @@
 
 ## 몬스터 도감
 
-<video src="miscellaneoustool/documentation/feature_monster_book.mp4" />
+![feature_monster_book](https://github.com/jowunnal/twom_miscellaneoustool/tree/master/miscellaneoustool/documentation/feature_monster_book.mp4)
 
 ## 아이템 도감
 
-<video src="miscellaneoustool/documentation/feature_collection.mp4" />
+![feature_monster_book](https://github.com/jowunnal/twom_miscellaneoustool/tree/master/miscellaneoustool/documentation/feature_collection.mp4)
 
 ## 길드마크 심볼
 
-<video src="miscellaneoustool/documentation/feature_symbol.mp4" />
+![feature_monster_book](https://github.com/jowunnal/twom_miscellaneoustool/tree/master/miscellaneoustool/documentation/feature_symbol.mp4)
 
 ## 몬스터 알람
 
-<video src="miscellaneoustool/documentation/feature_alarm.mp4" />
+![feature_monster_book](https://github.com/jowunnal/twom_miscellaneoustool/tree/master/miscellaneoustool/documentation/feature_alarm.mp4)
