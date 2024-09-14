@@ -13,7 +13,7 @@
     <string name="item_name">아이템이름</string>
     <string name="stat">스텟</string>
     <string name="home_header">아이모 잡학도구</string>
-    <string name="version" translatable="false">2.2.2</string>
+    <string name="version" translatable="false">2.3.0</string>
 
     <string name="input_price_hint">가격 입력</string>
     <string name="setting_item"><u>아이템 설정 변경</u></string>

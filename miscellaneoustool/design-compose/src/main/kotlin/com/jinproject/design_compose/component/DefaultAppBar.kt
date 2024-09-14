@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,8 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.button.DefaultIconButton
-import com.jinproject.design_ui.R
 import com.jinproject.design_compose.theme.Typography
+import com.jinproject.design_ui.R
 
 @Composable
 fun OneButtonAppBar(
@@ -103,8 +102,6 @@ fun DefaultAppBar(
                 .align(Alignment.CenterStart)
                 .clickable(
                     onClick = onBackClick,
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(bounded = false, radius = 18.dp)
                 ),
             painter = painterResource(id = R.drawable.ic_arrow_left),
             contentDescription = "back",

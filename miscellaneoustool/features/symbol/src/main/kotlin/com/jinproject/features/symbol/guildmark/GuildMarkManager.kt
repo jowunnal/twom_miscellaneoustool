@@ -21,7 +21,7 @@ fun rememberGuildMarkManager(
     slider: Float,
 ): GuildMarkManager {
 
-    val state = remember {
+    val state = remember(bitMap) {
         GuildMarkManager().apply {
             setColors(bitMap)
         }

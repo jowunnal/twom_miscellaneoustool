@@ -19,6 +19,7 @@ internal class AndroidComposePlugin : Plugin<Project> {
 
         with(pluginManager) {
             apply("org.jetbrains.kotlin.plugin.compose")
+            apply("kotlinx-serialization")
         }
 
         dependencies {
@@ -31,6 +32,7 @@ internal class AndroidComposePlugin : Plugin<Project> {
 
             "implementation"(libs.findLibrary("navigation.compose").get())
             "implementation"(libs.findBundle("composeAdaptive").get())
+            "implementation"(libs.findLibrary("kotlinx-serialization-json").get())
         }
     }
 }

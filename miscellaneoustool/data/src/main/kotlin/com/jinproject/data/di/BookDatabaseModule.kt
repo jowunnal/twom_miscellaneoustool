@@ -6,6 +6,7 @@ import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.data.datasource.cache.database.BookDatabase
 import com.jinproject.data.datasource.cache.database.dao.CollectionDao
 import com.jinproject.data.datasource.cache.database.dao.DropListDao
+import com.jinproject.data.datasource.cache.database.dao.SimulatorDao
 import com.jinproject.data.datasource.cache.database.dao.TimerDao
 import dagger.Module
 import dagger.Provides
@@ -37,18 +38,26 @@ object BookDatabaseModule {
 
     @Provides
     @Singleton
+    fun provideSimulatorDao(bookDatabase: BookDatabase): SimulatorDao = bookDatabase.getSimulatorDao()
+
+    @Provides
+    @Singleton
     fun provideBookDatabaseInstance(@ApplicationContext context:Context): BookDatabase {
         val assetName = context.doOnLocaleLanguage(
-            onKo = "database/db_twom_2.db",
-            onElse = "database/db_twom_2_eng.db"
+            onKo = "database/db_twom_3.db",
+            onElse = "database/db_twom_3_eng.db"
         )
-        val migration = context.doOnLocaleLanguage(
+        val migration1to2 = context.doOnLocaleLanguage(
             onKo = BookDatabase.MIGRATION_1_2_KOR,
             onElse = BookDatabase.MIGRATION_1_2_ELSE
         )
+        val migration2to3 = context.doOnLocaleLanguage(
+            onKo = BookDatabase.MIGRATION_2_3_KOR,
+            onElse = BookDatabase.MIGRATION_2_3_ELSE,
+        )
         return Room.databaseBuilder(context, BookDatabase::class.java,"BookDatabase")
             .createFromAsset(assetName)
-            .addMigrations(migration)
+            .addMigrations(migration1to2, migration2to3)
             .build()
     }
 }

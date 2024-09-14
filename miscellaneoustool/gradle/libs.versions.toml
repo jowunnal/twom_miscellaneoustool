@@ -6,10 +6,10 @@ appCompat = "1.6.1"
 billing = "6.1.0"
 coreKtx = "1.12.0"
 coil = "2.5.0"
-composeAdaptive = "1.0.0-beta04"
-composeAdaptiveNavigationSuite = "1.0.0-alpha07"
-composeBom = "2024.06.00"
-composeFoundation = "1.6.8"
+composeAdaptive = "1.0.0"
+composeAdaptiveNavigationSuite = "1.3.0"
+composeBom = "2024.09.00"
+composeFoundation = "1.7.0"
 constraintLayout = "2.1.4"
 dagger = "2.51.1"
 datastore = "1.1.0"
@@ -23,11 +23,12 @@ junit-jupiter = "5.9.3"
 kotest = "5.6.0"
 kotlin-coroutine = "1.7.3"
 kotlinx-immutable = "0.3.6"
+kotlinx-serialzation-json = "1.7.2"
 lifecycle = "2.6.1"
 lifecycle-common = "2.6.1"
 material = "1.11.0"
 mockk = "1.13.5"
-navigation = "2.7.0"
+navigation = "2.8.0"
 playInApp = "2.1.0"
 protobuf = "3.25.0"
 room = "2.6.1"
@@ -53,7 +54,9 @@ gradle-google-firebase-crashlytics = { module = "com.google.firebase:firebase-cr
 gradle-hilt = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "dagger" }
 gradle-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 gradle-kotlin-compose = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+gradle-kotlin-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 gradle-protobuf = { group = "com.google.protobuf", name = "protobuf-gradle-plugin", version.ref = "protobufPlugin" }
+gradle-room = { module = "androidx.room:room-gradle-plugin", version.ref = "room" }
 
 # Androidx
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
@@ -111,8 +114,9 @@ google-gms-services-ads = { group = "com.google.android.gms", name = "play-servi
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt" }
 
 # Kotlin
-kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
 kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-immutable" }
+kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialzation-json" }
 
 # Lifecycle
 lifecycle-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
@@ -135,6 +139,8 @@ protobuf = { group = "com.google.protobuf", name = "protobuf-javalite", version.
 
 # Room
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-common = { module = "androidx.room:room-common", version.ref = "room" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
@@ -161,5 +167,3 @@ lifecycle = ["lifecycle-compose", "lifecycle-viewmodel-ktx", "lifecycle-runtime-
 navigation = ["navigation-fragment", "navigation-ui"]
 testing = ["jUnit", "junit-jupiter-api", "io-mockk"]
 playInAppUpdate = ["play-app-update", "play-app-update-ktx"]
-
-[plugins]

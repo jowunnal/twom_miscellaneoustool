@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="35"
+    android:versionCode="49"
     android:versionName="@string/version">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -39,7 +39,7 @@
         </activity>
 
         <service
-            android:name="com.jinproject.features.watch.service.OverlayService"
+            android:name="com.jinproject.features.alarm.watch.service.OverlayService"
             android:description="@string/현재시간항상보기"
             android:foregroundServiceType="specialUse">
             <property
@@ -47,10 +47,10 @@
                 android:value="For overlay view of the current time on the window" />
         </service>
         <service
-            android:name="com.jinproject.features.alarm.service.ReAlarmService"
+            android:name="com.jinproject.features.alarm.alarm.service.ReAlarmService"
             android:description="@string/알람재생성서비스" />
         <receiver
-            android:name="com.jinproject.features.alarm.receiver.AlarmReceiver"
+            android:name="com.jinproject.features.alarm.alarm.receiver.AlarmReceiver"
             android:enabled="true"
             android:exported="false" />
     </application>

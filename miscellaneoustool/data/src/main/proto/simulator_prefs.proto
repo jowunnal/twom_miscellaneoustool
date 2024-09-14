@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option java_package = "com.jinproject.data";
+option java_multiple_files = true;
+
+message SimulatorPreferences {
+  repeated ItemInfo ownedItems = 1;
+}
+
+message ItemInfo {
+  string name = 1;
+  int32 enchantNumber = 2;
+  string uuid = 3;
+  map<string, float> options = 4;
+}

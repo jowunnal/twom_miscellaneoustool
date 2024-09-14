@@ -31,8 +31,11 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.jinproject.design_compose.component.SnackBarHostCustom
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
+import com.jinproject.features.alarm.AlarmRoute
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.core.utils.findActivity
+import com.jinproject.features.simulator.SimulatorRoute
+import com.jinproject.features.symbol.SymbolRoute
 import com.jinproject.twomillustratedbook.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -115,7 +118,12 @@ class NavigationFragment : Fragment() {
         }
         val billingModule = remember(activity) { activity.billingModule }
         val startDestination =
-            findNavController().currentBackStackEntry?.arguments?.getString("start") ?: "alarm"
+            when(findNavController().currentBackStackEntry?.arguments?.getString("start")) {
+                "alarm" -> AlarmRoute.AlarmGraph
+                "symbolGraph" -> SymbolRoute.SymbolGraph
+                "simulator" -> SimulatorRoute.SimulatorGraph
+                else -> AlarmRoute.AlarmGraph
+            }
 
         Surface(
             modifier = Modifier.fillMaxSize(),

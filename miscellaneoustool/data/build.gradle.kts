@@ -4,6 +4,7 @@ plugins {
     id("jinProject.android.library")
     id("jinProject.android.hilt")
     id("jinProject.android.protobuf")
+    id("jinProject.android.room")
 }
 
 android {
@@ -14,9 +15,11 @@ android {
             it.useJUnitPlatform()
         }
     }
-
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
     sourceSets {
-        getByName("androidTest").assets.srcDir("$projectDir/schemas")
+        getByName("androidTest").assets.srcDirs(files("$projectDir/schemas"))
     }
 }
 
@@ -31,10 +34,6 @@ dependencies {
     implementation(libs.coroutines.core)
 
     implementation(libs.datastore)
-
-    implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
-    androidTestImplementation(libs.room.testing)
 }
 
 androidComponents {

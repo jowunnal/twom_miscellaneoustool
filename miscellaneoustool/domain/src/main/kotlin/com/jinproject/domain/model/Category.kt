@@ -18,3 +18,6 @@ enum class Category(val displayName: String,val storedName: String) {
             }
     }
 }
+
+fun Iterable<String>.getItemCategory(): Category =
+    if (this.find { it == "MINDAMAGE" } != null) Category.WEAPONS else Category.ARMORS

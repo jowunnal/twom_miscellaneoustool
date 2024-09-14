@@ -1,7 +1,10 @@
 package com.jinproject.design_compose.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -48,11 +51,10 @@ fun HorizontalDivider(
     thickness: Dp = 1.dp,
     color: Color = MaterialTheme.colorScheme.scrim,
 ) {
-    Spacer(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(thickness)
-            .background(color)
+    androidx.compose.material3.HorizontalDivider(
+        modifier = modifier,
+        thickness = thickness,
+        color = color,
     )
 }
 

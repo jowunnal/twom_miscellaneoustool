@@ -30,4 +30,14 @@
             />
     </fragment>
 
+    <fragment
+        android:id="@+id/navi_simulator"
+        android:name="com.jinproject.twomillustratedbook.ui.screen.navigation.NavigationFragment"
+        android:label="NavigationFragment">
+        <argument
+            android:name="start"
+            app:argType="string"
+            android:defaultValue="simulator"
+            />
+    </fragment>
 </navigation>

@@ -3,31 +3,23 @@ package com.jinproject.features.symbol.detail
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.jinproject.features.symbol.DetailImageUri
+import androidx.lifecycle.viewModelScope
 import com.jinproject.features.symbol.toParsedUri
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 open class DetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
 ): ViewModel() {
-    private val _imageDetailState: MutableStateFlow<Uri> =
-        MutableStateFlow(Uri.EMPTY)
-    val imageDetailState get() = _imageDetailState.asStateFlow()
-
-    init {
-        getImageDetail()
-    }
-
-    fun getImageDetail() {
-        val uri = savedStateHandle.get<String>(DetailImageUri)
-
-        uri?.let {
-            _imageDetailState.update { uri.toParsedUri() }
-        }
-    }
+    val imageDetailState get() = flow<Uri> {
+        emit(savedStateHandle.get<String>("imgUri")?.toParsedUri() ?: Uri.EMPTY)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = Uri.EMPTY
+    )
 }

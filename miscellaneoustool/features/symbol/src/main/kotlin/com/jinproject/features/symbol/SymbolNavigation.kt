@@ -8,29 +8,39 @@ import androidx.compose.ui.Modifier
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.jinproject.features.core.BillingModule
+import com.jinproject.features.core.Route
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.symbol.detail.DetailScreen
 import com.jinproject.features.symbol.gallery.GalleryScreen
 import com.jinproject.features.symbol.guildmark.GuildMarkScreen
 import com.jinproject.features.symbol.preview.PreviewScreen
 import com.jinproject.features.symbol.symbol.SymbolScreen
+import kotlinx.serialization.Serializable
 
-const val SymbolGraph = "symbolGraph"
-const val SymbolRoute = "symbol"
-const val GalleryRoute = "gallery"
-const val DetailImageUri = "imageDetailUri"
-const val DetailRoute = "detail"
-const val DetailLink = "$DetailRoute/{$DetailImageUri}"
-const val GuildMarkRoute = "guildMark"
-const val GuildMarkLink = "$GuildMarkRoute/{$DetailImageUri}"
-const val GuildMarkPreviewRoute = "guildMarkPreview"
-const val GuildMarkPreviewLink = "$GuildMarkPreviewRoute/{$DetailImageUri}"
+@Serializable
+sealed class SymbolRoute : Route {
+    @Serializable
+    data object SymbolGraph : SymbolRoute()
+
+    @Serializable
+    data object Symbol : SymbolRoute()
+
+    @Serializable
+    data object Gallery : SymbolRoute()
+
+    @Serializable
+    data class Detail(val imgUri: String) : SymbolRoute()
+
+    @Serializable
+    data class GuildMark(val imgUri: String) : SymbolRoute()
+
+    @Serializable
+    data class GuildMarkPreview(val imgUri: String) : SymbolRoute()
+}
 
 fun NavGraphBuilder.symbolNavGraph(
     modifier: Modifier = Modifier,
@@ -39,12 +49,10 @@ fun NavGraphBuilder.symbolNavGraph(
     showSnackBar: (SnackBarMessage) -> Unit,
     setBottomBarVisibility: (Int) -> Unit,
 ) {
-    navigation(
-        startDestination = SymbolRoute,
-        route = SymbolGraph,
+    navigation<SymbolRoute.SymbolGraph>(
+        startDestination = SymbolRoute.Symbol,
     ) {
-        composable(
-            route = SymbolRoute,
+        composable<SymbolRoute.Symbol>(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Right,
@@ -67,8 +75,7 @@ fun NavGraphBuilder.symbolNavGraph(
                 showSnackBar = showSnackBar,
             )
         }
-        composable(
-            route = GalleryRoute,
+        composable<SymbolRoute.Gallery>(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Left,
@@ -112,11 +119,7 @@ fun NavGraphBuilder.symbolNavGraph(
             )
         }
 
-        composable(
-            route = DetailLink,
-            arguments = listOf(navArgument(DetailImageUri) {
-                type = NavType.StringType
-            }),
+        composable<SymbolRoute.Detail>(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Left,
@@ -136,11 +139,7 @@ fun NavGraphBuilder.symbolNavGraph(
             )
         }
 
-        composable(
-            route = GuildMarkLink,
-            arguments = listOf(navArgument(DetailImageUri) {
-                type = NavType.StringType
-            }),
+        composable<SymbolRoute.GuildMark>(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Left,
@@ -160,11 +159,7 @@ fun NavGraphBuilder.symbolNavGraph(
             )
         }
 
-        composable(
-            route = GuildMarkPreviewLink,
-            arguments = listOf(navArgument(DetailImageUri) {
-                type = NavType.StringType
-            }),
+        composable<SymbolRoute.GuildMarkPreview>(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Left,
@@ -202,24 +197,24 @@ fun NavGraphBuilder.symbolNavGraph(
     }
 }
 
-internal fun String.toParsedString() = this.replace("/","*")
+internal fun String.toParsedString() = this.replace("/", "*")
 
-internal fun String.toParsedUri() = this.replace("*","/").toUri()
+internal fun String.toParsedUri() = this.replace("*", "/").toUri()
 
 fun NavController.navigateToGuildMark(imageUri: String) {
-    this.navigate("$GuildMarkRoute/$imageUri", navOptions { popUpTo(GalleryRoute) })
+    this.navigate(SymbolRoute.GuildMark(imageUri), navOptions { popUpTo(SymbolRoute.Gallery) })
 }
 
 fun NavController.navigateToGallery() {
-    this.navigate(GalleryRoute)
+    this.navigate(SymbolRoute.Gallery)
 }
 
 fun NavController.navigateToDetail(imageUri: String) {
-    this.navigate("$DetailRoute/$imageUri")
+    this.navigate(SymbolRoute.Detail(imageUri))
 }
 
 fun NavController.navigateToGuildMarkPreview(imageUri: String) {
-    this.navigate("$GuildMarkPreviewRoute/$imageUri")
+    this.navigate(SymbolRoute.GuildMarkPreview(imageUri))
 }
 
 fun NavController.popBackStackIfCan() {

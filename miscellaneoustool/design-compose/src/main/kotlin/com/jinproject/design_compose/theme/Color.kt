@@ -76,5 +76,20 @@ value class MiscellaneousToolColor private constructor(val color: Color){
         val dark_onSurfaceVariant = grey_200
         val dark_scrim = grey_300
         val dark_outline = grey_300
+
+        @Stable
+        val itemSpaceColor = MiscellaneousToolColor(Color(0xFFDFEDF2))
+        @Stable
+        val itemListContentColor = MiscellaneousToolColor(Color(0xFFBFCFD9))
+        @Stable
+        val itemDetailContentColor = MiscellaneousToolColor(Color(0xFF3E4C59))
+        @Stable
+        val itemButtonColor = MiscellaneousToolColor(Color(0xFF2393D9))
+        @Stable
+        val itemNameColor = MiscellaneousToolColor(Color(0xFF35AAF2))
+        @Stable
+        val itemDescriptionColor = MiscellaneousToolColor(Color(0xFFC5CED9))
+        @Stable
+        val itemTextColor = MiscellaneousToolColor(Color(0xFF70818C))
     }
 }

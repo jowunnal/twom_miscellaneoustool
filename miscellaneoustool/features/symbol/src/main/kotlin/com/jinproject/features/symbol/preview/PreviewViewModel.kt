@@ -14,10 +14,6 @@ class PreviewViewModel @Inject constructor(
     private val repository: CollectionRepository,
 ): DetailViewModel(savedStateHandle) {
 
-    init {
-        getImageDetail()
-    }
-
     fun setPaidImageUri() {
         viewModelScope.launch {
             repository.setSymbolUri(imageDetailState.value)

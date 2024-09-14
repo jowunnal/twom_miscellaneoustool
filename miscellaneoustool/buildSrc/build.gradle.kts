@@ -12,6 +12,8 @@ dependencies {
     implementation(libs.gradle.google.firebase.crashlytics)
     implementation(libs.gradle.androidx.navigation.safe.args)
     implementation(libs.gradle.protobuf)
+    implementation(libs.gradle.kotlin.serialization)
+    implementation(libs.gradle.room)
 }
 
 gradlePlugin {
@@ -51,6 +53,10 @@ gradlePlugin {
         register("androidNavigationSafeArgs") {
             id = "jinProject.android.safeArgs"
             implementationClass = "gradle.plugin.android.AndroidxNavigationSafeArgsPlugin"
+        }
+        register("androidRoom") {
+            id = "jinProject.android.room"
+            implementationClass = "gradle.plugin.android.AndroidRoomPlugin"
         }
     }
 }
