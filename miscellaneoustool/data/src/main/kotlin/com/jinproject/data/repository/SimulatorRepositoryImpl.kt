@@ -1,6 +1,5 @@
 package com.jinproject.data.repository
 
-import android.util.Log
 import com.jinproject.data.datasource.cache.CacheSimulatorDataSource
 import com.jinproject.data.datasource.cache.database.entity.toItemInfoDomainModel
 import com.jinproject.data.model.toItemInfoDomainModel
@@ -47,7 +46,6 @@ class SimulatorRepositoryImpl @Inject constructor(
                 name = itemInfo.name
                 uuid = itemInfo.uuid
                 enchantNumber = itemInfo.enchantNumber
-                Log.d("test", "input options: ${itemInfo.stat.keys.toString()}")
                 putAllOptions(itemInfo.stat)
             }.build()
         )
@@ -67,5 +65,4 @@ class SimulatorRepositoryImpl @Inject constructor(
             }.build()
         )
     }
-
 }

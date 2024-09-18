@@ -1,7 +1,6 @@
 package com.jinproject.data.repository
 
 import android.net.Uri
-import android.util.Log
 import com.jinproject.data.datasource.cache.CacheCollectionDataSource
 import com.jinproject.data.datasource.cache.database.dao.CollectionDao
 import com.jinproject.data.mapper.fromItemsToItemModel
@@ -12,10 +11,8 @@ import com.jinproject.domain.model.ItemModel
 import com.jinproject.domain.repository.CollectionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.zip
 import javax.inject.Inject
 
@@ -25,22 +22,26 @@ class CollectionRepositoryImpl @Inject constructor(
 ) : CollectionRepository {
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getCollectionList(category: Category, filter: Boolean): Flow<List<CollectionModel>> =
+    override fun getCollectionList(
+        category: Category,
+        filter: Boolean
+    ): Flow<List<CollectionModel>> =
         collectionDao.getCollectionItems(category.storedName).flatMapConcat { items ->
             collectionDao.getCollectionStats(items.keys.map { it.bookId }).map { stats ->
                 fromItemsWithStatsToCollectionModel(items, stats)
             }
-        }.zip(cacheCollectionDataSource.getFilteringCollectionList()) { collectionModels, filterList ->
-            val list = filterList.toMutableList()
-
-            collectionModels.filter { collectionModel ->
-                if(collectionModel.bookId in list) {
-                    list.remove(collectionModel.bookId)
-                    !filter
-                } else
-                    filter
-            }
         }
+            .zip(cacheCollectionDataSource.getFilteringCollectionList()) { collectionModels, filterList ->
+                val list = filterList.toMutableList()
+
+                collectionModels.filter { collectionModel ->
+                    if (collectionModel.bookId in list) {
+                        list.remove(collectionModel.bookId)
+                        !filter
+                    } else
+                        filter
+                }
+            }
 
     override suspend fun deleteCollection(collectionList: List<Int>) {
         cacheCollectionDataSource.setFilteringCollectionList(collectionList)
