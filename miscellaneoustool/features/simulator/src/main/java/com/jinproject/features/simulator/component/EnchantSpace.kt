@@ -40,7 +40,7 @@ import com.jinproject.features.simulator.model.Item
 import com.jinproject.features.simulator.model.Weapon
 import com.jinproject.features.simulator.model.findEnchantScroll
 import com.jinproject.features.simulator.model.formatter
-import com.jinproject.features.simulator.util.enchantEquipmentBy30percent
+import com.jinproject.features.simulator.util.enchantEquipment
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.serialization.encodeToString
 
@@ -51,6 +51,7 @@ internal fun EnchantSpace(
     selectedItem: Equipment,
     setSelectedEquipment: (Equipment) -> Unit,
     storeSelectedItem: () -> Unit,
+    removeEquipmentOnOwnedItemListByUUID: (String) -> Unit,
 ) {
     val dndTarget = remember(selectedItem) {
         object : DragAndDropTarget {
@@ -59,26 +60,32 @@ internal fun EnchantSpace(
                 val decodedData = formatter.decodeFromString<Item>(draggedData)
 
                 val newItem = if (decodedData is EnchantScroll) {
-                    when (selectedItem) {
-                        is Weapon -> {
-                            selectedItem.copy(
-                                enchantNumber = enchantEquipmentBy30percent(
-                                    now = selectedItem.enchantNumber,
-                                    standard = 6,
-                                )
-                            )
-                        }
+                    val enchantStandard = when (selectedItem) {
+                        is Weapon -> 6
 
-                        is Armor -> {
-                            selectedItem.copy(
-                                enchantNumber = enchantEquipmentBy30percent(
-                                    now = selectedItem.enchantNumber,
-                                    standard = 4,
-                                )
-                            )
-                        }
+                        is Armor -> 4
 
                         else -> throw IllegalStateException("$selectedItem is not allowed type for Equipment")
+                    }
+                    if (enchantEquipment(
+                            now = selectedItem.enchantNumber,
+                            standard = enchantStandard,
+                        )
+                    )
+                        when (selectedItem) {
+                            is Weapon -> selectedItem.copy(
+                                enchantNumber = selectedItem.enchantNumber + 1
+                            )
+
+                            is Armor -> selectedItem.copy(
+                                enchantNumber = selectedItem.enchantNumber + 1
+                            )
+
+                            else -> throw IllegalStateException("$selectedItem is not allowed type for Equipment")
+                        }
+                    else {
+                        removeEquipmentOnOwnedItemListByUUID(selectedItem.uuid)
+                        Empty()
                     }
                 } else
                     decodedData as Equipment
@@ -160,6 +167,7 @@ private fun PreviewEnchantSpace(
             selectedItem = equipments.first(),
             setSelectedEquipment = {},
             storeSelectedItem = {},
+            removeEquipmentOnOwnedItemListByUUID = {},
         )
     }
 }

@@ -42,7 +42,7 @@ internal fun SimulatorScreen(
         selectedEquipment = selectedEquipment,
         updateSelectedEquipment = simulatorViewModel::updateSelectedEquipment,
         addEquipmentOnOwnedItemList = simulatorViewModel::addEquipmentOnOwnedItemList,
-        removeEquipmentOnOwnedItemList = simulatorViewModel::removeEquipmentOnOwnedItemList,
+        removeEquipmentOnOwnedItemListByUUID = simulatorViewModel::removeEquipmentOnOwnedItemList,
         storeSelectedItem = simulatorViewModel::storeSelectedItem,
     )
 }
@@ -55,7 +55,7 @@ private fun SimulatorScreen(
     selectedEquipment: Equipment,
     updateSelectedEquipment: (Equipment) -> Unit,
     addEquipmentOnOwnedItemList: (Equipment) -> Unit,
-    removeEquipmentOnOwnedItemList: (String) -> Unit,
+    removeEquipmentOnOwnedItemListByUUID: (String) -> Unit,
     storeSelectedItem: () -> Unit,
 ) {
     val viewWidthDp = configuration.screenWidthDp.dp
@@ -81,7 +81,7 @@ private fun SimulatorScreen(
         EquipmentDeleteBar(
             isEquipmentDragging = isEquipmentDragging,
             setIsEquipmentDragging = { bool -> isEquipmentDragging = bool },
-            removeEquipmentOnOwnedItemList = removeEquipmentOnOwnedItemList,
+            removeEquipmentOnOwnedItemList = removeEquipmentOnOwnedItemListByUUID,
         )
         VerticalSpacer(height = 100.dp)
         EnchantSpace(
@@ -91,6 +91,7 @@ private fun SimulatorScreen(
                 updateSelectedEquipment(equipment)
             },
             storeSelectedItem = storeSelectedItem,
+            removeEquipmentOnOwnedItemListByUUID = removeEquipmentOnOwnedItemListByUUID,
         )
         VerticalSpacer(height = 200.dp)
         ItemList(
@@ -130,7 +131,7 @@ private fun PreviewSimulatorScreen(
         selectedEquipment = simulatorState.ownedItems.first(),
         updateSelectedEquipment = {},
         addEquipmentOnOwnedItemList = {},
-        removeEquipmentOnOwnedItemList = {},
+        removeEquipmentOnOwnedItemListByUUID = {},
         storeSelectedItem = {},
     )
 }

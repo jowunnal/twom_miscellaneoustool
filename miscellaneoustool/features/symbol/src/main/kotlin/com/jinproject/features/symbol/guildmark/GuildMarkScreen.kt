@@ -98,7 +98,7 @@ private fun GuildMarkScreen(
                 )
         }
 
-    DisposableEffect(key1 = Unit) {
+    DisposableEffect(key1 = imageUri) {
         val intent = Intent(
             context,
             SymbolOverlayService::class.java
