@@ -76,11 +76,11 @@
 - 알람 생성
   - 몬스터의 재 생성 시간은 수분 ~ 수일 까지 걸릴 수 있고, 앱이 **백그라운드**에 있거나 디바이스가 **도즈모드**에 진입해도 **정시** 에 울려야 합니다.
   - 따라서 **AlarmManager#setAlarmClock** 으로 알람을 생성하고 **BroadcastReceiver** 에서 수신하여 **Notification** 을 생성합니다.
-    - BroadcastReceiver#onReceive(Intent) 는 코드를 모두 빠르게 수행시키고 프로세스가 종료되기 때문에 비동기 작업을 이 안에서 처리하지 않고, intent 에 필요한 모든 정보를 담아와서 처리합니다.
+    - **BroadcastReceiver#onReceive(Intent)** 는 코드를 모두 빠르게 수행시키고 프로세스가 종료되기 때문에 비동기 작업을 이 안에서 처리하지 않고, intent 에 필요한 모든 정보를 담아와서 처리합니다.
 - 알람 재 생성
-  - NotificationCompat.Builder#addAction 으로 "알람 재생성" 버튼을 생성하고, PendingIntent#getService 으로 서비스를 실행하여 알람을 재 생성합니다.
+  - **NotificationCompat.Builder#addAction** 으로 "알람 재생성" 버튼을 생성하고, **PendingIntent#getService** 으로 서비스를 실행하여 알람을 재 생성합니다.
 - 단위테스트 작성
-  - 알람을 생성하기 위해 몬스터 이름으로 몬스터 정보를 가져오고, 정보의 재 생성 시간을 이용하여 현재 시간으로 부터 몬스터의 다음 생성 시간을 계산하는 과정의 단위테스트를 kotlin 언어 기반 라이브러리인 kotest 와 mockk를 이용하여 작성하였습니다.
+  - 알람을 생성하기 위해 몬스터 이름으로 몬스터 정보를 가져오고, 정보의 재 생성 시간을 이용하여 현재 시간으로 부터 몬스터의 다음 생성 시간을 계산하는 과정의 단위테스트를 kotlin 언어 기반 라이브러리인 **kotest** 와 **mockk**를 이용하여 작성하였습니다.
 
 ### To-Be
 - 사용자들은 더 이상의 몬스터 재 생성 시간 계산의 실수를 방지하고, 알람 생성으로 정확한 시간에 잊지 않고 몬스터를 사냥할 수 있게 되었습니다.
@@ -98,21 +98,21 @@
 - 몬스터 도감, 아이템 도감, 몬스터 알람, 강화 시뮬레이터 기능에 사용할 데이터들이 필요하다.
 
 ### Challenge
-- 데이터 저장은 Local Database 선택
+- 데이터 저장은 Local **Database** 선택
   - 해당 앱은 사용자 디바이스(Local) 기반의 앱 이므로 서버로 부터 데이터를 요청하지 않습니다.
-  - DataStore 를 사용하기에는 많은 양의 데이터를 복잡한 데이터 구조로 관리해야 합니다.
-  - 따라서, 디바이스에 Database 를 이용하여 데이터를 저장하고 관리하는 방법을 선택했습니다.
-- Database 를 위한 Jetpack Room 선택
-  - 안드로이드의 DBMS 는 SQLite 를 이용합니다.
-  - SQLite 를 직접 이용하기에는 보일러 플레이트가 많이 발생하고, Migration 과 같은 DB 관리에 어려움이 발생했습니다.
-  - 어노테이션으로 보일러 플레이트를 줄이고, Kotlinx.Coroutines 를 지원하여 DB 관리에 다양한 API 를 제공해주는 JetPack Room 을 채택했습니다.
-  - 몬스터, 아이템, 도감에 대해 개념적 설계로 E-R 다이어그램을 산출하고, 논리적 설계로 테이블 관계도를 구성했습니다.
+  - **DataStore** 를 사용하기에는 많은 양의 데이터를 복잡한 데이터 구조로 관리해야 합니다.
+  - 따라서, 디바이스에 **Database** 를 이용하여 데이터를 저장하고 관리하는 방법을 선택했습니다.
+- Database 를 위한 **Jetpack Room** 선택
+  - 안드로이드의 DBMS 는 **SQLite** 를 이용합니다.
+  - **SQLite** 를 직접 이용하기에는 **보일러 플레이트**가 많이 발생하고, Migration 과 같은 **DB 관리에 어려움**이 발생했습니다.
+  - **어노테이션**으로 보일러 플레이트를 줄이고, **Kotlinx.Coroutines 를 지원**하여 DB 관리에 다양한 API 를 제공해주는 **JetPack Room** 을 채택했습니다.
+  - 몬스터, 아이템, 도감에 대해 개념적 설계로 **E-R 다이어그램**을 산출하고, 논리적 설계로 테이블 관계도를 구성했습니다.
 - Room DB Migration
-  - Jetpack Room 은 DB Migration 에 대해 수동이전과 자동이전을 지원하고 있습니다.
-  - 리펙토링 과정에 DB에 중대한 변경점들이 크게 발생하여 수동이전 코드를 작성하고, crash 를 방지하기 위해 Migration 에 대한 UI test 를 작성하였습니다. 
+  - **Jetpack Room** 은 **DB Migration** 에 대해 **수동이전**과 **자동이전**을 지원하고 있습니다.
+  - 리펙토링 과정에 DB에 **중대한 변경점들이 크게 발생**하여 **수동이전** 코드를 작성하고, **crash 를 방지하기 위해** Migration 에 대한 **UI test** 를 작성하였습니다. 
 
 ### To-Be
-- 안드로이드 생태계에서 Local 데이터를 관리할 수 있는 방법인 SharedPerferences, DataStore 와 Room 에 대해 알게 되었습니다.
+- 안드로이드 생태계에서 Local 데이터를 관리할 수 있는 방법인 **SharedPerferences**, **DataStore** 와 **Room** 에 대해 알게 되었습니다.
 
 </div>
 </details>
@@ -125,9 +125,9 @@
 - 모바일 게임 아이모는 글로벌 서버가 있고, 주요 국가인 미국, 필리핀 에 대한 서비스를 지원해야 한다.
 
 ### Challenge
-- UI string 요소들의 지역화는 resource 의 string.xml 을 이용하여 지역화 하였습니다.
+- UI string 요소들의 지역화는 **resource 의 string.xml** 을 이용하여 지역화 하였습니다.
 - 데이터베이스로 부터 가져온 데이터들의 지역화는 string.xml 로 지역화 할 수 없는 문제가 발생했습니다.
-- 이를 Database 를 언어에 따라 생성한 뒤, Data layer 에서 ApplicationContext 를 주입받아 앱의 Locale 로 분기하여 가져오도록 지역화 하였습니다.
+- 이를 Database 를 **언어에 따라 생성한 뒤**, Data layer 에서 ApplicationContext 를 주입받아 **앱의 Locale 로 분기**하여 가져오도록 지역화 하였습니다.
 
 ### To-Be
 - 앱의 이용자들중 10% 만큼의 글로벌 유저들을 추가적으로 유치할 수 있었습니다.
@@ -184,8 +184,8 @@
       - 마지막으로 "색상 팔레트" 리스트를 rgb 값 순서대로 정렬합니다.
 
 ### To-Be
-- 이미지가 컴퓨터상에서 존재하는 방법인 Bitmap 과 Vector 에 대해 알게되었고 png, jpg, webp, svg 와 같은 확장자들에 대해 알게 되었습니다.
-- android.graphics.Bitmap 의 다양한 API 들을 활용하면서 이미지 처리에 대한 이해를 넓힐 수 있었습니다.
+- 이미지가 컴퓨터상에서 존재하는 방법인 **Bitmap** 과 **Vector** 에 대해 알게되었고 **png, jpg, webp, svg** 와 같은 확장자들에 대해 알게 되었습니다.
+- **android.graphics.Bitmap** 의 다양한 API 들을 활용하면서 **이미지 처리에 대한 이해**를 넓힐 수 있었습니다.
 
 </div>
 </details>
