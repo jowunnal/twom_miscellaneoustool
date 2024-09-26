@@ -30,11 +30,12 @@
 
 # Stacks
 
-| Category | Config |
+| Category | Skill Set |
 | ----- | ----- |
 | Language | Kotlin |
 | UI toolkit | XML, Compose |
 | Architecture | Clean Architecture |
+| Design Pattern | MVVM |
 | Android Component | Activity, Service, BroadcastReceiver |
 | Jetpack | Lifecycle, Navigation, AlarmManager, Databinding |
 | Asynchronous | Kotlinx.Coroutines, Kotlinx.Coroutines.Flow |
@@ -85,7 +86,6 @@
 ### To-Be
 - 사용자들은 더 이상의 몬스터 재 생성 시간 계산의 실수를 방지하고, 알람 생성으로 정확한 시간에 잊지 않고 몬스터를 사냥할 수 있게 되었습니다.
 - 몬스터 재 생성 시간을 계산하는 담당자의 계산 실수로 인한 길드 내의 유저들간에 불화를 방지할 수 있었습니다.
-
 
 </div>
 </details>
