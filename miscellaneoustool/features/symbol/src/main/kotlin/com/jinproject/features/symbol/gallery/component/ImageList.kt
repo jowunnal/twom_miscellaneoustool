@@ -17,7 +17,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +25,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -63,11 +63,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import coil.request.ImageRequest
-import com.jinproject.design_compose.component.button.DefaultButton
-import com.jinproject.design_compose.component.button.DefaultIconButton
 import com.jinproject.design_compose.component.DescriptionLargeText
 import com.jinproject.design_compose.component.DescriptionMediumText
 import com.jinproject.design_compose.component.SubcomposeAsyncImageWithPreview
+import com.jinproject.design_compose.component.button.DefaultButton
+import com.jinproject.design_compose.component.button.DefaultIconButton
 import com.jinproject.design_compose.component.lazyList.TimeScheduler
 import com.jinproject.design_compose.component.lazyList.VerticalScrollBar
 import com.jinproject.design_compose.component.lazyList.addScrollBarNestedScrollConnection
@@ -97,7 +97,6 @@ internal fun ImageList(
     list: MTImageList,
     setClickedImage: (Long) -> Unit,
     isRefreshing: Boolean,
-    modifier: Modifier = Modifier,
     getMoreImages: () -> Unit,
     navigateToImageDetail: (String) -> Unit,
 ) {
@@ -113,7 +112,8 @@ internal fun ImageList(
     val backgroundColor = MaterialTheme.colorScheme.background
     val permissionLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions()) { results ->
-
+            if (results[READ_MEDIA_IMAGES] == true)
+                pushRefreshState.onRefresh
         }
 
     val isUpperScrollActive by remember {
@@ -128,22 +128,23 @@ internal fun ImageList(
         }
     }
 
-    val cellColumnsCount = 4
-    val perWidth = configuration.screenWidthDp.dp / cellColumnsCount
-    val perHeight = configuration.screenHeightDp.dp / 8
-
-    val perItemHeight = perHeight
+    val cellColumnCount = 4
+    val perWidth = configuration.screenWidthDp.dp / cellColumnCount
+    val cellRowCount = 8
+    val perHeight = (configuration.screenHeightDp.dp - 50.dp) / cellRowCount
 
     val scrollBarState = rememberScrollBarState(
         viewHeight = with(density) {
             val perViewPortHeight = viewPortSize.height
 
-            (perItemHeight * (list.images.size / cellColumnsCount)).toPx() - perViewPortHeight
-        }
+            (perHeight * (list.images.size / cellColumnCount)).toPx() - perViewPortHeight
+        },
+        timer = timeScheduler,
+        isUpperScrollActive = isUpperScrollActive,
     )
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .pushRefresh(pushRefreshState = pushRefreshState)
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE &&
@@ -222,22 +223,17 @@ internal fun ImageList(
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxWidth()
-                .addScrollBarNestedScrollConnection(
-                    timer = timeScheduler,
-                    isUpperScrollActive = isUpperScrollActive,
-                    scrollBarState = scrollBarState,
-                ),
+                .addScrollBarNestedScrollConnection(scrollBarState = scrollBarState),
         ) {
             LazyVerticalGrid(
-                columns = GridCells.Fixed(cellColumnsCount),
+                columns = GridCells.Fixed(cellColumnCount),
                 state = lazyGridState,
                 modifier = Modifier
                     .fillMaxHeight()
                     .align(Alignment.Center),
-                contentPadding = PaddingValues(vertical = 8.dp)
             ) {
                 items(list.images, key = { image -> image.id }) { image ->
-                    Box(modifier = Modifier.fillMaxSize()) {
+                    Box(modifier = Modifier.wrapContentSize()) {
                         SubcomposeAsyncImageWithPreview(
                             model = ImageRequest.Builder(LocalContext.current)
                                 .data(image.uri)
@@ -270,7 +266,10 @@ internal fun ImageList(
                                     navigateToImageDetail(image.uri)
                                 }
                                 .padding(4.dp)
-                                .background(MaterialTheme.colorScheme.onSurfaceVariant , RoundedCornerShape(2.5.dp))
+                                .background(
+                                    MaterialTheme.colorScheme.onSurfaceVariant,
+                                    RoundedCornerShape(2.5.dp)
+                                )
                                 .padding(4.dp)
                                 .align(Alignment.BottomStart),
                         ) {
@@ -294,7 +293,7 @@ internal fun ImageList(
                         }
                     }
                 }
-                item(span = { GridItemSpan(currentLineSpan = cellColumnsCount) }) {
+                item(span = { GridItemSpan(currentLineSpan = cellColumnCount) }) {
                     MTPushRefreshIndicator(
                         state = pushRefreshState,
                         isRefreshing = isRefreshing,
@@ -327,9 +326,14 @@ internal fun ImageList(
             if (isUpperScrollActive)
                 VerticalScrollBar(
                     scrollBarState = scrollBarState,
-                    lazyListState = lazyGridState,
-                    headerItemHeight = 0.dp,
-                    perItemHeight = perItemHeight,
+                    scrollToItem = {
+                        val idx = with(density) {
+                            (scrollBarState.offset / perHeight.toPx() * cellColumnCount).coerceAtLeast(0f).toInt()
+                        }
+
+                        lazyGridState.scrollToItem(idx)
+                    },
+                    upperScrollAlpha = upperScrollAlpha
                 )
 
         }
@@ -357,15 +361,18 @@ private fun PreviewFeedList(
     imageList: MTImageList,
 ) = MiscellaneousToolTheme {
     val state = rememberLazyGridState()
-    ImageList(
-        list = imageList,
-        isRefreshing = false,
-        setClickedImage = {},
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
-        lazyGridState = state,
-        getMoreImages = {},
-        navigateToImageDetail = {},
-    )
+    ) {
+        ImageList(
+            list = imageList,
+            isRefreshing = false,
+            setClickedImage = {},
+            lazyGridState = state,
+            getMoreImages = {},
+            navigateToImageDetail = {},
+        )
+    }
 }

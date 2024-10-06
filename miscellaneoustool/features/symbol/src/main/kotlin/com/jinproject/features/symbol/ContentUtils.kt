@@ -24,7 +24,7 @@ fun getBitmapFromContentUri(
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.P -> {
             ImageDecoder.decodeBitmap(
                 ImageDecoder.createSource(context.contentResolver, imageUri.toUri())
-            ) { decoder, info, source ->
+            ) { decoder, _, _ ->
                 decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
                 decoder.isMutableRequired = true
             }
