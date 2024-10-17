@@ -21,8 +21,14 @@ internal fun NotificationManager.sendNotification(
     context: Context,
     intervalFirstTimerSetting: Int = 0,
     intervalSecondTimerSetting: Int = 0,
-    backToAlarmIntent: Intent?
 ) {
+    val backToAlarmIntent = Intent(
+        context,
+        Class.forName("com.jinproject.twomillustratedbook.ui.MainActivity")
+    ).apply {
+        putExtra("screen", "alarm")
+    }
+
 
     val backToAlarmPendingIntent = PendingIntent.getActivity(
         context,
@@ -34,7 +40,7 @@ internal fun NotificationManager.sendNotification(
     val reAlarmIntent = Intent(context, ReAlarmService::class.java).apply {
         putExtra("name", name)
         putExtra("code", code)
-        backToAlarmIntent?.let { putExtra("backToAlarmIntent", it) }
+        putExtra("backToAlarmIntent", backToAlarmIntent)
     }
 
     val reAlarmPendingIntent = PendingIntent.getService(

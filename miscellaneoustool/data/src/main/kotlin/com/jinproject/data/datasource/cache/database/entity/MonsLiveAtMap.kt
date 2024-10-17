@@ -6,16 +6,20 @@ import androidx.room.Index
 
 @Entity(
     primaryKeys = ["mlMonsName", "mlMapName"],
-    foreignKeys = [ForeignKey(
-        entity = Monster::class,
-        parentColumns = arrayOf("monsName"),
-        childColumns = arrayOf("mlMonsName")
-    ),
+    foreignKeys = [
+        ForeignKey(
+            entity = Monster::class,
+            parentColumns = arrayOf("monsName"),
+            childColumns = arrayOf("mlMonsName")
+        ),
         ForeignKey(
             entity = Maps::class,
             parentColumns = arrayOf("mapName"),
-            childColumns = arrayOf("mlMapName")
-        )], indices = [Index("mlMapName")]
+            childColumns = arrayOf("mlMapName"),
+            onUpdate = ForeignKey.CASCADE,
+        )
+    ],
+    indices = [Index("mlMapName")],
 )
 data class MonsLiveAtMap(
     val mlMonsName: String,

@@ -19,25 +19,14 @@ android {
         buildConfigField("String","ADMOB_REAL_REWARD_ID",getLocalKey("adMob.real.rewardId"))
         resValue("string", "ADMOB_TEST_UNIT_ID", getLocalKey("adMob.test.unitId"))
         resValue("string", "ADMOB_REAL_UNIT_ID", getLocalKey("adMob.real.unitId"))
+        manifestPlaceholders["ADMOB_TEST_APP_ID"] = getLocalKey("adMob.test.appId")
+        manifestPlaceholders["ADMOB_REAL_APP_ID"] = getLocalKey("adMob.real.appId")
     }
 
     buildFeatures {
         viewBinding = true
         dataBinding = true
         buildConfig = true
-    }
-
-    buildTypes {
-        debug {
-            isMinifyEnabled = false
-            manifestPlaceholders["ADMOB_TEST_APP_ID"] = getLocalKey("adMob.test.appId")
-            manifestPlaceholders["ADMOB_REAL_APP_ID"] = getLocalKey("adMob.real.appId")
-        }
-        release {
-            isMinifyEnabled = false
-            manifestPlaceholders["ADMOB_TEST_APP_ID"] = getLocalKey("adMob.test.appId")
-            manifestPlaceholders["ADMOB_REAL_APP_ID"] = getLocalKey("adMob.real.appId")
-        }
     }
 }
 

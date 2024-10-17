@@ -34,6 +34,7 @@ import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.features.alarm.AlarmRoute
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.core.utils.findActivity
+import com.jinproject.features.droplist.DropListRoute
 import com.jinproject.features.simulator.SimulatorRoute
 import com.jinproject.features.symbol.SymbolRoute
 import com.jinproject.twomillustratedbook.BuildConfig.ADMOB_REAL_REWARD_ID
@@ -45,11 +46,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class NavigationFragment : Fragment() {
     private var mRewardedAd: RewardedAd? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        hideTopBar()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,6 +65,7 @@ class NavigationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadRewardedAd()
+        hideTopBar()
     }
 
     @Composable
@@ -118,11 +115,13 @@ class NavigationFragment : Fragment() {
             setBillingCallback(callback)
         }
         val billingModule = remember(activity) { activity.billingModule }
+
         val startDestination =
             when(findNavController().currentBackStackEntry?.arguments?.getString("start")) {
                 "alarm" -> AlarmRoute.AlarmGraph
                 "symbolGraph" -> SymbolRoute.SymbolGraph
                 "simulator" -> SimulatorRoute.SimulatorGraph
+                "dropList" -> DropListRoute.DropListGraph
                 else -> AlarmRoute.AlarmGraph
             }
 
@@ -141,19 +140,20 @@ class NavigationFragment : Fragment() {
                         disMissSnackBar = { snackBarHostState.currentSnackbarData?.dismiss() })
                 }
             ) { paddingValues ->
+                val navController = rememberNavController()
                 NavigationGraph(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(paddingValues),
-                    navHostController = rememberNavController(),
-                    startDestination = startDestination,
+                    navHostController = navController,
                     billingModule = billingModule,
                     showRewardedAd = { onResult ->
                         showRewardedAd(onResult)
                     },
                     showSnackBar = { snackBarMessage ->
                         showSnackBar(snackBarMessage)
-                    }
+                    },
+                    startDestination = startDestination
                 )
             }
         }

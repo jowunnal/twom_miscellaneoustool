@@ -35,11 +35,11 @@ import com.jinproject.design_compose.component.pushRefresh.MTProgressIndicatorRo
 import com.jinproject.design_compose.theme.MiscellaneousToolColor
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.design_compose.tu
+import com.jinproject.features.core.utils.toAssetImageUri
 import com.jinproject.features.simulator.EquipmentListPreviewParameters
 import com.jinproject.features.simulator.model.Empty
 import com.jinproject.features.simulator.model.Equipment
 import com.jinproject.features.simulator.model.Item
-import com.jinproject.features.simulator.util.toImageUriOnAsset
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -77,7 +77,7 @@ internal fun ItemSpace(
     SubcomposeAsyncImageWithPreview(
         model = ImageRequest
             .Builder(LocalContext.current)
-            .data(item.imgName.toImageUriOnAsset())
+            .data(toAssetImageUri(prefix = "item", imgName = item.imgName))
             .build(),
         contentDescription = "Image",
         loading = {

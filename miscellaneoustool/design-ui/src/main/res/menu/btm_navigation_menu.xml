@@ -25,7 +25,7 @@
         android:icon="@drawable/icon_simulator"
         app:showAsAction="always"
         />
-    <item android:id="@+id/navigationFragment"
+    <item android:id="@+id/navi_alarm"
         android:title="alarm"
         android:enabled="true"
         android:icon="@drawable/icon_alarm"

@@ -1,4 +1,4 @@
-package com.jinproject.design_compose.component
+package com.jinproject.design_compose.component.text
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text

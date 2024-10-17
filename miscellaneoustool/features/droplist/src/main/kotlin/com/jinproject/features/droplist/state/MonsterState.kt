@@ -1,4 +1,8 @@
-package com.jinproject.features.droplist.monster.item
+package com.jinproject.features.droplist.state
+
+import com.jinproject.domain.model.MonsterType
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 data class MonsterState(
     val name: String,
@@ -6,7 +10,7 @@ data class MonsterState(
     val genTime: Int,
     val imgName: String,
     val type: com.jinproject.domain.model.MonsterType,
-    val item: List<ItemState>
+    val items: ImmutableList<String>
 ): Comparable<MonsterState> {
     companion object {
         fun getInitValue() = MonsterState(
@@ -14,8 +18,8 @@ data class MonsterState(
             level = 0,
             genTime = 0,
             imgName = "",
-            type = com.jinproject.domain.model.MonsterType.NORMAL,
-            item = emptyList()
+            type = MonsterType.Normal("일반"),
+            items = persistentListOf()
         )
     }
 
@@ -24,4 +28,7 @@ data class MonsterState(
             this.level.compareTo(other.level)
         else
             this.type.getPriority().compareTo(other.type.getPriority())
+
+    fun itemsToSingleLine() = items.joinToString(", ")
+
 }

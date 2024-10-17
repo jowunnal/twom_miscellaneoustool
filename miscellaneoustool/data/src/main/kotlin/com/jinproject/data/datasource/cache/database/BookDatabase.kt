@@ -1,5 +1,6 @@
 package com.jinproject.data.datasource.cache.database
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
@@ -22,7 +23,14 @@ import com.jinproject.data.datasource.cache.database.entity.Timer
 
 @Database(
     entities = [Book::class, Item::class, ItemInfo::class, Equipment::class, Monster::class, Maps::class, Stat::class, MonsDropItem::class, MonsLiveAtMap::class, RegisterItemToBook::class, Timer::class],
-    version = 3, exportSchema = true
+    version = 4,
+    exportSchema = true,
+    autoMigrations = [
+        AutoMigration (
+            from = 3,
+            to = 4,
+        )
+    ],
 )
 abstract class BookDatabase : RoomDatabase() {
 
@@ -179,6 +187,7 @@ abstract class BookDatabase : RoomDatabase() {
                 }
             }
         }
+
     }
 
     abstract fun getDropListDao(): DropListDao

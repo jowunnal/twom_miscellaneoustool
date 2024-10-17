@@ -1,16 +1,15 @@
 package com.jinproject.features.alarm
 
-import android.content.Intent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Stable
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import androidx.navigation.navDeepLink
 import com.jinproject.features.alarm.alarm.AlarmScreen
 import com.jinproject.features.alarm.gear.GearScreen
 import com.jinproject.features.alarm.watch.WatchScreen
@@ -45,6 +44,9 @@ fun NavGraphBuilder.alarmNavGraph(
 ) {
     navigation<AlarmRoute.AlarmGraph>(
         startDestination = AlarmRoute.Alarm,
+        deepLinks = listOf(
+            navDeepLink<AlarmRoute.Alarm>("twom/alarm")
+        ),
     ) {
         composable<AlarmRoute.Alarm>(
             enterTransition = {
@@ -62,18 +64,10 @@ fun NavGraphBuilder.alarmNavGraph(
         ) {
             AlarmScreen(
                 billingModule = billingModule,
-                backToAlarmIntent = Intent(
-                    LocalContext.current,
-                    Class.forName("com.jinproject.twomillustratedbook.ui.MainActivity")
-                ).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    putExtra("screen", "alarm")
-                },
                 showRewardedAd = showRewardedAd,
                 onNavigateToGear = onNavigateToGear,
                 onNavigateToWatch = onNavigateToWatch,
-                showSnackBar = showSnackBar
+                showSnackBar = showSnackBar,
             )
         }
 

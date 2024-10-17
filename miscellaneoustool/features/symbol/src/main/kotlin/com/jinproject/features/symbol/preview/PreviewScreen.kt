@@ -32,7 +32,7 @@ import com.jinproject.design_compose.component.BackButtonTitleAppBar
 import com.jinproject.design_compose.component.DefaultLayout
 import com.jinproject.design_compose.component.DialogCustom
 import com.jinproject.design_compose.component.DialogState
-import com.jinproject.design_compose.component.FooterText
+import com.jinproject.design_compose.component.text.FooterText
 import com.jinproject.design_compose.component.SubcomposeAsyncImageWithPreview
 import com.jinproject.design_compose.component.button.TextButton
 import com.jinproject.design_compose.component.VerticalSpacer

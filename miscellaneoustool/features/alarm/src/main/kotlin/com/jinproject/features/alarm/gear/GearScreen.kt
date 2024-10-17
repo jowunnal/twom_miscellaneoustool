@@ -27,8 +27,8 @@ import com.chargemap.compose.numberpicker.NumberPicker
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.DefaultAppBar
 import com.jinproject.design_compose.component.DefaultLayout
-import com.jinproject.design_compose.component.DescriptionAnnotatedLargeText
-import com.jinproject.design_compose.component.DescriptionLargeText
+import com.jinproject.design_compose.component.text.DescriptionAnnotatedLargeText
+import com.jinproject.design_compose.component.text.DescriptionLargeText
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.HorizontalSpacer
 import com.jinproject.design_compose.component.VerticalSpacer

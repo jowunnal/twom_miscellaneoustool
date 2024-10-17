@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,16 +31,18 @@ fun VerticalDivider(
 
 @Suppress("FunctionName")
 @Composable
-fun LazyListScope.VerticalDividerItem(
+fun LazyItemScope.VerticalDividerItem(
+    idx: Int,
+    lastIdx: Int,
     modifier: Modifier = Modifier,
     thickness: Dp = 1.dp,
     color: Color = MaterialTheme.colorScheme.scrim,
 ) {
-    item {
-        VerticalDivider(
+    if(idx != lastIdx) {
+        androidx.compose.material3.VerticalDivider(
             modifier = modifier,
             thickness = thickness,
-            color = color
+            color = color,
         )
     }
 }
@@ -60,16 +62,18 @@ fun HorizontalDivider(
 
 @Suppress("FunctionName")
 @Composable
-fun LazyListScope.HorizontalDividerItem(
+fun LazyItemScope.HorizontalDividerItem(
+    idx: Int,
+    lastIdx: Int,
     modifier: Modifier = Modifier,
     thickness: Dp = 1.dp,
     color: Color = MaterialTheme.colorScheme.scrim,
 ) {
-    item {
-        HorizontalDivider(
+    if(idx != lastIdx) {
+        androidx.compose.material3.HorizontalDivider(
             modifier = modifier,
             thickness = thickness,
-            color = color
+            color = color,
         )
     }
 }

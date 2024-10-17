@@ -10,6 +10,7 @@ android {
 
 dependencies {
     implementation(libs.billing.ktx)
+    implementation(libs.navigation.fragment.compose)
 
     // compose NumberPicker
     implementation("com.chargemap.compose:numberpicker:1.0.3")

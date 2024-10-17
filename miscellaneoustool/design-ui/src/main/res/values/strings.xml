@@ -71,6 +71,9 @@
     <!-- alarm strings -->
     <string name="alarm_selectboss">보스 선택</string>
     <string name="alarm_classify_boss">보스 분류</string>
+    <string name="alarm_classified_boss_type_named">Mini Boss</string>
+    <string name="alarm_classified_boss_type_boss">Semi Boss</string>
+    <string name="alarm_classified_boss_type_bigboss">World Boss</string>
     <string name="alarm_present_bosslist">현재 진행중인 알람 내역</string>
     <string name="alarm_setted">의 알람이 설정되었습니다.</string>
     <string name="alarm_message_head">띵동~&#10; &lt;</string>

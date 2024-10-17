@@ -5,13 +5,23 @@
     android:id="@+id/navi_main"
     app:startDestination="@id/navi_droplist">
 
-    <include app:graph="@navigation/navi_droplist"/>
+    <fragment
+        android:id="@+id/navi_droplist"
+        android:name="com.jinproject.twomillustratedbook.ui.screen.navigation.NavigationFragment"
+        android:label="droplist">
+        <argument
+            android:name="start"
+            app:argType="string"
+            android:defaultValue="dropList"
+            />
+    </fragment>
+
     <include app:graph="@navigation/navi_collection"/>
 
     <fragment
-        android:id="@+id/navigationFragment"
+        android:id="@+id/navi_alarm"
         android:name="com.jinproject.twomillustratedbook.ui.screen.navigation.NavigationFragment"
-        android:label="NavigationFragment">
+        android:label="alarm">
         <argument
             android:name="start"
             app:argType="string"
@@ -22,7 +32,7 @@
     <fragment
         android:id="@+id/navi_symbol"
         android:name="com.jinproject.twomillustratedbook.ui.screen.navigation.NavigationFragment"
-        android:label="NavigationFragment">
+        android:label="symbol">
         <argument
             android:name="start"
             app:argType="string"
@@ -33,7 +43,7 @@
     <fragment
         android:id="@+id/navi_simulator"
         android:name="com.jinproject.twomillustratedbook.ui.screen.navigation.NavigationFragment"
-        android:label="NavigationFragment">
+        android:label="simulator">
         <argument
             android:name="start"
             app:argType="string"

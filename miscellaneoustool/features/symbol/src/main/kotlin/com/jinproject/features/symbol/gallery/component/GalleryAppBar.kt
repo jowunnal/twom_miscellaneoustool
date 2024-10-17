@@ -11,9 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.jinproject.design_compose.component.AppBarText
-import com.jinproject.design_compose.component.DescriptionSmallText
+import com.jinproject.design_compose.component.text.AppBarText
+import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.component.OneButtonAppBar
+import com.jinproject.design_ui.R
 
 @Composable
 fun GalleryAppBar(
@@ -36,7 +37,7 @@ fun GalleryAppBar(
                 .align(Alignment.Center),
         )
         DescriptionSmallText(
-            text = stringResource(id = com.jinproject.design_ui.R.string.convert),
+            text = stringResource(id = R.string.convert),
             modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .clickable {

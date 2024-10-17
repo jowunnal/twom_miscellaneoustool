@@ -69,6 +69,9 @@
     <!-- alarm strings -->
     <string name="alarm_selectboss">Boss Selection</string>
     <string name="alarm_classify_boss">Boss Classified</string>
+    <string name="alarm_classified_boss_type_named">Mini Boss</string>
+    <string name="alarm_classified_boss_type_boss">Semi Boss</string>
+    <string name="alarm_classified_boss_type_bigboss">World Boss</string>
     <string name="alarm_present_bosslist">Current progress alarm history</string>
     <string name="alarm_setted">\'s alarm has been set</string>
     <string name="alarm_message_head">Ding dong~ &#10; &lt;</string>

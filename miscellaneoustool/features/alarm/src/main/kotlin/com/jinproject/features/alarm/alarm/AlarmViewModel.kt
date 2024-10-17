@@ -7,7 +7,6 @@ import android.content.Intent
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.design_ui.R
 import com.jinproject.domain.usecase.alarm.SetAlarmUsecase
 import com.jinproject.domain.usecase.timer.GetAlarmStoredBossUsecase
@@ -90,15 +89,12 @@ class AlarmViewModel @Inject constructor(
         getAlarmStoredBossUsecase().onEach { alarmStoredBoss ->
             _uiState.update { state ->
                 state.copy(
-                    recentlySelectedBossClassified = context.doOnLocaleLanguage(
-                        onKo = com.jinproject.domain.model.MonsterType.findByStoredName(alarmStoredBoss.classified).displayName,
-                        onElse = com.jinproject.domain.model.MonsterType.findByStoredName(alarmStoredBoss.classified).storedName
-                    ),
+                    recentlySelectedBossClassified = alarmStoredBoss.classified,
                     recentlySelectedBossName = alarmStoredBoss.name,
                     frequentlyUsedBossList = alarmStoredBoss.list
                 )
             }
-            getBossListByType(com.jinproject.domain.model.MonsterType.findByStoredName(alarmStoredBoss.classified))
+            getBossListByType(com.jinproject.domain.model.MonsterType.findByBossTypeName(alarmStoredBoss.classified))
         }.launchIn(viewModelScope)
     }
 
@@ -197,7 +193,7 @@ class AlarmViewModel @Inject constructor(
         state.copy(selectedBossName = bossName, timeState = TimeState.getInitValue())
     }
 
-    fun setAlarm(monsterName: String, showSnackBar: suspend (SnackBarMessage) -> Unit, backToAlarmIntent: Intent) =
+    fun setAlarm(monsterName: String, showSnackBar: suspend (SnackBarMessage) -> Unit) =
         setAlarmUsecase.invoke(
             monsterName = monsterName,
             monsDiedHour = bottomSheetUiState.value.timeState.hour,
@@ -214,7 +210,6 @@ class AlarmViewModel @Inject constructor(
                         code = monsterAlarmModel.code
                     ),
                     intervalFirstTimerSetting = firstInterval,
-                    backToAlarmIntent = backToAlarmIntent
                 )
 
                 alarmManager.makeAlarm(
@@ -226,7 +221,6 @@ class AlarmViewModel @Inject constructor(
                         code = monsterAlarmModel.code + 300
                     ),
                     intervalSecondTimerSetting = secondInterval,
-                    backToAlarmIntent = backToAlarmIntent
                 )
             }
         ).onEach {

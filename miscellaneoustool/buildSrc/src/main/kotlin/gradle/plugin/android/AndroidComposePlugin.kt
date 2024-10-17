@@ -20,6 +20,7 @@ internal class AndroidComposePlugin : Plugin<Project> {
         with(pluginManager) {
             apply("org.jetbrains.kotlin.plugin.compose")
             apply("kotlinx-serialization")
+            apply("kotlin-parcelize")
         }
 
         dependencies {

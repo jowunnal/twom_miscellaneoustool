@@ -1,5 +1,6 @@
 package com.jinproject.twomillustratedbook.ui.screen.navigation
 
+import android.content.Context
 import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,6 +17,7 @@ import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.Route
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.core.utils.findActivity
+import com.jinproject.features.droplist.dropListNavigation
 import com.jinproject.features.simulator.simulatorNavGraph
 import com.jinproject.features.symbol.symbolNavGraph
 import com.jinproject.twomillustratedbook.R
@@ -23,13 +25,13 @@ import com.jinproject.twomillustratedbook.R
 @Composable
 fun NavigationGraph(
     modifier: Modifier = Modifier,
-    startDestination: Route,
+    context: Context = LocalContext.current,
     navHostController: NavHostController,
     billingModule: BillingModule,
     showRewardedAd: (() -> Unit) -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit,
+    startDestination: Route,
 ) {
-    val context = LocalContext.current
     val bottomBar = remember {
         context.findActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
     }
@@ -65,5 +67,11 @@ fun NavigationGraph(
         )
 
         simulatorNavGraph()
+
+        dropListNavigation(
+            setBottomBarVisibility = { visibility ->
+                bottomBar.visibility = visibility
+            }
+        )
     }
 }

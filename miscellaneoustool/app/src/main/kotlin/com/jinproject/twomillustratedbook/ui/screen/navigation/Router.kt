@@ -10,6 +10,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
 import com.jinproject.features.alarm.AlarmRoute
 import com.jinproject.features.alarm.navigateToAlarm
+import com.jinproject.features.droplist.DropListRoute
 import com.jinproject.features.simulator.SimulatorRoute
 import com.jinproject.features.symbol.SymbolRoute
 
@@ -19,6 +20,7 @@ internal val TopLevelRoutes = listOf(
     TopLevelRoute(route = AlarmRoute.Alarm),
     TopLevelRoute(route = SymbolRoute.Symbol),
     TopLevelRoute(route = SimulatorRoute.Simulator),
+    TopLevelRoute(route = DropListRoute.MapList),
 )
 
 /**

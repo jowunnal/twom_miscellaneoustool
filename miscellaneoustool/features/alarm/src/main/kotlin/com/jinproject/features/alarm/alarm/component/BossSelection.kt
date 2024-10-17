@@ -18,14 +18,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
-import com.jinproject.design_compose.component.DescriptionLargeText
+import com.jinproject.design_compose.component.text.DescriptionLargeText
 import com.jinproject.design_compose.component.DialogState
 import com.jinproject.design_compose.component.DropDownMenuCustom
+import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.component.button.TextButton
 import com.jinproject.design_compose.component.button.TextCombinedButton
-import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_ui.R
 import com.jinproject.domain.model.MonsterType
 
@@ -104,21 +103,14 @@ private fun BossSelectionHeader(
                 DropDownMenuCustom(
                     label = stringResource(id = R.string.alarm_classify_boss),
                     text = recentlySelectedBossClassified,
-                    items = MonsterType.values().toMutableList()
-                        .apply { remove(MonsterType.NORMAL) }
-                        .map { monsterType ->
-                            context.doOnLocaleLanguage(
-                                onKo = monsterType.displayName,
-                                onElse = monsterType.storedName
-                            )
-                        }
-                        .toList(),
-                    setTextChanged = { item ->
+                    items = listOf(
+                        stringResource(id = R.string.alarm_classified_boss_type_named),
+                        stringResource(id = R.string.alarm_classified_boss_type_boss),
+                        stringResource(id = R.string.alarm_classified_boss_type_bigboss),
+                    ),
+                    setTextChanged = { type ->
                         setRecentlySelectedBossClassifiedChanged(
-                            context.doOnLocaleLanguage(
-                                onKo = MonsterType.findByDisplayName(item),
-                                onElse = MonsterType.findByStoredName(item)
-                            )
+                            MonsterType.findByBossTypeName(type)
                         )
                     }
                 )

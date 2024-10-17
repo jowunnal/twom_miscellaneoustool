@@ -26,7 +26,6 @@ class AlarmReceiver : BroadcastReceiver() {
         val code = p1.getIntExtra("code", 0)
         val intervalFirstTimeSetting = p1.getIntExtra("first",0)
         val intervalSecondTimeSetting = p1.getIntExtra("second",0)
-        val backToAlarmIntent = p1.getParcelableExtraOnVersion<Intent>(key = "backToAlarmIntent")
 
         if (code > 300) {
             notificationManager.sendNotification(
@@ -35,7 +34,6 @@ class AlarmReceiver : BroadcastReceiver() {
                 code = code,
                 context = p0,
                 intervalSecondTimerSetting = intervalSecondTimeSetting,
-                backToAlarmIntent = backToAlarmIntent
             )
             CoroutineScope(Dispatchers.IO).launch {
                 timerRepository.deleteTimer(name)
@@ -48,7 +46,6 @@ class AlarmReceiver : BroadcastReceiver() {
                 code = code,
                 context = p0,
                 intervalFirstTimerSetting = intervalFirstTimeSetting,
-                backToAlarmIntent = backToAlarmIntent
             )
         }
     }

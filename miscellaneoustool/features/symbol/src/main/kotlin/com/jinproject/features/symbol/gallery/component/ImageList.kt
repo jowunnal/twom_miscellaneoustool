@@ -63,8 +63,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import coil.request.ImageRequest
-import com.jinproject.design_compose.component.DescriptionLargeText
-import com.jinproject.design_compose.component.DescriptionMediumText
+import com.jinproject.design_compose.component.text.DescriptionLargeText
+import com.jinproject.design_compose.component.text.DescriptionMediumText
 import com.jinproject.design_compose.component.SubcomposeAsyncImageWithPreview
 import com.jinproject.design_compose.component.button.DefaultButton
 import com.jinproject.design_compose.component.button.DefaultIconButton

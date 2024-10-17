@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
+import com.jinproject.design_compose.component.text.DescriptionLargeText
+import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.blue
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.red
 import com.jinproject.design_compose.theme.Typography

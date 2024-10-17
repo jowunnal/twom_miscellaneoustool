@@ -38,8 +38,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.design_compose.component.BackButtonTitleAppBar
 import com.jinproject.design_compose.component.DefaultLayout
-import com.jinproject.design_compose.component.DescriptionSmallText
-import com.jinproject.design_compose.component.HeadlineText
+import com.jinproject.design_compose.component.text.DescriptionSmallText
+import com.jinproject.design_compose.component.text.HeadlineText
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.design_ui.R

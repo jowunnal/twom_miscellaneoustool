@@ -3,7 +3,6 @@ package com.jinproject.data.mapper
 import com.jinproject.data.datasource.cache.database.entity.MonsDropItem
 import com.jinproject.data.datasource.cache.database.entity.Monster
 import com.jinproject.domain.model.ItemModel
-import com.jinproject.domain.model.MapField
 import com.jinproject.domain.model.MapModel
 import com.jinproject.domain.model.MonsterModel
 import com.jinproject.domain.model.MonsterType
@@ -16,7 +15,7 @@ fun MonsDropItem.toItemModel() = ItemModel(
 )
 
 fun com.jinproject.data.datasource.cache.database.entity.Maps.toMapModel() = MapModel(
-    name = MapField.findByMapName(mapName),
+    name = mapName,
     imgName = mapImgName
 )
 
@@ -25,7 +24,7 @@ fun Monster.toMonsterModel() = MonsterModel(
     level = monsLevel,
     genTime = monsGtime,
     imgName = monsImgName,
-    type = MonsterType.findByStoredName(monsType),
+    type = MonsterType.findByBossTypeName(monsType),
     item = emptyList()
 )
 

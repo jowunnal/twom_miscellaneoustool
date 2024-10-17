@@ -8,8 +8,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.jinproject.design_compose.component.DescriptionSmallText
-import com.jinproject.design_compose.component.HeadlineText
+import com.jinproject.design_compose.component.text.DescriptionSmallText
+import com.jinproject.design_compose.component.text.HeadlineText
 import com.jinproject.design_compose.component.VerticalSpacer
 
 @Composable

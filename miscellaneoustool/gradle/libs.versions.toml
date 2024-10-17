@@ -34,7 +34,7 @@ protobuf = "3.25.0"
 room = "2.6.1"
 
 # plugin
-androidNavigationSafeargs = "2.7.7"
+androidNavigationSafeargs = "2.8.0"
 androidStudioGradlePlugin = "8.5.0"
 gmsGoogleServicePlugin = "4.4.2"
 firebaseCrashlyticsPlugin = "2.9.9"
@@ -47,7 +47,7 @@ protobufPlugin = "0.9.4"
 
 # Gradle Plugin
 gradle-android = { group = "com.android.tools.build", name = "gradle", version.ref = "androidStudioGradlePlugin" }
-gradle-androidx-navigation-safe-args = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "androidNavigationSafeargs" }
+gradle-androidx-navigation-safe-args = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navigation" }
 gradle-google-devtools-ksp = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "kotlinKsp" }
 gradle-google-gms-google-services = { module = "com.google.gms:google-services", version.ref = "gmsGoogleServicePlugin" }
 gradle-google-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsPlugin" }
@@ -76,6 +76,7 @@ compose-material = { group = "androidx.compose.material", name = "material" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 compose-material3-adaptive = { group = "androidx.compose.material3.adaptive", name = "adaptive", version.ref = "composeAdaptive" }
 compose-material3-adaptive-layout = { group = "androidx.compose.material3.adaptive", name = "adaptive-layout", version.ref = "composeAdaptive" }
+compose-material3-adaptive-navigation = { module = "androidx.compose.material3.adaptive:adaptive-navigation", version.ref = "composeAdaptive" }
 compose-material3-adaptive-navigation-suite = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite", version.ref = "composeAdaptiveNavigationSuite" }
 compose-material3-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
@@ -127,7 +128,8 @@ lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-view
 
 # Navigation
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
+navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
+navigation-fragment-compose = { group = "androidx.navigation", name = "navigation-fragment-compose", version.ref = "navigation" }
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 
 # Play In App
@@ -159,11 +161,11 @@ test-ext = { group = "androidx.test.ext", name = "junit", version.ref = "android
 
 billing = ["billing-client", "billing-ktx"]
 compose = ["compose-material3", "compose-material", "compose-foundation", "compose-ui", "compose-ui-preview", "compose-viewBinding"]
-composeAdaptive = ["compose-material3-adaptive", "compose-material3-adaptive-layout", "compose-material3-adaptive-navigation-suite"]
+composeAdaptive = ["compose-material3-adaptive", "compose-material3-adaptive-layout", "compose-material3-adaptive-navigation", "compose-material3-adaptive-navigation-suite"]
 coroutines = ["coroutines-core"]
 firebase = ["firebase-analytics", "firebase-crashlytics", "firebase-database"]
 kotest = ["io-kotest-junit", "io-kotest-assertions"]
 lifecycle = ["lifecycle-compose", "lifecycle-viewmodel-ktx", "lifecycle-runtime-ktx", "lifecycle-runtime-compose", "lifecycle-service"]
-navigation = ["navigation-fragment", "navigation-ui"]
+navigation = ["navigation-fragment-ktx", "navigation-ui", "navigation-fragment-compose"]
 testing = ["jUnit", "junit-jupiter-api", "io-mockk"]
 playInAppUpdate = ["play-app-update", "play-app-update-ktx"]
