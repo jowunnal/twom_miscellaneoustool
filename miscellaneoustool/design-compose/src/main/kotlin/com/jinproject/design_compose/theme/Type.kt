@@ -8,8 +8,8 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import com.jinproject.design_ui.R
 import com.jinproject.design_compose.tu
+import com.jinproject.design_ui.R
 
 @Stable
 val font = FontFamily(

@@ -1,3 +1,6 @@
+
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("jinProject.android.application")
     id("jinProject.android.safeArgs")
@@ -11,12 +14,35 @@ android {
         targetSdk = 34
         versionCode = 50
         versionName = "2.3.1"
+
+        buildConfigField("String","ADMOB_TEST_REWARD_ID",getLocalKey("adMob.test.rewardId"))
+        buildConfigField("String","ADMOB_REAL_REWARD_ID",getLocalKey("adMob.real.rewardId"))
+        resValue("string", "ADMOB_TEST_UNIT_ID", getLocalKey("adMob.test.unitId"))
+        resValue("string", "ADMOB_REAL_UNIT_ID", getLocalKey("adMob.real.unitId"))
     }
 
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
+
+    buildTypes {
+        debug {
+            isMinifyEnabled = false
+            manifestPlaceholders["ADMOB_TEST_APP_ID"] = getLocalKey("adMob.test.appId")
+            manifestPlaceholders["ADMOB_REAL_APP_ID"] = getLocalKey("adMob.real.appId")
+        }
+        release {
+            isMinifyEnabled = false
+            manifestPlaceholders["ADMOB_TEST_APP_ID"] = getLocalKey("adMob.test.appId")
+            manifestPlaceholders["ADMOB_REAL_APP_ID"] = getLocalKey("adMob.real.appId")
+        }
+    }
+}
+
+fun getLocalKey(propertyKey:String):String{
+    return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 }
 
 dependencies {

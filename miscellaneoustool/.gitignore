@@ -184,7 +184,6 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 
-app_info.xml
 data/schemas/
 app/src/main/assets/
 

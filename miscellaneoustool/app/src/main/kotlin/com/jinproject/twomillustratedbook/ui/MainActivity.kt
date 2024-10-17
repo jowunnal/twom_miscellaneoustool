@@ -36,8 +36,9 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), BottomNavigationController {
-    private var _binding: ActivityMainBinding? = null
-    private val binding get() = _binding!!
+    private val binding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
     private val appUpdateManager by lazy { AppUpdateManagerFactory.create(this) }
 
     private val permissionLauncher = registerForActivityResult(
@@ -95,7 +96,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initBillingModule()
         initTopBar()
@@ -265,11 +265,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationController {
             appUpdateManager.unregisterListener(listener)
             installUpdatedListener = null
         }
-    }
-
-    override fun onDestroy() {
-        _binding = null
-        super.onDestroy()
     }
 
     override fun hideBottomNavigation() {
