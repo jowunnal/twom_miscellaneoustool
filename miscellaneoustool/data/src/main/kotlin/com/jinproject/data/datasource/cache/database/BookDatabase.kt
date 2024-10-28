@@ -2,7 +2,9 @@ package com.jinproject.data.datasource.cache.database
 
 import androidx.room.AutoMigration
 import androidx.room.Database
+import androidx.room.RenameColumn
 import androidx.room.RoomDatabase
+import androidx.room.migration.AutoMigrationSpec
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.jinproject.data.datasource.cache.database.dao.CollectionDao
@@ -29,6 +31,7 @@ import com.jinproject.data.datasource.cache.database.entity.Timer
         AutoMigration (
             from = 3,
             to = 4,
+            spec = BookDatabase.AutoMigration3To4::class
         )
     ],
 )
@@ -187,8 +190,11 @@ abstract class BookDatabase : RoomDatabase() {
                 }
             }
         }
-
     }
+
+    @RenameColumn(tableName = "RegisterItemToBook", fromColumnName = "rlBookId", toColumnName = "bookId")
+    @RenameColumn(tableName = "RegisterItemToBook", fromColumnName = "rlItemName", toColumnName = "itemName")
+    class AutoMigration3To4 : AutoMigrationSpec
 
     abstract fun getDropListDao(): DropListDao
     abstract fun getCollectionDao(): CollectionDao

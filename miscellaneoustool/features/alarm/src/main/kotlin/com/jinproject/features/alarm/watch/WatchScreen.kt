@@ -31,7 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.ButtonStatus
-import com.jinproject.design_compose.component.DefaultAppBar
+import com.jinproject.design_compose.component.bar.DefaultAppBar
 import com.jinproject.design_compose.component.DefaultLayout
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.component.button.TextButton

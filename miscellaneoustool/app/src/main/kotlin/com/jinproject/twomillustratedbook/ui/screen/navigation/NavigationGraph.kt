@@ -13,6 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.jinproject.features.alarm.alarmNavGraph
 import com.jinproject.features.alarm.navigateToGear
 import com.jinproject.features.alarm.navigateToWatch
+import com.jinproject.features.collection.collectionNavigation
 import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.Route
 import com.jinproject.features.core.base.item.SnackBarMessage
@@ -72,6 +73,11 @@ fun NavigationGraph(
             setBottomBarVisibility = { visibility ->
                 bottomBar.visibility = visibility
             }
+        )
+
+        collectionNavigation(
+            showSnackBar = showSnackBar,
+            popBackStackIfCan = navController::popBackStackIfCan,
         )
     }
 }

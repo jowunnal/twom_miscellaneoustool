@@ -20,6 +20,21 @@ data class MiscellanousToolPaddingValues(
     @Stable
     private val bottom: Dp = 0.dp
 ): PaddingValues {
+
+    constructor(paddingValues: PaddingValues) : this(
+        start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
+        end = paddingValues.calculateEndPadding(LayoutDirection.Ltr),
+        top = paddingValues.calculateTopPadding(),
+        bottom = paddingValues.calculateBottomPadding(),
+    )
+
+    constructor(vertical: Dp = 0.dp, horizontal: Dp = 0.dp) : this (
+        start = horizontal,
+        end = horizontal,
+        top = vertical,
+        bottom = vertical,
+    )
+
     override fun calculateLeftPadding(layoutDirection: LayoutDirection) = start
 
     override fun calculateTopPadding() = top
@@ -28,7 +43,10 @@ data class MiscellanousToolPaddingValues(
 
     override fun calculateBottomPadding() = bottom
 
-    operator fun plus(other: PaddingValues): PaddingValues = PaddingValues(
+    fun calculateHorizontalPadding() = start + end
+    fun calculateVerticalPadding() = top + bottom
+
+    operator fun plus(other: PaddingValues): MiscellanousToolPaddingValues = MiscellanousToolPaddingValues(
         top = top + other.calculateTopPadding(),
         start = start + other.calculateStartPadding(LayoutDirection.Ltr),
         end = end + other.calculateEndPadding(LayoutDirection.Ltr),

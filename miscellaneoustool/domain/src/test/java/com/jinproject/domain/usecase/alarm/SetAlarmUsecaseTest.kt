@@ -50,7 +50,7 @@ class SetAlarmUsecaseTest : BehaviorSpec() {
                                 level = 7,
                                 genTime = 900,
                                 imgName = "bulldozer",
-                                type = MonsterType.NAMED,
+                                type = MonsterType.Named("bulldozer"),
                                 item = emptyList()
                             )
                         )

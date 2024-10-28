@@ -1,4 +1,4 @@
-package com.jinproject.design_compose.component
+package com.jinproject.design_compose.component.bar
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,17 +27,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
+import com.jinproject.design_compose.component.HorizontalWeightSpacer
 import com.jinproject.design_compose.component.button.DefaultIconButton
 import com.jinproject.design_compose.component.text.AppBarText
-import com.jinproject.design_compose.component.text.DescriptionSmallText
+import com.jinproject.design_compose.component.text.SearchTextField
 import com.jinproject.design_compose.theme.Typography
 import com.jinproject.design_ui.R
 
 @Composable
 fun OneButtonAppBar(
-    buttonAlignment: Alignment,
+    buttonAlignment: Alignment = Alignment.CenterStart,
     @DrawableRes icon: Int,
-    onClick: () -> Unit,
+    onBackClick: () -> Unit,
     content: @Composable BoxScope.() -> Unit,
 ) {
     DefaultAppBar(
@@ -48,7 +47,7 @@ fun OneButtonAppBar(
                 modifier = Modifier
                     .align(buttonAlignment),
                 icon = icon,
-                onClick = onClick,
+                onClick = onBackClick,
                 iconTint = MaterialTheme.colorScheme.onSurface,
                 interactionSource = remember { MutableInteractionSource() }
             )
@@ -59,7 +58,7 @@ fun OneButtonAppBar(
 
 @Composable
 fun BackButtonTitleAppBar(
-    onClick: () -> Unit,
+    onBackClick: () -> Unit,
     title: String
 ) {
     DefaultAppBar(
@@ -68,7 +67,7 @@ fun BackButtonTitleAppBar(
                 modifier = Modifier
                     .align(Alignment.CenterStart),
                 icon = R.drawable.ic_arrow_left,
-                onClick = onClick,
+                onClick = onBackClick,
                 iconTint = MaterialTheme.colorScheme.onSurface,
                 interactionSource = remember { MutableInteractionSource() }
             )
@@ -112,7 +111,7 @@ fun DefaultRowScopeAppBar(
 fun BackButtonRowScopeAppBar(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
-    content: @Composable RowScope.() -> Unit,
+    content: @Composable RowScope.() -> Unit = {},
 ) {
     DefaultRowScopeAppBar(modifier = modifier) {
         DefaultIconButton(
@@ -128,30 +127,19 @@ fun BackButtonRowScopeAppBar(
 
 @Composable
 fun BackButtonSearchAppBar(
+    modifier: Modifier = Modifier,
     textFieldState: TextFieldState,
-
+    onBackClick: () -> Unit,
+    onSearchClick: () -> Unit = {},
 ) {
     BackButtonRowScopeAppBar(
-        onBackClick = {}
+        onBackClick = onBackClick,
     ) {
-        BasicTextField(
-            modifier = Modifier.padding(end = 12.dp),
-            state = textFieldState,
-            decorator = { innerTextField ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
-                        .padding(vertical = 12.dp, horizontal = 8.dp),
-                ) {
-                    if(textFieldState.text.isEmpty())
-                        DescriptionSmallText(
-                            text = "입력하쇼",
-                            color = MaterialTheme.colorScheme.onPrimary,
-                        )
-                    innerTextField()
-                }
-            },
+        HorizontalWeightSpacer(float = 1f)
+        SearchTextField(
+            modifier = modifier,
+            textFieldState = textFieldState,
+            onSearchClick = onSearchClick,
         )
     }
 }
@@ -194,10 +182,33 @@ fun DefaultAppBar(
 
 @Preview
 @Composable
-private fun PreviewDefaultAppBar() =
+private fun PreviewBackButtonRowScopeAppBar() =
     PreviewMiscellaneousToolTheme {
-        DefaultAppBar(
+        BackButtonRowScopeAppBar(
+            onBackClick = {},
+        ) {
+
+        }
+    }
+
+@Preview
+@Composable
+private fun PreviewBackButtonTitleAppBar() =
+    PreviewMiscellaneousToolTheme {
+        BackButtonTitleAppBar(
             title = "앱바 타이틀",
-            onBackClick = {}
+            onBackClick = {},
+        )
+    }
+
+@Preview
+@Composable
+private fun PreviewBackButtonSearchAppBar() =
+    PreviewMiscellaneousToolTheme {
+        val textFiledState = rememberTextFieldState()
+        BackButtonSearchAppBar(
+            textFieldState = textFiledState,
+            onBackClick = {},
+            onSearchClick = {},
         )
     }

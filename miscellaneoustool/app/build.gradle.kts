@@ -28,6 +28,21 @@ android {
         dataBinding = true
         buildConfig = true
     }
+
+    buildTypes {
+        debug {
+            isMinifyEnabled = false
+            manifestPlaceholders["ADMOB_APP_ID"] = getLocalKey("adMob.test.appId")
+            buildConfigField("String","ADMOB_REWARD_ID",getLocalKey("adMob.test.rewardId"))
+            resValue("string", "ADMOB_UNIT_ID", getLocalKey("adMob.test.unitId"))
+        }
+        release {
+            isMinifyEnabled = false
+            manifestPlaceholders["ADMOB_APP_ID"] = getLocalKey("adMob.real.appId")
+            buildConfigField("String","ADMOB_REWARD_ID",getLocalKey("adMob.real.rewardId"))
+            resValue("string", "ADMOB_UNIT_ID", getLocalKey("adMob.real.unitId"))
+        }
+    }
 }
 
 fun getLocalKey(propertyKey:String):String{

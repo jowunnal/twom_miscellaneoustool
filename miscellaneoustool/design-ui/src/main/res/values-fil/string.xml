@@ -11,7 +11,7 @@
     <string name="알람서비스">Twom lumikha ng serbisyo ng alarma</string>
 
     <!-- UI strings !-->
-    <string name="item_name">Item\'s Name</string>
+    <string name="item">Item</string>
     <string name="stat">Stat</string>
 
     <string name="home_header">Twom Miscellaneous Tool</string>
@@ -56,10 +56,15 @@
     <string name="very_high">Napakataas</string>
     <string name="color_precision">Katumpakan ng Kulay</string>
     <string name="very_low">Napakababa</string>
+    <string name="gold">Gold</string>
+    <string name="textfield_hint">Maglagay ng text</string>
+    <string name="total">Kabuuan</string>
 
     <!-- Snackbar Message -->
     <string name="message_throw_no_such_element">Walang tugmang data.</string>
     <string name="message_throw_exceptions">May naganap na hindi kilalang error. Pakisubukang muli.</string>
+    <string name="message_success_applied">Matagumpay na nailapat.</string>
+    <string name="message_success_removed">Matagumpay na naalis.</string>
 
     <!-- collection strings -->
     <string name="collection_roll_back">Gusto mo bang ibalik ang collection?</string>

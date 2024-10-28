@@ -50,7 +50,6 @@ internal fun MapListPane(
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(itemWidth),
-        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
         verticalArrangement = Arrangement.spacedBy(itemSpaceWidth),
         horizontalArrangement = Arrangement.spacedBy(itemSpaceWidth),
         contentPadding = PaddingValues(vertical = 16.dp, horizontal = itemPadding)

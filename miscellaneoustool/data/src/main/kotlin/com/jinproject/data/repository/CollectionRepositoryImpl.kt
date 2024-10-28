@@ -1,70 +1,58 @@
 package com.jinproject.data.repository
 
 import android.net.Uri
-import com.jinproject.data.datasource.cache.CacheCollectionDataSource
+import com.jinproject.data.datasource.cache.CollectionDataStorePreferences
 import com.jinproject.data.datasource.cache.database.dao.CollectionDao
-import com.jinproject.data.mapper.fromItemsToItemModel
-import com.jinproject.data.mapper.fromItemsWithStatsToCollectionModel
-import com.jinproject.domain.model.Category
 import com.jinproject.domain.model.CollectionModel
 import com.jinproject.domain.model.ItemModel
+import com.jinproject.domain.model.ItemType
+import com.jinproject.domain.model.Stat
 import com.jinproject.domain.repository.CollectionRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.zip
 import javax.inject.Inject
 
 class CollectionRepositoryImpl @Inject constructor(
     private val collectionDao: CollectionDao,
-    private val cacheCollectionDataSource: CacheCollectionDataSource
+    private val collectionDataStorePreferences: CollectionDataStorePreferences
 ) : CollectionRepository {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getCollectionList(
-        category: Category,
-        filter: Boolean
-    ): Flow<List<CollectionModel>> =
-        collectionDao.getCollectionItems(category.storedName).flatMapConcat { items ->
-            collectionDao.getCollectionStats(items.keys.map { it.bookId }).map { stats ->
-                fromItemsWithStatsToCollectionModel(items, stats)
+    override fun getCollectionList(): Flow<List<CollectionModel>> =
+        collectionDao.getCollectionItems().map { collectionItems ->
+            collectionItems.map { collectionItem ->
+                CollectionModel(
+                    bookId = collectionItem.book.bookId,
+                    stat = collectionItem.stats.associate { stat -> Stat.valueOf(stat.type) to stat.value },
+                    items = collectionItem.items.map { item -> ItemModel(
+                        name = item.item.itemName,
+                        count = item.registerItemToBook.rlItemCount,
+                        enchantNumber = item.registerItemToBook.rlItemEnchant,
+                        price = item.item.itemPrice,
+                        type = ItemType.findByStoredName(item.item.itemType)
+                    ) }
+                )
             }
         }
-            .zip(cacheCollectionDataSource.getFilteringCollectionList()) { collectionModels, filterList ->
-                val list = filterList.toMutableList()
 
-                collectionModels.filter { collectionModel ->
-                    if (collectionModel.bookId in list) {
-                        list.remove(collectionModel.bookId)
-                        !filter
-                    } else
-                        filter
-                }
-            }
+    override fun getFilteredCollectionIds(): Flow<Set<Int>> =
+        collectionDataStorePreferences.getFilteringCollectionList().map { it.toSet() }
 
-    override suspend fun deleteCollection(collectionList: List<Int>) {
-        cacheCollectionDataSource.setFilteringCollectionList(collectionList)
+
+    override suspend fun setFilteringCollections(collectionList: Set<Int>) {
+        collectionDataStorePreferences.setFilteringCollectionList(collectionList.toList())
     }
 
-    override fun getItems(): Flow<List<ItemModel>> =
-        collectionDao.getItems().map { items ->
-            fromItemsToItemModel(items)
+    override suspend fun updateItemPrice(items: List<ItemModel>) {
+        items.forEach { item ->
+            collectionDao.updateItemPrice(name = item.name, price = item.price)
         }
-
-    override suspend fun updateItemPrice(name: String, price: Int) {
-        collectionDao.updateItemPrice(name = name, price = price)
-    }
-
-    override suspend fun deleteFilter(id: Int) {
-        cacheCollectionDataSource.deleteFilter(id)
     }
 
     override suspend fun setSymbolUri(uri: Uri) {
-        cacheCollectionDataSource.setSymbolUri(uri)
+        collectionDataStorePreferences.setSymbolUri(uri)
     }
 
     override fun getSymbolUri(): Flow<List<String>> =
-        cacheCollectionDataSource.getSymbolUri()
+        collectionDataStorePreferences.getSymbolUri()
 
 }

@@ -1,21 +1,18 @@
 package com.jinproject.domain.repository
 
 import android.net.Uri
-import com.jinproject.domain.model.Category
 import com.jinproject.domain.model.CollectionModel
 import com.jinproject.domain.model.ItemModel
 import kotlinx.coroutines.flow.Flow
 
 interface CollectionRepository {
-    fun getCollectionList(category: Category, filter: Boolean): Flow<List<CollectionModel>>
+    fun getCollectionList(): Flow<List<CollectionModel>>
 
-    suspend fun deleteCollection(collectionList: List<Int>)
+    fun getFilteredCollectionIds(): Flow<Set<Int>>
 
-    fun getItems(): Flow<List<ItemModel>>
+    suspend fun setFilteringCollections(collectionList: Set<Int>)
 
-    suspend fun updateItemPrice(name: String, price: Int)
-
-    suspend fun deleteFilter(id: Int)
+    suspend fun updateItemPrice(items: List<ItemModel>)
 
     suspend fun setSymbolUri(uri: Uri)
 

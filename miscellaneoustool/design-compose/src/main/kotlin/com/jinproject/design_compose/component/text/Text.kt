@@ -1,5 +1,6 @@
 package com.jinproject.design_compose.component.text
 
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 
 @Composable
@@ -92,7 +94,8 @@ fun DescriptionMediumText(
 fun DescriptionSmallText(
     modifier: Modifier = Modifier,
     text: String,
-    color: Color = MaterialTheme.colorScheme.onBackground
+    color: Color = MaterialTheme.colorScheme.onBackground,
+    textAlign: TextAlign = TextAlign.Start,
 ) {
     DefaultText(
         modifier = modifier,
@@ -101,6 +104,7 @@ fun DescriptionSmallText(
         overflow = Ellipsis,
         color = color,
         maxLines = Int.MAX_VALUE,
+        textAlign = textAlign,
     )
 }
 
@@ -225,7 +229,8 @@ fun DefaultText(
 private fun PreviewBottomBarTextTrue() = MiscellaneousToolTheme {
     BottomBarText(
         text = "길면 잘려서 보이게 됩니다.길면 잘려서 보이게 됩니다.길면 잘려서 보이게 됩니다.길면 잘려서 보이게 됩니다.길면 잘려서 보이게 됩니다.",
-        clicked = true
+        clicked = true,
+        modifier = Modifier.width(220.dp)
     )
 }
 
@@ -234,7 +239,8 @@ private fun PreviewBottomBarTextTrue() = MiscellaneousToolTheme {
 private fun PreviewBottomBarTextFalse() = MiscellaneousToolTheme {
     BottomBarText(
         text = "길면 잘려서 보이게 됩니다.길면 잘려서 보이게 됩니다.길면 잘려서 보이게 됩니다.길면 잘려서 보이게 됩니다.",
-        clicked = false
+        clicked = false,
+        modifier = Modifier.width(220.dp)
     )
 }
 
@@ -243,6 +249,7 @@ private fun PreviewBottomBarTextFalse() = MiscellaneousToolTheme {
 private fun PreviewAppBarText() = MiscellaneousToolTheme {
     AppBarText(
         text = "이렇게 보입니다.길면 잘려서 보이게 됩니다.",
+        modifier = Modifier.width(220.dp)
     )
 }
 
@@ -251,14 +258,16 @@ private fun PreviewAppBarText() = MiscellaneousToolTheme {
 private fun PreviewHeadlineText() = MiscellaneousToolTheme {
     HeadlineText(
         text = "이렇게 보입니다. 길면 잘리게 됩니다. 이렇게 잘리게 됩니다.",
+        modifier = Modifier.width(220.dp)
     )
 }
 
 @Composable
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
-private fun PreviewDescriptionText() = MiscellaneousToolTheme {
+private fun PreviewDescriptionSmallText() = MiscellaneousToolTheme {
     DescriptionSmallText(
         text = "이렇게 보입니다. 길어도 이렇게 계속 잘 보이게 됩니다. 짤리지 않고 쭈우우욱",
+        modifier = Modifier.width(220.dp)
     )
 }
 
@@ -267,5 +276,6 @@ private fun PreviewDescriptionText() = MiscellaneousToolTheme {
 private fun PreviewFooterText() = MiscellaneousToolTheme {
     FooterText(
         text = "이렇게 보입니다. 길어도 이렇게 계속 잘 보이게 됩니다. 짤리지 않고 쭈우우욱",
+        modifier = Modifier.width(220.dp)
     )
 }

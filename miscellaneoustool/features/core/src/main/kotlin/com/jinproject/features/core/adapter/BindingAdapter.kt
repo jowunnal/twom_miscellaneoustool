@@ -7,8 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import com.jinproject.core.util.doOnLocaleLanguage
-import com.jinproject.domain.model.Category
+import com.jinproject.domain.model.ItemType
 
 @SuppressLint("DiscouragedApi")
 @BindingAdapter("context", "imgName", "type")
@@ -19,9 +18,9 @@ fun setImageResource(imgView: ImageView, context: Context, imgName: String, type
 }
 
 @BindingAdapter("context","category")
-fun setCategoryOnLocale(textView: TextView, context: Context, category: Category) {
-    textView.text = context.doOnLocaleLanguage(
-        onKo = category.displayName,
-        onElse = category.storedName
-    )
+fun setCategoryOnLocale(textView: TextView, context: Context, itemType: ItemType) {
+    /*textView.text = context.doOnLocaleLanguage(
+        onKo = itemType.displayName,
+        onElse = itemType.storedName
+    )*/
 }

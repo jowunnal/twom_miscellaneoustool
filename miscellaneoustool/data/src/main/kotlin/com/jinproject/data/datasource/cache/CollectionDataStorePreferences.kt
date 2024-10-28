@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.transform
 import java.io.IOException
 import javax.inject.Inject
 
-class CacheCollectionDataSource @Inject constructor(
+class CollectionDataStorePreferences @Inject constructor(
     private val dataStorePrefs: DataStore<CollectionPreferences>
 ) {
 
@@ -29,19 +29,8 @@ class CacheCollectionDataSource @Inject constructor(
     suspend fun setFilteringCollectionList(collectionList: List<Int>) {
         dataStorePrefs.updateData { prefs ->
             prefs.toBuilder()
-                .addAllFilteredCollectionList(collectionList)
-                .build()
-        }
-    }
-
-    suspend fun deleteFilter(id: Int) {
-        dataStorePrefs.updateData { prefs ->
-            val old = prefs.filteredCollectionListList.toMutableList().apply {
-                remove(id)
-            }
-            prefs.toBuilder()
                 .clearFilteredCollectionList()
-                .addAllFilteredCollectionList(old)
+                .addAllFilteredCollectionList(collectionList)
                 .build()
         }
     }

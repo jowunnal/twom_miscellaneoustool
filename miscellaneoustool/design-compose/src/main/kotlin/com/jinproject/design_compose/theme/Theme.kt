@@ -15,6 +15,7 @@ import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_onSurface
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_onSurfaceVariant
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_outline
+import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_outlineVariant
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_primary
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_scrim
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_secondary
@@ -29,10 +30,12 @@ import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.ligh
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_onSurface
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_onSurfaceVariant
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_outline
+import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_outlineVariant
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_primary
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_scrim
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_secondary
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_surface
+import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_surfaceVariant
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.red
 
 @Stable
@@ -62,7 +65,8 @@ private val DarkColorPalette = darkColorScheme(
     onError = dark_onError.color,
     onErrorContainer = red.color,
     scrim = dark_scrim.color,
-    outline = dark_outline.color
+    outline = dark_outline.color,
+    outlineVariant = dark_outlineVariant.color,
 )
 
 @Stable
@@ -74,13 +78,14 @@ private val LightColorPalette = lightColorScheme(
     background = light_background.color,
     onBackground = light_onBackground.color,
     surface = light_surface.color,
-    surfaceVariant = light_onSurfaceVariant.color,
+    surfaceVariant = light_surfaceVariant.color,
     onSurface = light_onSurface.color,
     onSurfaceVariant = light_onSurfaceVariant.color,
     error = light_error.color,
     onError = light_onError.color,
     scrim = light_scrim.color,
-    outline = light_outline.color
+    outline = light_outline.color,
+    outlineVariant = light_outlineVariant.color,
 )
 
 @Composable

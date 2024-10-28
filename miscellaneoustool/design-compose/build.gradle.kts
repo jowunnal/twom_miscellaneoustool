@@ -9,6 +9,7 @@ android {
 
 dependencies {
     implementation(project(":design-ui"))
+    implementation(project(":core"))
 
     implementation(libs.bumptech.glide)
     implementation(libs.coil)

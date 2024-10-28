@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.jinproject.design_compose.component.BackButtonTitleAppBar
+import com.jinproject.design_compose.component.bar.BackButtonTitleAppBar
 import com.jinproject.design_compose.component.HorizontalDividerItem
 import com.jinproject.design_compose.component.HorizontalSpacer
 import com.jinproject.design_compose.component.paddingvalues.MiscellanousToolPaddingValues
@@ -34,7 +34,7 @@ internal fun DropListDetail(
     Scaffold(
         topBar = {
             BackButtonTitleAppBar(
-                onClick = onNavigateBack,
+                onBackClick = onNavigateBack,
                 title = mapName,
             )
         }

@@ -57,10 +57,12 @@ private fun MapListScreen(
         value = navigator.scaffoldValue,
         listPane = {
             AnimatedPane {
+                setBottomBarVisibility(View.VISIBLE)
                 MapListPane(
                     mapListState = dropListUiState.maps,
                     onClickItem = { item ->
                         selectMap(item)
+                        setBottomBarVisibility(View.GONE)
                         navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, item)
                     },
                 )
@@ -69,13 +71,11 @@ private fun MapListScreen(
         detailPane = {
             AnimatedPane {
                 navigator.currentDestination?.content?.let { map ->
-                    setBottomBarVisibility(View.GONE)
                     DropListDetail(
                         mapName = map.name,
                         monsterListState = dropListUiState.monsters,
                         onNavigateBack = {
                             navigator.navigateBack()
-                            setBottomBarVisibility(View.VISIBLE)
                         },
                     )
                 }

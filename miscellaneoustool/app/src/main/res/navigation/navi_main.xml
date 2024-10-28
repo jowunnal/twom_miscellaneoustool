@@ -16,7 +16,16 @@
             />
     </fragment>
 
-    <include app:graph="@navigation/navi_collection"/>
+    <fragment
+        android:id="@+id/navi_collection"
+        android:name="com.jinproject.twomillustratedbook.ui.screen.navigation.NavigationFragment"
+        android:label="collection">
+        <argument
+            android:name="start"
+            app:argType="string"
+            android:defaultValue="collection"
+            />
+    </fragment>
 
     <fragment
         android:id="@+id/navi_alarm"

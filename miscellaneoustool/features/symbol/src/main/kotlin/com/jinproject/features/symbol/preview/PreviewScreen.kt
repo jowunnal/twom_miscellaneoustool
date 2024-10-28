@@ -28,7 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.request.ImageRequest
 import com.android.billingclient.api.ProductDetails
-import com.jinproject.design_compose.component.BackButtonTitleAppBar
+import com.jinproject.design_compose.component.bar.BackButtonTitleAppBar
 import com.jinproject.design_compose.component.DefaultLayout
 import com.jinproject.design_compose.component.DialogCustom
 import com.jinproject.design_compose.component.DialogState
@@ -119,7 +119,7 @@ private fun PreviewScreen(
     DefaultLayout(topBar = {
         BackButtonTitleAppBar(
             title = stringResource(id = R.string.symbol_preview_topbar),
-            onClick = popBackStack
+            onBackClick = popBackStack
         )
     }) {
         SubcomposeAsyncImageWithPreview(

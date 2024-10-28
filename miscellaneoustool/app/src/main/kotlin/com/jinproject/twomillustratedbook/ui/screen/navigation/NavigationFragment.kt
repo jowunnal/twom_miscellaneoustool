@@ -32,12 +32,13 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.jinproject.design_compose.component.SnackBarHostCustom
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.features.alarm.AlarmRoute
+import com.jinproject.features.collection.CollectionRoute
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.core.utils.findActivity
 import com.jinproject.features.droplist.DropListRoute
 import com.jinproject.features.simulator.SimulatorRoute
 import com.jinproject.features.symbol.SymbolRoute
-import com.jinproject.twomillustratedbook.BuildConfig.ADMOB_REAL_REWARD_ID
+import com.jinproject.twomillustratedbook.BuildConfig.ADMOB_REWARD_ID
 import com.jinproject.twomillustratedbook.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -122,6 +123,7 @@ class NavigationFragment : Fragment() {
                 "symbolGraph" -> SymbolRoute.SymbolGraph
                 "simulator" -> SimulatorRoute.SimulatorGraph
                 "dropList" -> DropListRoute.DropListGraph
+                "collection" -> CollectionRoute.CollectionGraph
                 else -> AlarmRoute.AlarmGraph
             }
 
@@ -166,7 +168,7 @@ class NavigationFragment : Fragment() {
     private fun loadRewardedAd() {
         RewardedAd.load(
             requireActivity(),
-            ADMOB_REAL_REWARD_ID,
+            ADMOB_REWARD_ID,
             AdRequest.Builder().build(),
             object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {

@@ -7,6 +7,7 @@ import android.content.Intent
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.design_ui.R
 import com.jinproject.domain.usecase.alarm.SetAlarmUsecase
 import com.jinproject.domain.usecase.timer.GetAlarmStoredBossUsecase
@@ -94,7 +95,17 @@ class AlarmViewModel @Inject constructor(
                     frequentlyUsedBossList = alarmStoredBoss.list
                 )
             }
-            getBossListByType(com.jinproject.domain.model.MonsterType.findByBossTypeName(alarmStoredBoss.classified))
+            val monsterType = kotlin.runCatching {
+                com.jinproject.domain.model.MonsterType.findByBossTypeName(alarmStoredBoss.classified)
+            }.getOrDefault(
+                com.jinproject.domain.model.MonsterType.Normal(
+                    context.doOnLocaleLanguage(
+                        onKo = "일반",
+                        onElse = "Normal"
+                    )
+                )
+            )
+            getBossListByType(monsterType)
         }.launchIn(viewModelScope)
     }
 
@@ -131,7 +142,10 @@ class AlarmViewModel @Inject constructor(
         }
     }
 
-    fun removeBossFromFrequentlyUsedList(bossName: String, showSnackBar: suspend (SnackBarMessage) -> Unit) {
+    fun removeBossFromFrequentlyUsedList(
+        bossName: String,
+        showSnackBar: suspend (SnackBarMessage) -> Unit
+    ) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
             if (throwable is IllegalArgumentException) {
                 viewModelScope.launch {
@@ -160,7 +174,7 @@ class AlarmViewModel @Inject constructor(
             })
         }
     }.catch { e ->
-        when(e) {
+        when (e) {
             is IllegalStateException -> {
                 _uiState.update { state ->
                     state.copy(

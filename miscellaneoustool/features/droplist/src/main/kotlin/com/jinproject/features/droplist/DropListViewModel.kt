@@ -54,8 +54,7 @@ class DropListViewModel @Inject constructor(
                 )
             }.toImmutableList()
         }.flatMapLatest { maps ->
-            _selectedMap.mapLatest {
-                map ->
+            _selectedMap.mapLatest { map ->
                 val monsters = dropListRepository.getMonsterListFromMap(map.name).map { monsterModelList ->
                     monsterModelList.map { monsterModel ->
                         monsterModel.toMonsterState()

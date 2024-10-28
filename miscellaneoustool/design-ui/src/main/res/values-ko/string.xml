@@ -11,7 +11,7 @@
     <string name="알람서비스">아이모 알람 생성 서비스</string>
 
     <!-- UI strings !-->
-    <string name="item_name">아이템이름</string>
+    <string name="item">아이템</string>
     <string name="stat">스텟</string>
     <string name="home_header">아이모 잡학도구</string>
 
@@ -54,10 +54,15 @@
     <string name="very_high">매우 높음</string>
     <string name="color_precision">색상 정밀도</string>
     <string name="very_low">매우 낮음</string>
+    <string name="gold">골드</string>
+    <string name="textfield_hint">텍스트를 입력해주세요.</string>
+    <string name="total">합계</string>
 
     <!-- Snackbar Message -->
     <string name="message_throw_no_such_element">일치하는 데이터가 없습니다.</string>
     <string name="message_throw_exceptions">오류가 발생했습니다. 다시 시도해 주세요.</string>
+    <string name="message_success_applied">성공적으로 적용되었어요.</string>
+    <string name="message_success_removed">성공적으로 제거되었어요.</string>
 
     <!-- collection strings -->
     <!-- Dialog -->

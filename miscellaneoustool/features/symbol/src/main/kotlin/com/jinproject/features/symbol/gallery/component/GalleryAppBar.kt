@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jinproject.design_compose.component.text.AppBarText
 import com.jinproject.design_compose.component.text.DescriptionSmallText
-import com.jinproject.design_compose.component.OneButtonAppBar
+import com.jinproject.design_compose.component.bar.OneButtonAppBar
 import com.jinproject.design_ui.R
 
 @Composable
@@ -28,8 +28,8 @@ fun GalleryAppBar(
 
     OneButtonAppBar(
         buttonAlignment = Alignment.CenterStart,
-        icon = com.jinproject.design_ui.R.drawable.ic_arrow_left,
-        onClick = onBackClick
+        icon = R.drawable.ic_arrow_left,
+        onBackClick = onBackClick
     ) {
         AppBarText(
             text = title,

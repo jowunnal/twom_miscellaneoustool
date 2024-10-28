@@ -11,7 +11,7 @@
     <string name="알람서비스">Twom create alarm service</string>
 
     <!-- UI strings !-->
-    <string name="item_name">Item\'s Name</string>
+    <string name="item">Item</string>
     <string name="stat">Stat</string>
 
     <string name="home_header">Twom Miscellaneous Tool</string>
@@ -55,10 +55,15 @@
     <string name="very_high">High</string>
     <string name="color_precision">Color Precision</string>
     <string name="very_low">Low</string>
+    <string name="gold">Gold</string>
+    <string name="textfield_hint">Enter text</string>
+    <string name="total">Total</string>
 
     <!-- Snackbar Message -->
     <string name="message_throw_no_such_element">The item has not found in Database</string>
     <string name="message_throw_exceptions">An error has occurred. Please try again.</string>
+    <string name="message_success_applied">Has been applied successfully.</string>
+    <string name="message_success_removed">Has been removed successfully.</string>
 
     <!-- collection strings -->
     <string name="collection_roll_back">Would you like to return the collection?</string>

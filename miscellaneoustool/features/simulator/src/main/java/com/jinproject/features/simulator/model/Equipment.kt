@@ -1,7 +1,7 @@
 package com.jinproject.features.simulator.model
 
-import com.jinproject.domain.model.Category
 import com.jinproject.domain.model.ItemInfo
+import com.jinproject.domain.model.ItemType
 import com.jinproject.domain.model.Stat
 import com.jinproject.domain.model.getItemCategory
 import kotlinx.serialization.Serializable
@@ -97,7 +97,7 @@ internal fun Equipment.toItemInfoDomainModel(): ItemInfo = when (this) {
 
 internal fun ItemInfo.toEquipment(): Equipment = run {
     when (val type = stat.keys.getItemCategory()) {
-        Category.WEAPONS -> {
+        is ItemType.Weapon -> {
             val minDamage = Stat.MINDAMAGE.name
             val maxDamage = Stat.MAXDAMAGE.name
             val speed = Stat.SPEED.name
@@ -127,7 +127,7 @@ internal fun ItemInfo.toEquipment(): Equipment = run {
             )
         }
 
-        Category.ARMORS -> {
+        is ItemType.Armor -> {
             val armor = Stat.ARMOR.name
 
             Armor(
