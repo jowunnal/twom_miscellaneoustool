@@ -45,7 +45,6 @@ import com.jinproject.design_compose.component.button.DefaultIconButton
 import com.jinproject.design_compose.component.button.clickableAvoidingDuplication
 import com.jinproject.design_compose.component.button.combinedClickableAvoidingDuplication
 import com.jinproject.design_compose.component.paddingvalues.MiscellanousToolPaddingValues
-import com.jinproject.design_compose.component.paddingvalues.addStatusBarPadding
 import com.jinproject.design_compose.component.text.DescriptionAnnotatedSmallText
 import com.jinproject.design_compose.component.text.DescriptionLargeText
 import com.jinproject.design_compose.component.text.DescriptionSmallText
@@ -84,7 +83,6 @@ private fun HomeScreen(
     DefaultLayout(
         modifier = Modifier
             .fillMaxSize()
-            .addStatusBarPadding()
             .verticalScroll(scrollState),
         contentPaddingValues = MiscellanousToolPaddingValues(vertical = 16.dp, horizontal = 12.dp),
     ) {

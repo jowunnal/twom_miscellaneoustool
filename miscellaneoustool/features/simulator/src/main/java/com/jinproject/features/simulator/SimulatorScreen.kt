@@ -76,8 +76,7 @@ private fun SimulatorScreen(
         Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface)
-            .padding(top = 20.dp)
-            .addStatusBarPadding(),
+            .padding(top = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         EquipmentDeleteBar(

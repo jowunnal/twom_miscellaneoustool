@@ -1,4 +1,3 @@
-
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
@@ -12,8 +11,8 @@ android {
     defaultConfig {
         applicationId = "com.jinproject.twomillustratedbook"
         targetSdk = 34
-        versionCode = 50
-        versionName = "2.3.1"
+        versionCode = 60
+        versionName = "2.3.2"
     }
 
     buildFeatures {

@@ -2,7 +2,6 @@ package com.jinproject.data.datasource.cache.database.entity
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.Index
 
 @Entity(
     primaryKeys = ["mlMonsName", "mlMapName"],
@@ -19,7 +18,6 @@ import androidx.room.Index
             onUpdate = ForeignKey.CASCADE,
         )
     ],
-    indices = [Index("mlMapName")],
 )
 data class MonsLiveAtMap(
     val mlMonsName: String,

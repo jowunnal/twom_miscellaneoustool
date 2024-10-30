@@ -50,6 +50,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.jinproject.design_compose.component.SnackBarHostCustom
+import com.jinproject.design_compose.component.paddingvalues.addStatusBarPadding
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.design_ui.R
 import com.jinproject.features.core.BillingModule
@@ -96,14 +97,13 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var billingModule: BillingModule
 
+    private val inAppUpdateLauncher = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+        inAppUpdateManager.inAppUpdatingLauncherResult(result)
+    }
+
     private val inAppUpdateManager by lazy {
         InAppUpdateManager(
             activity = this,
-            requestInAppUpdatingLauncher = { inAppUpdatingLauncherResult ->
-                registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
-                    inAppUpdatingLauncherResult(result)
-                }
-            },
             showDialog = { appUpdateManager, sendMessageIfDenyUpdate ->
                 CommonDialogFragment.show(
                     fragmentManager = supportFragmentManager,
@@ -136,6 +136,7 @@ class MainActivity : AppCompatActivity() {
                 Content()
             }
         }
+        inAppUpdateManager.checkUpdateIsAvailable(launcher = inAppUpdateLauncher)
     }
 
     private fun initBillingModule() {
@@ -263,7 +264,9 @@ class MainActivity : AppCompatActivity() {
                     navigationDrawerContentColor = NavigationDefaults.contentColor(),
                 ),
             ) {
-                Column {
+                Column(
+                    modifier = Modifier.addStatusBarPadding()
+                ) {
                     if (!isAdViewRemoved)
                         AndroidView(
                             modifier = Modifier.fillMaxWidth(),
@@ -365,7 +368,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        inAppUpdateManager.checkUpdateIsAvailableOrDownloaded()
+        inAppUpdateManager.checkUpdateIsDownloaded()
         requestPermission()
     }
 

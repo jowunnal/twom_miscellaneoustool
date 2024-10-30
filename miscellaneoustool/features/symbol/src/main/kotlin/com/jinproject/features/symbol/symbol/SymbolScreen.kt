@@ -26,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.component.button.TextButton
-import com.jinproject.design_compose.component.paddingvalues.addStatusBarPadding
 import com.jinproject.design_compose.component.text.FooterText
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.design_ui.R
@@ -97,7 +96,7 @@ internal fun SymbolScreen(
     val imageSize = configuration.screenWidthDp / 2.5
 
     SymbolLayout(
-        modifier = Modifier.fillMaxSize().addStatusBarPadding(),
+        modifier = Modifier.fillMaxSize(),
         headline = stringResource(id = R.string.symbol_headline),
         headLineContent = {
             Image(

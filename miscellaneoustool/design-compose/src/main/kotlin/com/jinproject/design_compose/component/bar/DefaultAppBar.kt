@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
@@ -23,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.HorizontalWeightSpacer
 import com.jinproject.design_compose.component.button.DefaultIconButton
-import com.jinproject.design_compose.component.paddingvalues.addStatusBarPadding
 import com.jinproject.design_compose.component.text.AppBarText
 import com.jinproject.design_compose.component.text.SearchTextField
 import com.jinproject.design_ui.R
@@ -79,8 +77,7 @@ fun DefaultAppBar(
         modifier = modifier
             .fillMaxWidth()
             .shadow(4.dp, RectangleShape, clip = false)
-            .background(MaterialTheme.colorScheme.surface)
-            .addStatusBarPadding(),
+            .background(MaterialTheme.colorScheme.surface),
     ) {
         content()
     }
@@ -95,8 +92,7 @@ fun DefaultRowScopeAppBar(
         modifier = modifier
             .fillMaxWidth()
             .shadow(4.dp, RectangleShape, clip = false)
-            .background(MaterialTheme.colorScheme.surface)
-            .statusBarsPadding(),
+            .background(MaterialTheme.colorScheme.surface),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         content()

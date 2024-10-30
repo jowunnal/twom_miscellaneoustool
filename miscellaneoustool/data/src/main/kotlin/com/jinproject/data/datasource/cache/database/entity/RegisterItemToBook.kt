@@ -2,7 +2,6 @@ package com.jinproject.data.datasource.cache.database.entity
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.Index
 
 @Entity(
     primaryKeys = ["bookId", "itemName", "rlItemEnchant"],
@@ -18,7 +17,6 @@ import androidx.room.Index
             childColumns = arrayOf("itemName")
         )
     ],
-    indices = [Index("itemName")],
 )
 data class RegisterItemToBook(
     val bookId: Int,

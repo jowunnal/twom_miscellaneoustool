@@ -17,33 +17,37 @@ import com.google.android.play.core.install.model.UpdateAvailability
 
 internal class InAppUpdateManager(
     private val activity: Activity,
-    private val requestInAppUpdatingLauncher: ((ActivityResult) -> Unit) -> ActivityResultLauncher<IntentSenderRequest>,
     private val showDialog: (AppUpdateManager, () -> Unit) -> Unit,
 ) {
     private val appUpdateManager = AppUpdateManagerFactory.create(activity)
 
     private var installUpdatedListener: InstallStateUpdatedListener? = null
 
-    fun checkUpdateIsAvailableOrDownloaded() {
+    fun checkUpdateIsAvailable(launcher: ActivityResultLauncher<IntentSenderRequest>) {
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
-                requestInAppUpdate(appUpdateInfo)
+                requestInAppUpdate(appUpdateInfo, launcher)
             }
-            else if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+        }
+    }
+
+    fun checkUpdateIsDownloaded() {
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
                 requireInstalling()
             }
         }
     }
 
-    private fun requestInAppUpdate(appUpdateInfo: AppUpdateInfo) {
+    private fun requestInAppUpdate(appUpdateInfo: AppUpdateInfo, launcher: ActivityResultLauncher<IntentSenderRequest>) {
         appUpdateManager.startUpdateFlowForResult(
             appUpdateInfo,
-            requestInAppUpdatingLauncher(::inAppUpdatingLauncherResult),
+            launcher,
             AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build()
         )
     }
 
-    private fun inAppUpdatingLauncherResult(result: ActivityResult) {
+    fun inAppUpdatingLauncherResult(result: ActivityResult) {
         if (result.resultCode == RESULT_OK) {
             installUpdatedListener = InstallStateUpdatedListener { state ->
                 if (state.installStatus() == InstallStatus.DOWNLOADED)
