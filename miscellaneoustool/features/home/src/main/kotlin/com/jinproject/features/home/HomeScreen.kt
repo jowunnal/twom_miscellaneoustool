@@ -1,5 +1,6 @@
 package com.jinproject.features.home
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,24 +11,31 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.design_compose.component.DefaultLayout
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.HorizontalSpacer
@@ -38,11 +46,16 @@ import com.jinproject.design_compose.component.button.clickableAvoidingDuplicati
 import com.jinproject.design_compose.component.button.combinedClickableAvoidingDuplication
 import com.jinproject.design_compose.component.paddingvalues.MiscellanousToolPaddingValues
 import com.jinproject.design_compose.component.paddingvalues.addStatusBarPadding
+import com.jinproject.design_compose.component.text.DescriptionAnnotatedSmallText
 import com.jinproject.design_compose.component.text.DescriptionLargeText
 import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
+import com.jinproject.design_ui.R
 import com.jinproject.features.collection.model.ItemCollection
+import com.jinproject.features.core.utils.appendBoldText
 import com.jinproject.features.droplist.component.DropListMonster
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 
 @Composable
 internal fun HomeScreen(
@@ -62,11 +75,17 @@ internal fun HomeScreen(
 @Composable
 private fun HomeScreen(
     uiState: HomeUiState,
+    context: Context = LocalContext.current,
     navigateToDropList: (String) -> Unit,
     navigateToCollection: (Int?) -> Unit,
 ) {
+    val scrollState = rememberScrollState()
+
     DefaultLayout(
-        modifier = Modifier.fillMaxSize().addStatusBarPadding(),
+        modifier = Modifier
+            .fillMaxSize()
+            .addStatusBarPadding()
+            .verticalScroll(scrollState),
         contentPaddingValues = MiscellanousToolPaddingValues(vertical = 16.dp, horizontal = 12.dp),
     ) {
         HomeMenu(
@@ -98,7 +117,7 @@ private fun HomeScreen(
             }
         }
 
-        VerticalSpacer(height = 20.dp)
+        VerticalSpacer(height = 40.dp)
 
         HomeMenu(
             header = stringResource(id = com.jinproject.design_ui.R.string.home_collection),
@@ -109,19 +128,88 @@ private fun HomeScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp),
+                    .height(220.dp),
                 contentPadding = MiscellanousToolPaddingValues(
                     vertical = 16.dp,
                     horizontal = 12.dp
                 ),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(uiState.collections, key = { collection -> collection.id}) { collection ->
+                items(uiState.collections, key = { collection -> collection.id }) { collection ->
                     CollectionItem(
                         collection = collection,
                         navigateToCollectionDetail = { id ->
                             navigateToCollection(id)
                         },
+                    )
+                }
+            }
+        }
+
+        VerticalSpacer(height = 40.dp)
+
+        Column(
+            modifier = Modifier
+                .shadow(6.dp, RoundedCornerShape(20.dp))
+                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
+                .padding(vertical = 16.dp, horizontal = 12.dp),
+        ) {
+            DescriptionLargeText(
+                text = stringResource(id = R.string.alarm_present_bosslist),
+            )
+            VerticalSpacer(height = 8.dp)
+            HorizontalDivider()
+            VerticalSpacer(height = 5.dp)
+
+            uiState.bossTimer.forEach { timer ->
+                key(timer.name) {
+                    DescriptionAnnotatedSmallText(
+                        text = buildAnnotatedString {
+                            appendBoldText(
+                                text = timer.name,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            append(" (")
+                            appendBoldText(
+                                text = timer.time.dayOfWeek.getDisplayName(
+                                    TextStyle.SHORT,
+                                    context.resources.configuration.locales[0]
+                                ),
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            append(") ${timer.time.format(DateTimeFormatter.ofPattern("a"))} ")
+                            appendBoldText(
+                                text = timer.time.hour.toString(),
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            append(
+                                "${
+                                    context.doOnLocaleLanguage(
+                                        onKo = stringResource(id = R.string.hour),
+                                        onElse = " :"
+                                    )
+                                } "
+                            )
+                            appendBoldText(
+                                text = timer.time.minute.toString(),
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            append(
+                                "${
+                                    context.doOnLocaleLanguage(
+                                        onKo = stringResource(id = R.string.minute),
+                                        onElse = " :"
+                                    )
+                                } "
+                            )
+                            appendBoldText(
+                                text = timer.time.second.toString(),
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            append(stringResource(id = R.string.second))
+                        },
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        modifier = Modifier.fillMaxWidth().wrapContentWidth().padding(vertical = 4.dp),
                     )
                 }
             }
@@ -142,7 +230,9 @@ private fun HomeMenu(
             .padding(vertical = 16.dp, horizontal = 12.dp),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().clickableAvoidingDuplication { onClickHeader() },
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickableAvoidingDuplication { onClickHeader() },
             verticalAlignment = Alignment.CenterVertically,
         ) {
             DescriptionLargeText(text = header)

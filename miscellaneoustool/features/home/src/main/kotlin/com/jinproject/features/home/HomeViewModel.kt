@@ -1,12 +1,14 @@
 package com.jinproject.features.home
 
 import android.content.Context
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.domain.model.ItemType
 import com.jinproject.domain.repository.CollectionRepository
 import com.jinproject.domain.repository.DropListRepository
+import com.jinproject.domain.repository.TimerRepository
 import com.jinproject.features.collection.model.Equipment
 import com.jinproject.features.collection.model.ItemCollection
 import com.jinproject.features.collection.model.MiscellaneousItem
@@ -21,15 +23,24 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.zip
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoField
 import javax.inject.Inject
 
 data class HomeUiState(
     val maps: ImmutableList<MapState>,
     val collections: ImmutableList<ItemCollection>,
+    val bossTimer: ImmutableList<BossTimer>,
+)
+
+@Stable
+data class BossTimer(
+    val name: String,
+    val time: ZonedDateTime,
 )
 
 @HiltViewModel
@@ -37,6 +48,7 @@ internal class HomeViewModel @Inject constructor(
     @ApplicationContext context: Context,
     collectionRepository: CollectionRepository,
     dropListRepository: DropListRepository,
+    timerRepository: TimerRepository,
 ) : ViewModel() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -74,7 +86,7 @@ internal class HomeViewModel @Inject constructor(
                 )
             }
         }.flatMapLatest { itemCollections ->
-            dropListRepository.getMaps().map { mapModelList ->
+            dropListRepository.getMaps().combine(timerRepository.getTimer()){ mapModelList, timerModels ->
                 HomeUiState(
                     maps = mapModelList.map { mapModel ->
                         MapState(
@@ -83,11 +95,24 @@ internal class HomeViewModel @Inject constructor(
                         )
                     }.toImmutableList(),
                     collections = itemCollections,
+                    bossTimer = timerModels.map { timerModel ->
+                        BossTimer(
+                            name = timerModel.bossName,
+                            time = timerModel.run {
+                                ZonedDateTime.now().apply {
+                                    with(ChronoField.DAY_OF_WEEK, day.toDayOfWeek().toLong())
+                                    withHour(hour)
+                                    withMinute(minutes)
+                                    withSecond(seconds)
+                                }
+                            }
+                        )
+                    }.toImmutableList(),
                 )
             }
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = HomeUiState(persistentListOf(), persistentListOf())
+            initialValue = HomeUiState(persistentListOf(), persistentListOf(), persistentListOf())
         )
 }
