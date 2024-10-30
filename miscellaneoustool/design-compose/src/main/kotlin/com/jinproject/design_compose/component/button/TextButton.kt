@@ -20,7 +20,7 @@ import com.jinproject.design_ui.R
 fun TextButton(
     text: String,
     modifier: Modifier = Modifier,
-    onClick: @Composable () -> Unit,
+    onClick: () -> Unit,
 ) {
     DefaultButton(
         modifier = modifier,

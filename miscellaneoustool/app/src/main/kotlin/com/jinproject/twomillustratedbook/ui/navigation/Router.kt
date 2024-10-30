@@ -1,26 +1,29 @@
-package com.jinproject.twomillustratedbook.ui.screen.navigation
+package com.jinproject.twomillustratedbook.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
 import com.jinproject.features.alarm.AlarmRoute
-import com.jinproject.features.alarm.navigateToAlarm
-import com.jinproject.features.droplist.DropListRoute
+import com.jinproject.features.alarm.navigateToAlarmGraph
+import com.jinproject.features.core.TopLevelRoute
+import com.jinproject.features.home.HomeRoute
+import com.jinproject.features.home.navigateToHomeGraph
 import com.jinproject.features.simulator.SimulatorRoute
+import com.jinproject.features.simulator.navigateToSimulatorGraph
 import com.jinproject.features.symbol.SymbolRoute
+import com.jinproject.features.symbol.navigateToSymbolGraph
 
-data class  TopLevelRoute<T>(val route: T)
-
-internal val TopLevelRoutes = listOf(
-    TopLevelRoute(route = AlarmRoute.Alarm),
-    TopLevelRoute(route = SymbolRoute.Symbol),
-    TopLevelRoute(route = SimulatorRoute.Simulator),
-    TopLevelRoute(route = DropListRoute.MapList),
+internal val TopLevelRoutes: List<TopLevelRoute> = listOf(
+    HomeRoute.Home,
+    SimulatorRoute.Simulator,
+    SymbolRoute.Symbol,
+    AlarmRoute.Alarm,
 )
 
 /**
@@ -34,7 +37,7 @@ internal class Router(val navController: NavHostController) {
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    internal fun <T> navigateTopLevelDestination(destination: T) {
+    internal fun navigateTopLevelDestination(topLevelRoute: TopLevelRoute) {
         val navOptions = navOptions {
             navController.currentBackStackEntry?.destination?.route?.let {
                 popUpTo(it) {
@@ -44,16 +47,11 @@ internal class Router(val navController: NavHostController) {
             launchSingleTop = true
         }
 
-        when (destination) {
-            is AlarmRoute.Alarm -> {
-                navController.navigateToAlarm(navOptions)
-            }
-
-            is SimulatorRoute.Simulator -> {
-
-            }
-
-            else -> throw IllegalStateException("$destination is not allowed to navigate")
+        when (topLevelRoute) {
+            is AlarmRoute.Alarm -> navController.navigateToAlarmGraph(navOptions)
+            is HomeRoute.Home -> navController.navigateToHomeGraph(navOptions)
+            is SimulatorRoute.Simulator -> navController.navigateToSimulatorGraph(navOptions)
+            is SymbolRoute.Symbol -> navController.navigateToSymbolGraph(navOptions)
         }
     }
 
@@ -61,7 +59,12 @@ internal class Router(val navController: NavHostController) {
 
 fun NavDestination?.isBarHasToBeShown(): Boolean =
     this?.let {
-        TopLevelRoutes.any { topLevelRoute -> hasRoute(route = topLevelRoute.route::class) }
+        TopLevelRoutes.any { topLevelRoute -> hasRoute(route = topLevelRoute::class) }
+    } ?: false
+
+fun <T> NavDestination?.isDestinationInHierarchy(destination: T) =
+    this?.hierarchy?.any {
+        it.hasRoute(destination!!::class)
     } ?: false
 
 fun NavController.popBackStackIfCan() {

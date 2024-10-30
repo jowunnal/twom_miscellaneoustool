@@ -1,37 +1,31 @@
 package com.jinproject.design_compose.component.bar
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.HorizontalWeightSpacer
 import com.jinproject.design_compose.component.button.DefaultIconButton
+import com.jinproject.design_compose.component.paddingvalues.addStatusBarPadding
 import com.jinproject.design_compose.component.text.AppBarText
 import com.jinproject.design_compose.component.text.SearchTextField
-import com.jinproject.design_compose.theme.Typography
 import com.jinproject.design_ui.R
 
 @Composable
@@ -86,6 +80,7 @@ fun DefaultAppBar(
             .fillMaxWidth()
             .shadow(4.dp, RectangleShape, clip = false)
             .background(MaterialTheme.colorScheme.surface)
+            .addStatusBarPadding(),
     ) {
         content()
     }
@@ -100,7 +95,8 @@ fun DefaultRowScopeAppBar(
         modifier = modifier
             .fillMaxWidth()
             .shadow(4.dp, RectangleShape, clip = false)
-            .background(MaterialTheme.colorScheme.surface),
+            .background(MaterialTheme.colorScheme.surface)
+            .statusBarsPadding(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         content()
@@ -140,42 +136,6 @@ fun BackButtonSearchAppBar(
             modifier = modifier,
             textFieldState = textFieldState,
             onSearchClick = onSearchClick,
-        )
-    }
-}
-
-@Composable
-fun DefaultAppBar(
-    modifier: Modifier = Modifier,
-    title: String = "",
-    onBackClick: () -> Unit,
-) {
-    //TODO 없애야함
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .shadow(4.dp, RectangleShape, clip = false)
-            .background(MaterialTheme.colorScheme.surface)
-    ) {
-        Image(
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .clickable(
-                    onClick = onBackClick,
-                ),
-            painter = painterResource(id = R.drawable.ic_arrow_left),
-            contentDescription = "back",
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
-        )
-        Text(
-            modifier = Modifier
-                .align(Alignment.Center),
-            text = title,
-            style = Typography.headlineSmall,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }

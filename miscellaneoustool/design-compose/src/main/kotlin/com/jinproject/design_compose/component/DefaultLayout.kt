@@ -14,7 +14,7 @@ import com.jinproject.design_compose.component.paddingvalues.MiscellanousToolPad
 @Composable
 fun DefaultLayout(
     modifier: Modifier = Modifier,
-    topBar: @Composable () -> Unit,
+    topBar: @Composable () -> Unit = {},
     contentPaddingValues: MiscellanousToolPaddingValues = MiscellanousToolPaddingValues(),
     content: @Composable ColumnScope.() -> Unit,
 ) {

@@ -64,12 +64,9 @@
     <string name="message_success_applied">성공적으로 적용되었어요.</string>
     <string name="message_success_removed">성공적으로 제거되었어요.</string>
 
-    <!-- collection strings -->
-    <!-- Dialog -->
-    <string name="collection_roll_back">선택하신 도감을 되돌리시겠습니까?</string>
-    <string name="input_price"> 의 가격을 입력해주세요.</string>
-
-    <string name="out_of_item_price">아이템의 가격이 허용치를 벗어났습니다.</string>
+    <!-- home strings -->
+    <string name="home_collection">아이템 도감</string>
+    <string name="home_droplist">드랍리스트</string>
 
     <!-- alarm strings -->
     <string name="alarm_selectboss">보스 선택</string>

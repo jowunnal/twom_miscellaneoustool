@@ -1,6 +1,5 @@
 package com.jinproject.features.droplist
 
-import android.view.View
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +10,7 @@ import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,28 +25,37 @@ import com.jinproject.features.droplist.state.MapState
 @Composable
 internal fun MapListScreen(
     viewModel: DropListViewModel = hiltViewModel(),
-    setBottomBarVisibility: (Int) -> Unit,
 ) {
     val dropListUiState by viewModel.dropListUiState.collectAsStateWithLifecycle()
+    val dropListArgument by viewModel.dropListArgument.collectAsStateWithLifecycle()
 
     MapListScreen(
+        dropListArgument = dropListArgument,
         dropListUiState = dropListUiState,
         selectMap = viewModel::selectMap,
-        setBottomBarVisibility = setBottomBarVisibility,
+
     )
 }
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 private fun MapListScreen(
+    dropListArgument: String?,
     dropListUiState: DropListUiState,
     selectMap: (MapState) -> Unit,
-    setBottomBarVisibility: (Int) -> Unit,
 ) {
     val navigator = rememberListDetailPaneScaffoldNavigator<MapState>()
 
     BackHandler(navigator.canNavigateBack()) {
         navigator.navigateBack()
+    }
+
+    LaunchedEffect(key1 = dropListArgument) {
+        dropListArgument?.let { mapName ->
+            dropListUiState.maps.find { it.name == mapName }?.let { mapState ->
+                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, mapState)
+            }
+        }
     }
 
     ListDetailPaneScaffold(
@@ -57,12 +66,10 @@ private fun MapListScreen(
         value = navigator.scaffoldValue,
         listPane = {
             AnimatedPane {
-                setBottomBarVisibility(View.VISIBLE)
                 MapListPane(
                     mapListState = dropListUiState.maps,
                     onClickItem = { item ->
                         selectMap(item)
-                        setBottomBarVisibility(View.GONE)
                         navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, item)
                     },
                 )
@@ -91,8 +98,8 @@ private fun MapListScreenPreview(
     dropListUiState: DropListUiState,
 ) = PreviewMiscellaneousToolTheme {
     MapListScreen(
+        dropListArgument = null,
         dropListUiState = dropListUiState,
         selectMap = {},
-        setBottomBarVisibility = {},
     )
 }

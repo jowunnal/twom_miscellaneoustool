@@ -8,20 +8,29 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.delete
+import androidx.compose.foundation.text.input.insert
+import androidx.compose.foundation.text.input.maxLength
+import androidx.compose.foundation.text.input.placeCursorAtEnd
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
@@ -65,9 +74,9 @@ internal fun CollectionDetail(
     val itemWidthDp =
         (configuration.screenWidthDp.dp - padding.calculateHorizontalPadding()) / 2
     val prices = remember(collection.items) {
-        mutableStateListOf(0L)
+        mutableStateListOf<String>()
     }.apply {
-        addAll(collection.items.map { it.price })
+        addAll(collection.items.map { it.price.toString() })
     }
 
     DefaultLayout(
@@ -97,14 +106,16 @@ internal fun CollectionDetail(
             )
         }
         collection.items.forEachIndexed { idx, item ->
-            ItemWithPrice(
-                name = item.name,
-                itemWidthDp = itemWidthDp,
-                price = item.price.toString(),
-                updatePrice = { price ->
-                    prices[idx] = price
-                }
-            )
+            key(item.name) {
+                ItemWithPrice(
+                    name = item.name,
+                    itemWidthDp = itemWidthDp,
+                    price = item.price.toString(),
+                    updatePrice = { price ->
+                        prices[idx] = price
+                    }
+                )
+            }
         }
         VerticalSpacer(height = 30.dp)
         DescriptionMediumText(
@@ -139,7 +150,7 @@ internal fun CollectionDetail(
                     color = MaterialTheme.colorScheme.surfaceVariant
                 )
                 DescriptionSmallText(
-                    text = "${item.price * item.count} 골드",
+                    text = "${item.price * item.count} ${stringResource(id = com.jinproject.design_ui.R.string.gold)}",
                     modifier = Modifier.width(itemWidthDp),
                     color = MaterialTheme.colorScheme.surfaceVariant
                 )
@@ -153,7 +164,7 @@ internal fun CollectionDetail(
                 .padding(start = itemWidthDp, top = 2.dp, bottom = 2.dp)
         ) {
             DescriptionSmallText(
-                text = "${collection.items.sumOf { it.price * it.count }} 골드",
+                text = "${collection.items.sumOf { it.price * it.count }} ${stringResource(id = com.jinproject.design_ui.R.string.gold)}",
                 modifier = Modifier.width(itemWidthDp),
                 color = MaterialTheme.colorScheme.surfaceVariant,
             )
@@ -163,6 +174,11 @@ internal fun CollectionDetail(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
+            val deleteSnackBarMessage =
+                stringResource(id = com.jinproject.design_ui.R.string.message_success_removed)
+            val applySnackBarMessage =
+                stringResource(id = com.jinproject.design_ui.R.string.message_success_applied)
+
             TextButton(
                 text = stringResource(id = com.jinproject.design_ui.R.string.delete_do),
                 modifier = Modifier
@@ -171,7 +187,7 @@ internal fun CollectionDetail(
                 onClick = {
                     dispatchEvent(CollectionEvent.AddFilteringCollectionId(collection.id))
                     onNavigateBack()
-                    showSnackBar(SnackBarMessage(headerMessage = stringResource(id = com.jinproject.design_ui.R.string.message_success_removed)))
+                    showSnackBar(SnackBarMessage(headerMessage = deleteSnackBarMessage))
                 },
             )
             TextButton(
@@ -181,13 +197,15 @@ internal fun CollectionDetail(
                     .padding(horizontal = 12.dp),
                 onClick = {
                     val newItems = collection.items.mapIndexed { idx, item ->
+                        val newPrice = if (prices[idx].isNotBlank()) prices[idx].toLong() else 0L
+
                         when (item) {
-                            is Equipment -> item.copy(price = prices[idx])
-                            is MiscellaneousItem -> item.copy(price = prices[idx])
+                            is Equipment -> item.copy(price = newPrice)
+                            is MiscellaneousItem -> item.copy(price = newPrice)
                             else -> MiscellaneousItem(
                                 name = item.name,
                                 count = item.count,
-                                price = prices[idx]
+                                price = newPrice
                             )
                         }
                     }
@@ -196,7 +214,7 @@ internal fun CollectionDetail(
                         CollectionEvent.UpdateItemsPrice(newItems)
                     )
                     onNavigateBack()
-                    showSnackBar(SnackBarMessage(headerMessage = stringResource(id = com.jinproject.design_ui.R.string.message_success_applied)))
+                    showSnackBar(SnackBarMessage(headerMessage = applySnackBarMessage))
                 },
             )
         }
@@ -208,21 +226,28 @@ internal fun CollectionDetail(
 @Composable
 internal fun ItemWithPrice(
     name: String,
-    price: String,
     itemWidthDp: Dp,
-    textFiledState: TextFieldState = rememberTextFieldState(initialText = price),
-    updatePrice: (Long) -> Unit,
+    price: String,
+    textFiledState: TextFieldState = rememberTextFieldState(initialText = price).apply {
+        edit {
+            placeCursorAtEnd()
+        }
+    },
+    updatePrice: (String) -> Unit,
 ) {
 
     LaunchedEffect(key1 = Unit) {
         snapshotFlow {
             textFiledState.text
         }.mapLatest {
-            it.toString().toLong()
+            it.toString()
         }.collectLatest {
             updatePrice(it)
+            textFiledState.edit { placeCursorBeforeCharAt(it.length) }
         }
     }
+
+    val textGold = stringResource(id = com.jinproject.design_ui.R.string.gold)
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -234,13 +259,26 @@ internal fun ItemWithPrice(
             color = MaterialTheme.colorScheme.surfaceVariant
         )
         DefaultTextField(
+            modifier = Modifier
+                .onFocusChanged {
+                    textFiledState.edit {
+                        if (it.hasFocus)
+                            delete(start = 0, end = length)
+                        else {
+                            if (length == 0)
+                                insert(0, price)
+                        }
+                    }
+                },
             textFieldState = textFiledState,
             textStyle = MaterialTheme.typography.bodySmall,
             outputTransformation = TenThousandSeparatorOutputTransformation(
                 suffix = {
-                    append(" 골드")
+                    append(" $textGold")
                 }
             ),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            inputTransformation = InputTransformation.maxLength(10),
         )
     }
 }

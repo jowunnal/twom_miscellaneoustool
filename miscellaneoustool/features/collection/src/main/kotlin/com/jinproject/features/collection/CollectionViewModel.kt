@@ -1,8 +1,10 @@
 package com.jinproject.features.collection
 
 import android.content.Context
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.domain.model.ItemType
 import com.jinproject.domain.repository.CollectionRepository
@@ -26,8 +28,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -36,7 +40,8 @@ import javax.inject.Inject
 @HiltViewModel
 internal class CollectionViewModel @Inject constructor(
     private val collectionRepository: CollectionRepository,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _filteringCollectionIds: MutableStateFlow<ImmutableSet<Int>> =
@@ -54,6 +59,9 @@ internal class CollectionViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = persistentSetOf()
         )
+
+    private val _collectionArgument: MutableStateFlow<Int?> = MutableStateFlow(null)
+    val collectionArgument get() = _collectionArgument.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<CollectionUiState> =
@@ -96,6 +104,9 @@ internal class CollectionViewModel @Inject constructor(
                     }.toImmutableList()
                 )
             }
+        }.onEach {
+            val argument = savedStateHandle.toRoute<CollectionRoute.CollectionList>().id
+            _collectionArgument.update { argument }
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),

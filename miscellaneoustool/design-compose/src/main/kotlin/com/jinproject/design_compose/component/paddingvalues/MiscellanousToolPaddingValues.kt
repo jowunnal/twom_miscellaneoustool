@@ -1,10 +1,16 @@
 package com.jinproject.design_compose.component.paddingvalues
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -62,3 +68,6 @@ data class MiscellanousToolPaddingValues(
         )
     }
 }
+
+@Composable
+fun Modifier.addStatusBarPadding() = padding(top = WindowInsets.statusBars.asPaddingValues().run { calculateTopPadding() + calculateBottomPadding() })

@@ -4,7 +4,7 @@ import com.jinproject.core.util.runIf
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
-internal data class CollectionUiState(
+data class CollectionUiState(
     val itemCollections: ImmutableList<ItemCollection>,
     val collectionFilters: ImmutableList<CollectionFilter>,
 ) {
@@ -33,7 +33,7 @@ internal data class CollectionUiState(
     }
 }
 
-internal data class CollectionFilter(
+data class CollectionFilter(
     val id: Int,
     val isSelected: Boolean = false,
 )

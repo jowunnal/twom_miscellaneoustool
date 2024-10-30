@@ -11,6 +11,7 @@ import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,9 +37,11 @@ internal fun CollectionScreen(
     onNavigateBack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val collectionArgument by viewModel.collectionArgument.collectAsStateWithLifecycle()
 
     CollectionScreen(
         collectionUiState = uiState,
+        collectionArgument = collectionArgument,
         dispatchEvent = viewModel::dispatchCollectionEvent,
         onNavigateBack = onNavigateBack,
         showSnackBar = showSnackBar,
@@ -49,6 +52,7 @@ internal fun CollectionScreen(
 @Composable
 private fun CollectionScreen(
     collectionUiState: CollectionUiState,
+    collectionArgument: Int?,
     dispatchEvent: (CollectionEvent) -> Unit,
     onNavigateBack: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit,
@@ -58,6 +62,14 @@ private fun CollectionScreen(
 
     BackHandler(navigator.canNavigateBack()) {
         navigator.navigateBack()
+    }
+
+    LaunchedEffect(key1 = collectionArgument) {
+        collectionArgument?.let {
+            collectionUiState.itemCollections.find { it.id == collectionArgument }?.let { item ->
+                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, item)
+            }
+        }
     }
 
     val textFiledState = rememberTextFieldState()
@@ -117,6 +129,7 @@ private fun PreviewCollectionScreen(
 ) = MiscellaneousToolTheme {
     CollectionScreen(
         collectionUiState = collectionUiState,
+        collectionArgument = null,
         dispatchEvent = {},
         onNavigateBack = {},
         showSnackBar = {},

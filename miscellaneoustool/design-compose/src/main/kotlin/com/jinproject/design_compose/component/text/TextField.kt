@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldBuffer
+import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.insert
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -56,6 +58,7 @@ fun SearchTextField(
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
         textStyle = TextStyle(color = MaterialTheme.colorScheme.onPrimary),
         cursorBrush = SolidColor(MaterialTheme.colorScheme.onPrimary),
+        lineLimits = TextFieldLineLimits.SingleLine,
     ) {
         DefaultIconButton(
             modifier = Modifier.align(Alignment.CenterEnd),
@@ -84,6 +87,8 @@ fun DefaultTextField(
     textStyle: TextStyle = TextStyle.Default,
     cursorBrush: Brush = SolidColor(MaterialTheme.colorScheme.onSurface),
     outputTransformation: OutputTransformation? = null,
+    inputTransformation: InputTransformation? = null,
+    lineLimits: TextFieldLineLimits = TextFieldLineLimits. Default,
     content: @Composable BoxScope.() -> Unit = {},
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -135,6 +140,8 @@ fun DefaultTextField(
         textStyle = textStyle,
         cursorBrush = cursorBrush,
         outputTransformation = outputTransformation,
+        inputTransformation = inputTransformation,
+        lineLimits = lineLimits,
     )
 }
 

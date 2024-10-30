@@ -64,10 +64,9 @@
     <string name="message_success_applied">Has been applied successfully.</string>
     <string name="message_success_removed">Has been removed successfully.</string>
 
-    <!-- collection strings -->
-    <string name="collection_roll_back">Would you like to return the collection?</string>
-    <string name="input_price">\'s Price</string>
-    <string name="out_of_item_price">The item\'s price is out of tolerance.</string>
+    <!-- home strings -->
+    <string name="home_collection">Collections</string>
+    <string name="home_droplist">DropList</string>
 
     <!-- alarm strings -->
     <string name="alarm_selectboss">Boss Selection</string>

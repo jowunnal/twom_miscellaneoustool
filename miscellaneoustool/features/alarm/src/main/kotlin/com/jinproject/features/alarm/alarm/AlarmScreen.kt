@@ -32,11 +32,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.DefaultLayout
-import com.jinproject.design_compose.component.text.DescriptionLargeText
 import com.jinproject.design_compose.component.DialogCustom
 import com.jinproject.design_compose.component.DialogState
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.VerticalSpacer
+import com.jinproject.design_compose.component.text.DescriptionLargeText
 import com.jinproject.design_ui.R
 import com.jinproject.domain.model.WeekModel
 import com.jinproject.features.alarm.alarm.component.AlarmBottomSheetContent

@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.VerticalSpacer
+import com.jinproject.design_compose.component.paddingvalues.addStatusBarPadding
 import com.jinproject.features.simulator.component.AvailableEquipmentSheet
 import com.jinproject.features.simulator.component.EnchantSpace
 import com.jinproject.features.simulator.component.EquipmentDeleteBar
@@ -75,7 +76,8 @@ private fun SimulatorScreen(
         Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface)
-            .padding(top = 20.dp),
+            .padding(top = 20.dp)
+            .addStatusBarPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         EquipmentDeleteBar(

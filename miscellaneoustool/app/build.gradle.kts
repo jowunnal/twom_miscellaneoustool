@@ -14,13 +14,6 @@ android {
         targetSdk = 34
         versionCode = 50
         versionName = "2.3.1"
-
-        buildConfigField("String","ADMOB_TEST_REWARD_ID",getLocalKey("adMob.test.rewardId"))
-        buildConfigField("String","ADMOB_REAL_REWARD_ID",getLocalKey("adMob.real.rewardId"))
-        resValue("string", "ADMOB_TEST_UNIT_ID", getLocalKey("adMob.test.unitId"))
-        resValue("string", "ADMOB_REAL_UNIT_ID", getLocalKey("adMob.real.unitId"))
-        manifestPlaceholders["ADMOB_TEST_APP_ID"] = getLocalKey("adMob.test.appId")
-        manifestPlaceholders["ADMOB_REAL_APP_ID"] = getLocalKey("adMob.real.appId")
     }
 
     buildFeatures {
@@ -34,13 +27,13 @@ android {
             isMinifyEnabled = false
             manifestPlaceholders["ADMOB_APP_ID"] = getLocalKey("adMob.test.appId")
             buildConfigField("String","ADMOB_REWARD_ID",getLocalKey("adMob.test.rewardId"))
-            resValue("string", "ADMOB_UNIT_ID", getLocalKey("adMob.test.unitId"))
+            buildConfigField("String", "ADMOB_UNIT_ID", getLocalKey("adMob.test.unitId"))
         }
         release {
             isMinifyEnabled = false
             manifestPlaceholders["ADMOB_APP_ID"] = getLocalKey("adMob.real.appId")
             buildConfigField("String","ADMOB_REWARD_ID",getLocalKey("adMob.real.rewardId"))
-            resValue("string", "ADMOB_UNIT_ID", getLocalKey("adMob.real.unitId"))
+            buildConfigField("String", "ADMOB_UNIT_ID", getLocalKey("adMob.real.unitId"))
         }
     }
 }
@@ -61,6 +54,7 @@ dependencies {
     implementation(project(":features:simulator"))
     implementation(project(":design-compose"))
     implementation(project(":design-ui"))
+    implementation(project(":features:home"))
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)

@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
@@ -55,26 +56,39 @@ internal fun MapListPane(
         contentPadding = PaddingValues(vertical = 16.dp, horizontal = itemPadding)
     ) {
         items(mapListState, key = { mapState -> mapState.name }) { mapState ->
-            Column(
-                modifier = Modifier
-                    .shadow(6.dp, RoundedCornerShape(20.dp))
-                    .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
-                    .clickable {
-                        onClickItem(mapState)
-                    }
-                    .padding(12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Monster(
-                    modifier = Modifier
-                        .height(65.dp)
-                        .width(itemWidth),
-                    imgName = mapState.imgName,
-                    header = mapState.name,
-                )
-            }
+            DropListMonster(
+                mapState = mapState,
+                itemWidth = itemWidth,
+                onClickItem = onClickItem,
+            )
         }
+    }
+}
+
+@Composable
+fun DropListMonster(
+    mapState: MapState,
+    itemWidth: Dp,
+    onClickItem: (MapState) -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .shadow(6.dp, RoundedCornerShape(20.dp))
+            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
+            .clickable {
+                onClickItem(mapState)
+            }
+            .padding(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Monster(
+            modifier = Modifier
+                .height(65.dp)
+                .width(itemWidth),
+            imgName = mapState.imgName,
+            header = mapState.name,
+        )
     }
 }
 
