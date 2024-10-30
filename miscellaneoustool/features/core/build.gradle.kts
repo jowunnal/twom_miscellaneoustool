@@ -22,4 +22,5 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.bumptech.glide)
     implementation(libs.bundles.billing)
+    implementation(libs.kotlinx.collections.immutable)
 }

@@ -31,9 +31,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.ButtonStatus
-import com.jinproject.design_compose.component.DefaultAppBar
 import com.jinproject.design_compose.component.DefaultLayout
 import com.jinproject.design_compose.component.VerticalSpacer
+import com.jinproject.design_compose.component.bar.BackButtonTitleAppBar
 import com.jinproject.design_compose.component.button.TextButton
 import com.jinproject.design_compose.theme.Typography
 import com.jinproject.design_ui.R
@@ -85,9 +85,9 @@ private fun WatchScreen(
 
     DefaultLayout(
         topBar = {
-            DefaultAppBar(
+            BackButtonTitleAppBar(
+                onBackClick = onNavigatePopBackStack,
                 title = stringResource(id = R.string.watch_appbar_title),
-                onBackClick = onNavigatePopBackStack
             )
         }
     ) {

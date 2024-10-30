@@ -18,8 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.jinproject.core.util.doOnLocaleLanguage
-import com.jinproject.design_compose.component.DescriptionMediumText
-import com.jinproject.design_compose.component.DescriptionSmallText
+import com.jinproject.design_compose.component.text.DescriptionMediumText
+import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.theme.MiscellaneousToolColor

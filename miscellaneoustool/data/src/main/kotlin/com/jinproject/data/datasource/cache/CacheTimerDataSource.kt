@@ -37,9 +37,10 @@ class CacheTimerDataSource @Inject constructor(private val dataStorePrefs: DataS
     }
 
     suspend fun setRecentlySelectedBossClassified(bossClassified: MonsterType) {
+        //TODO 보스 타입을 데이터베이스의 문자 기준으로 바꿧기 때문에, 실유저 기기에서 다른 문자가 들어와서 오류 발생 가능
         dataStorePrefs.updateData { prefs ->
             prefs.toBuilder()
-                .setRecentlySelectedBossClassified(bossClassified.storedName)
+                .setRecentlySelectedBossClassified(bossClassified.name)
                 .build()
         }
     }

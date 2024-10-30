@@ -36,7 +36,7 @@ fun DefaultIconButton(
     @DrawableRes icon: Int,
     onClick: () -> Unit,
     enabled: Boolean = true,
-    iconTint: Color,
+    iconTint: Color = MaterialTheme.colorScheme.onSurface,
     iconSize: Dp = 48.dp,
     backgroundTint: Color = MaterialTheme.colorScheme.surface,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
@@ -98,29 +98,6 @@ fun DefaultButton(
     }
 }
 
-@Composable
-fun Modifier.clickableAvoidingDuplication(
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    indication: Indication? = null,
-    enabled: Boolean = true,
-    onClick: () -> Unit,
-): Modifier {
-    val avoidDuplicationClickEvent = remember {
-        AvoidDuplicationClickEvent(onClick)
-    }
-
-    SideEffect {
-        avoidDuplicationClickEvent.changeOnClick(onClick)
-    }
-
-    return this.clickable(
-        interactionSource = interactionSource,
-        indication = indication,
-        enabled = enabled,
-        onClick = avoidDuplicationClickEvent::onClick,
-    )
-}
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DefaultCombinedButton(
@@ -151,6 +128,57 @@ fun DefaultCombinedButton(
     ) {
         content()
     }
+}
+
+@Composable
+fun Modifier.clickableAvoidingDuplication(
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    indication: Indication? = null,
+    enabled: Boolean = true,
+    onClick: () -> Unit,
+): Modifier {
+    val avoidDuplicationClickEvent = remember {
+        AvoidDuplicationClickEvent(onClick)
+    }
+
+    SideEffect {
+        avoidDuplicationClickEvent.changeOnClick(onClick)
+    }
+
+    return this.clickable(
+        interactionSource = interactionSource,
+        indication = indication,
+        enabled = enabled,
+        onClick = avoidDuplicationClickEvent::onClick,
+    )
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun Modifier.combinedClickableAvoidingDuplication(
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    indication: Indication? = null,
+    enabled: Boolean = true,
+    onClick: () -> Unit,
+    onDoubleClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null,
+): Modifier {
+    val avoidDuplicationClickEvent = remember {
+        AvoidDuplicationClickEvent(onClick)
+    }
+
+    SideEffect {
+        avoidDuplicationClickEvent.changeOnClick(onClick)
+    }
+
+    return this.combinedClickable(
+        interactionSource = interactionSource,
+        indication = indication,
+        enabled = enabled,
+        onClick = avoidDuplicationClickEvent::onClick,
+        onLongClick = onLongClick,
+        onDoubleClick = onDoubleClick,
+    )
 }
 
 private class AvoidDuplicationClickEvent(

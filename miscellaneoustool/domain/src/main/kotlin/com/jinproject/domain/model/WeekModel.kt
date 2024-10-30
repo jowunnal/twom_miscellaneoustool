@@ -24,6 +24,16 @@ enum class WeekModel(val displayOnKo: String, val displayOnElse: String) {
             Sat -> 7
         }
 
+    fun toDayOfWeek() = when (this) {
+        Mon -> 1
+        Tues -> 2
+        Wed -> 3
+        Thurs -> 4
+        Fri -> 5
+        Sat -> 6
+        Sun -> 7
+    }
+
     companion object {
         fun findByCode(code: Int) =
             when (code) {

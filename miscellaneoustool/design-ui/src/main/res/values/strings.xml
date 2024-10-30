@@ -1,131 +1,134 @@
 <resources>
 
     <!-- App strings !-->
-    <string name="app_name">아이모 잡학도구</string>
-    <string name="channel_name">아이모 잡학도구 채널</string>
-    <string name="channel_description">아이모 잡학도구 채널 입니다.</string>
+    <string name="app_name">IMO Miscellaneous Tool</string>
+    <string name="channel_name">IMO Miscellaneous Channel</string>
+    <string name="channel_description">This is IMO Miscellaneous Channel</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="현재시간항상보기">아이모 현재시간 항상보기 서비스</string>
-    <string name="알람재생성서비스">아이모 알람 재생성 서비스</string>
-    <string name="알람서비스">아이모 알람 생성 서비스</string>
+    <string name="현재시간항상보기">Twom watch always present time service</string>
+    <string name="알람재생성서비스">Twom recreate alarm service</string>
+    <string name="알람서비스">Twom create alarm service</string>
 
     <!-- UI strings !-->
-    <string name="item_name">아이템이름</string>
-    <string name="stat">스텟</string>
-    <string name="home_header">아이모 잡학도구</string>
-    <string name="version" translatable="false">2.3.1</string>
+    <string name="item">Item</string>
+    <string name="stat">Stat</string>
 
-    <string name="input_price_hint">가격 입력</string>
-    <string name="setting_item"><u>아이템 설정 변경</u></string>
-    <string name="setting_filter"><u>필터링 설정 변경</u></string>
+    <string name="home_header">Twom Miscellaneous Tool</string>
 
-    <string name="new_version_message">최신 버전 설치가 완료되었어요.\n업데이트를 진행하시겠어요?</string>
-    <string name="new_version_positive_button">네, 진행할게요.</string>
-    <string name="new_version_negative_button">아니요, 하고싶지않아요.</string>
-    <string name="deny_new_version_update">업데이트가 거절됬어요. 최신버전이 아닌 경우 원활한 사용이 어려울 수 있어요.</string>
-    <string name="updating_new_version">새 버전 업데이트가 진행중이에요. 완료되면 알려드릴게요.</string>
+    <string name="input_price_hint">Input Price</string>
+    <string name="setting_item"><u>Change Item Setting</u></string>
+    <string name="setting_filter"><u>Change Filtering Setting</u></string>
+    <string name="new_version_message">Installation of the latest version has been completed.\nWould you like to proceed with the update?</string>
+    <string name="new_version_positive_button">Yes, please.</string>
+    <string name="new_version_negative_button">No, thanks.</string>
+    <string name="deny_new_version_update">The update was rejected. If it is not the latest version, smooth use may be difficult.</string>
+    <string name="updating_new_version">A new version update is in progress. Let you know when it is completed.</string>
 
-    <!-- base strings -->
-    <string name="price">가격</string>
-    <string name="delete">제거</string>
-    <string name="change">변경</string>
-    <string name="confirm">확인</string>
-    <string name="cancel">취소</string>
-    <string name="first">처음</string>
-    <string name="last">마지막</string>
-    <string name="apply_do">적용하기</string>
-    <string name="rollback_do">되돌리기</string>
-    <string name="somethingdo">하기</string>
-    <string name="set_do">설정하기</string>
-    <string name="register_do">등록하기</string>
-    <string name="delete_do">제거하기</string>
-    <string name="start_do">시작하기</string>
-    <string name="addition_do">추가하기</string>
+    <string name="price">Price</string>
+    <string name="delete">Delete</string>
+    <string name="change">Change</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="first">First</string>
+    <string name="last">Last</string>
+    <string name="apply_do">Apply</string>
+    <string name="rollback_do">Rollback</string>
+    <string name="somethingdo"> </string>
+    <string name="set_do">Set</string>
+    <string name="register_do">Register</string>
+    <string name="delete_do">Delete</string>
+    <string name="start_do">Start</string>
+    <string name="addition_do">Addition</string>
     <string name="on">ON</string>
     <string name="off">OFF</string>
-    <string name="yes">예</string>
-    <string name="no">아니오</string>
-    <string name="delete_something">를 삭제 하시겠습니까?</string>
-    <string name="hour">시</string>
-    <string name="minute">분</string>
-    <string name="second">초</string>
-    <string name="turnoff">끄기</string>
-    <string name="alarm">알람</string>
-    <string name="convert">변환하기</string>
-    <string name="image">이미지</string>
-    <string name="very_high">매우 높음</string>
-    <string name="color_precision">색상 정밀도</string>
-    <string name="very_low">매우 낮음</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="delete_something">: Are you sure you want to delete it?</string>
+    <string name="hour">:</string>
+    <string name="minute">:</string>
+    <string name="second"> </string>
+    <string name="turnoff">Turn off</string>
+    <string name="alarm">Alarm</string>
+    <string name="convert">Convert</string>
+    <string name="image">Image</string>
+    <string name="very_high">High</string>
+    <string name="color_precision">Color Precision</string>
+    <string name="very_low">Low</string>
+    <string name="gold">Gold</string>
+    <string name="textfield_hint">Enter text</string>
+    <string name="total">Total</string>
 
     <!-- Snackbar Message -->
-    <string name="message_throw_no_such_element">일치하는 데이터가 없습니다.</string>
-    <string name="message_throw_exceptions">오류가 발생했습니다. 다시 시도해 주세요.</string>
+    <string name="message_throw_no_such_element">The item has not found in Database</string>
+    <string name="message_throw_exceptions">An error has occurred. Please try again.</string>
+    <string name="message_success_applied">Has been applied successfully.</string>
+    <string name="message_success_removed">Has been removed successfully.</string>
 
-    <!-- collection strings -->
-
-    <!-- Dialog -->
-    <string name="collection_roll_back">선택하신 도감을 되돌리시겠습니까?</string>
-    <string name="input_price"> 의 가격을 입력해주세요.</string>
-    <string name="out_of_item_price">아이템의 가격이 허용치를 벗어났습니다.</string>
+    <!-- home strings -->
+    <string name="home_collection">Collections</string>
+    <string name="home_droplist">DropList</string>
 
     <!-- alarm strings -->
-    <string name="alarm_selectboss">보스 선택</string>
-    <string name="alarm_classify_boss">보스 분류</string>
-    <string name="alarm_present_bosslist">현재 진행중인 알람 내역</string>
-    <string name="alarm_setted">의 알람이 설정되었습니다.</string>
-    <string name="alarm_message_head">띵동~&#10; &lt;</string>
-    <string name="alarm_message_body">&gt; 젠타임</string>
-    <string name="alarm_message_tail">분전 입니다.</string>
-    <string name="alarm_regeneration">알람 재생성</string>
+    <string name="alarm_selectboss">Boss Selection</string>
+    <string name="alarm_classify_boss">Boss Classified</string>
+    <string name="alarm_classified_boss_type_named">Mini Boss</string>
+    <string name="alarm_classified_boss_type_boss">Semi Boss</string>
+    <string name="alarm_classified_boss_type_bigboss">World Boss</string>
+    <string name="alarm_present_bosslist">Current progress alarm history</string>
+    <string name="alarm_setted">\'s alarm has been set</string>
+    <string name="alarm_message_head">Ding dong~ &#10; &lt;</string>
+    <string name="alarm_message_body">&gt; will be spawned in</string>
+    <string name="alarm_message_tail">minutes.</string>
+    <string name="alarm_regeneration">Regeneration</string>
 
     <!-- gear strings -->
-    <string name="billing_purchase">상품 구매</string>
-    <string name="alarm_setting_interval_success">알람 간격 설정이 완료 되었어요.</string>
-    <string name="alarm_setting_interval_failure">알람 간격 설정이 되지 않았어요.</string>
-    <string name="alarm_setting_interval_failure_reason">마지막 알람 간격이 더 길어야 해요.</string>
-    <string name="alarm_setting_interval"> 알람 간격</string>
-    <string name="alarm_setting">알람 설정</string>
+    <string name="billing_purchase">Buy Products</string>
+    <string name="alarm_setting_interval_success">Alarm interval setting has been completed.</string>
+    <string name="alarm_setting_interval_failure">The alarm interval has not been set.</string>
+    <string name="alarm_setting_interval_failure_reason">The last alarm interval should be longer.</string>
+    <string name="alarm_setting_interval"> Alarm Interval</string>
+    <string name="alarm_setting">Alarm Setting</string>
 
     <!-- watch strings -->
-    <string name="watch_appbar_title">현재 시간 보기 설정</string>
-    <string name="watch_title_recently_bosslist">자주 사용하는 보스 목록</string>
-    <string name="watch_bottomsheet_title">현재시간 항상 보기에 등록 하시겠습니까?</string>
-    <string name="watch_setting_fontsize">폰트 크기 조절</string>
-    <string name="watch_setting_move_x">가로축 이동</string>
-    <string name="watch_setting_move_y">세로축 이동</string>
-    <string name="watch_setting_title">현재 시간 항상 보기</string>
+    <string name="watch_appbar_title">Current time view settings</string>
+    <string name="watch_title_recently_bosslist">List of frequently used bosses</string>
+    <string name="watch_bottomsheet_title">Do you want to register to always view the current time?</string>
+    <string name="watch_setting_fontsize">Font Size</string>
+    <string name="watch_setting_move_x">Horizontal Axis Move</string>
+    <string name="watch_setting_move_y">Vertical Axis Move</string>
+    <string name="watch_setting_title">Always see the current time</string>
 
     <!-- symbol strings -->
-    <string name="symbol_gallery_topbar">갤러리</string>
-    <string name="symbol_headline">길드 마크 심볼!\n이제 편리하게 만드세요.</string>
-    <string name="symbol_headline_content">변환 전의 원본 이미지에 대한 예시 에요.</string>
-    <string name="symbol_description">이미지를 불러온 후, 픽셀 단위로 사용된 색상들과 함께 화면에 보여 드려요.\n더 이상 어렵게 길드마크를 만들지 않게 될 거에요.\n이미지의 배경을 미리 제거해주시면 좀 더 정확한 변환을 할 수 있어요.\n이미지는 정사각형 비율에 가까울수록 더 품질이 좋아져요.</string>
-    <string name="symbol_description_content">변환 후의 이미지를 예시로 보여 드리고 있어요.\n해당 이미지는 실제 변환한 형태와 다를 수 있음을 유의해주세요.</string>
-    <string name="symbol_footer">본 상품은 1회 불러오기당 소액의 요금이 과금되요.\n불러온 이미지가 정확한지 작은 사이즈로 변환해서 미리보기를 제공해 드리고 있어요.\n불러온 이미지가 마음에 드신다면 이후 과정을 진행해 주세요.\n결제 이후 청약철회가 불가능한 상품이니 신중하게 결정해주세요!
-        \n\n개발자는 사용자의 그 어떠한 정보도 수집하고 있지 않아요.\n걱정없이 안전하게 저장소의 이미지를 변환해보세요.</string>
-    <string name="symbol_button_getImage">이미지 불러오기</string>
-    <string name="symbol_permission_headline">이미지 읽기 권한이 수락되지 않았어요.</string>
-    <string name="symbol_permission_content">권한을 수락 하지 않으면 기능을 이용 하실 수 없어요.</string>
-    
-    <string name="symbol_preview_topbar">예상 이미지</string>
-    <string name="symbol_preview_expectation">예상되는 변환된 이미지의 형태에요.</string>
-    <string name="symbol_preview_expectation_double">예상되는 변환된 이미지의 2배 확대된 형태에요.</string>
-    <string name="symbol_preview_dialog_headline">정말 변환 하시겠어요?</string>
-    <string name="symbol_preview_dialog_content">해당 상품은 청약 철회가 불가능 해요.\n예상 되는 이미지를 잘 확인한 후 신중 하게 결정해 주세요.</string>
+    <string name="symbol_gallery_topbar">Gallery</string>
+    <string name="symbol_headline">Guild Mark Symbol!\nMake it conveniently for now</string>
+    <string name="symbol_headline_content">This is an example of the original image before conversion.</string>
+    <string name="symbol_description">After loading the image, it is displayed on the screen in pixel units.\nYou will no longer have a hard time creating your guild mark.\nYou can make a more accurate conversion if you remove the background of the image in advance.\nThe closer the image is to a square ratio, the better the quality.</string>
+    <string name="symbol_description_content">the converted image will be shown as an example.\nPlease note that the image may differ from the actual converted form.</string>
+    <string name="symbol_footer">A small fee is charged per load for this product.\nYou can convert the loaded image to a smaller size and provide a preview to check if it is accurate.\nIf you like the loaded image, please proceed with the next process. \nThis product cannot be canceled after payment, so please decide carefully!
+        \n\nThe developer does not collect any information about users.\nConvert images in the storage safely without worry.</string>
+    <string name="symbol_button_getImage">Load image</string>
+    <string name="symbol_permission_headline">Permission to read images has not been granted.</string>
+    <string name="symbol_permission_content">If you do not accept permission, you cannot use the function.</string>
 
-    <string name="symbol_guildMark_expectation_image">예상되는 이미지</string>
-    <string name="symbol_guildMark_used_color">사용된 색상</string>
-    <string name="symbol_guildMark_overlay_running">길드마크 팔레트 오버레이가 실행중 입니다.</string>
-    <string name="symbol_guildMark_permission_headline">다른앱 위에 그리기 권한을 수락해 주세요.</string>
-    <string name="symbol_guildMark_permission_content">권한을 수락하지 않으시면 오버레이 서비스를 이용할 수 없어요.</string>
-    <string name="symbol_guildMark_description">현재 화면을 이탈하시면 오버레이로 보여드리고 있어요.\n꼭 다른앱 위에 그리기 권한을 수락해 주세요!</string>
+    <string name="symbol_preview_topbar">Expected image</string>
+    <string name="symbol_preview_expectation">This is the expected and converted image form.</string>
+    <string name="symbol_preview_expectation_double">This is the 2x enlarged form of the expected and converted image form.</string>
+    <string name="symbol_preview_dialog_headline">Are you sure you want to convert?</string>
+    <string name="symbol_preview_dialog_content">It is not possible to cancel your subscription for this product.\nPlease check the expected image carefully and make a decision carefully.</string>
 
-    <string name="symbol_detail_appbar">이미지 상세</string>
+    <string name="symbol_guildMark_expectation_image">Expected image</string>
+    <string name="symbol_guildMark_used_color">Used colors</string>
+    <string name="symbol_guildMark_overlay_running">The guildmark palette overlay is running.</string>
+    <string name="symbol_guildMark_permission_headline">Mangyaring tanggapin ang pahintulot na gumuhit sa iba pang mga app.</string>
+    <string name="symbol_guildMark_permission_content">Kung hindi ka tumanggap ng pahintulot, hindi mo magagamit ang serbisyo ng overlay.</string>
+    <string name="symbol_guildMark_description">Kung aalis ka sa kasalukuyang screen, ipapakita ito bilang isang overlay.\nTiyaking tumanggap ng pahintulot na gumuhit sa iba pang mga app!</string>
+
+    <string name="symbol_detail_appbar">Image Details</string>
 
     <!-- service strings -->
-    <string name="service_overlay_running">현재시간 항상 보기가 실행중입니다.</string>
+    <string name="service_overlay_running">The current time always view is running.</string>
 
     <!-- activity strings -->
-    <string name="authority_alarm_failure">알림 권한에 동의하지 않으시면 알람 서비스를 이용하실 수 없습니다.</string>
+    <string name="authority_alarm_failure">If you do not agree to the notification authority, you cannot use the alarm service.</string>
 
 </resources>

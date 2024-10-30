@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
@@ -33,11 +32,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.DefaultLayout
-import com.jinproject.design_compose.component.DescriptionLargeText
 import com.jinproject.design_compose.component.DialogCustom
 import com.jinproject.design_compose.component.DialogState
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.VerticalSpacer
+import com.jinproject.design_compose.component.text.DescriptionLargeText
 import com.jinproject.design_ui.R
 import com.jinproject.domain.model.WeekModel
 import com.jinproject.features.alarm.alarm.component.AlarmBottomSheetContent
@@ -54,7 +53,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun AlarmScreen(
     billingModule: BillingModule,
-    backToAlarmIntent: Intent,
     alarmViewModel: AlarmViewModel = hiltViewModel(),
     context: Context = LocalContext.current,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
@@ -99,14 +97,12 @@ fun AlarmScreen(
                                     alarmViewModel::setAlarm.invoke(
                                         bossName,
                                         showSnackBar,
-                                        backToAlarmIntent
                                     )
                                 else
                                     showRewardedAd {
                                         alarmViewModel::setAlarm.invoke(
                                             bossName,
                                             showSnackBar,
-                                            backToAlarmIntent
                                         )
                                     }
                             }
@@ -118,7 +114,7 @@ fun AlarmScreen(
                     }
                 }
             } else {
-                alarmViewModel::setAlarm.invoke(bossName, showSnackBar, backToAlarmIntent)
+                alarmViewModel::setAlarm.invoke(bossName, showSnackBar)
             }
         },
         onClearAlarm = alarmViewModel::clearAlarm,
@@ -133,7 +129,6 @@ fun AlarmScreen(
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun AlarmScreen(
     alarmUiState: AlarmUiState,

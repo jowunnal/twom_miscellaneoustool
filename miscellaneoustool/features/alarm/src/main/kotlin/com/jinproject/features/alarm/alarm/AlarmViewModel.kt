@@ -90,15 +90,22 @@ class AlarmViewModel @Inject constructor(
         getAlarmStoredBossUsecase().onEach { alarmStoredBoss ->
             _uiState.update { state ->
                 state.copy(
-                    recentlySelectedBossClassified = context.doOnLocaleLanguage(
-                        onKo = com.jinproject.domain.model.MonsterType.findByStoredName(alarmStoredBoss.classified).displayName,
-                        onElse = com.jinproject.domain.model.MonsterType.findByStoredName(alarmStoredBoss.classified).storedName
-                    ),
+                    recentlySelectedBossClassified = alarmStoredBoss.classified,
                     recentlySelectedBossName = alarmStoredBoss.name,
                     frequentlyUsedBossList = alarmStoredBoss.list
                 )
             }
-            getBossListByType(com.jinproject.domain.model.MonsterType.findByStoredName(alarmStoredBoss.classified))
+            val monsterType = kotlin.runCatching {
+                com.jinproject.domain.model.MonsterType.findByBossTypeName(alarmStoredBoss.classified)
+            }.getOrDefault(
+                com.jinproject.domain.model.MonsterType.Normal(
+                    context.doOnLocaleLanguage(
+                        onKo = "일반",
+                        onElse = "Normal"
+                    )
+                )
+            )
+            getBossListByType(monsterType)
         }.launchIn(viewModelScope)
     }
 
@@ -135,7 +142,10 @@ class AlarmViewModel @Inject constructor(
         }
     }
 
-    fun removeBossFromFrequentlyUsedList(bossName: String, showSnackBar: suspend (SnackBarMessage) -> Unit) {
+    fun removeBossFromFrequentlyUsedList(
+        bossName: String,
+        showSnackBar: suspend (SnackBarMessage) -> Unit
+    ) {
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
             if (throwable is IllegalArgumentException) {
                 viewModelScope.launch {
@@ -164,7 +174,7 @@ class AlarmViewModel @Inject constructor(
             })
         }
     }.catch { e ->
-        when(e) {
+        when (e) {
             is IllegalStateException -> {
                 _uiState.update { state ->
                     state.copy(
@@ -197,7 +207,7 @@ class AlarmViewModel @Inject constructor(
         state.copy(selectedBossName = bossName, timeState = TimeState.getInitValue())
     }
 
-    fun setAlarm(monsterName: String, showSnackBar: suspend (SnackBarMessage) -> Unit, backToAlarmIntent: Intent) =
+    fun setAlarm(monsterName: String, showSnackBar: suspend (SnackBarMessage) -> Unit) =
         setAlarmUsecase.invoke(
             monsterName = monsterName,
             monsDiedHour = bottomSheetUiState.value.timeState.hour,
@@ -214,7 +224,6 @@ class AlarmViewModel @Inject constructor(
                         code = monsterAlarmModel.code
                     ),
                     intervalFirstTimerSetting = firstInterval,
-                    backToAlarmIntent = backToAlarmIntent
                 )
 
                 alarmManager.makeAlarm(
@@ -226,7 +235,6 @@ class AlarmViewModel @Inject constructor(
                         code = monsterAlarmModel.code + 300
                     ),
                     intervalSecondTimerSetting = secondInterval,
-                    backToAlarmIntent = backToAlarmIntent
                 )
             }
         ).onEach {

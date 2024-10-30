@@ -27,7 +27,7 @@ class DropListRepositoryImpl @Inject constructor(private val dropListDao: DropLi
                     level = monster.key.monsLevel,
                     genTime = monster.key.monsGtime,
                     imgName = monster.key.monsImgName,
-                    type = MonsterType.findByStoredName(monster.key.monsType),
+                    type = MonsterType.findByBossTypeName(monster.key.monsType),
                     item = monster.value.map { item ->
                         item.toItemModel()
                     }
@@ -36,7 +36,7 @@ class DropListRepositoryImpl @Inject constructor(private val dropListDao: DropLi
         }
 
     override fun getMonsterByType(monsterType: MonsterType) =
-        dropListDao.getMonsterByType(monsterType.storedName).map { response ->
+        dropListDao.getMonsterByType(monsterType.name).map { response ->
             response.map { monster -> monster.toMonsterModel() }
         }
 

@@ -1,11 +1,17 @@
 package com.jinproject.design_compose.theme
 
+import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_background
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_error
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_onBackground
@@ -15,6 +21,7 @@ import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_onSurface
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_onSurfaceVariant
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_outline
+import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_outlineVariant
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_primary
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_scrim
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_secondary
@@ -29,10 +36,12 @@ import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.ligh
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_onSurface
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_onSurfaceVariant
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_outline
+import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_outlineVariant
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_primary
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_scrim
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_secondary
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_surface
+import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_surfaceVariant
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.red
 
 @Stable
@@ -62,7 +71,8 @@ private val DarkColorPalette = darkColorScheme(
     onError = dark_onError.color,
     onErrorContainer = red.color,
     scrim = dark_scrim.color,
-    outline = dark_outline.color
+    outline = dark_outline.color,
+    outlineVariant = dark_outlineVariant.color,
 )
 
 @Stable
@@ -74,13 +84,14 @@ private val LightColorPalette = lightColorScheme(
     background = light_background.color,
     onBackground = light_onBackground.color,
     surface = light_surface.color,
-    surfaceVariant = light_onSurfaceVariant.color,
+    surfaceVariant = light_surfaceVariant.color,
     onSurface = light_onSurface.color,
     onSurfaceVariant = light_onSurfaceVariant.color,
     error = light_error.color,
     onError = light_onError.color,
     scrim = light_scrim.color,
-    outline = light_outline.color
+    outline = light_outline.color,
+    outlineVariant = light_outlineVariant.color,
 )
 
 @Composable
@@ -92,6 +103,17 @@ fun MiscellaneousToolTheme(
         DarkColorPalette
     } else {
         LightColorPalette
+    }
+
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = Color.Transparent.toArgb()
+            window.navigationBarColor = Color.Transparent.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+            WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = !darkTheme
+        }
     }
 
     MaterialTheme(

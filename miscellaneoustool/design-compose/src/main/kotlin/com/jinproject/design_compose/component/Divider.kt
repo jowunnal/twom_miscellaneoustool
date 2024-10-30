@@ -2,11 +2,13 @@ package com.jinproject.design_compose.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,7 +18,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun VerticalDivider(
+fun RowScope.VerticalDivider(
     modifier: Modifier = Modifier,
     thickness: Dp = 1.dp,
     color: Color = MaterialTheme.colorScheme.scrim,
@@ -31,16 +33,18 @@ fun VerticalDivider(
 
 @Suppress("FunctionName")
 @Composable
-fun LazyListScope.VerticalDividerItem(
+fun LazyItemScope.VerticalDividerItem(
+    idx: Int,
+    lastIdx: Int,
     modifier: Modifier = Modifier,
     thickness: Dp = 1.dp,
-    color: Color = MaterialTheme.colorScheme.scrim,
+    color: Color = MaterialTheme.colorScheme.outline,
 ) {
-    item {
+    if(idx != lastIdx) {
         VerticalDivider(
             modifier = modifier,
             thickness = thickness,
-            color = color
+            color = color,
         )
     }
 }
@@ -49,7 +53,7 @@ fun LazyListScope.VerticalDividerItem(
 fun HorizontalDivider(
     modifier: Modifier = Modifier,
     thickness: Dp = 1.dp,
-    color: Color = MaterialTheme.colorScheme.scrim,
+    color: Color = MaterialTheme.colorScheme.outline,
 ) {
     androidx.compose.material3.HorizontalDivider(
         modifier = modifier,
@@ -60,16 +64,18 @@ fun HorizontalDivider(
 
 @Suppress("FunctionName")
 @Composable
-fun LazyListScope.HorizontalDividerItem(
+fun LazyItemScope.HorizontalDividerItem(
+    idx: Int,
+    lastIdx: Int,
     modifier: Modifier = Modifier,
     thickness: Dp = 1.dp,
-    color: Color = MaterialTheme.colorScheme.scrim,
+    color: Color = MaterialTheme.colorScheme.outline,
 ) {
-    item {
-        HorizontalDivider(
+    if(idx != lastIdx) {
+        androidx.compose.material3.HorizontalDivider(
             modifier = modifier,
             thickness = thickness,
-            color = color
+            color = color,
         )
     }
 }

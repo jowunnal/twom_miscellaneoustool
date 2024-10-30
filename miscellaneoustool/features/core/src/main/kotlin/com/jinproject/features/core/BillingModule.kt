@@ -35,7 +35,7 @@ import kotlinx.coroutines.withContext
 class BillingModule(
     private val context: Activity,
     private val lifecycleScope: LifecycleCoroutineScope,
-    private val callback: BillingCallback,
+    private var callback: BillingCallback,
 ) {
 
     var isReady: Boolean = false

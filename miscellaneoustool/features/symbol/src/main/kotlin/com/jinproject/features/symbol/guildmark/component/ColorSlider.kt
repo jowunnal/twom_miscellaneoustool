@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jinproject.design_compose.component.DescriptionSmallText
-import com.jinproject.design_compose.component.FooterText
+import com.jinproject.design_compose.component.text.DescriptionSmallText
+import com.jinproject.design_compose.component.text.FooterText
 import com.jinproject.design_compose.component.HorizontalWeightSpacer
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme

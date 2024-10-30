@@ -25,14 +25,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.billingclient.api.ProductDetails
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
-import com.jinproject.design_compose.component.DefaultAppBar
 import com.jinproject.design_compose.component.DefaultLayout
-import com.jinproject.design_compose.component.DescriptionAnnotatedLargeText
-import com.jinproject.design_compose.component.DescriptionLargeText
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.HorizontalSpacer
 import com.jinproject.design_compose.component.VerticalSpacer
+import com.jinproject.design_compose.component.bar.BackButtonTitleAppBar
 import com.jinproject.design_compose.component.button.TextButton
+import com.jinproject.design_compose.component.text.DescriptionAnnotatedLargeText
+import com.jinproject.design_compose.component.text.DescriptionLargeText
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.red
 import com.jinproject.design_ui.R
 import com.jinproject.features.core.BillingModule
@@ -90,9 +90,9 @@ private fun GearScreen(
 
     DefaultLayout(
         topBar = {
-            DefaultAppBar(
+            BackButtonTitleAppBar(
+                onBackClick = onNavigatePopBackStack,
                 title = stringResource(id = R.string.alarm_setting),
-                onBackClick = onNavigatePopBackStack
             )
         },
         content = {

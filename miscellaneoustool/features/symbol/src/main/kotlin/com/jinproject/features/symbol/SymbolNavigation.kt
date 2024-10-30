@@ -1,6 +1,5 @@
 package com.jinproject.features.symbol
 
-import android.view.View
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
@@ -8,11 +7,13 @@ import androidx.compose.ui.Modifier
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.Route
+import com.jinproject.features.core.TopLevelRoute
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.symbol.detail.DetailScreen
 import com.jinproject.features.symbol.gallery.GalleryScreen
@@ -27,7 +28,10 @@ sealed class SymbolRoute : Route {
     data object SymbolGraph : SymbolRoute()
 
     @Serializable
-    data object Symbol : SymbolRoute()
+    data object Symbol : SymbolRoute(), TopLevelRoute {
+        override val icon: Int = com.jinproject.design_ui.R.drawable.ic_guild_symbol
+        override val iconClicked: Int = com.jinproject.design_ui.R.drawable.ic_guild_symbol
+    }
 
     @Serializable
     data object Gallery : SymbolRoute()
@@ -47,26 +51,11 @@ fun NavGraphBuilder.symbolNavGraph(
     navController: NavController,
     billingModule: BillingModule,
     showSnackBar: (SnackBarMessage) -> Unit,
-    setBottomBarVisibility: (Int) -> Unit,
 ) {
     navigation<SymbolRoute.SymbolGraph>(
         startDestination = SymbolRoute.Symbol,
     ) {
-        composable<SymbolRoute.Symbol>(
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(durationMillis = 300, easing = LinearOutSlowInEasing)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(durationMillis = 250, easing = LinearOutSlowInEasing)
-                )
-            },
-        ) {
-            setBottomBarVisibility(View.VISIBLE)
+        composable<SymbolRoute.Symbol> {
             SymbolScreen(
                 modifier = modifier,
                 navigateToGallery = {
@@ -101,7 +90,6 @@ fun NavGraphBuilder.symbolNavGraph(
                 )
             },
         ) {
-            setBottomBarVisibility(View.GONE)
             GalleryScreen(
                 navigateToImageDetail = { uri ->
                     navController::navigateToDetail.invoke(uri.toParsedString())
@@ -200,6 +188,10 @@ fun NavGraphBuilder.symbolNavGraph(
 internal fun String.toParsedString() = this.replace("/", "*")
 
 internal fun String.toParsedUri() = this.replace("*", "/").toUri()
+
+fun NavController.navigateToSymbolGraph(navOptions: NavOptions? = null) {
+    navigate(SymbolRoute.SymbolGraph, navOptions)
+}
 
 fun NavController.navigateToGuildMark(imageUri: String) {
     this.navigate(SymbolRoute.GuildMark(imageUri), navOptions { popUpTo(SymbolRoute.Gallery) })

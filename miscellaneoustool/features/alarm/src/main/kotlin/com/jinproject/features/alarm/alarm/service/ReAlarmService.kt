@@ -8,14 +8,13 @@ import android.os.IBinder
 import android.widget.Toast
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
-import com.jinproject.core.util.getParcelableExtraOnVersion
 import com.jinproject.core.util.hour
 import com.jinproject.core.util.minute
 import com.jinproject.core.util.second
+import com.jinproject.design_ui.R
 import com.jinproject.domain.usecase.alarm.SetAlarmUsecase
 import com.jinproject.features.alarm.alarm.item.AlarmItem
 import com.jinproject.features.alarm.alarm.utils.makeAlarm
-import com.jinproject.design_ui.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import java.util.Calendar
@@ -40,7 +39,6 @@ class ReAlarmService : LifecycleService() {
         notificationManager?.cancel(code - 300)
 
         val monsterName = intent.getStringExtra("name")!!
-        val backToAlarmIntent = intent.getParcelableExtraOnVersion<Intent>("backToAlarmIntent")
         val cal = Calendar.getInstance()
 
         setAlarmUsecase.invoke(
@@ -59,7 +57,6 @@ class ReAlarmService : LifecycleService() {
                         monsterAlarmModel.code
                     ),
                     intervalFirstTimerSetting = intervalFirst,
-                    backToAlarmIntent = backToAlarmIntent
                 )
 
                 alarmManager.makeAlarm(
@@ -71,7 +68,6 @@ class ReAlarmService : LifecycleService() {
                         monsterAlarmModel.code + 300
                     ),
                     intervalSecondTimerSetting = intervalSecond,
-                    backToAlarmIntent = backToAlarmIntent
                 )
                 Toast.makeText(this,"$monsterName ${getString(R.string.alarm_setted)}",Toast.LENGTH_LONG).show()
                 stopSelf()

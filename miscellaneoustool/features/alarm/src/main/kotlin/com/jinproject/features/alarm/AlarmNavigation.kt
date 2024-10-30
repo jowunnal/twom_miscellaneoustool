@@ -1,21 +1,21 @@
 package com.jinproject.features.alarm
 
-import android.content.Intent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Stable
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import androidx.navigation.navDeepLink
 import com.jinproject.features.alarm.alarm.AlarmScreen
 import com.jinproject.features.alarm.gear.GearScreen
 import com.jinproject.features.alarm.watch.WatchScreen
 import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.Route
+import com.jinproject.features.core.TopLevelRoute
 import com.jinproject.features.core.base.item.SnackBarMessage
 import kotlinx.serialization.Serializable
 
@@ -26,7 +26,10 @@ sealed class AlarmRoute: Route {
     data object AlarmGraph: AlarmRoute()
 
     @Serializable
-    data object Alarm : AlarmRoute()
+    data object Alarm : AlarmRoute(), TopLevelRoute {
+        override val icon: Int = com.jinproject.design_ui.R.drawable.icon_alarm
+        override val iconClicked: Int = com.jinproject.design_ui.R.drawable.icon_alarm
+    }
 
     @Serializable
     data object Gear : AlarmRoute()
@@ -45,35 +48,19 @@ fun NavGraphBuilder.alarmNavGraph(
 ) {
     navigation<AlarmRoute.AlarmGraph>(
         startDestination = AlarmRoute.Alarm,
+        deepLinks = listOf(
+            navDeepLink<AlarmRoute.AlarmGraph>(
+                basePath = "twom_miscellanous_tool/alarm"
+            )
+        ),
     ) {
-        composable<AlarmRoute.Alarm>(
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(durationMillis = 300, easing = LinearOutSlowInEasing)
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(durationMillis = 250, easing = LinearOutSlowInEasing)
-                )
-            }
-        ) {
+        composable<AlarmRoute.Alarm> {
             AlarmScreen(
                 billingModule = billingModule,
-                backToAlarmIntent = Intent(
-                    LocalContext.current,
-                    Class.forName("com.jinproject.twomillustratedbook.ui.MainActivity")
-                ).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    putExtra("screen", "alarm")
-                },
                 showRewardedAd = showRewardedAd,
                 onNavigateToGear = onNavigateToGear,
                 onNavigateToWatch = onNavigateToWatch,
-                showSnackBar = showSnackBar
+                showSnackBar = showSnackBar,
             )
         }
 
@@ -119,8 +106,8 @@ fun NavGraphBuilder.alarmNavGraph(
     }
 }
 
-fun NavController.navigateToAlarm(navOptions: NavOptions?) {
-    this.navigate(AlarmRoute.Alarm, navOptions)
+fun NavController.navigateToAlarmGraph(navOptions: NavOptions?) {
+    this.navigate(AlarmRoute.AlarmGraph, navOptions)
 }
 
 fun NavController.navigateToGear() {

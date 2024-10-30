@@ -4,5 +4,6 @@ data class ItemModel(
     val name: String,
     val count: Int,
     val enchantNumber: Int,
-    val price: Int
+    val price: Long,
+    val type: ItemType,
 )

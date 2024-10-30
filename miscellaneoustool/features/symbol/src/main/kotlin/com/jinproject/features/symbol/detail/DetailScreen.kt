@@ -11,11 +11,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.request.ImageRequest
-import com.jinproject.design_compose.component.BackButtonTitleAppBar
+import com.jinproject.design_compose.component.bar.BackButtonTitleAppBar
 import com.jinproject.design_compose.component.DefaultLayout
 import com.jinproject.design_compose.component.SubcomposeAsyncImageWithPreview
 import com.jinproject.design_compose.component.pushRefresh.MTProgressIndicatorRotating
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
+import com.jinproject.design_ui.R
 import com.jinproject.features.core.base.item.SnackBarMessage
 
 @Composable
@@ -41,8 +42,8 @@ private fun DetailScreen(
 ) {
     DefaultLayout(topBar = {
         BackButtonTitleAppBar(
-            title = stringResource(id = com.jinproject.design_ui.R.string.symbol_detail_appbar),
-            onClick = popBackStack
+            title = stringResource(id = R.string.symbol_detail_appbar),
+            onBackClick = popBackStack
         )
     }) {
         SubcomposeAsyncImageWithPreview(

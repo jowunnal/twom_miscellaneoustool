@@ -13,7 +13,6 @@ internal fun AlarmManager.makeAlarm(
     item: AlarmItem,
     intervalFirstTimerSetting: Int = 0,
     intervalSecondTimerSetting: Int = 0,
-    backToAlarmIntent: Intent?
 ) {
     val notifyIntentImmediately = Intent(context, AlarmReceiver::class.java).apply {
         putExtra("name", item.name)
@@ -21,7 +20,6 @@ internal fun AlarmManager.makeAlarm(
         putExtra("code", item.code)
         putExtra("first", intervalFirstTimerSetting)
         putExtra("second", intervalSecondTimerSetting)
-        backToAlarmIntent?.let { putExtra("backToAlarmIntent", it) }
     }
 
     val notifyPendingIntent = PendingIntent.getBroadcast(

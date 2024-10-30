@@ -5,6 +5,8 @@ import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.jinproject.data.datasource.cache.database.BookDatabase
+import com.jinproject.data.datasource.cache.database.BookMigration.MIGRATION_1_2_KOR
+import com.jinproject.data.datasource.cache.database.BookMigration.MIGRATION_2_3_KOR
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -41,7 +43,7 @@ class BookDatabaseTest {
             close()
         }
 
-        db = helper.runMigrationsAndValidate(TEST_DB_VER2, 2, true, BookDatabase.MIGRATION_1_2_KOR)
+        db = helper.runMigrationsAndValidate(TEST_DB_VER2, 2, true, MIGRATION_1_2_KOR)
     }
 
     @Test
@@ -110,7 +112,7 @@ class BookDatabaseTest {
             TEST_DB_VER3,
             3,
             true,
-            BookDatabase.MIGRATION_2_3_KOR
+            MIGRATION_2_3_KOR
         )
     }
 }
