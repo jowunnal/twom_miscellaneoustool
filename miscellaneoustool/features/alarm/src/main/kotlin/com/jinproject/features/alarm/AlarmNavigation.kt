@@ -49,7 +49,9 @@ fun NavGraphBuilder.alarmNavGraph(
     navigation<AlarmRoute.AlarmGraph>(
         startDestination = AlarmRoute.Alarm,
         deepLinks = listOf(
-            navDeepLink<AlarmRoute.Alarm>("twom/alarm")
+            navDeepLink<AlarmRoute.AlarmGraph>(
+                basePath = "twom_miscellanous_tool/alarm"
+            )
         ),
     ) {
         composable<AlarmRoute.Alarm> {

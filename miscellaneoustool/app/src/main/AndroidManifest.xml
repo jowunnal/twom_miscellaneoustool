@@ -34,6 +34,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <data android:scheme="https" android:host="twom_miscellanous_tool" />
+            </intent-filter>
         </activity>
 
         <service

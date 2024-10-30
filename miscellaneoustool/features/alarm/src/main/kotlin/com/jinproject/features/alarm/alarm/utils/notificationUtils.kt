@@ -4,12 +4,14 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.drawable.IconCompat
+import androidx.core.net.toUri
 import com.jinproject.design_ui.R
 import com.jinproject.features.alarm.alarm.service.ReAlarmService
 
@@ -22,25 +24,21 @@ internal fun NotificationManager.sendNotification(
     intervalFirstTimerSetting: Int = 0,
     intervalSecondTimerSetting: Int = 0,
 ) {
-    val backToAlarmIntent = Intent(
+    val deepLinkIntent = Intent(
+        Intent.ACTION_VIEW,
+        "https://twom_miscellanous_tool/alarm".toUri(),
         context,
         Class.forName("com.jinproject.twomillustratedbook.ui.MainActivity")
-    ).apply {
-        putExtra("screen", "alarm")
-    }
-
-
-    val backToAlarmPendingIntent = PendingIntent.getActivity(
-        context,
-        code,
-        backToAlarmIntent,
-        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
+
+    val deepLinkPendingIntent: PendingIntent? = TaskStackBuilder.create(context).run {
+        addNextIntentWithParentStack(deepLinkIntent)
+        getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+    }
 
     val reAlarmIntent = Intent(context, ReAlarmService::class.java).apply {
         putExtra("name", name)
         putExtra("code", code)
-        putExtra("backToAlarmIntent", backToAlarmIntent)
     }
 
     val reAlarmPendingIntent = PendingIntent.getService(
@@ -58,7 +56,7 @@ internal fun NotificationManager.sendNotification(
         .setSmallIcon(IconCompat.createWithBitmap(bitMap))
         .setContentTitle(context.getString(R.string.alarm))
         .setPriority(NotificationCompat.PRIORITY_HIGH)
-        .setContentIntent(backToAlarmPendingIntent)
+        .setContentIntent(deepLinkPendingIntent)
         .setAutoCancel(true)
         .setLargeIcon(bitMap)
 
