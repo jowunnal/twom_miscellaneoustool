@@ -1,5 +1,5 @@
 <a href="https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook">
-	<img src="https://img.shields.io/badge/PlayStore-v2.3.1-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
+	<img src="https://img.shields.io/badge/PlayStore-v2.3.2-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
 </a>
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.0.10-blue.svg)](https://kotlinlang.org)
@@ -33,11 +33,11 @@
 | Category | Skill Set |
 | ----- | ----- |
 | Language | Kotlin |
-| UI toolkit | XML, Compose |
+| UI toolkit | Compose |
 | Architecture | Clean Architecture |
 | Design Pattern | MVVM |
 | Android Component | Activity, Service, BroadcastReceiver |
-| Jetpack | Lifecycle, Navigation, AlarmManager, Databinding |
+| Jetpack | Lifecycle, Navigation(Compose), AlarmManager, Databinding |
 | Asynchronous | Kotlinx.Coroutines, Kotlinx.Coroutines.Flow |
 | Dependency Injection | Hilt |
 | Data | Room, DataStore(proto3) |
