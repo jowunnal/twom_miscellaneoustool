@@ -18,7 +18,7 @@ sealed interface ItemType {
                 "방어구", "armor" -> Armor(storedName)
                 "코스튬", "costume" -> Costume(storedName)
                 "스킬", "skill" -> Skill(storedName)
-                "장신구", "accessory" -> Accessory(storedName)
+                "장신구", "accessories" -> Accessory(storedName)
                 else -> throw IllegalStateException("[$storedName] 은 잘못된 카테고리 입니다.")
             }
     }

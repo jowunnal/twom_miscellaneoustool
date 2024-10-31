@@ -16,8 +16,8 @@ import com.jinproject.features.alarm.navigateToGear
 import com.jinproject.features.alarm.navigateToWatch
 import com.jinproject.features.collection.navigateToCollectionList
 import com.jinproject.features.core.BillingModule
-import com.jinproject.features.core.TopLevelRoute
 import com.jinproject.features.core.base.item.SnackBarMessage
+import com.jinproject.features.core.compose.TopLevelRoute
 import com.jinproject.features.droplist.navigateToDropList
 import com.jinproject.features.home.HomeRoute
 import com.jinproject.features.home.homeNavGraph

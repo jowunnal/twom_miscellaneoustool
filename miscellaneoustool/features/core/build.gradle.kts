@@ -23,4 +23,6 @@ dependencies {
     implementation(libs.bumptech.glide)
     implementation(libs.bundles.billing)
     implementation(libs.kotlinx.collections.immutable)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 }

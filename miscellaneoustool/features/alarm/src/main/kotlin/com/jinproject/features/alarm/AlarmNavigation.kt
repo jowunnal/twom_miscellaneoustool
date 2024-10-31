@@ -14,8 +14,8 @@ import com.jinproject.features.alarm.alarm.AlarmScreen
 import com.jinproject.features.alarm.gear.GearScreen
 import com.jinproject.features.alarm.watch.WatchScreen
 import com.jinproject.features.core.BillingModule
-import com.jinproject.features.core.Route
-import com.jinproject.features.core.TopLevelRoute
+import com.jinproject.features.core.compose.Route
+import com.jinproject.features.core.compose.TopLevelRoute
 import com.jinproject.features.core.base.item.SnackBarMessage
 import kotlinx.serialization.Serializable
 

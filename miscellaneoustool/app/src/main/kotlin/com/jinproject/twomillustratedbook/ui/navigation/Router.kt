@@ -11,7 +11,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
 import com.jinproject.features.alarm.AlarmRoute
 import com.jinproject.features.alarm.navigateToAlarmGraph
-import com.jinproject.features.core.TopLevelRoute
+import com.jinproject.features.core.compose.TopLevelRoute
 import com.jinproject.features.home.HomeRoute
 import com.jinproject.features.home.navigateToHomeGraph
 import com.jinproject.features.simulator.SimulatorRoute

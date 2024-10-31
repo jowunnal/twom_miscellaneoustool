@@ -41,6 +41,8 @@ import com.jinproject.features.alarm.watch.component.OverlaySetting
 import com.jinproject.features.alarm.watch.component.TimeStatusSetting
 import com.jinproject.features.alarm.watch.component.TimerBottomSheetContent
 import com.jinproject.features.alarm.watch.service.OverlayService
+import com.jinproject.features.core.AnalyticsEvent
+import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -82,6 +84,7 @@ private fun WatchScreen(
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val scrollState = rememberScrollState()
+    val localAnalyticsLoggingEvent = LocalAnalyticsLoggingEvent.current
 
     DefaultLayout(
         topBar = {
@@ -119,6 +122,7 @@ private fun WatchScreen(
                         context.startOverlayService(
                             status = status
                         )
+                        localAnalyticsLoggingEvent(AnalyticsEvent.ASCT)
                     }
                 )
 
@@ -160,13 +164,16 @@ private fun WatchScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    uiState.frequentlyUsedBossList.forEach { item ->
+                    uiState.frequentlyUsedBossList.forEach { monsName ->
                         BossSelectionItem(
-                            bossName = item,
+                            bossName = monsName,
                             onClickBossItem = {
                                 coroutineScope.launch {
-                                    setSelectedMonsterName(item)
+                                    setSelectedMonsterName(monsName)
                                     bottomSheetState.show()
+                                    localAnalyticsLoggingEvent(
+                                        AnalyticsEvent.FrequentlyUsedBoss(monsName = monsName)
+                                    )
                                 }
                             }
                         )

@@ -18,6 +18,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
+import com.jinproject.features.core.AnalyticsEvent
+import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
 import com.jinproject.features.droplist.component.DropListDetail
 import com.jinproject.features.droplist.component.MapListPane
 import com.jinproject.features.droplist.state.MapState
@@ -50,12 +52,16 @@ private fun MapListScreen(
         navigator.navigateBack()
     }
 
+    val localAnalyticsLoggingEvent = LocalAnalyticsLoggingEvent.current
+
     LaunchedEffect(key1 = dropListArgument) {
         dropListArgument?.let { mapName ->
             dropListUiState.maps.find { it.name == mapName }?.let { mapState ->
                 navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, mapState)
             }
         }
+
+        localAnalyticsLoggingEvent(AnalyticsEvent.DropListScreen)
     }
 
     ListDetailPaneScaffold(
