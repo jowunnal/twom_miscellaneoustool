@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import com.jinproject.design_compose.component.HorizontalWeightSpacer
 import com.jinproject.design_compose.theme.MiscellaneousToolColor
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
+import com.jinproject.features.core.AnalyticsEvent
+import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
 import com.jinproject.features.simulator.EquipmentListPreviewParameters
 import com.jinproject.features.simulator.model.Armor
 import com.jinproject.features.simulator.model.Empty
@@ -53,6 +55,8 @@ internal fun EnchantSpace(
     storeSelectedItem: () -> Unit,
     removeEquipmentOnOwnedItemListByUUID: (String) -> Unit,
 ) {
+    val localAnalyticsLoggingEvent = LocalAnalyticsLoggingEvent.current
+
     val dndTarget = remember(selectedItem) {
         object : DragAndDropTarget {
             override fun onDrop(event: DragAndDropEvent): Boolean {
@@ -71,19 +75,29 @@ internal fun EnchantSpace(
                             now = selectedItem.enchantNumber,
                             standard = enchantStandard,
                         )
-                    )
-                        when (selectedItem) {
-                            is Weapon -> selectedItem.copy(
-                                enchantNumber = selectedItem.enchantNumber + 1
+                    ) {
+                        if (selectedItem.enchantNumber >= enchantStandard)
+                            localAnalyticsLoggingEvent(
+                                AnalyticsEvent.SimulatorEnchant(
+                                    itemName = selectedItem.name,
+                                    result = true
+                                )
                             )
 
-                            is Armor -> selectedItem.copy(
-                                enchantNumber = selectedItem.enchantNumber + 1
-                            )
+                        when (selectedItem) {
+                            is Weapon ->
+                                selectedItem.copy(
+                                    enchantNumber = selectedItem.enchantNumber + 1
+                                )
+
+                            is Armor ->
+                                selectedItem.copy(
+                                    enchantNumber = selectedItem.enchantNumber + 1
+                                )
 
                             else -> throw IllegalStateException("$selectedItem is not allowed type for Equipment")
                         }
-                    else {
+                    } else {
                         removeEquipmentOnOwnedItemListByUUID(selectedItem.uuid)
                         Empty()
                     }

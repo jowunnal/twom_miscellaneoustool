@@ -1,4 +1,4 @@
-package com.jinproject.features.core
+package com.jinproject.features.core.compose
 
 import androidx.annotation.DrawableRes
 

@@ -49,13 +49,19 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import com.jinproject.design_compose.component.SnackBarHostCustom
 import com.jinproject.design_compose.component.paddingvalues.addStatusBarPadding
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.design_ui.R
+import com.jinproject.features.core.AnalyticsEvent
 import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.base.CommonDialogFragment
 import com.jinproject.features.core.base.item.SnackBarMessage
+import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
 import com.jinproject.twomillustratedbook.BuildConfig
 import com.jinproject.twomillustratedbook.BuildConfig.ADMOB_REWARD_ID
 import com.jinproject.twomillustratedbook.ui.navigation.NavigationDefaults
@@ -127,15 +133,20 @@ class MainActivity : AppCompatActivity() {
 
     private val adMobManager by lazy { AdMobManager(this) }
 
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         initBillingModule()
+        firebaseAnalytics = Firebase.analytics
+
         setContent {
             MiscellaneousToolTheme {
                 Content()
             }
         }
+
         inAppUpdateManager.checkUpdateIsAvailable(launcher = inAppUpdateLauncher)
     }
 
@@ -241,7 +252,10 @@ class MainActivity : AppCompatActivity() {
                 currentWindowAdaptiveInfo
         )
 
-        CompositionLocalProvider(value = LocalTonalElevationEnabled provides false) {
+        CompositionLocalProvider(
+            LocalTonalElevationEnabled provides false,
+            LocalAnalyticsLoggingEvent provides ::loggingAnalyticsEvent
+        ) {
             NavigationSuiteScaffold(
                 navigationSuiteItems = {
                     navigationSuiteItems(
@@ -308,6 +322,12 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+    }
+
+    private fun loggingAnalyticsEvent(event: AnalyticsEvent) {
+        firebaseAnalytics.logEvent(event.eventName) {
+            event.logEvent(this)
         }
     }
 

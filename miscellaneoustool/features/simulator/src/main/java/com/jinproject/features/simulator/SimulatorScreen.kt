@@ -23,7 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.VerticalSpacer
-import com.jinproject.design_compose.component.paddingvalues.addStatusBarPadding
+import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
 import com.jinproject.features.simulator.component.AvailableEquipmentSheet
 import com.jinproject.features.simulator.component.EnchantSpace
 import com.jinproject.features.simulator.component.EquipmentDeleteBar
@@ -71,6 +71,7 @@ private fun SimulatorScreen(
     var isEquipmentDragging by remember {
         mutableStateOf(false)
     }
+    val localAnalyticsLoggingEvent = LocalAnalyticsLoggingEvent.current
 
     Column(
         Modifier
@@ -116,6 +117,7 @@ private fun SimulatorScreen(
         availableItems = simulatorState.availableItems,
         addOnItemSpace = { equipment ->
             addEquipmentOnOwnedItemList(equipment)
+            localAnalyticsLoggingEvent(com.jinproject.features.core.AnalyticsEvent.SimulatorAddItem(itemName = equipment.name))
         }
     )
 }

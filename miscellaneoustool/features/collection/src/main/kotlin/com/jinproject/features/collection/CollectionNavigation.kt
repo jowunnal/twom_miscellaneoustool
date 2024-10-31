@@ -3,7 +3,7 @@ package com.jinproject.features.collection
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.jinproject.features.core.Route
+import com.jinproject.features.core.compose.Route
 import com.jinproject.features.core.base.item.SnackBarMessage
 import kotlinx.serialization.Serializable
 

@@ -6,8 +6,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.jinproject.features.collection.collectionNavGraph
-import com.jinproject.features.core.Route
-import com.jinproject.features.core.TopLevelRoute
+import com.jinproject.features.core.compose.Route
+import com.jinproject.features.core.compose.TopLevelRoute
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.droplist.dropListNavGraph
 import kotlinx.serialization.Serializable

@@ -12,8 +12,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.jinproject.features.core.BillingModule
-import com.jinproject.features.core.Route
-import com.jinproject.features.core.TopLevelRoute
+import com.jinproject.features.core.compose.Route
+import com.jinproject.features.core.compose.TopLevelRoute
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.symbol.detail.DetailScreen
 import com.jinproject.features.symbol.gallery.GalleryScreen

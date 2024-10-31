@@ -3,6 +3,7 @@ package com.jinproject.features.symbol.gallery
 import android.content.Context
 import android.content.Intent
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,7 +18,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.design_compose.component.DefaultLayout
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
+import com.jinproject.features.core.AnalyticsEvent
 import com.jinproject.features.core.base.item.SnackBarMessage
+import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
 import com.jinproject.features.symbol.gallery.component.GalleryAppBar
 import com.jinproject.features.symbol.gallery.component.ImageList
 import com.jinproject.features.symbol.guildmark.SymbolOverlayService
@@ -66,6 +69,14 @@ private fun GalleryScreen(
 ) {
     var isRefreshing by remember {
         mutableStateOf(false)
+    }
+
+    val localAnalyticsLoggingEvent = LocalAnalyticsLoggingEvent.current
+
+    LaunchedEffect(key1 = Unit) {
+        localAnalyticsLoggingEvent(
+            AnalyticsEvent.GalleryScreen
+        )
     }
 
     DefaultLayout(

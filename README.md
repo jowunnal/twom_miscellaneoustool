@@ -1,5 +1,5 @@
 <a href="https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook">
-	<img src="https://img.shields.io/badge/PlayStore-v2.3.2-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
+	<img src="https://img.shields.io/badge/PlayStore-v2.3.3-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
 </a>
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.0.10-blue.svg)](https://kotlinlang.org)
@@ -41,7 +41,7 @@
 | Asynchronous | Kotlinx.Coroutines, Kotlinx.Coroutines.Flow |
 | Dependency Injection | Hilt |
 | Data | Room, DataStore(proto3) |
-| Google | InAppPurchase, InAppUpdate, Admob |
+| Google | InAppPurchase, InAppUpdate, Admob, Firebase-Analytics |
 | Unit Test | Junit, Kotest, mockk |
 
 # 개발 기간

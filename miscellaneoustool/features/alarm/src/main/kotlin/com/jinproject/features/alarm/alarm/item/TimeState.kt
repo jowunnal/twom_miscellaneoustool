@@ -8,6 +8,8 @@ import com.jinproject.core.util.minute
 import com.jinproject.core.util.second
 import com.jinproject.domain.model.WeekModel
 import kotlinx.parcelize.Parcelize
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoField
 import java.util.Calendar
 
 @Stable
@@ -22,6 +24,13 @@ data class TimeState(
     fun getTime12Hour() = if(hour >= 12) hour - 12 else hour
 
     fun getMeridiem() = if(hour >= 12) "PM" else "AM"
+
+    fun toTimeStamp() = ZonedDateTime.now().apply {
+        with(ChronoField.DAY_OF_WEEK, day.toDayOfWeek().toLong())
+        withHour(hour)
+        withMinute(minutes)
+        withSecond(seconds)
+    }.toString()
 
     companion object {
         fun getInitValue(): TimeState = kotlin.run {

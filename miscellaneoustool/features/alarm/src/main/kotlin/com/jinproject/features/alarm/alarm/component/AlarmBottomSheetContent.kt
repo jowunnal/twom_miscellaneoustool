@@ -27,12 +27,14 @@ import androidx.compose.ui.unit.dp
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.HorizontalSpacer
-import com.jinproject.design_compose.component.button.TextButton
 import com.jinproject.design_compose.component.VerticalSpacer
+import com.jinproject.design_compose.component.button.TextButton
 import com.jinproject.design_compose.tu
-import com.jinproject.domain.model.WeekModel
 import com.jinproject.design_ui.R
+import com.jinproject.domain.model.WeekModel
 import com.jinproject.features.alarm.alarm.item.TimeState
+import com.jinproject.features.core.AnalyticsEvent
+import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -109,12 +111,17 @@ fun AlarmBottomSheetContent(
         VerticalSpacer(height = 16.dp)
 
         Row {
+            val event = LocalAnalyticsLoggingEvent.current
             TextButton(
                 text = stringResource(id = R.string.start_do),
                 modifier = Modifier
                     .weight(1f),
                 onClick = {
                     onStartAlarm(selectedBossName)
+                    event(AnalyticsEvent.StartAlarm(
+                        monsName = selectedBossName,
+                        timeStamp = timeState.toTimeStamp(),
+                    ))
                     onCloseBottomSheet()
                 }
             )

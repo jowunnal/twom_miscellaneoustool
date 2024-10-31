@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -29,6 +30,11 @@ import com.jinproject.features.collection.component.CollectionList
 import com.jinproject.features.collection.model.CollectionUiState
 import com.jinproject.features.collection.model.ItemCollection
 import com.jinproject.features.core.base.item.SnackBarMessage
+import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 internal fun CollectionScreen(
@@ -48,7 +54,7 @@ internal fun CollectionScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
+@OptIn(ExperimentalMaterial3AdaptiveApi::class, FlowPreview::class)
 @Composable
 private fun CollectionScreen(
     collectionUiState: CollectionUiState,
@@ -75,6 +81,15 @@ private fun CollectionScreen(
     val textFiledState = rememberTextFieldState()
     var isFilterMode by remember {
         mutableStateOf(false)
+    }
+    val localAnalyticsLoggingEvent = LocalAnalyticsLoggingEvent.current
+
+    LaunchedEffect(key1 = Unit) {
+        snapshotFlow {
+            textFiledState.text
+        }.debounce(300).distinctUntilChanged().collectLatest {
+            localAnalyticsLoggingEvent(com.jinproject.features.core.AnalyticsEvent.CollectionSearchWord(word = it.toString()))
+        }
     }
 
     ListDetailPaneScaffold(
