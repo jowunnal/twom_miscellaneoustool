@@ -131,4 +131,9 @@
     <!-- activity strings -->
     <string name="authority_alarm_failure">알림 권한에 동의하지 않으시면 알람 서비스를 이용하실 수 없습니다.</string>
 
+    <!-- simulator strings -->
+    <string name="item_detail_require_level">요구레벨</string>
+    <string name="item_detail_attack">공격</string>
+    <string name="item_detail_speed">속도</string>
+
 </resources>

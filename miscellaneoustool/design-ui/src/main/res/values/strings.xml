@@ -131,4 +131,9 @@
     <!-- activity strings -->
     <string name="authority_alarm_failure">If you do not agree to the notification authority, you cannot use the alarm service.</string>
 
+    <!-- simulator strings -->
+    <string name="item_detail_require_level">Require Level</string>
+    <string name="item_detail_attack">Attack</string>
+    <string name="item_detail_speed">Speed</string>
+
 </resources>

@@ -92,7 +92,7 @@ internal fun CollectionList(
     val items by remember(collectionUiState, isFilterMode, searchCharSequence) {
         derivedStateOf {
             collectionUiState.filterBySearchWord(
-                s = searchCharSequence,
+                s = searchCharSequence.toString(),
                 isFilterMode = isFilterMode
             )
         }
