@@ -8,7 +8,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -51,7 +49,6 @@ import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,6 +61,7 @@ import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.component.button.TextButton
 import com.jinproject.design_compose.component.button.clickableAvoidingDuplication
 import com.jinproject.design_compose.component.button.combinedClickableAvoidingDuplication
+import com.jinproject.design_compose.component.image.DefaultPainterImage
 import com.jinproject.design_compose.component.paddingvalues.MiscellanousToolPaddingValues
 import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
@@ -288,10 +286,9 @@ private fun CollectionItem(
                 modifier = Modifier.width(itemWidth)
             )
             HorizontalSpacer(width = 5.dp)
-            Image(
-                painter = painterResource(id = com.jinproject.design_ui.R.drawable.ic_arrow_right_long),
-                contentDescription = "Right Arrow",
-                modifier = Modifier.size(24.dp)
+            DefaultPainterImage(
+                resId = com.jinproject.design_ui.R.drawable.ic_arrow_right_long,
+                contentDescription = "Right Long Arrow",
             )
             HorizontalSpacer(width = 20.dp)
             DescriptionSmallText(
@@ -301,14 +298,13 @@ private fun CollectionItem(
                     .padding(vertical = verticalPadding)
             )
             HorizontalSpacer(width = 20.dp)
-            Image(
-                painter = painterResource(id = com.jinproject.design_ui.R.drawable.ic_arrow_right_small),
+            DefaultPainterImage(
+                resId = com.jinproject.design_ui.R.drawable.ic_arrow_right_small,
                 contentDescription = "Right Arrow",
                 modifier = Modifier
-                    .size(24.dp)
                     .clickableAvoidingDuplication {
                         navigateToDetail(collection)
-                    }
+                    },
             )
         }
         HorizontalDivider()

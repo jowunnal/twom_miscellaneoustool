@@ -59,6 +59,7 @@
     <string name="gold">Gold</string>
     <string name="textfield_hint">Maglagay ng text</string>
     <string name="total">Kabuuan</string>
+    <string name="empty">Walang laman</string>
 
     <!-- Snackbar Message -->
     <string name="message_throw_no_such_element">Walang tugmang data.</string>

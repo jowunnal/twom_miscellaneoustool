@@ -1,20 +1,13 @@
 package com.jinproject.features.simulator
 
 import android.content.res.Configuration
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -22,7 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
+import com.jinproject.design_compose.component.DefaultLayout
 import com.jinproject.design_compose.component.VerticalSpacer
+import com.jinproject.design_compose.component.paddingvalues.MiscellanousToolPaddingValues
 import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
 import com.jinproject.features.simulator.component.AvailableEquipmentSheet
 import com.jinproject.features.simulator.component.EnchantSpace
@@ -73,12 +68,8 @@ private fun SimulatorScreen(
     }
     val localAnalyticsLoggingEvent = LocalAnalyticsLoggingEvent.current
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(top = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    DefaultLayout(
+        contentPaddingValues = MiscellanousToolPaddingValues(top = 20.dp),
     ) {
         EquipmentDeleteBar(
             isEquipmentDragging = isEquipmentDragging,

@@ -26,6 +26,7 @@ import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_scrim
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_secondary
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_surface
+import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_surfaceContainer
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.dark_surfaceVariant
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_background
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_error
@@ -41,6 +42,7 @@ import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.ligh
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_scrim
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_secondary
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_surface
+import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_surfaceContainer
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.light_surfaceVariant
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.red
 
@@ -66,6 +68,7 @@ private val DarkColorPalette = darkColorScheme(
     onSurfaceVariant = dark_onSurfaceVariant.color,
     inverseSurface = red.color,
     inverseOnSurface = red.color,
+    surfaceContainer = dark_surfaceContainer.color,
     error = dark_error.color,
     errorContainer = red.color,
     onError = dark_onError.color,
@@ -87,6 +90,7 @@ private val LightColorPalette = lightColorScheme(
     surfaceVariant = light_surfaceVariant.color,
     onSurface = light_onSurface.color,
     onSurfaceVariant = light_onSurfaceVariant.color,
+    surfaceContainer = light_surfaceContainer.color,
     error = light_error.color,
     onError = light_onError.color,
     scrim = light_scrim.color,

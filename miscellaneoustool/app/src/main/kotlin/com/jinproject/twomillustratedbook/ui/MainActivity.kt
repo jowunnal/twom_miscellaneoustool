@@ -103,9 +103,10 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var billingModule: BillingModule
 
-    private val inAppUpdateLauncher = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
-        inAppUpdateManager.inAppUpdatingLauncherResult(result)
-    }
+    private val inAppUpdateLauncher =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+            inAppUpdateManager.inAppUpdatingLauncherResult(result)
+        }
 
     private val inAppUpdateManager by lazy {
         InAppUpdateManager(
@@ -326,9 +327,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loggingAnalyticsEvent(event: AnalyticsEvent) {
-        firebaseAnalytics.logEvent(event.eventName) {
-            event.logEvent(this)
-        }
+        if (!BuildConfig.IS_DEBUG_MODE)
+            firebaseAnalytics.logEvent(event.eventName) {
+                event.logEvent(this)
+            }
     }
 
     private fun loadRewardedAd() {
@@ -364,12 +366,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showRewardedAd(onResult: () -> Unit) {
-        mRewardedAd?.show(this) {
-            onResult()
-        } ?: run {
-            loadRewardedAd()
-            onResult()
+        if (!BuildConfig.IS_DEBUG_MODE) {
+            mRewardedAd?.show(this) {
+                onResult()
+            } ?: run {
+                loadRewardedAd()
+                onResult()
+            }
         }
+        else
+            onResult()
     }
 
     override fun onResume() {

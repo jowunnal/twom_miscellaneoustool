@@ -173,6 +173,7 @@ internal fun CollectionDetail(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(bottom = 20.dp)
         ) {
             val deleteSnackBarMessage =
                 stringResource(id = com.jinproject.design_ui.R.string.message_success_removed)
@@ -271,7 +272,7 @@ internal fun ItemWithPrice(
                     }
                 },
             textFieldState = textFiledState,
-            textStyle = MaterialTheme.typography.bodySmall,
+            textStyle = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onSurface),
             outputTransformation = TenThousandSeparatorOutputTransformation(
                 suffix = {
                     append(" $textGold")

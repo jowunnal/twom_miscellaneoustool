@@ -1,7 +1,6 @@
 package com.jinproject.features.home
 
 import android.content.Context
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -27,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,6 +41,7 @@ import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.component.button.DefaultIconButton
 import com.jinproject.design_compose.component.button.clickableAvoidingDuplication
 import com.jinproject.design_compose.component.button.combinedClickableAvoidingDuplication
+import com.jinproject.design_compose.component.image.DefaultPainterImage
 import com.jinproject.design_compose.component.paddingvalues.MiscellanousToolPaddingValues
 import com.jinproject.design_compose.component.text.DescriptionAnnotatedSmallText
 import com.jinproject.design_compose.component.text.DescriptionLargeText
@@ -61,6 +59,7 @@ internal fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToDropList: (String) -> Unit,
     navigateToCollection: (Int?) -> Unit,
+    navigateToAlarm: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -68,6 +67,7 @@ internal fun HomeScreen(
         uiState = uiState,
         navigateToDropList = navigateToDropList,
         navigateToCollection = navigateToCollection,
+        navigateToAlarm = navigateToAlarm,
     )
 }
 
@@ -77,6 +77,7 @@ private fun HomeScreen(
     context: Context = LocalContext.current,
     navigateToDropList: (String) -> Unit,
     navigateToCollection: (Int?) -> Unit,
+    navigateToAlarm: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
 
@@ -87,7 +88,7 @@ private fun HomeScreen(
         contentPaddingValues = MiscellanousToolPaddingValues(vertical = 16.dp, horizontal = 12.dp),
     ) {
         HomeMenu(
-            header = stringResource(id = com.jinproject.design_ui.R.string.home_droplist),
+            header = stringResource(id = R.string.home_droplist),
             onClickHeader = {
                 navigateToDropList("")
             },
@@ -118,7 +119,7 @@ private fun HomeScreen(
         VerticalSpacer(height = 40.dp)
 
         HomeMenu(
-            header = stringResource(id = com.jinproject.design_ui.R.string.home_collection),
+            header = stringResource(id = R.string.home_collection),
             onClickHeader = {
                 navigateToCollection(null)
             },
@@ -146,71 +147,76 @@ private fun HomeScreen(
 
         VerticalSpacer(height = 40.dp)
 
-        Column(
-            modifier = Modifier
-                .shadow(6.dp, RoundedCornerShape(20.dp))
-                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
-                .padding(vertical = 16.dp, horizontal = 12.dp),
+        HomeMenu(
+            header = stringResource(id = R.string.alarm_present_bosslist),
+            onClickHeader = {
+                navigateToCollection(null)
+            },
         ) {
-            DescriptionLargeText(
-                text = stringResource(id = R.string.alarm_present_bosslist),
-            )
-            VerticalSpacer(height = 8.dp)
-            HorizontalDivider()
-            VerticalSpacer(height = 5.dp)
-
-            uiState.bossTimer.forEach { timer ->
-                key(timer.name) {
-                    DescriptionAnnotatedSmallText(
-                        text = buildAnnotatedString {
-                            appendBoldText(
-                                text = timer.name,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                            append(" (")
-                            appendBoldText(
-                                text = timer.time.dayOfWeek.getDisplayName(
-                                    TextStyle.SHORT,
-                                    context.resources.configuration.locales[0]
-                                ),
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                            append(") ${timer.time.format(DateTimeFormatter.ofPattern("a"))} ")
-                            appendBoldText(
-                                text = timer.time.hour.toString(),
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                            append(
-                                "${
-                                    context.doOnLocaleLanguage(
-                                        onKo = stringResource(id = R.string.hour),
-                                        onElse = " :"
-                                    )
-                                } "
-                            )
-                            appendBoldText(
-                                text = timer.time.minute.toString(),
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                            append(
-                                "${
-                                    context.doOnLocaleLanguage(
-                                        onKo = stringResource(id = R.string.minute),
-                                        onElse = " :"
-                                    )
-                                } "
-                            )
-                            appendBoldText(
-                                text = timer.time.second.toString(),
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                            append(stringResource(id = R.string.second))
-                        },
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        modifier = Modifier.fillMaxWidth().wrapContentWidth().padding(vertical = 4.dp),
-                    )
+            if (uiState.bossTimer.isEmpty())
+                DescriptionSmallText(
+                    text = stringResource(id = R.string.empty),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth()
+                        .padding(vertical = 4.dp),
+                )
+            else
+                uiState.bossTimer.forEach { timer ->
+                    key(timer.name) {
+                        DescriptionAnnotatedSmallText(
+                            text = buildAnnotatedString {
+                                appendBoldText(
+                                    text = timer.name,
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                                append(" (")
+                                appendBoldText(
+                                    text = timer.time.dayOfWeek.getDisplayName(
+                                        TextStyle.SHORT,
+                                        context.resources.configuration.locales[0]
+                                    ),
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                                append(") ${timer.time.format(DateTimeFormatter.ofPattern("a"))} ")
+                                appendBoldText(
+                                    text = timer.time.hour.toString(),
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                                append(
+                                    "${
+                                        context.doOnLocaleLanguage(
+                                            onKo = stringResource(id = R.string.hour),
+                                            onElse = " :"
+                                        )
+                                    } "
+                                )
+                                appendBoldText(
+                                    text = timer.time.minute.toString(),
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                                append(
+                                    "${
+                                        context.doOnLocaleLanguage(
+                                            onKo = stringResource(id = R.string.minute),
+                                            onElse = " :"
+                                        )
+                                    } "
+                                )
+                                appendBoldText(
+                                    text = timer.time.second.toString(),
+                                    color = MaterialTheme.colorScheme.onBackground
+                                )
+                                append(stringResource(id = R.string.second))
+                            },
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentWidth()
+                                .padding(vertical = 4.dp),
+                        )
+                    }
                 }
-            }
         }
     }
 }
@@ -224,7 +230,7 @@ private fun HomeMenu(
     Column(
         modifier = Modifier
             .shadow(6.dp, RoundedCornerShape(20.dp))
-            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainer, RoundedCornerShape(20.dp))
             .padding(vertical = 16.dp, horizontal = 12.dp),
     ) {
         Row(
@@ -236,8 +242,8 @@ private fun HomeMenu(
             DescriptionLargeText(text = header)
             HorizontalWeightSpacer(float = 1f)
             DefaultIconButton(
-                icon = com.jinproject.design_ui.R.drawable.ic_arrow_right_small,
-                onClick = {},
+                icon = R.drawable.ic_arrow_right_small,
+                onClick = { onClickHeader() },
                 iconSize = 24.dp
             )
         }
@@ -271,7 +277,10 @@ private fun CollectionItem(
         modifier = modifier
             .fillMaxWidth()
             .shadow(5.dp, shape = RoundedCornerShape(20.dp))
-            .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(20.dp))
+            .background(
+                MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(20.dp)
+            )
             .combinedClickableAvoidingDuplication(
                 onClick = {
                     navigateToCollectionDetail(collection.id)
@@ -292,10 +301,9 @@ private fun CollectionItem(
                     .weight(1f),
             )
             HorizontalSpacer(width = 5.dp)
-            Image(
-                painter = painterResource(id = com.jinproject.design_ui.R.drawable.ic_arrow_right_long),
-                contentDescription = "Right Arrow",
-                modifier = Modifier.size(24.dp)
+            DefaultPainterImage(
+                resId = com.jinproject.design_ui.R.drawable.ic_arrow_right_long,
+                contentDescription = "Right Long Arrow",
             )
             HorizontalSpacer(width = 10.dp)
             DescriptionSmallText(
@@ -305,11 +313,9 @@ private fun CollectionItem(
                     .padding(vertical = verticalPadding)
             )
             HorizontalSpacer(width = 10.dp)
-            Image(
-                painter = painterResource(id = com.jinproject.design_ui.R.drawable.ic_arrow_right_small),
+            DefaultPainterImage(
+                resId = com.jinproject.design_ui.R.drawable.ic_arrow_right_small,
                 contentDescription = "Right Arrow",
-                modifier = Modifier
-                    .size(24.dp)
             )
         }
     }
@@ -325,6 +331,7 @@ private fun PreviewHomeScreen(
         uiState = homeUiState,
         navigateToDropList = {},
         navigateToCollection = {},
+        navigateToAlarm = {},
     )
 }
 

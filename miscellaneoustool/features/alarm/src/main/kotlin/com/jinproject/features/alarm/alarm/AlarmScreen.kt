@@ -3,6 +3,7 @@ package com.jinproject.features.alarm.alarm
 import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.compose.foundation.layout.Arrangement
@@ -85,33 +86,34 @@ fun AlarmScreen(
         onStartAlarm = { bossName ->
             if (Build.VERSION.SDK_INT >= 31) {
                 val alarmManager = context.getSystemService<AlarmManager>()!!
-                when {
-                    alarmManager.canScheduleExactAlarms() -> {
-                        coroutineScope.launch {
-                            billingModule.queryPurchaseAsync()?.let { purchasedList ->
-                                if (billingModule.checkPurchased(
-                                        purchaseList = purchasedList,
-                                        productId = "ad_remove"
-                                    )
+                if (alarmManager.canScheduleExactAlarms()) {
+                    coroutineScope.launch {
+                        billingModule.queryPurchaseAsync()?.let { purchasedList ->
+                            if (billingModule.checkPurchased(
+                                    purchaseList = purchasedList,
+                                    productId = "ad_remove"
                                 )
+                            )
+                                alarmViewModel::setAlarm.invoke(
+                                    bossName,
+                                    showSnackBar,
+                                )
+                            else
+                                showRewardedAd {
                                     alarmViewModel::setAlarm.invoke(
                                         bossName,
                                         showSnackBar,
                                     )
-                                else
-                                    showRewardedAd {
-                                        alarmViewModel::setAlarm.invoke(
-                                            bossName,
-                                            showSnackBar,
-                                        )
-                                    }
-                            }
+                                }
                         }
                     }
-
-                    else -> {
-                        context.startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
-                    }
+                } else {
+                    context.startActivity(
+                        Intent(
+                            Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
+                            Uri.parse("package:" + context.packageName)
+                        )
+                    )
                 }
             } else {
                 alarmViewModel::setAlarm.invoke(bossName, showSnackBar)

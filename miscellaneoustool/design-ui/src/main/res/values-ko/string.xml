@@ -57,6 +57,7 @@
     <string name="gold">골드</string>
     <string name="textfield_hint">텍스트를 입력해주세요.</string>
     <string name="total">합계</string>
+    <string name="empty">비어있음</string>
 
     <!-- Snackbar Message -->
     <string name="message_throw_no_such_element">일치하는 데이터가 없습니다.</string>

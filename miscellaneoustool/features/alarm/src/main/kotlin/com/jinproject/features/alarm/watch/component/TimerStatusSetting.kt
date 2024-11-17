@@ -51,15 +51,12 @@ fun TimeStatusSetting(
             textYes = stringResource(id = R.string.on),
             textNo = stringResource(id = R.string.off),
             onClickYes = {
-                when (checkAuthorityDrawOverlays(context) { intent ->
+                val isOverlayGranted = checkAuthorityDrawOverlays(context) { intent ->
                     permissionLauncher.launch(intent)
-                } && watchStatus != ButtonStatus.OFF) {
-                    true -> {
-                        startOverlayService(true)
-                        setWatchStatus(ButtonStatus.OFF)
-                    }
-
-                    false -> {}
+                }
+                if (isOverlayGranted && watchStatus != ButtonStatus.OFF) {
+                    startOverlayService(true)
+                    setWatchStatus(ButtonStatus.OFF)
                 }
             },
             onClickNo = {

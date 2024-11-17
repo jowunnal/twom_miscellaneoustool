@@ -164,6 +164,9 @@ object BookMigration {
                 execSQL("alter table RegisterItemToBook rename column rlBookId to bookId")
                 execSQL("alter table RegisterItemToBook rename column rlItemName to itemName")
 
+                execSQL("drop index index_MonsDropItem_mdItemName")
+                execSQL("drop index index_RegisterItemToBook_rlItemName")
+
                 execSQL("create table 'Tempor' ('mlMonsName' TEXT NOT NULL, 'mlMapName' TEXT NOT NULL, FOREIGN KEY('mlMapName') REFERENCES 'Maps'('mapName') on update cascade, PRIMARY KEY('mlMonsName','mlMapName'), FOREIGN KEY('mlMonsName') REFERENCES 'Monster'('monsName'))")
                 execSQL("insert into Tempor select * from MonsLiveAtMap")
                 execSQL("drop table MonsLiveAtMap")
@@ -188,6 +191,9 @@ object BookMigration {
             db.apply {
                 execSQL("alter table RegisterItemToBook rename column rlBookId to bookId")
                 execSQL("alter table RegisterItemToBook rename column rlItemName to itemName")
+
+                execSQL("drop index index_MonsDropItem_mdItemName")
+                execSQL("drop index index_RegisterItemToBook_rlItemName")
 
                 execSQL("create table 'Tempor' ('mlMonsName' TEXT NOT NULL, 'mlMapName' TEXT NOT NULL, FOREIGN KEY('mlMapName') REFERENCES 'Maps'('mapName') on update cascade, PRIMARY KEY('mlMonsName','mlMapName'), FOREIGN KEY('mlMonsName') REFERENCES 'Monster'('monsName'))")
                 execSQL("insert into Tempor select * from MonsLiveAtMap")

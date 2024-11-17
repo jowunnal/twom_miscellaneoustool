@@ -46,10 +46,7 @@ internal data class Weapon(
             options.any { option -> option.name == Stat.STATINT || option.name == Stat.MP }
 
         val addition = if (!isMagicianWeapon) {
-            when (enchantNumber) {
-                0, 1, 2, 3, 4, 5, 6 -> enchantNumber * 11
-                else -> 11 * enchantNumber + 2 * (enchantNumber - 7)
-            }
+            11 * enchantNumber + (11 * (enchantNumber - 6)).coerceAtLeast(0)
         } else {
             when (name) {
                 context.doOnLocaleLanguage(
@@ -65,7 +62,7 @@ internal data class Weapon(
                     onElse = "Soul Eater"
                 ) -> when (enchantNumber < 7) {
                     true -> 23 * enchantNumber
-                    false -> 46 * enchantNumber - 139
+                    false -> 46 * enchantNumber - 137
                 }
 
                 else -> throw IllegalStateException("$name cannot be used yet")

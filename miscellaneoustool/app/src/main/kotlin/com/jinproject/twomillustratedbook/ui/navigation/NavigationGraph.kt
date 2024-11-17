@@ -12,6 +12,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavDestination
 import androidx.navigation.compose.NavHost
 import com.jinproject.features.alarm.alarmNavGraph
+import com.jinproject.features.alarm.navigateToAlarmGraph
 import com.jinproject.features.alarm.navigateToGear
 import com.jinproject.features.alarm.navigateToWatch
 import com.jinproject.features.collection.navigateToCollectionList
@@ -43,6 +44,9 @@ internal fun NavigationGraph(
         homeNavGraph(
             navigateToDropList = navController::navigateToDropList,
             navigateToCollection = navController::navigateToCollectionList,
+            navigateToAlarm = {
+                navController.navigateToAlarmGraph(null)
+            },
             showSnackBar = showSnackBar,
             popBackStackIfCan = navController::popBackStackIfCan,
         )

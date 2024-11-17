@@ -3,6 +3,7 @@ package com.jinproject.features.alarm.alarm.component
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,13 +26,15 @@ fun AlarmTopAppBar(
                 IconButton(onClick = { onNavigateToGear() }) {
                     Icon(
                         painter = painterResource(id = R.drawable.icon_gear),
-                        contentDescription = "GearIcon"
+                        contentDescription = "GearIcon",
+                        tint = MaterialTheme.colorScheme.onSurface,
                     )
                 }
                 IconButton(onClick = { onNavigateToOverlaySetting() }) {
                     Icon(
                         painter = painterResource(id = R.drawable.icon_clock),
-                        contentDescription = "AlarmIcon"
+                        contentDescription = "AlarmIcon",
+                        tint = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }
