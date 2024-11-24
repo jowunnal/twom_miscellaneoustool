@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.google.protobuf.gradle.GenerateProtoTask
 
 plugins {
@@ -21,6 +22,18 @@ android {
     sourceSets {
         getByName("androidTest").assets.srcDirs(files("$projectDir/schemas"))
     }
+
+    defaultConfig {
+        buildConfigField("String","OPENAI_APIKEY",getLocalKey("openAI.apiKey"))
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+}
+
+fun getLocalKey(propertyKey:String):String{
+    return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 }
 
 dependencies {
@@ -34,6 +47,7 @@ dependencies {
     implementation(libs.coroutines.core)
 
     implementation(libs.datastore)
+    implementation(libs.bundles.square)
 }
 
 androidComponents {

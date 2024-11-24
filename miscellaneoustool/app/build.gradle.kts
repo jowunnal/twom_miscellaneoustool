@@ -11,8 +11,8 @@ android {
     defaultConfig {
         applicationId = "com.jinproject.twomillustratedbook"
         targetSdk = 34
-        versionCode = 61
-        versionName = "2.3.3"
+        versionCode = 64
+        versionName = "2.3.4"
     }
 
     buildFeatures {
@@ -79,4 +79,5 @@ dependencies {
 
     implementation(libs.bundles.billing)
     implementation(libs.bundles.playInAppUpdate)
+    implementation(libs.bundles.square)
 }

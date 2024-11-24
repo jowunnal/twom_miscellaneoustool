@@ -12,9 +12,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.jinproject.features.core.BillingModule
+import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.core.compose.Route
 import com.jinproject.features.core.compose.TopLevelRoute
-import com.jinproject.features.core.base.item.SnackBarMessage
+import com.jinproject.features.symbol.ai.GenerateImageScreen
 import com.jinproject.features.symbol.detail.DetailScreen
 import com.jinproject.features.symbol.gallery.GalleryScreen
 import com.jinproject.features.symbol.guildmark.GuildMarkScreen
@@ -44,6 +45,9 @@ sealed class SymbolRoute : Route {
 
     @Serializable
     data class GuildMarkPreview(val imgUri: String) : SymbolRoute()
+
+    @Serializable
+    data object GenerateImage: SymbolRoute()
 }
 
 fun NavGraphBuilder.symbolNavGraph(
@@ -58,10 +62,9 @@ fun NavGraphBuilder.symbolNavGraph(
         composable<SymbolRoute.Symbol> {
             SymbolScreen(
                 modifier = modifier,
-                navigateToGallery = {
-                    navController::navigateToGallery.invoke()
-                },
+                navigateToGallery = navController::navigateToGallery,
                 showSnackBar = showSnackBar,
+                navigateToGenerateImage = navController::navigateToGenerateImage,
             )
         }
         composable<SymbolRoute.Gallery>(
@@ -91,18 +94,12 @@ fun NavGraphBuilder.symbolNavGraph(
             },
         ) {
             GalleryScreen(
-                navigateToImageDetail = { uri ->
-                    navController::navigateToDetail.invoke(uri.toParsedString())
-                },
-                popBackStack = {
-                    navController::popBackStackIfCan.invoke()
-                },
+                navigateToImageDetail = navController::navigateToDetail,
+                popBackStack = navController::popBackStackIfCan,
                 showSnackBar = showSnackBar,
-                navigateToGuildMarkPreview = { uri ->
-                    navController::navigateToGuildMarkPreview.invoke(uri.toParsedString())
-                },
+                navigateToGuildMarkPreview = navController::navigateToGuildMarkPreview,
                 navigateToGuildMark = { uri ->
-                    navController::navigateToGuildMark.invoke(uri.toParsedString())
+                    navController.navigateToGuildMark(uri.toParsedString())
                 }
             )
         }
@@ -182,6 +179,39 @@ fun NavGraphBuilder.symbolNavGraph(
                 }
             )
         }
+
+        composable<SymbolRoute.GenerateImage>(
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(durationMillis = 300, easing = LinearOutSlowInEasing)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(durationMillis = 250, easing = LinearOutSlowInEasing)
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(durationMillis = 300, easing = LinearOutSlowInEasing)
+                )
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(durationMillis = 250, easing = LinearOutSlowInEasing)
+                )
+            },
+        ) {
+            GenerateImageScreen(
+                navigateToBack = navController::popBackStackIfCan,
+                navigateToImageDetail = navController::navigateToDetail,
+                navigateToGuildMarkPreview = navController::navigateToGuildMarkPreview
+            )
+        }
     }
 }
 
@@ -202,11 +232,15 @@ fun NavController.navigateToGallery() {
 }
 
 fun NavController.navigateToDetail(imageUri: String) {
-    this.navigate(SymbolRoute.Detail(imageUri))
+    this.navigate(SymbolRoute.Detail(imageUri.toParsedString()))
 }
 
 fun NavController.navigateToGuildMarkPreview(imageUri: String) {
-    this.navigate(SymbolRoute.GuildMarkPreview(imageUri))
+    this.navigate(SymbolRoute.GuildMarkPreview(imageUri.toParsedString()))
+}
+
+fun NavController.navigateToGenerateImage() {
+    navigate(SymbolRoute.GenerateImage)
 }
 
 fun NavController.popBackStackIfCan() {

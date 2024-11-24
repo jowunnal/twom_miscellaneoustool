@@ -11,7 +11,7 @@ import android.provider.MediaStore
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jinproject.domain.repository.CollectionRepository
+import com.jinproject.domain.repository.SymbolRepository
 import com.jinproject.features.symbol.gallery.MTImage.Companion.IMAGE_COLUMNS_ID
 import com.jinproject.features.symbol.gallery.MTImage.Companion.IMAGE_COLUMNS_MODIFIED_DATE
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,7 +36,7 @@ import javax.inject.Inject
 @HiltViewModel
 class GalleryViewModel @Inject constructor(
     @ApplicationContext context: Context,
-    private val repository: CollectionRepository,
+    private val repository: SymbolRepository,
 ) : ViewModel() {
     private val _images: MutableStateFlow<MTImageList> =
         MutableStateFlow(MTImageList.getInitValues())

@@ -109,7 +109,8 @@
     <string name="symbol_description_content">ang na-convert na imahe ay ipapakita bilang isang halimbawa.\nPakitandaan na ang larawan ay maaaring iba mula sa aktwal na na-convert na form.</string>
     <string name="symbol_footer">Ang isang maliit na bayad ay sinisingil sa bawat pag-load para sa produktong ito.\nMaaari mong i-convert ang na-load na larawan sa isang mas maliit na sukat at magbigay ng isang preview upang suriin kung ito ay tumpak.\nKung gusto mo ang na-load na larawan, mangyaring magpatuloy sa susunod na proseso. \nHindi maaaring kanselahin ang produktong ito pagkatapos ng pagbabayad, kaya mangyaring magdesisyon nang mabuti!
         \n\nAng developer ay hindi nangongolekta ng anumang impormasyon tungkol sa mga user.\nI-convert ang mga larawan sa storage nang ligtas nang walang pag-aalala.</string>
-    <string name="symbol_button_getImage">Mag-load ng larawan</string>
+    <string name="symbol_button_getImage">Mag-load ng lokal na larawan</string>
+    <string name="symbol_button_generateImage">Bumuo ng AI Image</string>
     <string name="symbol_permission_headline">Ang pahintulot na basahin ang mga larawan ay hindi ibinigay.</string>
     <string name="symbol_permission_content">Kung hindi ka tumatanggap ng pahintulot, hindi mo magagamit ang function.</string>
 

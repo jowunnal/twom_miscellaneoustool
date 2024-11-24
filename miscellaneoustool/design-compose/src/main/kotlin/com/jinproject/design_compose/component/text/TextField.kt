@@ -3,8 +3,10 @@ package com.jinproject.design_compose.component.text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -61,10 +63,43 @@ fun SearchTextField(
         lineLimits = TextFieldLineLimits.SingleLine,
     ) {
         DefaultIconButton(
-            modifier = Modifier.align(Alignment.CenterEnd),
+            modifier = Modifier,
             icon = R.drawable.icon_search,
             onClick = {
                 onSearchClick()
+                focusManager.clearFocus()
+            },
+            iconSize = 24.dp,
+            iconTint = MaterialTheme.colorScheme.onPrimary,
+            backgroundTint = MaterialTheme.colorScheme.primary,
+            interactionSource = remember { MutableInteractionSource() }
+        )
+    }
+}
+
+@Composable
+fun ChatTextField(
+    modifier: Modifier = Modifier,
+    textFieldState: TextFieldState,
+    onEntered: () -> Unit,
+) {
+    val focusManager = LocalFocusManager.current
+
+    DefaultTextField(
+        modifier = modifier.padding(start = 12.dp),
+        textFieldState = textFieldState,
+        backgroundColor = MaterialTheme.colorScheme.primary,
+        borderColor = MaterialTheme.colorScheme.surface,
+        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+        textStyle = TextStyle(color = MaterialTheme.colorScheme.onPrimary),
+        cursorBrush = SolidColor(MaterialTheme.colorScheme.onPrimary),
+        lineLimits = TextFieldLineLimits.MultiLine(),
+    ) {
+        DefaultIconButton(
+            modifier = Modifier,
+            icon = R.drawable.ic_enter,
+            onClick = {
+                onEntered()
                 focusManager.clearFocus()
             },
             iconSize = 24.dp,
@@ -88,8 +123,8 @@ fun DefaultTextField(
     cursorBrush: Brush = SolidColor(MaterialTheme.colorScheme.onSurface),
     outputTransformation: OutputTransformation? = null,
     inputTransformation: InputTransformation? = null,
-    lineLimits: TextFieldLineLimits = TextFieldLineLimits. Default,
-    content: @Composable BoxScope.() -> Unit = {},
+    lineLimits: TextFieldLineLimits = TextFieldLineLimits.Default,
+    content: @Composable RowScope.() -> Unit = {},
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -99,6 +134,7 @@ fun DefaultTextField(
 
     BasicTextField(
         modifier = modifier
+            .fillMaxWidth()
             .padding(end = 12.dp, top = 8.dp, bottom = 8.dp)
             .shadow(7.dp, RoundedCornerShape(10.dp))
             .background(
@@ -113,19 +149,27 @@ fun DefaultTextField(
             .onFocusChanged { focusState -> isFocused = focusState.isFocused },
         state = textFieldState,
         decorator = { innerTextField ->
-            Box(
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp, horizontal = 8.dp),
+                    .fillMaxWidth().padding(vertical = 12.dp, horizontal = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                if (textFieldState.text.isEmpty())
-                    DescriptionSmallText(
-                        text = if(isFocused) "" else stringResource(id = R.string.textfield_hint),
-                        color = MaterialTheme.colorScheme.outlineVariant,
-                        modifier = Modifier.fillMaxWidth().align(Alignment.CenterStart)
-                    )
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp),
+                ) {
+                    if (textFieldState.text.isEmpty())
+                        DescriptionSmallText(
+                            text = if (isFocused) "" else stringResource(id = R.string.textfield_hint),
+                            color = MaterialTheme.colorScheme.outlineVariant,
+                            modifier = Modifier
+                                .align(Alignment.CenterStart)
+                        )
 
-                innerTextField()
+                    innerTextField()
+                }
 
                 content()
             }
@@ -191,6 +235,15 @@ private fun PreviewSearchTextField() = MiscellaneousToolTheme {
     SearchTextField(
         textFieldState = rememberTextFieldState(),
         onSearchClick = {},
+    )
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun PreviewChatTextField() = MiscellaneousToolTheme {
+    ChatTextField(
+        textFieldState = rememberTextFieldState(),
+        onEntered = {},
     )
 }
 

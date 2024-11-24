@@ -107,7 +107,8 @@
     <string name="symbol_description_content">변환 후의 이미지를 예시로 보여 드리고 있어요.\n해당 이미지는 실제 변환한 형태와 다를 수 있음을 유의해주세요.</string>
     <string name="symbol_footer">본 상품은 1회 불러오기당 소액의 요금이 과금되요.\n불러온 이미지가 정확한지 작은 사이즈로 변환해서 미리보기를 제공해 드리고 있어요.\n불러온 이미지가 마음에 드신다면 이후 과정을 진행해 주세요.\n결제 이후 청약철회가 불가능한 상품이니 신중하게 결정해주세요!
         \n\n개발자는 사용자의 그 어떠한 정보도 수집하고 있지 않아요.\n걱정없이 안전하게 저장소의 이미지를 변환해보세요.</string>
-    <string name="symbol_button_getImage">이미지 불러오기</string>
+    <string name="symbol_button_getImage">로컬 이미지 불러오기</string>
+    <string name="symbol_button_generateImage">AI 이미지 생성하기</string>
     <string name="symbol_permission_headline">이미지 읽기 권한이 수락되지 않았어요.</string>
     <string name="symbol_permission_content">권한을 수락 하지 않으면 기능을 이용 하실 수 없어요.</string>
 

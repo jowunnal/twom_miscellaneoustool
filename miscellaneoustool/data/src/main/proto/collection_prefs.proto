@@ -6,4 +6,11 @@ option java_multiple_files = true;
 message CollectionPreferences {
   repeated int32 filtered_collection_list = 1;
   repeated string stored_symbol_uri = 2;
+  repeated ChatMessage message = 3;
+}
+
+message ChatMessage {
+  string publisher = 1;
+  string data = 2;
+  int64 timestamp = 3;
 }

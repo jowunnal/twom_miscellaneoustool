@@ -40,7 +40,7 @@ fun BoxWithConstraintsScope.VerticalScrollBar(
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     density: Density = LocalDensity.current,
     upperScrollAlpha: Float,
-    scrollToItem: suspend () -> Unit,
+    scrollToItem: suspend (Float) -> Unit,
 ) {
     val scrollBarHeight = 24.dp
     val scrollBarWidth = 16.dp
@@ -73,7 +73,7 @@ fun BoxWithConstraintsScope.VerticalScrollBar(
                     scrollBarState.onScroll(-dragAmount / (maxHeight) * scrollBarState.threshold)
 
                     coroutineScope.launch {
-                        scrollToItem()
+                        scrollToItem(dragAmount / (maxHeight) * scrollBarState.threshold)
                     }
                 }
             },

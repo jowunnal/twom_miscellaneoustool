@@ -14,12 +14,14 @@ fun rememberScrollBarState(
     viewHeight: Float,
     timer: TimeScheduler,
     isUpperScrollActive: Boolean,
+    startFromTop: Boolean = true,
 ): ScrollBarState {
     val maxHeight = viewHeight.coerceAtLeast(0f)
 
     val state = remember {
         ScrollBarState(
             maxHeight = maxHeight,
+            startFromTop = startFromTop,
             setTime = timer::setTime,
             cancel = timer::cancel,
         )
@@ -35,14 +37,14 @@ fun rememberScrollBarState(
 
 class ScrollBarState(
     maxHeight: Float,
+    private val startFromTop: Boolean,
     private val setTime: () -> Unit,
     private val cancel: () -> Unit,
 ) {
-    var offset by mutableFloatStateOf(0f)
-        private set
-
     var threshold by mutableFloatStateOf(maxHeight)
         private set
+
+    private var offset by mutableFloatStateOf(if(maxHeight <= 0f) -1f else 0f)
 
     val progress by derivedStateOf { (offset.toDouble() / threshold.toDouble()).toFloat() }
 
@@ -59,6 +61,8 @@ class ScrollBarState(
 
     fun setScrollThreshold(threshold: Float) {
         this.threshold = threshold
+        if(threshold > 0f && offset < 0f)
+            offset = if (startFromTop) 0f else threshold
     }
 
     fun updateUpperScrollActiveState(bool: Boolean) {

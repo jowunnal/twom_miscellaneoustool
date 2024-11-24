@@ -29,8 +29,10 @@ lifecycle-common = "2.6.1"
 material = "1.11.0"
 mockk = "1.13.5"
 navigation = "2.8.0"
+okhttp3 = "4.12.0"
 playInApp = "2.1.0"
 protobuf = "3.25.0"
+retrofit2 = "2.9.0"
 room = "2.6.1"
 
 # plugin
@@ -147,6 +149,12 @@ room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
+# Square
+square-retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
+square-retrofit2-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit2" }
+square-retrofit2-converter-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit2" }
+square-okhttp3-intercepter = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3" }
+
 # Test
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlin-coroutine" }
 io-kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
@@ -168,5 +176,6 @@ firebase = ["firebase-analytics", "firebase-crashlytics", "firebase-database"]
 kotest = ["io-kotest-junit", "io-kotest-assertions"]
 lifecycle = ["lifecycle-compose", "lifecycle-viewmodel-ktx", "lifecycle-runtime-ktx", "lifecycle-runtime-compose", "lifecycle-service"]
 navigation = ["navigation-fragment-ktx", "navigation-ui", "navigation-fragment-compose"]
+square = ["square-retrofit2", "square-retrofit2-converter-gson", "square-retrofit2-converter-scalars", "square-okhttp3-intercepter"]
 testing = ["jUnit", "junit-jupiter-api", "io-mockk"]
 playInAppUpdate = ["play-app-update", "play-app-update-ktx"]

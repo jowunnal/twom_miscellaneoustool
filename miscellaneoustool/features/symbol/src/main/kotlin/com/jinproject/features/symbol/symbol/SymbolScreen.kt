@@ -50,6 +50,7 @@ internal fun SymbolScreen(
     context: Context = LocalContext.current,
     configuration: Configuration = LocalConfiguration.current,
     navigateToGallery: () -> Unit,
+    navigateToGenerateImage: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit,
 ) {
     val activityForResultLauncher =
@@ -152,6 +153,30 @@ internal fun SymbolScreen(
                     )
                 },
             )
+
+            VerticalSpacer(height = 10.dp)
+
+            TextButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(id = R.string.symbol_button_generateImage),
+                onClick = {
+                    checkPermissions(
+                        context = context,
+                        permissions = MediaStorePermissionSet,
+                        onGranted = {
+                            if (checkAuthorityDrawOverlays(
+                                    context = context
+                                ) { intent ->
+                                    activityForResultLauncher.launch(intent)
+                                }
+                            )
+                                navigateToGenerateImage()
+
+                        },
+                        permissionLauncher = permissionLauncher,
+                    )
+                },
+            )
         }
     )
 }
@@ -162,5 +187,6 @@ private fun PreviewSymbolScreen() = MiscellaneousToolTheme {
     SymbolScreen(
         navigateToGallery = {},
         showSnackBar = {},
+        navigateToGenerateImage = {},
     )
 }

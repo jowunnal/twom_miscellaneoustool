@@ -107,7 +107,8 @@
     <string name="symbol_description_content">the converted image will be shown as an example.\nPlease note that the image may differ from the actual converted form.</string>
     <string name="symbol_footer">A small fee is charged per load for this product.\nYou can convert the loaded image to a smaller size and provide a preview to check if it is accurate.\nIf you like the loaded image, please proceed with the next process. \nThis product cannot be canceled after payment, so please decide carefully!
         \n\nThe developer does not collect any information about users.\nConvert images in the storage safely without worry.</string>
-    <string name="symbol_button_getImage">Load image</string>
+    <string name="symbol_button_getImage">Load Local image</string>
+    <string name="symbol_button_generateImage">Generate AI Image</string>
     <string name="symbol_permission_headline">Permission to read images has not been granted.</string>
     <string name="symbol_permission_content">If you do not accept permission, you cannot use the function.</string>
 
