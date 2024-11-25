@@ -26,8 +26,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -63,6 +67,7 @@ internal fun GenerateImageScreen(
         navigateToImageDetail = navigateToImageDetail,
         navigateToGuildMarkPreview = navigateToGuildMarkPreview,
         downloadImage = viewModel::downloadImage,
+        getNextPage = viewModel::getNextPage
     )
 }
 
@@ -74,19 +79,20 @@ private fun GenerateImageScreen(
     navigateToImageDetail: (String) -> Unit,
     navigateToGuildMarkPreview: (String) -> Unit,
     downloadImage: (Message) -> Unit,
+    getNextPage: () -> Unit,
 ) {
     val textFieldState = rememberTextFieldState()
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(key1 = uiState.messages.size) {
-        if (uiState.messages.isNotEmpty())
+    if (uiState.messages.isNotEmpty())
+        LaunchedEffect(key1 = uiState.messages.last().timeStamp) {
             lazyListState.animateScrollToItem(uiState.messages.lastIndex)
-    }
+        }
 
-    val viewPortSize by remember {
+    val viewPortEndOffset by remember {
         derivedStateOf {
-            lazyListState.layoutInfo.viewportSize
+            lazyListState.layoutInfo.viewportEndOffset
         }
     }
 
@@ -94,11 +100,27 @@ private fun GenerateImageScreen(
         topBar = {
             BackButtonRowScopeAppBar(onBackClick = navigateToBack)
         },
+        modifier = Modifier.nestedScroll(object : NestedScrollConnection {
+            override fun onPostScroll(
+                consumed: Offset,
+                available: Offset,
+                source: NestedScrollSource
+            ): Offset {
+                val new = if (available.y > 0f) {
+                    getNextPage()
+
+                    0f
+                } else
+                    available.y
+
+                return available.copy(y = new)
+            }
+        })
     ) {
         ScrollableLayout(
             scrollableState = lazyListState,
             viewHeight = with(LocalDensity.current) {
-                val perViewPortHeight = viewPortSize.height
+                val perViewPortHeight = viewPortEndOffset
 
                 val maxItemHeight =
                     uiState.messages.sumOf {
@@ -113,6 +135,7 @@ private fun GenerateImageScreen(
                 maxItemHeight.toFloat() - perViewPortHeight
             },
             startFromTop = false,
+            isUpperScrollActive = true,
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -234,5 +257,6 @@ private fun PreviewGenerateImageScreen(
         navigateToImageDetail = {},
         navigateToGuildMarkPreview = {},
         downloadImage = {},
+        getNextPage = {},
     )
 }

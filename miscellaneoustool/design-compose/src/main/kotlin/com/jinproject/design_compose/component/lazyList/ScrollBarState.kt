@@ -1,6 +1,7 @@
 package com.jinproject.design_compose.component.lazyList
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -27,8 +28,12 @@ fun rememberScrollBarState(
         )
     }
 
+    LaunchedEffect(key1 = maxHeight) {
+        if(maxHeight > 0f)
+            state.setScrollThreshold(maxHeight)
+    }
+
     SideEffect {
-        state.setScrollThreshold(maxHeight)
         state.updateUpperScrollActiveState(isUpperScrollActive)
     }
 
@@ -44,9 +49,9 @@ class ScrollBarState(
     var threshold by mutableFloatStateOf(maxHeight)
         private set
 
-    private var offset by mutableFloatStateOf(if(maxHeight <= 0f) -1f else 0f)
+    private var offset by mutableFloatStateOf(0f)
 
-    val progress by derivedStateOf { (offset.toDouble() / threshold.toDouble()).toFloat() }
+    val progress by derivedStateOf { (offset.toDouble() / threshold.toDouble()).toFloat().coerceIn(0f..1f) }
 
     private var isUpperScrollActive by mutableStateOf(false)
 
@@ -60,9 +65,10 @@ class ScrollBarState(
     }
 
     fun setScrollThreshold(threshold: Float) {
+        if(!startFromTop && threshold > this.threshold) {
+            offset = (threshold - this.threshold).coerceAtLeast(0f)
+        }
         this.threshold = threshold
-        if(threshold > 0f && offset < 0f)
-            offset = if (startFromTop) 0f else threshold
     }
 
     fun updateUpperScrollActiveState(bool: Boolean) {

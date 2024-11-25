@@ -107,6 +107,7 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database-ktx" }
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
 
 # Glide
 bumptech-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
@@ -172,7 +173,7 @@ billing = ["billing-client", "billing-ktx"]
 compose = ["compose-material3", "compose-material", "compose-foundation", "compose-ui", "compose-ui-preview", "compose-viewBinding"]
 composeAdaptive = ["compose-material3-adaptive", "compose-material3-adaptive-layout", "compose-material3-adaptive-navigation", "compose-material3-adaptive-navigation-suite"]
 coroutines = ["coroutines-core"]
-firebase = ["firebase-analytics", "firebase-crashlytics", "firebase-database"]
+firebase = ["firebase-analytics", "firebase-crashlytics", "firebase-database", "firebase-auth"]
 kotest = ["io-kotest-junit", "io-kotest-assertions"]
 lifecycle = ["lifecycle-compose", "lifecycle-viewmodel-ktx", "lifecycle-runtime-ktx", "lifecycle-runtime-compose", "lifecycle-service"]
 navigation = ["navigation-fragment-ktx", "navigation-ui", "navigation-fragment-compose"]

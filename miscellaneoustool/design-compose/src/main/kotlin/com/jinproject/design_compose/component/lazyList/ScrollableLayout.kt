@@ -12,9 +12,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,19 +29,11 @@ fun ColumnScope.ScrollableLayout(
     startFromTop: Boolean = true,
     scrollableState: ScrollableState = rememberLazyListState(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    isUpperScrollActive: Boolean,
     content: @Composable () -> Unit,
 ) {
     require(scrollableState is LazyListState || scrollableState is LazyGridState) {
         "LazyList and LazyGrid only granted"
-    }
-
-    val isUpperScrollActive by remember {
-        derivedStateOf {
-            if (scrollableState is LazyListState)
-                scrollableState.firstVisibleItemIndex > 0
-            else
-                (scrollableState as LazyGridState).firstVisibleItemIndex > 0
-        }
     }
 
     val timeScheduler = rememberTimeScheduler()

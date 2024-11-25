@@ -94,8 +94,14 @@ internal fun ImageList(
     val permissionLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestMultiplePermissions()) { results ->
             if (results[READ_MEDIA_IMAGES] == true)
-                pushRefreshState.onRefresh
+                pushRefreshState.onRefresh()
         }
+
+    val isUpperScrollActive by remember {
+        derivedStateOf {
+            lazyGridState.firstVisibleItemIndex > 0
+        }
+    }
 
     val viewPortSize by remember {
         derivedStateOf {
@@ -192,6 +198,7 @@ internal fun ImageList(
                 (perHeight * (list.images.size / cellColumnCount)).toPx() - perViewPortHeight
             },
             scrollableState = lazyGridState,
+            isUpperScrollActive = isUpperScrollActive,
         ) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(cellColumnCount),
