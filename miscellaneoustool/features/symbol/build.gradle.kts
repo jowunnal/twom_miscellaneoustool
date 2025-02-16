@@ -10,5 +10,6 @@ android {
 dependencies {
     implementation(libs.constraintLayout)
 
-    implementation(libs.bundles.billing)
+    implementation(libs.firebase.storage)
+    implementation(libs.airbnb.android.lottie.compose)
 }

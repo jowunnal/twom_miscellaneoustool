@@ -171,4 +171,8 @@ class GuildMarkManager(
 
             intArray.toList()
         }
+
+    companion object {
+        fun getInitBitmap() = Bitmap.createBitmap(12, 12, Bitmap.Config.ARGB_8888)
+    }
 }

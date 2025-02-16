@@ -13,7 +13,7 @@ fun getBitmapFromContentUri(
     context: Context,
     imageUri: String,
 ): Bitmap = when {
-    imageUri.isBlank() -> {
+    imageUri.isEmpty() -> {
         BitmapFactory.decodeResource(
             context.resources,
             R.drawable.test,

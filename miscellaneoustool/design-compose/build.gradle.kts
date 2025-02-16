@@ -13,4 +13,5 @@ dependencies {
 
     implementation(libs.bumptech.glide)
     implementation(libs.coil)
+    implementation(libs.airbnb.android.lottie.compose)
 }

@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.Modifier
-import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -20,6 +19,7 @@ import com.jinproject.features.symbol.detail.DetailScreen
 import com.jinproject.features.symbol.gallery.GalleryScreen
 import com.jinproject.features.symbol.guildmark.GuildMarkScreen
 import com.jinproject.features.symbol.preview.PreviewScreen
+import com.jinproject.features.symbol.purchasedList.PurchasedListScreen
 import com.jinproject.features.symbol.symbol.SymbolScreen
 import kotlinx.serialization.Serializable
 
@@ -47,7 +47,10 @@ sealed class SymbolRoute : Route {
     data class GuildMarkPreview(val imgUri: String) : SymbolRoute()
 
     @Serializable
-    data object GenerateImage: SymbolRoute()
+    data object GenerateImage : SymbolRoute()
+
+    @Serializable
+    data object PurchasedImage : SymbolRoute()
 }
 
 fun NavGraphBuilder.symbolNavGraph(
@@ -55,6 +58,7 @@ fun NavGraphBuilder.symbolNavGraph(
     navController: NavController,
     billingModule: BillingModule,
     showSnackBar: (SnackBarMessage) -> Unit,
+    navigateToAuthGraph: () -> Unit,
 ) {
     navigation<SymbolRoute.SymbolGraph>(
         startDestination = SymbolRoute.Symbol,
@@ -65,8 +69,10 @@ fun NavGraphBuilder.symbolNavGraph(
                 navigateToGallery = navController::navigateToGallery,
                 showSnackBar = showSnackBar,
                 navigateToGenerateImage = navController::navigateToGenerateImage,
+                navigateToAuthGraph = navigateToAuthGraph,
             )
         }
+
         composable<SymbolRoute.Gallery>(
             enterTransition = {
                 slideIntoContainer(
@@ -100,7 +106,9 @@ fun NavGraphBuilder.symbolNavGraph(
                 navigateToGuildMarkPreview = navController::navigateToGuildMarkPreview,
                 navigateToGuildMark = { uri ->
                     navController.navigateToGuildMark(uri.toParsedString())
-                }
+                },
+                navigateToPurchasedImage = navController::navigateToPurchasedImage,
+                navigateToAuthGraph = navigateToAuthGraph,
             )
         }
 
@@ -175,7 +183,7 @@ fun NavGraphBuilder.symbolNavGraph(
                 popBackStack = navController::popBackStackIfCan,
                 showSnackBar = showSnackBar,
                 navigateToGuildMark = { uri ->
-                    navController::navigateToGuildMark.invoke(uri.toParsedString())
+                    navController.navigateToGuildMark(uri.toParsedString())
                 }
             )
         }
@@ -207,17 +215,32 @@ fun NavGraphBuilder.symbolNavGraph(
             },
         ) {
             GenerateImageScreen(
+                billingModule = billingModule,
                 navigateToBack = navController::popBackStackIfCan,
                 navigateToImageDetail = navController::navigateToDetail,
-                navigateToGuildMarkPreview = navController::navigateToGuildMarkPreview
+                navigateToGuildMarkPreview = navController::navigateToGuildMarkPreview,
+                navigateToPurchasedImage = navController::navigateToPurchasedImage,
+                navigateToAuthGraph = navigateToAuthGraph,
+                showSnackBar = showSnackBar,
             )
         }
+
+        composable<SymbolRoute.PurchasedImage> {
+            PurchasedListScreen(
+                navigateToItemDetail = navController::navigateToDetail,
+                navigateToGuildMark = { uri ->
+                    navController.navigateToGuildMark(uri.toParsedString())
+                },
+                navigatePopBackStack = navController::popBackStackIfCan,
+            )
+        }
+
     }
 }
 
 internal fun String.toParsedString() = this.replace("/", "*")
 
-internal fun String.toParsedUri() = this.replace("*", "/").toUri()
+internal fun String.toParsedUri() = this.replace("*", "/")
 
 fun NavController.navigateToSymbolGraph(navOptions: NavOptions? = null) {
     navigate(SymbolRoute.SymbolGraph, navOptions)
@@ -239,8 +262,12 @@ fun NavController.navigateToGuildMarkPreview(imageUri: String) {
     this.navigate(SymbolRoute.GuildMarkPreview(imageUri.toParsedString()))
 }
 
-fun NavController.navigateToGenerateImage() {
-    navigate(SymbolRoute.GenerateImage)
+fun NavController.navigateToGenerateImage(navOptions: NavOptions? = null) {
+    navigate(SymbolRoute.GenerateImage, navOptions)
+}
+
+fun NavController.navigateToPurchasedImage() {
+    navigate(SymbolRoute.PurchasedImage)
 }
 
 fun NavController.popBackStackIfCan() {

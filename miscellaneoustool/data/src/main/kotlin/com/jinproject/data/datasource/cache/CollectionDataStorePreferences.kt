@@ -1,6 +1,5 @@
 package com.jinproject.data.datasource.cache
 
-import android.net.Uri
 import androidx.datastore.core.DataStore
 import com.jinproject.data.ChatMessage
 import com.jinproject.data.CollectionPreferences
@@ -36,13 +35,13 @@ class CollectionDataStorePreferences @Inject constructor(
         }
     }
 
-    suspend fun setSymbolUri(uri: Uri) {
+    suspend fun addPaidSymbol(uri: String) {
         dataStorePrefs.updateData { prefs ->
-            prefs.toBuilder().addStoredSymbolUri(uri.toString()).build()
+            prefs.toBuilder().addStoredSymbolUri(uri).build()
         }
     }
 
-    fun getSymbolUri(): Flow<List<String>> =
+    fun getPaidSymbolUris(): Flow<List<String>> =
         collectionPreferences.transform { prefs ->
             emit(prefs.storedSymbolUriList)
         }

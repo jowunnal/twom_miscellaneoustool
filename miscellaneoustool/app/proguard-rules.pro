@@ -27,3 +27,5 @@
 -keep interface retrofit2.Call
 -keep class retrofit2.Response
 -keep class kotlin.coroutines.Continuation
+
+-keep class * extends com.google.protobuf.GeneratedMessageLite { *; }

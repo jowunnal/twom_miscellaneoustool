@@ -2,31 +2,36 @@ package com.jinproject.features.symbol.gallery
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.jinproject.design_compose.component.DefaultLayout
+import com.jinproject.design_compose.component.layout.DownloadableLayout
+import com.jinproject.design_compose.component.layout.DownloadableUiState
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
+import com.jinproject.design_ui.R
 import com.jinproject.features.core.AnalyticsEvent
+import com.jinproject.features.core.AuthManager
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
 import com.jinproject.features.symbol.gallery.component.GalleryAppBar
 import com.jinproject.features.symbol.gallery.component.ImageList
 import com.jinproject.features.symbol.guildmark.SymbolOverlayService
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 
 @Composable
 internal fun GalleryScreen(
@@ -36,20 +41,27 @@ internal fun GalleryScreen(
     showSnackBar: (SnackBarMessage) -> Unit,
     navigateToGuildMarkPreview: (String) -> Unit,
     navigateToGuildMark: (String) -> Unit,
+    navigateToPurchasedImage: () -> Unit,
+    navigateToAuthGraph: () -> Unit,
 ) {
-    val images by galleryViewModel.images.collectAsStateWithLifecycle()
-    val isPaidImage by galleryViewModel.isPaidImage.collectAsStateWithLifecycle()
+    val uiState by galleryViewModel.galleryUiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(key1 = Unit) {
+        galleryViewModel.snackBarMessageChannel.receiveAsFlow().collectLatest { snackBarMessage ->
+            showSnackBar(snackBarMessage)
+        }
+    }
 
     GalleryScreen(
-        images = images,
-        setClickedImage = galleryViewModel::setClickedImage,
+        uiState = uiState,
         getMoreImages = galleryViewModel::getMoreImages,
-        isPaidImage = isPaidImage,
         navigateToImageDetail = navigateToImageDetail,
         popBackStack = popBackStack,
         showSnackBar = showSnackBar,
         navigateToGuildMarkPreview = navigateToGuildMarkPreview,
-        navigateToGuildMark = navigateToGuildMark
+        navigateToGuildMark = navigateToGuildMark,
+        navigateToPurchasedImage = navigateToPurchasedImage,
+        navigateToAuthGraph = navigateToAuthGraph,
     )
 }
 
@@ -57,21 +69,19 @@ internal fun GalleryScreen(
 private fun GalleryScreen(
     context: Context = LocalContext.current,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    images: MTImageList,
-    setClickedImage: (Long) -> Unit,
-    getMoreImages: suspend (Context) -> Unit,
-    isPaidImage: Boolean,
+    uiState: DownloadableUiState,
+    getMoreImages: () -> Unit,
     navigateToImageDetail: (String) -> Unit,
     popBackStack: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit,
     navigateToGuildMarkPreview: (String) -> Unit,
     navigateToGuildMark: (String) -> Unit,
+    navigateToPurchasedImage: () -> Unit,
+    navigateToAuthGraph: () -> Unit,
 ) {
-    var isRefreshing by remember {
-        mutableStateOf(false)
-    }
-
     val localAnalyticsLoggingEvent = LocalAnalyticsLoggingEvent.current
+
+    val lazyGridState = rememberLazyGridState()
 
     LaunchedEffect(key1 = Unit) {
         localAnalyticsLoggingEvent(
@@ -79,42 +89,63 @@ private fun GalleryScreen(
         )
     }
 
-    DefaultLayout(
-        modifier = Modifier,
+    DownloadableLayout(
+        modifier = Modifier.nestedScroll(object : NestedScrollConnection {
+            override fun onPostScroll(
+                consumed: Offset,
+                available: Offset,
+                source: NestedScrollSource
+            ): Offset {
+                val new = if (available.y < 0f) {
+                    getMoreImages()
+
+                    0f
+                } else
+                    available.y
+
+                return available.copy(y = new)
+            }
+        }),
         topBar = {
             GalleryAppBar(
-                title = stringResource(id = com.jinproject.design_ui.R.string.symbol_gallery_topbar),
+                title = stringResource(id = R.string.symbol_gallery_topbar),
                 onBackClick = popBackStack,
-                enabledTailText = images.clickedId != -1L,
-                navigateToGuildMarkPreview = {
-                    images.images.find { it.id == images.clickedId }?.let { clickedImage ->
-                        context.stopService(
-                            Intent(
-                                context,
-                                SymbolOverlayService::class.java
+                onSettingClick = {
+                    if (AuthManager.isActive)
+                        navigateToPurchasedImage()
+                    else {
+                        navigateToAuthGraph()
+                        showSnackBar(
+                            SnackBarMessage(
+                                headerMessage = context.getString(R.string.auth_sign_in_required)
                             )
                         )
-                        if (isPaidImage)
-                            navigateToGuildMark(clickedImage.uri)
-                        else
-                            navigateToGuildMarkPreview(clickedImage.uri)
                     }
-                }
+                },
             )
-        }
-    ) {
+        },
+        downloadableUiState = uiState,
+    ) { state ->
+        val downloadedUiState = state as GalleryUiState
+
         ImageList(
-            list = images,
-            isRefreshing = isRefreshing,
-            setClickedImage = { id -> setClickedImage(id) },
-            getMoreImages = {
-                coroutineScope.launch {
-                    isRefreshing = true
-                    delay(500)
-                    getMoreImages(context)
-                    isRefreshing = false
-                }
+            list = downloadedUiState.data,
+            lazyGridState = lazyGridState,
+            isRefreshing = false,
+            onClickImage = { image ->
+                context.stopService(
+                    Intent(
+                        context,
+                        SymbolOverlayService::class.java
+                    )
+                )
+
+                if (downloadedUiState.isPaidImage(image))
+                    navigateToGuildMark(image.uri)
+                else
+                    navigateToGuildMarkPreview(image.uri)
             },
+            getMoreImages = getMoreImages,
             navigateToImageDetail = navigateToImageDetail,
         )
     }
@@ -124,17 +155,17 @@ private fun GalleryScreen(
 @Composable
 private fun PreviewGalleryScreen(
     @PreviewParameter(GalleryPreviewParameters::class)
-    imageList: MTImageList,
+    uiState: DownloadableUiState,
 ) = MiscellaneousToolTheme {
     GalleryScreen(
-        images = imageList,
-        setClickedImage = {},
+        uiState = uiState,
         getMoreImages = {},
-        isPaidImage = false,
         navigateToImageDetail = {},
         popBackStack = { },
         showSnackBar = {},
         navigateToGuildMarkPreview = {},
-        navigateToGuildMark = {}
+        navigateToGuildMark = {},
+        navigateToPurchasedImage = {},
+        navigateToAuthGraph = {},
     )
 }

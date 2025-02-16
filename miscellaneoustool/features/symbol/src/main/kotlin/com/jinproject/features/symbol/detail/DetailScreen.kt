@@ -1,9 +1,9 @@
 package com.jinproject.features.symbol.detail
 
-import android.net.Uri
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -11,9 +11,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.request.ImageRequest
-import com.jinproject.design_compose.component.bar.BackButtonTitleAppBar
-import com.jinproject.design_compose.component.DefaultLayout
 import com.jinproject.design_compose.component.SubcomposeAsyncImageWithPreview
+import com.jinproject.design_compose.component.bar.BackButtonTitleAppBar
+import com.jinproject.design_compose.component.layout.DefaultLayout
 import com.jinproject.design_compose.component.pushRefresh.MTProgressIndicatorRotating
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.design_ui.R
@@ -36,7 +36,7 @@ internal fun DetailScreen(
 
 @Composable
 private fun DetailScreen(
-    imageUri: Uri,
+    imageUri: String,
     popBackStack: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit,
 ) {
@@ -55,9 +55,9 @@ private fun DetailScreen(
                 MTProgressIndicatorRotating()
             },
             contentScale = ContentScale.Fit,
-            modifier = androidx.compose.ui.Modifier
+            modifier = Modifier
                 .fillMaxSize(),
-            placeHolderPreview = com.jinproject.design_ui.R.drawable.ic_x,
+            placeHolderPreview = R.drawable.ic_x,
         )
     }
 }
@@ -66,7 +66,7 @@ private fun DetailScreen(
 @Composable
 private fun PreviewDetailScreen() = MiscellaneousToolTheme {
     DetailScreen(
-        imageUri = Uri.EMPTY,
+        imageUri = "",
         popBackStack = {},
         showSnackBar = {},
     )

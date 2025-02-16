@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,11 +33,12 @@ import androidx.core.content.getSystemService
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
-import com.jinproject.design_compose.component.DefaultLayout
-import com.jinproject.design_compose.component.DialogCustom
+import com.jinproject.design_compose.component.layout.DefaultLayout
+import com.jinproject.design_compose.component.TextDialog
 import com.jinproject.design_compose.component.DialogState
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.VerticalSpacer
+import com.jinproject.design_compose.component.rememberDialogState
 import com.jinproject.design_compose.component.text.DescriptionLargeText
 import com.jinproject.design_ui.R
 import com.jinproject.domain.model.WeekModel
@@ -86,26 +88,21 @@ fun AlarmScreen(
         onStartAlarm = { bossName ->
             if (Build.VERSION.SDK_INT >= 31) {
                 val alarmManager = context.getSystemService<AlarmManager>()!!
+
                 if (alarmManager.canScheduleExactAlarms()) {
                     coroutineScope.launch {
-                        billingModule.queryPurchaseAsync()?.let { purchasedList ->
-                            if (billingModule.checkPurchased(
-                                    purchaseList = purchasedList,
-                                    productId = "ad_remove"
-                                )
+                        if (billingModule.isProductPurchased(BillingModule.Product.AD_REMOVE))
+                            alarmViewModel::setAlarm.invoke(
+                                bossName,
+                                showSnackBar,
                             )
+                        else
+                            showRewardedAd {
                                 alarmViewModel::setAlarm.invoke(
                                     bossName,
                                     showSnackBar,
                                 )
-                            else
-                                showRewardedAd {
-                                    alarmViewModel::setAlarm.invoke(
-                                        bossName,
-                                        showSnackBar,
-                                    )
-                                }
-                        }
+                            }
                     }
                 } else {
                     context.startActivity(
@@ -152,18 +149,12 @@ private fun AlarmScreen(
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
-    val showDialogState = remember {
-        mutableStateOf(false)
-    }
-    val dialogUiState = remember {
-        mutableStateOf(DialogState.getInitValue())
-    }
+    var dialogUiState by rememberDialogState()
 
-    if (showDialogState.value)
-        DialogCustom(
-            dialogState = dialogUiState.value,
-            onDismissRequest = { showDialogState.value = false }
-        )
+    TextDialog(
+        dialogState = dialogUiState,
+        onDismissRequest = { dialogUiState.changeVisibility(false) }
+    )
 
     DefaultLayout(
         topBar = {
@@ -215,11 +206,12 @@ private fun AlarmScreen(
                         removeBossFromFrequentlyUsedList = removeBossFromFrequentlyUsedList,
                         setRecentlySelectedBossClassifiedChanged = setRecentlySelectedBossClassifiedChanged,
                         setRecentlySelectedBossNameChanged = setRecentlySelectedBossNameChanged,
-                        onOpenDialog = { dialogState ->
-                            dialogUiState.value = dialogState
-                            showDialogState.value = true
+                        onOpenDialog = { state ->
+                            dialogUiState = state.apply {
+                                changeVisibility(true)
+                            }
                         },
-                        onCloseDialog = { showDialogState.value = false }
+                        onCloseDialog = { dialogUiState.changeVisibility(false) }
                     )
                     VerticalSpacer(height = 20.dp)
                     HorizontalDivider()
@@ -241,11 +233,12 @@ private fun AlarmScreen(
                     InProgressTimerItem(
                         timerState = item,
                         onClearAlarm = onClearAlarm,
-                        onOpenDialog = { dialogState ->
-                            dialogUiState.value = dialogState
-                            showDialogState.value = true
+                        onOpenDialog = { state ->
+                            dialogUiState = state.apply {
+                                changeVisibility(true)
+                            }
                         },
-                        onCloseDialog = { showDialogState.value = false }
+                        onCloseDialog = { dialogUiState.changeVisibility(false) }
                     )
                 }
             }

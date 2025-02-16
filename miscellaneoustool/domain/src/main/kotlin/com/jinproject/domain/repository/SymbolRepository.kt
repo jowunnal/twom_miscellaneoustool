@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface SymbolRepository {
 
-    suspend fun setSymbolUri(uri: Uri)
+    suspend fun addPaidSymbol(uri: String)
 
-    fun getSymbolUri(): Flow<List<String>>
+    fun getPaidSymbolUris(): Flow<List<String>>
 
     suspend fun generateSymbolImage(prompt: String)
 

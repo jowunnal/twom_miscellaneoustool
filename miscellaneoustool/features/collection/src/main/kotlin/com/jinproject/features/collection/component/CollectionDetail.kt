@@ -2,7 +2,7 @@ package com.jinproject.features.collection.component
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,27 +26,26 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.jinproject.design_compose.component.DefaultLayout
+import com.jinproject.design_compose.clearFocusIfKeyboardActive
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.VerticalSpacer
-import com.jinproject.design_compose.component.VerticalWeightSpacer
 import com.jinproject.design_compose.component.bar.BackButtonRowScopeAppBar
 import com.jinproject.design_compose.component.button.TextButton
+import com.jinproject.design_compose.component.layout.DefaultLayout
 import com.jinproject.design_compose.component.paddingvalues.MiscellanousToolPaddingValues
 import com.jinproject.design_compose.component.text.DefaultTextField
 import com.jinproject.design_compose.component.text.DescriptionMediumText
 import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.component.text.TenThousandSeparatorOutputTransformation
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
+import com.jinproject.design_ui.R
 import com.jinproject.features.collection.CollectionEvent
 import com.jinproject.features.collection.CollectionUiStatePreviewParameter
 import com.jinproject.features.collection.model.CollectionUiState
@@ -66,7 +65,6 @@ internal fun CollectionDetail(
     onNavigateBack: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit,
 ) {
-    val focusManager = LocalFocusManager.current
     val padding = MiscellanousToolPaddingValues(
         horizontal = 12.dp,
         vertical = 16.dp,
@@ -83,11 +81,7 @@ internal fun CollectionDetail(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .pointerInput(Unit) {
-                detectTapGestures {
-                    focusManager.clearFocus()
-                }
-            },
+            .clearFocusIfKeyboardActive(),
         topBar = {
             BackButtonRowScopeAppBar(
                 onBackClick = onNavigateBack,
@@ -95,93 +89,95 @@ internal fun CollectionDetail(
         },
         contentPaddingValues = padding,
     ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            DescriptionMediumText(
-                text = stringResource(id = com.jinproject.design_ui.R.string.item),
-                modifier = Modifier.width(itemWidthDp),
-            )
-            DescriptionMediumText(
-                text = stringResource(id = com.jinproject.design_ui.R.string.price),
-                modifier = Modifier.width(itemWidthDp),
-            )
-        }
-        collection.items.forEachIndexed { idx, item ->
-            key(item.name) {
-                ItemWithPrice(
-                    name = item.name,
-                    itemWidthDp = itemWidthDp,
-                    price = item.price.toString(),
-                    updatePrice = { price ->
-                        prices[idx] = price
-                    }
+        Column(modifier = Modifier.weight(1f)) {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                DescriptionMediumText(
+                    text = stringResource(id = R.string.item),
+                    modifier = Modifier.width(itemWidthDp),
+                )
+                DescriptionMediumText(
+                    text = stringResource(id = R.string.price),
+                    modifier = Modifier.width(itemWidthDp),
                 )
             }
-        }
-        VerticalSpacer(height = 30.dp)
-        DescriptionMediumText(
-            text = stringResource(id = com.jinproject.design_ui.R.string.stat),
-            modifier = Modifier,
-        )
-        VerticalSpacer(height = 5.dp)
-        collection.stats.forEach { stat ->
-            DescriptionSmallText(
-                text = "${stat.key} : ${stat.value}",
-                modifier = Modifier
-                    .width(itemWidthDp)
-                    .padding(vertical = 12.dp),
-                color = MaterialTheme.colorScheme.surfaceVariant
+            collection.items.forEachIndexed { idx, item ->
+                key(item.name) {
+                    ItemWithPrice(
+                        name = item.name,
+                        itemWidthDp = itemWidthDp,
+                        price = item.price.toString(),
+                        updatePrice = { price ->
+                            prices[idx] = price
+                        }
+                    )
+                }
+            }
+            VerticalSpacer(height = 30.dp)
+            DescriptionMediumText(
+                text = stringResource(id = R.string.stat),
+                modifier = Modifier,
             )
-        }
-        VerticalSpacer(height = 30.dp)
-        DescriptionMediumText(
-            text = stringResource(id = com.jinproject.design_ui.R.string.total),
-            modifier = Modifier,
-        )
-        VerticalSpacer(height = 5.dp)
-        collection.items.forEach { item ->
+            VerticalSpacer(height = 5.dp)
+            collection.stats.forEach { stat ->
+                DescriptionSmallText(
+                    text = "${stat.key} : ${stat.value}",
+                    modifier = Modifier
+                        .width(itemWidthDp)
+                        .padding(vertical = 12.dp),
+                    color = MaterialTheme.colorScheme.surfaceVariant
+                )
+            }
+            VerticalSpacer(height = 30.dp)
+            DescriptionMediumText(
+                text = stringResource(id = R.string.total),
+                modifier = Modifier,
+            )
+            VerticalSpacer(height = 5.dp)
+            collection.items.forEach { item ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp)
+                ) {
+                    DescriptionSmallText(
+                        text = "${item.name} * ${item.count}",
+                        modifier = Modifier.width(itemWidthDp),
+                        color = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                    DescriptionSmallText(
+                        text = "${item.price * item.count} ${stringResource(id = R.string.gold)}",
+                        modifier = Modifier.width(itemWidthDp),
+                        color = MaterialTheme.colorScheme.surfaceVariant
+                    )
+
+                }
+            }
+            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp)
+                    .padding(start = itemWidthDp, top = 2.dp, bottom = 2.dp)
             ) {
                 DescriptionSmallText(
-                    text = "${item.name} * ${item.count}",
+                    text = "${collection.items.sumOf { it.price * it.count }} ${stringResource(id = R.string.gold)}",
                     modifier = Modifier.width(itemWidthDp),
-                    color = MaterialTheme.colorScheme.surfaceVariant
+                    color = MaterialTheme.colorScheme.surfaceVariant,
                 )
-                DescriptionSmallText(
-                    text = "${item.price * item.count} ${stringResource(id = com.jinproject.design_ui.R.string.gold)}",
-                    modifier = Modifier.width(itemWidthDp),
-                    color = MaterialTheme.colorScheme.surfaceVariant
-                )
-
             }
         }
-        HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = itemWidthDp, top = 2.dp, bottom = 2.dp)
-        ) {
-            DescriptionSmallText(
-                text = "${collection.items.sumOf { it.price * it.count }} ${stringResource(id = com.jinproject.design_ui.R.string.gold)}",
-                modifier = Modifier.width(itemWidthDp),
-                color = MaterialTheme.colorScheme.surfaceVariant,
-            )
-        }
-        VerticalWeightSpacer(float = 1f)
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 20.dp)
+                .padding(vertical = 20.dp)
         ) {
             val deleteSnackBarMessage =
-                stringResource(id = com.jinproject.design_ui.R.string.message_success_removed)
+                stringResource(id = R.string.message_success_removed)
             val applySnackBarMessage =
-                stringResource(id = com.jinproject.design_ui.R.string.message_success_applied)
+                stringResource(id = R.string.message_success_applied)
 
             TextButton(
-                text = stringResource(id = com.jinproject.design_ui.R.string.delete_do),
+                text = stringResource(id = R.string.delete_do),
                 modifier = Modifier
                     .width(itemWidthDp)
                     .padding(horizontal = 12.dp),
@@ -192,7 +188,7 @@ internal fun CollectionDetail(
                 },
             )
             TextButton(
-                text = stringResource(id = com.jinproject.design_ui.R.string.apply_do),
+                text = stringResource(id = R.string.apply_do),
                 modifier = Modifier
                     .width(itemWidthDp)
                     .padding(horizontal = 12.dp),
@@ -220,7 +216,6 @@ internal fun CollectionDetail(
             )
         }
     }
-
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)

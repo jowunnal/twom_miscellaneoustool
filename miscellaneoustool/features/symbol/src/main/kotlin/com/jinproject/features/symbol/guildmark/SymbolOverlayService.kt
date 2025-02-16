@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
 import android.graphics.PixelFormat
+import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -13,30 +14,39 @@ import android.view.WindowManager
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Recomposer
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.AndroidUiDispatcher
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.platform.compositionContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.Lifecycle
@@ -49,6 +59,8 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
+import coil.ImageLoader
+import coil.request.ImageRequest
 import com.jinproject.design_compose.component.HorizontalWeightSpacer
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.component.button.DefaultIconButton
@@ -61,6 +73,7 @@ import com.jinproject.features.symbol.guildmark.component.UsedColorInPixels
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 
 @AndroidEntryPoint
@@ -110,7 +123,10 @@ class SymbolOverlayService : LifecycleService() {
 
     private fun inflateOverlayView() {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        mView = inflater.inflate(com.jinproject.features.symbol.R.layout.guild_symbol_overlay, null) as ComposeView
+        mView = inflater.inflate(
+            com.jinproject.features.symbol.R.layout.guild_symbol_overlay,
+            null
+        ) as ComposeView
 
         val lifecycleOwner = object : SavedStateRegistryOwner {
             private var mSavedStateRegistryController: SavedStateRegistryController =
@@ -137,94 +153,126 @@ class SymbolOverlayService : LifecycleService() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindow)
             setContent {
                 MiscellaneousToolTheme {
-                    val bitMapSample = getBitmapFromContentUri(
-                        context = this@SymbolOverlayService,
-                        imageUri = imageUri
-                    )
-                    val guildMarkManager =
-                        rememberGuildMarkManager(bitMap = bitMapSample, slider = sliderThreshold)
-                    var isTopBarHide by remember {
-                        mutableStateOf(false)
-                    }
-                    val topBarState by animateFloatAsState(targetValue = if(isTopBarHide) 1f else 0f, label = "TopBar State")
-
-                    Box(
-                        modifier = Modifier
-                            .pointerInput(Unit) {
-                                detectDragGestures { change, offset ->
-                                    require(mView != null) {
-                                        "Overlay 되어질 view 가 inflate 되지 않음"
-                                    }
-                                    change.consume()
-
-                                    val params = mView!!.layoutParams as WindowManager.LayoutParams
-                                    params.x = (params.x + offset.x).toInt()
-                                    params.y = (params.y + offset.y).toInt()
-
-                                    wm.updateViewLayout(mView, params)
-                                }
-                            }
-                            .pointerInput(Unit) {
-                                detectTapGestures {
-                                    isTopBarHide = !isTopBarHide
-                                }
-                            }
-                            .padding(8.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .graphicsLayer {
-                                    alpha = if(isTopBarHide) 0.3f else 1f
-                                }
-                        ) {
-                            ImagePixels(
-                                guildMarkManager = guildMarkManager,
-                                modifier = Modifier
-                                    .size(16.dp)
-                                    .border(1.dp, MaterialTheme.colorScheme.onBackground)
-                            )
-                            VerticalSpacer(height = 30.dp)
-                            UsedColorInPixels(
-                                guildMarkManager = guildMarkManager,
-                                itemWidth = 16.dp
-                            )
-                        }
-                        Row(
-                            modifier = Modifier
-                                .width(204.dp)
-                                .align(Alignment.TopCenter)
-                                .graphicsLayer {
-                                    scaleX = topBarState
-                                    scaleY = topBarState
-                                    alpha = topBarState
-                                }
-                                .background(MaterialTheme.colorScheme.surfaceVariant)
-                        ) {
-                            HorizontalWeightSpacer(float = 1f)
-                            DefaultIconButton(
-                                icon = R.drawable.ic_recycle,
-                                onClick = {
-                                    guildMarkManager.selectColor(Color.Unspecified)
-                                },
-                                iconTint = MaterialTheme.colorScheme.surface,
-                                backgroundTint = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            DefaultIconButton(
-                                icon = R.drawable.ic_x,
-                                onClick = {
-                                    stopSelf()
-                                },
-                                iconTint = MaterialTheme.colorScheme.surface,
-                                backgroundTint = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
+                    OverlayScreen()
                 }
             }
             compositionContext = reComposer
             runRecomposeScope.launch {
                 reComposer.runRecomposeAndApplyChanges()
+            }
+        }
+    }
+
+    @Composable
+    private fun OverlayScreen(
+        context: Context = LocalContext.current,
+    ) {
+        val bitMapSample by produceState(
+            initialValue = GuildMarkManager.getInitBitmap(),
+            key1 = imageUri,
+        ) {
+            value = if (imageUri.startsWith("http")) {
+                val requester = ImageRequest.Builder(context).data(imageUri).build()
+                (ImageLoader(context).newBuilder()
+                    .allowHardware(false)
+                    .build()
+                    .execute(requester).drawable as BitmapDrawable).bitmap
+            } else getBitmapFromContentUri(
+                context = this@SymbolOverlayService,
+                imageUri = imageUri
+            )
+        }
+        val guildMarkManager =
+            rememberGuildMarkManager(bitMap = bitMapSample, slider = sliderThreshold)
+        var isTopBarHide by remember {
+            mutableStateOf(false)
+        }
+        val topBarState by animateFloatAsState(
+            targetValue = if (isTopBarHide) 1f else 0f,
+            label = "TopBar State"
+        )
+        val screenHeight = 221.dp + ((guildMarkManager.standardColors.size % 12 + 1) * 12).dp
+
+        val screenWidth = 160.dp
+
+        Box(
+            modifier = Modifier
+                .width(screenWidth)
+                .height(screenHeight)
+                .clip(RoundedCornerShape(20.dp))
+                .background(MaterialTheme.colorScheme.background)
+                .border(1.5.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(20.dp))
+                .pointerInput(Unit) {
+                    detectTapGestures {
+                        isTopBarHide = !isTopBarHide
+                    }
+                }
+                .pointerInput(Unit) {
+                    detectTransformGestures(panZoomLock = true) { centroid, pan, zoom, _ ->
+                        mView?.let { view ->
+                            val params = view.layoutParams as WindowManager.LayoutParams
+                            with(view.layoutParams as WindowManager.LayoutParams) {
+                                x = (x + pan.x).toInt()
+                                y = (y + pan.y).toInt()
+                                val scaledWidth = (view.width * zoom).roundToInt().coerceAtLeast(160.dp.roundToPx())
+                                val scaledHeight = (view.height * zoom).roundToInt().coerceAtLeast(screenHeight.roundToPx())
+                                width = scaledWidth
+                                height = scaledHeight
+                            }
+
+                            wm.updateViewLayout(mView, params)
+                        }
+                    }
+                }
+                .padding(8.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .graphicsLayer {
+                        alpha = if (isTopBarHide) 0.3f else 1f
+                    }
+            ) {
+                ImagePixels(
+                    guildMarkManager = guildMarkManager,
+                    modifier = Modifier
+                        .size(12.dp)
+                        .border(1.dp, MaterialTheme.colorScheme.onBackground)
+                )
+                VerticalSpacer(height = 30.dp)
+                UsedColorInPixels(
+                    guildMarkManager = guildMarkManager,
+                    itemWidth = 12.dp
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .width(204.dp)
+                    .align(Alignment.TopCenter)
+                    .graphicsLayer {
+                        scaleX = topBarState
+                        scaleY = topBarState
+                        alpha = topBarState
+                    }
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+            ) {
+                HorizontalWeightSpacer(float = 1f)
+                DefaultIconButton(
+                    icon = R.drawable.ic_recycle,
+                    onClick = {
+                        guildMarkManager.selectColor(Color.Unspecified)
+                    },
+                    iconTint = MaterialTheme.colorScheme.surface,
+                    backgroundTint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                DefaultIconButton(
+                    icon = R.drawable.ic_x,
+                    onClick = {
+                        stopSelf()
+                    },
+                    iconTint = MaterialTheme.colorScheme.surface,
+                    backgroundTint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }
@@ -247,5 +295,11 @@ class SymbolOverlayService : LifecycleService() {
         const val CHANNEL_ID = 990
         const val IMAGE_URI = "imageUri"
         const val IMAGE_THRESHOLD = "imageThreshold"
+    }
+
+    @Preview
+    @Composable
+    private fun PreviewOverlayScreen() = MiscellaneousToolTheme {
+        OverlayScreen()
     }
 }

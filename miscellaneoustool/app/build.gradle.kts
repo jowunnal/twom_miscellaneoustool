@@ -11,8 +11,8 @@ android {
     defaultConfig {
         applicationId = "com.jinproject.twomillustratedbook"
         targetSdk = 34
-        versionCode = 64
-        versionName = "2.3.4"
+        versionCode = 68
+        versionName = "2.4.0"
     }
 
     buildFeatures {
@@ -66,6 +66,8 @@ dependencies {
     implementation(project(":design-compose"))
     implementation(project(":design-ui"))
     implementation(project(":features:home"))
+    implementation(project(":features:auth"))
+    implementation(project(":features:info"))
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)

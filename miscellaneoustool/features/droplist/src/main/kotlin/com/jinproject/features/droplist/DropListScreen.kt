@@ -3,6 +3,7 @@ package com.jinproject.features.droplist
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
@@ -46,6 +47,7 @@ private fun MapListScreen(
     dropListUiState: DropListUiState,
     selectMap: (MapState) -> Unit,
 ) {
+    val lazyGridState = rememberLazyGridState()
     val navigator = rememberListDetailPaneScaffoldNavigator<MapState>()
 
     BackHandler(navigator.canNavigateBack()) {
@@ -74,6 +76,7 @@ private fun MapListScreen(
             AnimatedPane {
                 MapListPane(
                     mapListState = dropListUiState.maps,
+                    lazyGridState = lazyGridState,
                     onClickItem = { item ->
                         selectMap(item)
                         navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, item)

@@ -79,7 +79,6 @@ fun NavGraphBuilder.alarmNavGraph(
             }
         ) {
             GearScreen(
-                billingModule = billingModule,
                 onNavigatePopBackStack = popBackStackIfCan,
                 showSnackBar = showSnackBar
             )

@@ -2,7 +2,9 @@ package com.jinproject.design_compose.component.pushRefresh
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -13,27 +15,39 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefreshIndicatorTransform
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastCoerceIn
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
 import kotlin.math.cos
+import kotlin.math.roundToInt
 import kotlin.math.sin
 
 @Composable
@@ -91,16 +105,22 @@ fun MTPushRefreshIndicator(
 ) {
     Box(
         modifier = modifier
-            .fillMaxWidth()
-            .height(
-                if (isRefreshing) {
-                    144.dp
-                } else
-                    (state.progress * 144).dp
-            )
+            .width(120.dp)
+            .height(40.dp)
+            .offset {
+                IntOffset(
+                    x = 0,
+                    y = -40.dp.roundToPx()-state.offset.roundToInt()
+                )
+            }
+            .shadow(6.dp * state.progress, shape = RoundedCornerShape(100.dp))
             .background(
                 color = MaterialTheme.colorScheme.surface,
-            ),
+                shape = RoundedCornerShape(100.dp)
+            )
+            .graphicsLayer {
+                alpha = state.progress
+            },
         contentAlignment = Alignment.Center
     ) {
         Crossfade(
@@ -189,14 +209,17 @@ fun MTProgressIndicatorRotatingWithTextByParam(
 
         drawPath(path, color = color, style = stroke)
 
-        val textSize = Size(width = textStyle.fontSize.toPx() * text.length, height = textStyle.lineHeight.toPx())
+        val textSize = Size(
+            width = textStyle.fontSize.toPx() * text.length,
+            height = textStyle.lineHeight.toPx()
+        )
         drawText(
             textMeasure,
             text,
             size = textSize,
             topLeft = Offset(
-                x = center.x - textStyle.fontSize.toPx()/2f ,
-                y = center.y  - textStyle.lineHeight.toPx() / 2,
+                x = center.x - textStyle.fontSize.toPx() / 2f,
+                y = center.y - textStyle.lineHeight.toPx() / 2,
             ),
             style = textStyle
         )

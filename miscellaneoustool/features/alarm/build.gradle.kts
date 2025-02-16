@@ -5,7 +5,6 @@ plugins {
 
 android {
     namespace = "com.jinproject.features.alarm"
-    compileSdk = 34
 }
 
 dependencies {

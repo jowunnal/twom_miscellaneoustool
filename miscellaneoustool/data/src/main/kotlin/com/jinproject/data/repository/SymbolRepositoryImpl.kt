@@ -1,6 +1,5 @@
 package com.jinproject.data.repository
 
-import android.net.Uri
 import com.jinproject.data.ChatMessage
 import com.jinproject.data.datasource.cache.CollectionDataStorePreferences
 import com.jinproject.data.datasource.remote.GenerateImageDataSource
@@ -16,12 +15,12 @@ class SymbolRepositoryImpl @Inject constructor(
     private val generateImageDataSource: GenerateImageDataSource,
     private val imageDownloadManager: ImageDownloadManager,
 ) : SymbolRepository {
-    override suspend fun setSymbolUri(uri: Uri) {
-        collectionDataStorePreferences.setSymbolUri(uri)
+    override suspend fun addPaidSymbol(uri: String) {
+        collectionDataStorePreferences.addPaidSymbol(uri)
     }
 
-    override fun getSymbolUri(): Flow<List<String>> =
-        collectionDataStorePreferences.getSymbolUri()
+    override fun getPaidSymbolUris(): Flow<List<String>> =
+        collectionDataStorePreferences.getPaidSymbolUris()
 
 
     override suspend fun generateSymbolImage(prompt: String) {
@@ -41,7 +40,12 @@ class SymbolRepositoryImpl @Inject constructor(
             )
         )
 
-        generateImageDataSource.generateImage("Can you generate a logo with below detail? 1. ${prompt}. 2. The background color of logo must be white, which should be exactly 0xFFFFFF in hexadecimal color code.  3. The entire logo must be 12*12 pixels in size and must be optimized to be clear and not blurry. ")
+        generateImageDataSource.generateImage(
+            "Can you generate a logo with below detail? " +
+                    "1. ${prompt}. " +
+                    "2. The background color of logo must be white which is 0xFFFFFFFF in hexadecimal color code.  " +
+                    "3. The entire logo must be 12*12 pixels in size and must be optimized to be clear and not blurry. "
+        )
             ?.let { response ->
                 replaceChat(
                     Message(
@@ -75,7 +79,10 @@ class SymbolRepositoryImpl @Inject constructor(
     }
 
     override suspend fun replaceChat(message: Message) {
-        collectionDataStorePreferences.replaceChatMessage(url = message.data, timeStamp = message.timeStamp)
+        collectionDataStorePreferences.replaceChatMessage(
+            url = message.data,
+            timeStamp = message.timeStamp
+        )
     }
 
     override suspend fun downloadImage(url: String, timeStamp: Long) {

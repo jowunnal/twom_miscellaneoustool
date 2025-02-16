@@ -3,6 +3,7 @@ package com.jinproject.features.symbol.ai
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jinproject.domain.repository.SymbolRepository
+import com.jinproject.features.core.RealtimeDatabaseManager
 import com.jinproject.features.core.utils.mapToImmutableList
 import com.jinproject.features.symbol.ai.DownloadState.Companion.DOWNLOADING
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,6 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -48,8 +50,14 @@ internal class GenerateImageViewModel @Inject constructor(
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = GenerateImageUiState.getInitValues()
+            initialValue = GenerateImageUiState.getInitValues(),
         )
+
+    val aiTokenCounter: StateFlow<Long> = RealtimeDatabaseManager.getAiTokenFlow().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = 0L,
+    )
 
     fun generateImage(prompt: String) {
         viewModelScope.launch(Dispatchers.IO) {

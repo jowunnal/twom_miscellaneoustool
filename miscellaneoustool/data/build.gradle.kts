@@ -30,6 +30,12 @@ android {
     buildFeatures {
         buildConfig = true
     }
+
+    buildTypes {
+        release {
+            consumerProguardFile("proguard-rules.pro")
+        }
+    }
 }
 
 fun getLocalKey(propertyKey:String):String{

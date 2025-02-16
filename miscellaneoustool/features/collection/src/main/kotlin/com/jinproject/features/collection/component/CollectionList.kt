@@ -1,6 +1,7 @@
 package com.jinproject.features.collection.component
 
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -80,6 +82,7 @@ internal fun CollectionList(
     triggerFilterMode: (Boolean) -> Unit,
     configuration: Configuration = LocalConfiguration.current,
     keyboardController: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current,
+    lazyListState: LazyListState = rememberLazyListState(),
     navigateToDetail: (ItemCollection) -> Unit,
     dispatchEvent: (CollectionEvent) -> Unit,
 ) {
@@ -96,12 +99,14 @@ internal fun CollectionList(
         }
     }
 
-    val lazyListState = rememberLazyListState()
-
     LaunchedEffect(key1 = lazyListState) {
         snapshotFlow { lazyListState.isScrollInProgress }.collectLatest {
             keyboardController?.hide()
         }
+    }
+
+    BackHandler(isFilterMode) {
+        triggerFilterMode(false)
     }
 
     Box(

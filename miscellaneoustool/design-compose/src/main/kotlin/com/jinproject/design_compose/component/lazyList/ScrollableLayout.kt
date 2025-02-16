@@ -3,7 +3,9 @@ package com.jinproject.design_compose.component.lazyList
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.gestures.scrollBy
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyListState
@@ -30,7 +32,7 @@ fun ColumnScope.ScrollableLayout(
     scrollableState: ScrollableState = rememberLazyListState(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     isUpperScrollActive: Boolean,
-    content: @Composable () -> Unit,
+    content: @Composable BoxWithConstraintsScope.() -> Unit,
 ) {
     require(scrollableState is LazyListState || scrollableState is LazyGridState) {
         "LazyList and LazyGrid only granted"

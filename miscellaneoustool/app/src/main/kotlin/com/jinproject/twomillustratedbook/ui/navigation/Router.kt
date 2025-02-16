@@ -2,6 +2,7 @@ package com.jinproject.twomillustratedbook.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -11,9 +12,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
 import com.jinproject.features.alarm.AlarmRoute
 import com.jinproject.features.alarm.navigateToAlarmGraph
+import com.jinproject.features.core.compose.Route
 import com.jinproject.features.core.compose.TopLevelRoute
 import com.jinproject.features.home.HomeRoute
 import com.jinproject.features.home.navigateToHomeGraph
+import com.jinproject.features.info.InfoRoute
+import com.jinproject.features.info.navigateToInfoGraph
 import com.jinproject.features.simulator.SimulatorRoute
 import com.jinproject.features.simulator.navigateToSimulatorGraph
 import com.jinproject.features.symbol.SymbolRoute
@@ -24,7 +28,12 @@ internal val TopLevelRoutes: List<TopLevelRoute> = listOf(
     SimulatorRoute.Simulator,
     SymbolRoute.Symbol,
     AlarmRoute.Alarm,
+    InfoRoute.Info,
 )
+
+@Composable
+internal fun rememberRouter(navController: NavHostController) =
+    remember(navController) { Router(navController) }
 
 /**
  * Navigation을 담당하는 클래스
@@ -52,6 +61,7 @@ internal class Router(val navController: NavHostController) {
             is HomeRoute.Home -> navController.navigateToHomeGraph(navOptions)
             is SimulatorRoute.Simulator -> navController.navigateToSimulatorGraph(navOptions)
             is SymbolRoute.Symbol -> navController.navigateToSymbolGraph(navOptions)
+            is InfoRoute.Info -> navController.navigateToInfoGraph(navOptions)
         }
     }
 
@@ -72,3 +82,6 @@ fun NavController.popBackStackIfCan() {
         this.popBackStack()
     }
 }
+
+fun NavController.popBackStackIfCan(route: Route, inclusive: Boolean = false) =
+    popBackStack(route = route, inclusive = inclusive)

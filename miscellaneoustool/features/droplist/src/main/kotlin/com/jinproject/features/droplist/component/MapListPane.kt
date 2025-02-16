@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
@@ -35,6 +37,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 internal fun MapListPane(
     mapListState: ImmutableList<MapState>,
+    lazyGridState: LazyGridState = rememberLazyGridState(),
     windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
     configuration: Configuration = LocalConfiguration.current,
     onClickItem: (MapState) -> Unit,
@@ -51,6 +54,7 @@ internal fun MapListPane(
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(itemWidth),
+        state = lazyGridState,
         verticalArrangement = Arrangement.spacedBy(itemSpaceWidth),
         horizontalArrangement = Arrangement.spacedBy(itemSpaceWidth),
         contentPadding = PaddingValues(vertical = 16.dp, horizontal = itemPadding)

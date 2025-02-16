@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.core.util.doOnLocaleLanguage
-import com.jinproject.design_compose.component.DefaultLayout
+import com.jinproject.design_compose.component.layout.DefaultLayout
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.HorizontalSpacer
 import com.jinproject.design_compose.component.HorizontalWeightSpacer
@@ -79,13 +79,10 @@ private fun HomeScreen(
     navigateToCollection: (Int?) -> Unit,
     navigateToAlarm: () -> Unit,
 ) {
-    val scrollState = rememberScrollState()
-
     DefaultLayout(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState),
-        contentPaddingValues = MiscellanousToolPaddingValues(vertical = 16.dp, horizontal = 12.dp),
+        modifier = Modifier,
+        contentPaddingValues = MiscellanousToolPaddingValues(horizontal = 12.dp),
+        verticalScrollable = true,
     ) {
         HomeMenu(
             header = stringResource(id = R.string.home_droplist),
@@ -149,9 +146,7 @@ private fun HomeScreen(
 
         HomeMenu(
             header = stringResource(id = R.string.alarm_present_bosslist),
-            onClickHeader = {
-                navigateToCollection(null)
-            },
+            onClickHeader = navigateToAlarm,
         ) {
             if (uiState.bossTimer.isEmpty())
                 DescriptionSmallText(
