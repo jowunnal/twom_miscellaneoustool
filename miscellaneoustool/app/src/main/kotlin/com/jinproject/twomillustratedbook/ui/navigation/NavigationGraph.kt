@@ -10,10 +10,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import com.jinproject.features.alarm.alarmNavGraph
+import com.jinproject.features.alarm.navigateToAlarmGraph
 import com.jinproject.features.alarm.navigateToGear
 import com.jinproject.features.alarm.navigateToWatch
+import com.jinproject.features.auth.authNavigation
+import com.jinproject.features.auth.navigateAuthRoute
+import com.jinproject.features.auth.navigateToAuthGraph
 import com.jinproject.features.collection.navigateToCollectionList
 import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.base.item.SnackBarMessage
@@ -21,7 +26,12 @@ import com.jinproject.features.core.compose.TopLevelRoute
 import com.jinproject.features.droplist.navigateToDropList
 import com.jinproject.features.home.HomeRoute
 import com.jinproject.features.home.homeNavGraph
+import com.jinproject.features.info.infoNavigation
+import com.jinproject.features.info.navigateInfoRoute
 import com.jinproject.features.simulator.simulatorNavGraph
+import com.jinproject.features.symbol.SymbolRoute
+import com.jinproject.features.symbol.navigateToGenerateImage
+import com.jinproject.features.symbol.popBackStackIfCan
 import com.jinproject.features.symbol.symbolNavGraph
 
 @Composable
@@ -43,6 +53,9 @@ internal fun NavigationGraph(
         homeNavGraph(
             navigateToDropList = navController::navigateToDropList,
             navigateToCollection = navController::navigateToCollectionList,
+            navigateToAlarm = {
+                navController.navigateToAlarmGraph(null)
+            },
             showSnackBar = showSnackBar,
             popBackStackIfCan = navController::popBackStackIfCan,
         )
@@ -60,9 +73,30 @@ internal fun NavigationGraph(
             billingModule = billingModule,
             navController = navController,
             showSnackBar = showSnackBar,
+            navigateToAuthGraph = navController::navigateToAuthGraph,
         )
 
         simulatorNavGraph()
+
+        authNavigation(
+            navigatePopBackStack = navController::popBackStackIfCan,
+            navigateAuthRoute = navController::navigateAuthRoute,
+            showSnackBar = showSnackBar,
+            navigatePopBackStackToRoute = navController::popBackStackIfCan,
+            navigateToGenerateImage = navController::navigateToGenerateImage,
+            isPreviousDestinationGenerateImage = {
+                navController.previousBackStackEntry?.destination?.hasRoute(SymbolRoute.GenerateImage::class)
+                    ?: false
+            }
+        )
+
+        infoNavigation(
+            billingModule = billingModule,
+            showSnackBar = showSnackBar,
+            navigateToAuthGraph = navController::navigateToAuthGraph,
+            navigateInfoRoute = navController::navigateInfoRoute,
+            navigatePopBackStack = navController::popBackStackIfCan
+        )
     }
 }
 

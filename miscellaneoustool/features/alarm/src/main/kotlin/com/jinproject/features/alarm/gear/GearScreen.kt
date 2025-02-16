@@ -25,7 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.billingclient.api.ProductDetails
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
-import com.jinproject.design_compose.component.DefaultLayout
+import com.jinproject.design_compose.component.layout.DefaultLayout
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.HorizontalSpacer
 import com.jinproject.design_compose.component.VerticalSpacer
@@ -42,7 +42,6 @@ import com.jinproject.features.core.utils.appendBoldText
 
 @Composable
 fun GearScreen(
-    billingModule: BillingModule,
     gearViewModel: GearViewModel = hiltViewModel(),
     onNavigatePopBackStack: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit
@@ -51,8 +50,6 @@ fun GearScreen(
 
     GearScreen(
         gearUiState = gearUiState,
-        getPurchasableProducts = billingModule::getPurchasableProducts,
-        purchaseInApp = billingModule::purchase,
         setIntervalFirstTimerSetting = gearViewModel::setIntervalFirstTimerSetting,
         setIntervalSecondTimerSetting = gearViewModel::setIntervalSecondTimerSetting,
         setIntervalTimerSetting = gearViewModel::setIntervalTimerSetting,
@@ -64,30 +61,13 @@ fun GearScreen(
 @Composable
 private fun GearScreen(
     gearUiState: GearUiState,
-    getPurchasableProducts: suspend (List<BillingModule.Product>) -> List<ProductDetails?>?,
     context: Context = LocalContext.current,
-    purchaseInApp: (ProductDetails) -> Unit,
     setIntervalFirstTimerSetting: (Int) -> Unit,
     setIntervalSecondTimerSetting: (Int) -> Unit,
     setIntervalTimerSetting: () -> Unit,
     onNavigatePopBackStack: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit
 ) {
-    val purchasableProducts = remember {
-        mutableStateListOf<ProductDetails>()
-    }
-
-    LaunchedEffect(key1 = Unit) {
-        getPurchasableProducts(
-            listOf(
-                BillingModule.Product.AD_REMOVE,
-                BillingModule.Product.SUPPORT
-            )
-        )?.let { productDetails ->
-            purchasableProducts.addAll(productDetails.filterNotNull())
-        }
-    }
-
     DefaultLayout(
         topBar = {
             BackButtonTitleAppBar(
@@ -133,29 +113,6 @@ private fun GearScreen(
             )
 
             VerticalSpacer(height = 30.dp)
-
-            HorizontalDivider()
-            VerticalSpacer(height = 16.dp)
-            DescriptionLargeText(
-                text = stringResource(id = R.string.billing_purchase), modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize()
-            )
-            VerticalSpacer(height = 30.dp)
-
-            purchasableProducts.forEachIndexed { index, product ->
-                TextButton(
-                    text = "${product.name} ${stringResource(id = R.string.somethingdo)}",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
-                    onClick = {
-                        purchaseInApp(product)
-                    }
-                )
-                if (index != purchasableProducts.lastIndex)
-                    VerticalSpacer(height = 12.dp)
-            }
         }
     )
 }
@@ -194,8 +151,6 @@ private fun PreviewGearScreen() {
     PreviewMiscellaneousToolTheme {
         GearScreen(
             gearUiState = GearUiState.getInitValue(),
-            getPurchasableProducts = { emptyList() },
-            purchaseInApp = {},
             setIntervalFirstTimerSetting = {},
             setIntervalSecondTimerSetting = {},
             setIntervalTimerSetting = {},

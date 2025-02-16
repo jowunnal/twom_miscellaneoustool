@@ -60,9 +60,13 @@ object BookDatabaseModule {
             onKo = BookMigration.MIGRATION_3_4_KOR,
             onElse = BookMigration.MIGRATION_3_4_ELSE,
         )
+        val migration4to5 = context.doOnLocaleLanguage(
+            onKo = BookMigration.MIGRATION_4_5_KOR,
+            onElse = BookMigration.MIGRATION_4_5_ELSE
+        )
         return Room.databaseBuilder(context, BookDatabase::class.java,"BookDatabase")
             .createFromAsset(assetName)
-            .addMigrations(migration1to2, migration2to3, migration3to4)
+            .addMigrations(migration1to2, migration2to3, migration3to4, migration4to5)
             .build()
     }
 }

@@ -1,6 +1,5 @@
 package com.jinproject.data.repository
 
-import android.net.Uri
 import com.jinproject.data.datasource.cache.CollectionDataStorePreferences
 import com.jinproject.data.datasource.cache.database.dao.CollectionDao
 import com.jinproject.domain.model.CollectionModel
@@ -47,12 +46,4 @@ class CollectionRepositoryImpl @Inject constructor(
             collectionDao.updateItemPrice(name = item.name, price = item.price)
         }
     }
-
-    override suspend fun setSymbolUri(uri: Uri) {
-        collectionDataStorePreferences.setSymbolUri(uri)
-    }
-
-    override fun getSymbolUri(): Flow<List<String>> =
-        collectionDataStorePreferences.getSymbolUri()
-
 }

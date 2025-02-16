@@ -49,15 +49,14 @@ fun rememberPushRefreshState(
 
 
 class PushRefreshState(
-    val onRefresh: () -> Unit,
+    private val onRefresh: () -> Unit,
     private val threshold: Float,
     private val scope: CoroutineScope,
 ) {
-    private var offset by mutableFloatStateOf(0f)
+    var offset by mutableFloatStateOf(0f)
+        private set
     private var isRefreshing by mutableStateOf(false)
-    private val adjustedPushedOffset by derivedStateOf {
-        offset * 1f
-    }
+
 
     val progress get() = offset / threshold
 

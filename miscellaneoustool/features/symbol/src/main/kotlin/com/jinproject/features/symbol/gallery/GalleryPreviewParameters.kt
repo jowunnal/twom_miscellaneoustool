@@ -1,14 +1,17 @@
 package com.jinproject.features.symbol.gallery
 
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import com.jinproject.design_compose.component.layout.DownLoadedUiState
+import com.jinproject.design_compose.component.layout.DownloadableUiStatePreviewParameter
 import com.jinproject.features.symbol.ImageListPreviewData
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
-internal class GalleryPreviewParameters: PreviewParameterProvider<MTImageList> {
-    override val values: Sequence<MTImageList> = sequenceOf(
-        MTImageList(
-            images = ImageListPreviewData.items,
-            clickedId = -1L,
+internal class GalleryPreviewParameters :
+    DownloadableUiStatePreviewParameter<ImmutableList<MTImage>>() {
+    override val data: DownLoadedUiState<ImmutableList<MTImage>>
+        get() = GalleryUiState(
+            data = ImageListPreviewData.items,
+            paidImageUris = persistentListOf(),
         )
-    )
 }

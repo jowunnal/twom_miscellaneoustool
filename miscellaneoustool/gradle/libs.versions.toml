@@ -3,7 +3,7 @@
 activity = "1.8.2"
 android-test-ext = "1.1.5"
 appCompat = "1.6.1"
-billing = "6.1.0"
+billing = "7.1.1"
 coreKtx = "1.12.0"
 coil = "2.5.0"
 composeAdaptive = "1.0.0"
@@ -14,7 +14,7 @@ constraintLayout = "2.1.4"
 dagger = "2.51.1"
 datastore = "1.1.0"
 espresso = "3.5.1"
-firebaseBom = "32.3.1"
+firebaseBom = "33.8.0"
 glide = "4.15.1"
 gms-service-ads = "23.2.0"
 hilt = "1.2.0"
@@ -26,23 +26,23 @@ kotlinx-immutable = "0.3.6"
 kotlinx-serialzation-json = "1.7.2"
 lifecycle = "2.6.1"
 lifecycle-common = "2.6.1"
+lottie = "6.3.0"
 material = "1.11.0"
 mockk = "1.13.5"
 navigation = "2.8.0"
+okhttp3 = "4.12.0"
 playInApp = "2.1.0"
 protobuf = "3.25.0"
+retrofit2 = "2.9.0"
 room = "2.6.1"
 
 # plugin
-androidNavigationSafeargs = "2.8.0"
 androidStudioGradlePlugin = "8.5.0"
 gmsGoogleServicePlugin = "4.4.2"
 firebaseCrashlyticsPlugin = "2.9.9"
-junitPlugin = "1.9.3.0"
 kotlin = "2.0.10"
 kotlinKsp = "2.0.10-1.0.24"
 protobufPlugin = "0.9.4"
-kotlinGradlePlugin = "1.9.0"
 
 [libraries]
 
@@ -102,9 +102,11 @@ datastore = { group = "androidx.datastore", name = "datastore", version.ref = "d
 
 # Firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
-firebase-database = { group = "com.google.firebase", name = "firebase-database-ktx" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database" }
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
+firebase-storage = { module = "com.google.firebase:firebase-storage" }
 
 # Glide
 bumptech-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
@@ -127,6 +129,9 @@ lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtim
 lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycle-common" }
 lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 
+# Lottie
+airbnb-android-lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
+
 # Navigation
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
@@ -147,6 +152,12 @@ room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
+# Square
+square-retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
+square-retrofit2-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit2" }
+square-retrofit2-converter-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit2" }
+square-okhttp3-intercepter = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3" }
+
 # Test
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlin-coroutine" }
 io-kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
@@ -164,9 +175,10 @@ billing = ["billing-client", "billing-ktx"]
 compose = ["compose-material3", "compose-material", "compose-foundation", "compose-ui", "compose-ui-preview", "compose-viewBinding"]
 composeAdaptive = ["compose-material3-adaptive", "compose-material3-adaptive-layout", "compose-material3-adaptive-navigation", "compose-material3-adaptive-navigation-suite"]
 coroutines = ["coroutines-core"]
-firebase = ["firebase-analytics", "firebase-crashlytics", "firebase-database"]
+firebase = ["firebase-analytics", "firebase-crashlytics", "firebase-database", "firebase-auth", "firebase-storage"]
 kotest = ["io-kotest-junit", "io-kotest-assertions"]
 lifecycle = ["lifecycle-compose", "lifecycle-viewmodel-ktx", "lifecycle-runtime-ktx", "lifecycle-runtime-compose", "lifecycle-service"]
 navigation = ["navigation-fragment-ktx", "navigation-ui", "navigation-fragment-compose"]
+square = ["square-retrofit2", "square-retrofit2-converter-gson", "square-retrofit2-converter-scalars", "square-okhttp3-intercepter"]
 testing = ["jUnit", "junit-jupiter-api", "io-mockk"]
 playInAppUpdate = ["play-app-update", "play-app-update-ktx"]

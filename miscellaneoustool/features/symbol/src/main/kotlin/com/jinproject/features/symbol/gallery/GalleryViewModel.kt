@@ -11,66 +11,73 @@ import android.provider.MediaStore
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jinproject.domain.repository.CollectionRepository
+import com.jinproject.design_compose.component.layout.DownLoadedUiState
+import com.jinproject.design_compose.component.layout.DownloadableUiState
+import com.jinproject.domain.repository.SymbolRepository
+import com.jinproject.features.core.base.item.SnackBarMessage
+import com.jinproject.features.core.utils.RestartableStateFlow
+import com.jinproject.features.core.utils.restartableStateIn
 import com.jinproject.features.symbol.gallery.MTImage.Companion.IMAGE_COLUMNS_ID
 import com.jinproject.features.symbol.gallery.MTImage.Companion.IMAGE_COLUMNS_MODIFIED_DATE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 import java.time.Instant
 import javax.inject.Inject
 
 @HiltViewModel
-class GalleryViewModel @Inject constructor(
+internal class GalleryViewModel @Inject constructor(
     @ApplicationContext context: Context,
-    private val repository: CollectionRepository,
+    repository: SymbolRepository,
 ) : ViewModel() {
-    private val _images: MutableStateFlow<MTImageList> =
-        MutableStateFlow(MTImageList.getInitValues())
-    val images: StateFlow<MTImageList> get() = _images.asStateFlow()
 
-    private val _isPaidImage: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isPaidImage: StateFlow<Boolean> get() = _isPaidImage.asStateFlow()
+    val snackBarMessageChannel = Channel<SnackBarMessage>(Channel.CONFLATED)
 
-    suspend fun getMoreImages(context: Context) {
-        val moreImages = getImageFromContentProvider(
-            resolver = context.contentResolver,
-            selection = "$IMAGE_COLUMNS_MODIFIED_DATE < ?",
-            selectionArgs = arrayOf(
-                this.images.value.images.lastOrNull()?.modifiedDate ?: Instant.now().toEpochMilli().toString(),
-            ),
+    private var lastModifiedDate: String? = Instant.now().toEpochMilli().toString()
+    private var origin = arrayListOf<MTImage>()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val galleryUiState: RestartableStateFlow<DownloadableUiState> =
+        repository.getPaidSymbolUris().flatMapLatest { paidSymbolUris ->
+            flow {
+                val images = (lastModifiedDate?.let {
+                    getImageFromContentProvider(
+                        resolver = context.contentResolver,
+                        selection = "$IMAGE_COLUMNS_MODIFIED_DATE < ?",
+                        selectionArgs = arrayOf(it),
+                    )
+                } ?: emptyList()).also { list ->
+                    lastModifiedDate = list.lastOrNull()?.modifiedDate
+                }
+
+                emit(
+                    GalleryUiState(
+                        data = origin.apply {
+                            if (images.isNotEmpty())
+                                addAll(images)
+                        }.toPersistentList(),
+                        paidImageUris = paidSymbolUris.toPersistentList(),
+                    )
+                )
+            }
+        }.restartableStateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = DownloadableUiState.Loading,
         )
 
-        _images.update { state ->
-            state.copy(images = state.images.toMutableList().apply { addAll(moreImages) })
-        }
-    }
-
-    fun setClickedImage(id: Long) {
-        _images.update { state ->
-            state.copy(clickedId = id)
-        }
-    }
-
-    init {
-        getStoredSymbolUri()
-
-        viewModelScope.launch {
-            getMoreImages(context)
-        }
+    fun getMoreImages() {
+        galleryUiState.stopAndStart()
     }
 
     private suspend fun getImageFromContentProvider(
@@ -79,7 +86,7 @@ class GalleryViewModel @Inject constructor(
         selection: String? = null,
         selectionArgs: Array<String>? = null,
         limit: Int = 100,
-    ): MutableList<MTImage> {
+    ): PersistentList<MTImage> {
         val imageList = mutableListOf<MTImage>()
 
         val projection = arrayOf(
@@ -135,36 +142,16 @@ class GalleryViewModel @Inject constructor(
             }
         }
 
-        return imageList
+        return imageList.toPersistentList()
     }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    fun getStoredSymbolUri() =
-        repository.getSymbolUri()
-            .flatMapLatest { uris ->
-                images.filter { mtImageList ->
-                    mtImageList.images.isNotEmpty() && mtImageList.clickedId != -1L
-                }.map { mtImageList ->
-                    mtImageList.images.find { it.id == images.value.clickedId }?.uri
-                }.map { uri ->
-                    uri in uris
-                }
-            }.onEach { bool ->
-                _isPaidImage.update { bool }
-            }.launchIn(viewModelScope)
 }
 
 @Stable
-data class MTImageList(
-    val images: List<MTImage>,
-    val clickedId: Long,
-) {
-    companion object {
-        fun getInitValues() = MTImageList(
-            images = emptyList(),
-            clickedId = -1L,
-        )
-    }
+internal data class GalleryUiState(
+    override val data: ImmutableList<MTImage>,
+    val paidImageUris: ImmutableList<String>,
+) : DownLoadedUiState<ImmutableList<MTImage>>() {
+    fun isPaidImage(image: MTImage): Boolean = image.uri in paidImageUris
 }
 
 @Stable

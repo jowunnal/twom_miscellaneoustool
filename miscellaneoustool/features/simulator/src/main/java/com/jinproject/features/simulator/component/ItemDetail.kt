@@ -14,14 +14,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.jinproject.core.util.doOnLocaleLanguage
-import com.jinproject.design_compose.component.text.DescriptionMediumText
-import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.VerticalSpacer
+import com.jinproject.design_compose.component.text.DescriptionMediumText
+import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.theme.MiscellaneousToolColor
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.features.simulator.EquipmentListPreviewParameters
@@ -55,7 +56,7 @@ internal fun ItemDetail(
             color = MiscellaneousToolColor.itemButtonColor.color,
         )
         DescriptionSmallText(
-            text = "요구 레벨 ${equipment.level}",
+            text = "${stringResource(id = com.jinproject.design_ui.R.string.item_detail_require_level)} ${equipment.level}",
             color = MiscellaneousToolColor.itemNameColor.color,
         )
         VerticalSpacer(height = 4.dp)
@@ -64,8 +65,8 @@ internal fun ItemDetail(
             is Weapon -> {
                 val enchantedDamage = equipment.getDamageRangeEnchanted(context)
 
-                val damageText = "공격 ${enchantedDamage.first}-${enchantedDamage.last}"
-                val speedText = "속도 ${equipment.speed}"
+                val damageText = "${stringResource(id = com.jinproject.design_ui.R.string.item_detail_attack)} ${enchantedDamage.first}-${enchantedDamage.last}"
+                val speedText = "${stringResource(id = com.jinproject.design_ui.R.string.item_detail_speed)} ${equipment.speed}"
                 val optionsText = equipment.options.filter { option ->
                     option.value.toInt() != 0
                 }.joinToString("\n") { option ->

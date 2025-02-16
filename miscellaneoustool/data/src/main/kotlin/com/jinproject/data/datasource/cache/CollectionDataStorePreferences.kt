@@ -1,7 +1,7 @@
 package com.jinproject.data.datasource.cache
 
-import android.net.Uri
 import androidx.datastore.core.DataStore
+import com.jinproject.data.ChatMessage
 import com.jinproject.data.CollectionPreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -35,14 +35,35 @@ class CollectionDataStorePreferences @Inject constructor(
         }
     }
 
-    suspend fun setSymbolUri(uri: Uri) {
+    suspend fun addPaidSymbol(uri: String) {
         dataStorePrefs.updateData { prefs ->
-            prefs.toBuilder().addStoredSymbolUri(uri.toString()).build()
+            prefs.toBuilder().addStoredSymbolUri(uri).build()
         }
     }
 
-    fun getSymbolUri(): Flow<List<String>> =
+    fun getPaidSymbolUris(): Flow<List<String>> =
         collectionPreferences.transform { prefs ->
             emit(prefs.storedSymbolUriList)
         }
+
+    fun getChatMessage(): Flow<List<ChatMessage>> =
+        collectionPreferences.transform { prefs -> emit(prefs.messageList) }
+
+    suspend fun addChat(message: ChatMessage) {
+        dataStorePrefs.updateData { prefs ->
+            prefs.toBuilder()
+                .addMessage(message)
+                .build()
+        }
+    }
+
+    suspend fun replaceChatMessage(url: String, timeStamp: Long) {
+        dataStorePrefs.updateData { prefs ->
+            val idx = prefs.messageList.indexOfLast { it.timestamp == timeStamp }
+
+            prefs.toBuilder()
+                .setMessage(idx, prefs.messageList[idx].toBuilder().setData(url))
+                .build()
+        }
+    }
 }

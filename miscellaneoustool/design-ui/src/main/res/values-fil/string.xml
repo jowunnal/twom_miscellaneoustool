@@ -59,12 +59,31 @@
     <string name="gold">Gold</string>
     <string name="textfield_hint">Maglagay ng text</string>
     <string name="total">Kabuuan</string>
+    <string name="empty">Walang laman</string>
+    <string name="verify">Verify</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="logout">Logout</string>
+    <string name="withdrawal">Withdrawal</string>
+    <string name="change_info">Change Information</string>
+    <string name="term">Terms of Service</string>
+    <string name="settings">Settings</string>
+    <string name="exit">Exit</string>
 
     <!-- Snackbar Message -->
     <string name="message_throw_no_such_element">Walang tugmang data.</string>
     <string name="message_throw_exceptions">May naganap na hindi kilalang error. Pakisubukang muli.</string>
     <string name="message_success_applied">Matagumpay na nailapat.</string>
     <string name="message_success_removed">Matagumpay na naalis.</string>
+
+    <!-- Activity Top Route -->
+    <string name="main_message_success_purchase">Nabili na ang produkto.</string>
+    <string name="main_message_fail_purchase">Nabigo ang pagbili.</string>
+    <string name="main_message_fail_unavailable">Ang produktong ito ay hindi wasto.</string>
+    <string name="main_message_fail_wrong">Ito ang maling produkto.</string>
+    <string name="main_message_fail_cancel">Kinansela mo.</string>
+    <string name="main_message_fail_already_owned">Pagmamay-ari mo na ang produktong ito.</string>
+    <string name="main_message_fail_network">Nabigo dahil sa isang error sa network.</string>
 
     <!-- home strings -->
     <string name="home_collection">Collections</string>
@@ -108,7 +127,8 @@
     <string name="symbol_description_content">ang na-convert na imahe ay ipapakita bilang isang halimbawa.\nPakitandaan na ang larawan ay maaaring iba mula sa aktwal na na-convert na form.</string>
     <string name="symbol_footer">Ang isang maliit na bayad ay sinisingil sa bawat pag-load para sa produktong ito.\nMaaari mong i-convert ang na-load na larawan sa isang mas maliit na sukat at magbigay ng isang preview upang suriin kung ito ay tumpak.\nKung gusto mo ang na-load na larawan, mangyaring magpatuloy sa susunod na proseso. \nHindi maaaring kanselahin ang produktong ito pagkatapos ng pagbabayad, kaya mangyaring magdesisyon nang mabuti!
         \n\nAng developer ay hindi nangongolekta ng anumang impormasyon tungkol sa mga user.\nI-convert ang mga larawan sa storage nang ligtas nang walang pag-aalala.</string>
-    <string name="symbol_button_getImage">Mag-load ng larawan</string>
+    <string name="symbol_button_getImage">Mag-load ng lokal na larawan</string>
+    <string name="symbol_button_generateImage">Bumuo ng AI Image</string>
     <string name="symbol_permission_headline">Ang pahintulot na basahin ang mga larawan ay hindi ibinigay.</string>
     <string name="symbol_permission_content">Kung hindi ka tumatanggap ng pahintulot, hindi mo magagamit ang function.</string>
 
@@ -126,11 +146,49 @@
     <string name="symbol_guildMark_description">If you leave the current screen, it is displayed as an overlay.\nBe sure to accept permission to draw on other apps!</string>
 
     <string name="symbol_detail_appbar">Mga Detalye ng Larawan</string>
+    <string name="symbol_ai_remain_token">Bilang ng mga token na natitira</string>
+    <string name="symbol_ai_dialog_purchase_token_header">Gusto mo bang bumili ng mga token?</string>
+    <string name="symbol_ai_dialog_purchase_token_content">Dapat ay mayroon kang token para magamit ang generative AI function.</string>
+    <string name="symbol_ai_dialog_purchase_token_yes">Oo, bibili ako.</string>
+
+    <string name="symbol_purchased_list">Listahan ng Pagbili</string>
 
     <!-- service strings -->
     <string name="service_overlay_running">Ang kasalukuyang view ng oras ay palaging gumagana.</string>
 
     <!-- activity strings -->
     <string name="authority_alarm_failure">Kung hindi mo inaprubahan ang awtoridad ng alarma, hindi ka makakatanggap ng mga tumpak na alarma.</string>
+
+    <!-- simulator strings -->
+    <string name="item_detail_require_level">Require Level</string>
+    <string name="item_detail_attack">Attack</string>
+    <string name="item_detail_speed">Speed</string>
+
+    <!-- auth strings -->
+    <string name="auth_sign_email">Ilagay ang iyong email</string>
+    <string name="auth_sign_password">Ipasok ang iyong password</string>
+    <string name="auth_sign_password_error">Ang password ay dapat na hindi bababa sa 8 character ang haba at naglalaman ng maliliit na titik na alpabeto, mga numero, at mga titik (kahit isa sa !, @, $, *, o _).</string>
+    <string name="auth_sign_email_code">Ilagay ang code na iyong natanggap</string>
+    <string name="auth_sign_email_error">Di-wasto ang format ng email.</string>
+    <string name="auth_sign_email_code_error">Ang code ay hindi wasto</string>
+    <string name="auth_sign_no_account">Walang account?</string>
+    <string name="auth_sign_create_account">Gumawa ng account</string>
+    <string name="auth_sign_repeat_password">Ulitin ang password</string>
+    <string name="auth_sign_repeat_password_error">Hindi pareho ang password.</string>
+    <string name="auth_sign_email_verify">I-authenticate ang iyong email</string>
+    <string name="auth_sign_verify_authentication">Pag-verify ng pagpapatunay</string>
+    <string name="auth_sign_in_success">Matagumpay ang pag-log in.</string>
+    <string name="auth_sign_in_failed">Nabigo ang pag-login.</string>
+    <string name="auth_sign_email_not_verified">Nabigo ang pag-verify sa email.</string>
+    <string name="auth_sign_verify_authentication_on_email">Mangyaring buksan ang email at i-verify.</string>
+    <string name="auth_sign_send_email_verification">Naipadala ang isang email sa pagpapatunay.</string>
+    <string name="auth_sign_email_already_exists">Umiiral na ang email na ito.</string>
+    <string name="auth_sign_sign_up_failed">Nabigo ang paggawa ng account.</string>
+    <string name="auth_sign_in_required">Kinakailangan ang pag-login.</string>
+    <string name="auth_sign_in_required_detail">Kailangan mong mag-login para magamit ang Guild Mark AI Creation.</string>
+    <string name="auth_sign_in_required_purchased_list">Pagkatapos mag-log in, maaari mong suriin ang Guild Mark Symbol na iyong nilikha.</string>
+
+    <!-- info strings -->
+    <string name="info_change_password">Baguhin ang Password</string>
 
 </resources>

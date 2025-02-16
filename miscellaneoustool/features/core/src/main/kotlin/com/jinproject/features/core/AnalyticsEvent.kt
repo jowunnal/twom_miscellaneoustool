@@ -1,11 +1,11 @@
 package com.jinproject.features.core
 
-import com.google.firebase.analytics.ktx.ParametersBuilder
+import com.google.firebase.analytics.ParametersBuilder
 
 sealed interface AnalyticsEvent {
     val eventName: String
 
-    fun logEvent(block : ParametersBuilder)
+    fun logEvent(block: ParametersBuilder)
 
     data class StartAlarm(
         override val eventName: String = "start_alarm",
@@ -40,8 +40,8 @@ sealed interface AnalyticsEvent {
 
     data class CollectionSearchWord(
         override val eventName: String = "collection_search_word",
-        val word : String,
-    ): AnalyticsEvent {
+        val word: String,
+    ) : AnalyticsEvent {
         override fun logEvent(block: ParametersBuilder) {
             block.apply {
                 param(SEARCH_WORD, word)
@@ -49,7 +49,7 @@ sealed interface AnalyticsEvent {
         }
     }
 
-    data object DropListScreen: AnalyticsEvent {
+    data object DropListScreen : AnalyticsEvent {
         override val eventName: String
             get() = "drop_list_screen"
 
@@ -60,7 +60,7 @@ sealed interface AnalyticsEvent {
         override val eventName: String = "simulator_add_item",
         val itemName: String,
 
-    ) : AnalyticsEvent {
+        ) : AnalyticsEvent {
         override fun logEvent(block: ParametersBuilder) {
             block.apply {
                 param(ITEM_NAME, itemName)
@@ -82,7 +82,7 @@ sealed interface AnalyticsEvent {
         }
     }
 
-    data object GalleryScreen: AnalyticsEvent {
+    data object GalleryScreen : AnalyticsEvent {
         override val eventName: String
             get() = "gallery_screen"
 

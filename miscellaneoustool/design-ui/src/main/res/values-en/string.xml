@@ -58,12 +58,31 @@
     <string name="gold">Gold</string>
     <string name="textfield_hint">Enter text</string>
     <string name="total">Total</string>
+    <string name="empty">Empty</string>
+    <string name="verify">Verify</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="logout">Logout</string>
+    <string name="withdrawal">Withdrawal</string>
+    <string name="change_info">Change Information</string>
+    <string name="term">Terms of Service</string>
+    <string name="settings">Settings</string>
+    <string name="exit">Exit</string>
 
     <!-- Snackbar Message -->
     <string name="message_throw_no_such_element">The item has not found in Database</string>
     <string name="message_throw_exceptions">An error has occurred. Please try again.</string>
     <string name="message_success_applied">Has been applied successfully.</string>
     <string name="message_success_removed">Has been removed successfully.</string>
+
+    <!-- Activity Top Route -->
+    <string name="main_message_success_purchase">The product has been purchased.</string>
+    <string name="main_message_fail_purchase">Purchase has been failed.</string>
+    <string name="main_message_fail_unavailable">This product is not valid.</string>
+    <string name="main_message_fail_wrong">This is the wrong product.</string>
+    <string name="main_message_fail_cancel">You have canceled.</string>
+    <string name="main_message_fail_already_owned">You already own this product.</string>
+    <string name="main_message_fail_network">Failed due to a network error.</string>
 
     <!-- home strings -->
     <string name="home_collection">Collections</string>
@@ -107,7 +126,8 @@
     <string name="symbol_description_content">the converted image will be shown as an example.\nPlease note that the image may differ from the actual converted form.</string>
     <string name="symbol_footer">A small fee is charged per load for this product.\nYou can convert the loaded image to a smaller size and provide a preview to check if it is accurate.\nIf you like the loaded image, please proceed with the next process. \nThis product cannot be canceled after payment, so please decide carefully!
         \n\nThe developer does not collect any information about users.\nConvert images in the storage safely without worry.</string>
-    <string name="symbol_button_getImage">Load image</string>
+    <string name="symbol_button_getImage">Load Local image</string>
+    <string name="symbol_button_generateImage">Generate AI Image</string>
     <string name="symbol_permission_headline">Permission to read images has not been granted.</string>
     <string name="symbol_permission_content">If you do not accept permission, you cannot use the function.</string>
 
@@ -125,11 +145,49 @@
     <string name="symbol_guildMark_description">Kung aalis ka sa kasalukuyang screen, ipapakita ito bilang isang overlay.\nTiyaking tumanggap ng pahintulot na gumuhit sa iba pang mga app!</string>
 
     <string name="symbol_detail_appbar">Image Details</string>
+    <string name="symbol_ai_remain_token">Number of tokens remaining</string>
+    <string name="symbol_ai_dialog_purchase_token_header">Would you like to purchase tokens?</string>
+    <string name="symbol_ai_dialog_purchase_token_content">You must have a token to use the generative AI function.</string>
+    <string name="symbol_ai_dialog_purchase_token_yes">Yes, I will buy it.</string>
+
+    <string name="symbol_purchased_list">Purchase List</string>
 
     <!-- service strings -->
     <string name="service_overlay_running">The current time always view is running.</string>
 
     <!-- activity strings -->
     <string name="authority_alarm_failure">If you do not agree to the notification authority, you cannot use the alarm service.</string>
+
+    <!-- simulator strings -->
+    <string name="item_detail_require_level">Require Level</string>
+    <string name="item_detail_attack">Attack</string>
+    <string name="item_detail_speed">Speed</string>
+
+    <!-- auth strings -->
+    <string name="auth_sign_email">Enter your email</string>
+    <string name="auth_sign_password">Enter your password</string>
+    <string name="auth_sign_password_error">The password must be at least 8 characters long and contain lower case alphabet, number, and letter (at least one of !, @, $, *, or _).</string>
+    <string name="auth_sign_email_code">Enter the code you received</string>
+    <string name="auth_sign_email_error">Email format is invalid.</string>
+    <string name="auth_sign_email_code_error">The code is invalid</string>
+    <string name="auth_sign_no_account">Don\'t have account?</string>
+    <string name="auth_sign_create_account">Create Account</string>
+    <string name="auth_sign_repeat_password">Repeat Password</string>
+    <string name="auth_sign_repeat_password_error">Password is not same.</string>
+    <string name="auth_sign_email_verify">Authenticate your email</string>
+    <string name="auth_sign_verify_authentication">Verifying authentication</string>
+    <string name="auth_sign_in_success">Login was successful.</string>
+    <string name="auth_sign_in_failed">Login has failed.</string>
+    <string name="auth_sign_email_not_verified">Email verification has failed.</string>
+    <string name="auth_sign_verify_authentication_on_email">Please open the email and verify.</string>
+    <string name="auth_sign_send_email_verification">A verification email has been sent.</string>
+    <string name="auth_sign_email_already_exists">This email already exists.</string>
+    <string name="auth_sign_sign_up_failed">Creating account has failed.</string>
+    <string name="auth_sign_in_required">Login has been required.</string>
+    <string name="auth_sign_in_required_detail">You need to login to use Guild Mark AI Creation.</string>
+    <string name="auth_sign_in_required_purchased_list">After logging in, you can check the Guild Mark Symbol you created.</string>
+
+    <!-- info strings -->
+    <string name="info_change_password">Change Password</string>
 
 </resources>

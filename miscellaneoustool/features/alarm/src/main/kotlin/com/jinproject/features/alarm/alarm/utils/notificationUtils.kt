@@ -14,6 +14,7 @@ import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
 import com.jinproject.design_ui.R
 import com.jinproject.features.alarm.alarm.service.ReAlarmService
+import com.jinproject.features.core.utils.getImageUri
 
 @SuppressLint("DiscouragedApi")
 internal fun NotificationManager.sendNotification(
@@ -49,7 +50,7 @@ internal fun NotificationManager.sendNotification(
     )
 
     val assetManager = context.assets
-    val inputStream = assetManager.open("img/monster/$img.png")
+    val inputStream = assetManager.open(getImageUri(prefix = "monster", imgName = img))
     val bitMap = BitmapFactory.decodeStream(inputStream)
 
     val builder = NotificationCompat.Builder(context, "TwomBossAlarm")

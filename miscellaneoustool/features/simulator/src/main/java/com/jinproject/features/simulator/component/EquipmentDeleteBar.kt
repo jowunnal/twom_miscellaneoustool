@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,11 +25,11 @@ import androidx.compose.ui.draganddrop.DragAndDropTarget
 import androidx.compose.ui.draganddrop.mimeTypes
 import androidx.compose.ui.draganddrop.toAndroidDragEvent
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jinproject.design_compose.component.text.DescriptionMediumText
 import com.jinproject.design_compose.component.HorizontalSpacer
+import com.jinproject.design_compose.component.image.DefaultPainterImage
+import com.jinproject.design_compose.component.text.DescriptionMediumText
 import com.jinproject.design_compose.theme.MiscellaneousToolColor
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.features.simulator.model.Equipment
@@ -94,8 +93,8 @@ internal fun EquipmentDeleteBar(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
-            Icon(
-                painter = painterResource(id = com.jinproject.design_ui.R.drawable.ic_delete),
+            DefaultPainterImage(
+                resId = com.jinproject.design_ui.R.drawable.ic_delete,
                 contentDescription = "Delete OwnedItem Icon",
             )
             HorizontalSpacer(width = 8.dp)

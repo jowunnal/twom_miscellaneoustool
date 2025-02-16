@@ -8,7 +8,7 @@ data class CollectionUiState(
     val itemCollections: ImmutableList<ItemCollection>,
     val collectionFilters: ImmutableList<CollectionFilter>,
 ) {
-    fun filter(isFilterMode: Boolean): ImmutableList<ItemCollection> {
+    private fun filter(isFilterMode: Boolean): ImmutableList<ItemCollection> {
         val filteredIds = collectionFilters.map { it.id }
 
         return if (isFilterMode)
@@ -19,14 +19,14 @@ data class CollectionUiState(
             }.toImmutableList()
     }
 
-    fun filterBySearchWord(s: CharSequence, isFilterMode: Boolean): ImmutableList<ItemCollection> {
+    fun filterBySearchWord(s: String, isFilterMode: Boolean): ImmutableList<ItemCollection> {
         return filter(isFilterMode).runIf(s.isNotBlank()) {
             filter { collection ->
                 collection.items.firstNotNullOfOrNull { item ->
-                    item.name.contains(s)
+                    item.name.contains(s, true)
                 } == true ||
                         collection.stats.firstNotNullOfOrNull { stat ->
-                            stat.key.contains(s)
+                            stat.key.contains(s, true)
                         } == true
             }.toImmutableList()
         }

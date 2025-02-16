@@ -6,9 +6,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.jinproject.features.collection.collectionNavGraph
+import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.core.compose.Route
 import com.jinproject.features.core.compose.TopLevelRoute
-import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.droplist.dropListNavGraph
 import kotlinx.serialization.Serializable
 
@@ -27,6 +27,7 @@ sealed class HomeRoute: Route {
 fun NavGraphBuilder.homeNavGraph(
     navigateToDropList: (String) -> Unit,
     navigateToCollection: (Int?) -> Unit,
+    navigateToAlarm: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit,
     popBackStackIfCan: () -> Unit,
 ) {
@@ -37,6 +38,7 @@ fun NavGraphBuilder.homeNavGraph(
             HomeScreen(
                 navigateToDropList = navigateToDropList,
                 navigateToCollection = navigateToCollection,
+                navigateToAlarm = navigateToAlarm,
             )
         }
 

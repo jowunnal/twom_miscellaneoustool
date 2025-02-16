@@ -47,14 +47,16 @@ fun HeadlineText(
     modifier: Modifier = Modifier,
     text: String,
     maxLines: Int = 1,
-    color: Color = MaterialTheme.colorScheme.onBackground
+    color: Color = MaterialTheme.colorScheme.onBackground,
+    textAlign: TextAlign = TextAlign.Start,
 ) {
     DefaultText(
         modifier = modifier,
         text = text,
         style = MaterialTheme.typography.headlineSmall,
         color = color,
-        maxLines = maxLines
+        maxLines = maxLines,
+        textAlign = textAlign,
     )
 }
 
@@ -62,7 +64,8 @@ fun HeadlineText(
 fun DescriptionLargeText(
     modifier: Modifier = Modifier,
     text: String,
-    color: Color = MaterialTheme.colorScheme.onBackground
+    color: Color = MaterialTheme.colorScheme.onBackground,
+    textAlign: TextAlign = TextAlign.Start,
 ) {
     DefaultText(
         modifier = modifier,
@@ -71,6 +74,7 @@ fun DescriptionLargeText(
         overflow = Ellipsis,
         color = color,
         maxLines = Int.MAX_VALUE,
+        textAlign = textAlign,
     )
 }
 
@@ -94,13 +98,14 @@ fun DescriptionMediumText(
 fun DescriptionSmallText(
     modifier: Modifier = Modifier,
     text: String,
+    style: TextStyle = MaterialTheme.typography.bodySmall,
     color: Color = MaterialTheme.colorScheme.onBackground,
     textAlign: TextAlign = TextAlign.Start,
 ) {
     DefaultText(
         modifier = modifier,
         text = text,
-        style = MaterialTheme.typography.bodySmall,
+        style = style,
         overflow = Ellipsis,
         color = color,
         maxLines = Int.MAX_VALUE,

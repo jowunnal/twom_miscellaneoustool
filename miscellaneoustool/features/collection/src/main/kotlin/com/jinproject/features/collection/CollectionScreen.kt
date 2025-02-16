@@ -3,6 +3,8 @@ package com.jinproject.features.collection
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -20,10 +22,12 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.jinproject.design_compose.component.DefaultLayout
+import com.jinproject.design_compose.component.layout.DefaultLayout
 import com.jinproject.design_compose.component.bar.BackButtonSearchAppBar
+import com.jinproject.design_compose.component.lazyList.ScrollableLayout
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.features.collection.component.CollectionDetail
 import com.jinproject.features.collection.component.CollectionList
@@ -63,7 +67,6 @@ private fun CollectionScreen(
     onNavigateBack: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit,
 ) {
-
     val navigator = rememberListDetailPaneScaffoldNavigator<ItemCollection>()
 
     BackHandler(navigator.canNavigateBack()) {
@@ -88,9 +91,15 @@ private fun CollectionScreen(
         snapshotFlow {
             textFiledState.text
         }.debounce(300).distinctUntilChanged().collectLatest {
-            localAnalyticsLoggingEvent(com.jinproject.features.core.AnalyticsEvent.CollectionSearchWord(word = it.toString()))
+            localAnalyticsLoggingEvent(
+                com.jinproject.features.core.AnalyticsEvent.CollectionSearchWord(
+                    word = it.toString()
+                )
+            )
         }
     }
+
+    val lazyListState = rememberLazyListState()
 
     ListDetailPaneScaffold(
         modifier = Modifier
@@ -102,13 +111,20 @@ private fun CollectionScreen(
             AnimatedPane {
                 DefaultLayout(topBar = {
                     BackButtonSearchAppBar(
+                        modifier = Modifier.padding(end = 8.dp),
                         textFieldState = textFiledState,
-                        onBackClick = onNavigateBack,
+                        onBackClick = {
+                            if (isFilterMode)
+                                isFilterMode = false
+                            else
+                                onNavigateBack()
+                        },
                     )
                 }) {
                     CollectionList(
                         collectionUiState = collectionUiState,
                         searchCharSequence = textFiledState.text,
+                        lazyListState = lazyListState,
                         isFilterMode = isFilterMode,
                         triggerFilterMode = { bool -> isFilterMode = bool },
                         navigateToDetail = { item ->

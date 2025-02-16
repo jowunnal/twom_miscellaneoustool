@@ -3,6 +3,7 @@ package com.jinproject.design_compose.component.button
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,13 +21,18 @@ import com.jinproject.design_ui.R
 fun TextButton(
     text: String,
     modifier: Modifier = Modifier,
+    contentPaddingValues: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+    shape: RoundedCornerShape = RoundedCornerShape(100.dp),
+    enabled: Boolean = true,
     onClick: () -> Unit,
 ) {
     DefaultButton(
         modifier = modifier,
         backgroundColor = MaterialTheme.colorScheme.primary,
-        contentPaddingValues = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        contentPaddingValues = contentPaddingValues,
+        shape = shape,
         onClick = onClick,
+        enabled = enabled,
     ) {
         Text(
             text = text,

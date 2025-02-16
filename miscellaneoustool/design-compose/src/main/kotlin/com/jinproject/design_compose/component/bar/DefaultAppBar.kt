@@ -50,8 +50,8 @@ fun OneButtonAppBar(
 
 @Composable
 fun BackButtonTitleAppBar(
+    title: String,
     onBackClick: () -> Unit,
-    title: String
 ) {
     DefaultAppBar(
         content = {

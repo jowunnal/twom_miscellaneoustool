@@ -20,7 +20,7 @@ import com.jinproject.data.datasource.cache.database.entity.Timer
 
 @Database(
     entities = [Book::class, Item::class, ItemInfo::class, Equipment::class, Monster::class, Maps::class, Stat::class, MonsDropItem::class, MonsLiveAtMap::class, RegisterItemToBook::class, Timer::class],
-    version = 4,
+    version = 5,
     exportSchema = true,
 )
 abstract class BookDatabase : RoomDatabase() {

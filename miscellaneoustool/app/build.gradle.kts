@@ -11,8 +11,8 @@ android {
     defaultConfig {
         applicationId = "com.jinproject.twomillustratedbook"
         targetSdk = 34
-        versionCode = 61
-        versionName = "2.3.3"
+        versionCode = 68
+        versionName = "2.4.0"
     }
 
     buildFeatures {
@@ -23,16 +23,28 @@ android {
 
     buildTypes {
         debug {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             manifestPlaceholders["ADMOB_APP_ID"] = getLocalKey("adMob.test.appId")
             buildConfigField("String","ADMOB_REWARD_ID",getLocalKey("adMob.test.rewardId"))
             buildConfigField("String", "ADMOB_UNIT_ID", getLocalKey("adMob.test.unitId"))
+            buildConfigField("Boolean", "IS_DEBUG_MODE", "true")
         }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             manifestPlaceholders["ADMOB_APP_ID"] = getLocalKey("adMob.real.appId")
             buildConfigField("String","ADMOB_REWARD_ID",getLocalKey("adMob.real.rewardId"))
             buildConfigField("String", "ADMOB_UNIT_ID", getLocalKey("adMob.real.unitId"))
+            buildConfigField("Boolean", "IS_DEBUG_MODE", "false")
         }
     }
 }
@@ -54,6 +66,8 @@ dependencies {
     implementation(project(":design-compose"))
     implementation(project(":design-ui"))
     implementation(project(":features:home"))
+    implementation(project(":features:auth"))
+    implementation(project(":features:info"))
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
@@ -67,4 +81,5 @@ dependencies {
 
     implementation(libs.bundles.billing)
     implementation(libs.bundles.playInAppUpdate)
+    implementation(libs.bundles.square)
 }
