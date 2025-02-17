@@ -188,7 +188,7 @@ private fun PreviewScreen(
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
 
-        VerticalWeightSpacer(float = 1f)
+        VerticalSpacer(height = 30.dp)
 
         TextButton(
             text = stringResource(id = R.string.convert),
