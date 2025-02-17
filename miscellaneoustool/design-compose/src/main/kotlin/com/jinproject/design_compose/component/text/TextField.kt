@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -124,12 +125,14 @@ fun OutlineVerifyTextField(
     enabled: Boolean = true,
     content: @Composable RowScope.() -> Unit = {},
 ) {
+    val error by rememberUpdatedState(newValue = isError && textFieldState.text.isNotBlank())
+
     Column(modifier) {
         DefaultTextField(
             modifier = Modifier,
             textFieldState = textFieldState,
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-            borderColor = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline,
+            borderColor = if (error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline,
             textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface),
             cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
             lineLimits = TextFieldLineLimits.MultiLine(),
@@ -139,7 +142,7 @@ fun OutlineVerifyTextField(
             enabled = enabled,
             content = content,
         )
-        if (isError)
+        if (error)
             DescriptionSmallText(
                 text = errorMessage,
                 modifier = Modifier
@@ -187,7 +190,7 @@ fun DefaultTextField(
                 shape = RoundedCornerShape(10.dp),
             )
             .graphicsLayer {
-                alpha = if(enabled) 1f else 0.3f
+                alpha = if (enabled) 1f else 0.3f
             }
             .onFocusChanged { focusState -> isFocused = focusState.isFocused },
         state = textFieldState,
@@ -275,7 +278,10 @@ class TenThousandSeparatorOutputTransformation(
     }
 }
 
-class PasswordOutputTransformation(private val mask: Char = '\u2022', private val hasFocus: Boolean = false) : OutputTransformation {
+class PasswordOutputTransformation(
+    private val mask: Char = '\u2022',
+    private val hasFocus: Boolean = false
+) : OutputTransformation {
     override fun TextFieldBuffer.transformOutput() {
         if (!hasFocus)
             replace(0, length, mask.toString().repeat(length))

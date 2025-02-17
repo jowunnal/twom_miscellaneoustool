@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ExitToApp
 import androidx.compose.material.icons.filled.AccountCircle
@@ -14,17 +14,13 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,13 +29,10 @@ import com.android.billingclient.api.ProductDetails
 import com.jinproject.design_compose.component.DefaultDialog
 import com.jinproject.design_compose.component.DialogState
 import com.jinproject.design_compose.component.HorizontalDivider
-import com.jinproject.design_compose.component.VerticalSpacer
-import com.jinproject.design_compose.component.button.TextButton
 import com.jinproject.design_compose.component.button.clickableAvoidingDuplication
 import com.jinproject.design_compose.component.getShownDialogState
 import com.jinproject.design_compose.component.layout.DefaultLayout
 import com.jinproject.design_compose.component.rememberDialogState
-import com.jinproject.design_compose.component.text.DescriptionLargeText
 import com.jinproject.design_compose.component.text.DescriptionMediumText
 import com.jinproject.design_compose.component.text.HeadlineText
 import com.jinproject.design_compose.component.text.auth.PasswordField
@@ -49,7 +42,6 @@ import com.jinproject.features.core.AuthManager
 import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.BillingModule.Product
 import com.jinproject.features.core.base.item.SnackBarMessage
-import com.jinproject.features.core.utils.findActivity
 import com.jinproject.features.info.state.InfoUiState
 import com.jinproject.features.info.state.rememberInfoUiState
 import kotlinx.coroutines.CoroutineScope
@@ -108,7 +100,10 @@ private fun InfoScreen(
 
     DefaultDialog(
         dialogState = dialogState,
-        onDismissRequest = { dialogState.changeVisibility(false) },
+        onDismissRequest = {
+            infoUiState.pw.textFieldState.clearText()
+            dialogState.changeVisibility(false)
+        },
     ) {
         PasswordField(authTextFieldState = infoUiState.pw)
     }
@@ -135,6 +130,7 @@ private fun InfoScreen(
                                 infoUiState.checkUserPassword {
                                     navigateRoute(InfoRoute.InfoChange)
                                 }
+                                infoUiState.pw.textFieldState.clearText()
                             }
                         },
                     )
@@ -161,6 +157,7 @@ private fun InfoScreen(
                             coroutineScope.launch {
                                 infoUiState.withdrawal()
                                 infoUiState.changeIsActive(false)
+                                infoUiState.pw.textFieldState.clearText()
                             }
                         },
                     )

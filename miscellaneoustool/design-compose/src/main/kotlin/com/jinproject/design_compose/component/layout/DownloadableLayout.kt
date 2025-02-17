@@ -22,6 +22,7 @@ import com.jinproject.design_compose.component.pushRefresh.MTProgressIndicatorRo
 @Stable
 sealed interface DownloadableUiState {
     data object Loading : DownloadableUiState
+
     @Stable
     data class Exception(val t: Throwable) : DownloadableUiState
 }
@@ -73,10 +74,7 @@ inline fun DownloadableLayout(
                     Column(
                         modifier = Modifier.then(
                             if (verticalScrollable)
-                                Modifier.verticalScroll(
-                                    rememberScrollState(),
-                                    enabled = verticalScrollable,
-                                )
+                                Modifier.verticalScroll(rememberScrollState())
                             else
                                 Modifier
                         )

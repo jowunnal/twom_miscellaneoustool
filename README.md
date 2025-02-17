@@ -1,5 +1,5 @@
 <a href="https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook">
-	<img src="https://img.shields.io/badge/PlayStore-v2.3.3-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
+	<img src="https://img.shields.io/badge/PlayStore-v2.4.0-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
 </a>
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.0.10-blue.svg)](https://kotlinlang.org)
@@ -27,6 +27,7 @@
 - **현재시간 항상 보기 기능** : 사용자는 모바일 디바이스 화면 상단에 현재시간을 원하는 폰트 크기와 위치시킨뒤 몬스터의 재생성 시간과 함께 확인할 수 있다.
 - **길드 마크 생성 기능** : 사용자가 갖고 있는 이미지 파일을 가져와 갤러리 형태로 노출하고, 사용자가 임의로 선택하여 해당 이미지를 12*12 픽셀로 변환할 수 있다.
 - **강화 시뮬레이터** : 사용자는 랜덤 수치의 스텟을 가진 무기, 방어구류 아이템을 획득할 수 있고, 보유한 아이템들 중에 선택하여 강화하거나 제거할 수 있다.
+- **AI 길드 마크 이미지 생성 기능** : Dalle3 API 활용하여, 로그인 한 유저가 최적화된 프롬프트로 길드 마크에 이용할 이미지를 생성할 수 있다.
 
 # Stacks
 
@@ -37,11 +38,12 @@
 | Architecture | Clean Architecture |
 | Design Pattern | MVVM |
 | Android Component | Activity, Service, BroadcastReceiver |
-| Jetpack | Lifecycle, Navigation(Compose), AlarmManager, Databinding |
+| Jetpack | Lifecycle, Navigation(Compose), AlarmManager |
 | Asynchronous | Kotlinx.Coroutines, Kotlinx.Coroutines.Flow |
 | Dependency Injection | Hilt |
 | Data | Room, DataStore(proto3) |
-| Google | InAppPurchase, InAppUpdate, Admob, Firebase-Analytics |
+| Google | InAppPurchase, InAppUpdate, Admob |
+| Firebase | Firebase-Analytics, Firebase-Storage, Firebase-RealtimeDatabase, Firebase-Crashlytics |
 | Unit Test | Junit, Kotest, mockk |
 
 # 개발 기간

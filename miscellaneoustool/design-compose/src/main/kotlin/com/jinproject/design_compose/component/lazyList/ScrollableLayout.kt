@@ -3,7 +3,6 @@ package com.jinproject.design_compose.component.lazyList
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.gestures.scrollBy
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.ColumnScope
@@ -32,20 +31,17 @@ fun ColumnScope.ScrollableLayout(
     scrollableState: ScrollableState = rememberLazyListState(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     isUpperScrollActive: Boolean,
+    timeScheduler: TimeScheduler = rememberTimeScheduler(),
+    scrollBarState: ScrollBarState = rememberScrollBarState(
+        viewHeight = viewHeight,
+        isUpperScrollActive = isUpperScrollActive,
+        startFromTop = startFromTop,
+    ),
     content: @Composable BoxWithConstraintsScope.() -> Unit,
 ) {
     require(scrollableState is LazyListState || scrollableState is LazyGridState) {
         "LazyList and LazyGrid only granted"
     }
-
-    val timeScheduler = rememberTimeScheduler()
-
-    val scrollBarState = rememberScrollBarState(
-        viewHeight = viewHeight,
-        timer = timeScheduler,
-        isUpperScrollActive = isUpperScrollActive,
-        startFromTop = startFromTop,
-    )
 
     val upperScrollAlpha by animateFloatAsState(
         targetValue = if (timeScheduler.isRunning) 1f else 0f,
@@ -56,7 +52,11 @@ fun ColumnScope.ScrollableLayout(
         modifier = Modifier
             .fillMaxWidth()
             .weight(1f)
-            .addScrollBarNestedScrollConnection(scrollBarState = scrollBarState),
+            .addScrollBarNestedScrollConnection(
+                scrollBarState = scrollBarState,
+                setTime = timeScheduler::setTime,
+                cancel = timeScheduler::cancel,
+            ),
     ) {
 
         content()
@@ -84,6 +84,7 @@ fun ColumnScope.ScrollableLayout(
         if (isUpperScrollActive)
             VerticalScrollBar(
                 scrollBarState = scrollBarState,
+                timeScheduler = timeScheduler,
                 scrollToItem = { amount ->
                     scrollableState.scrollBy(amount)
                 },
