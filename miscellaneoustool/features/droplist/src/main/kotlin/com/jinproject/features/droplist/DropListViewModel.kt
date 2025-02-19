@@ -15,12 +15,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -28,13 +26,13 @@ import javax.inject.Inject
 data class DropListUiState(
     val maps: ImmutableList<MapState>,
     val monsters: ImmutableList<MonsterState>,
-    val selectedMap: MapState,
+    val selectedMap: MapState?,
 ) {
     companion object {
         fun getInitValue() = DropListUiState(
             maps = persistentListOf(),
             monsters = persistentListOf(),
-            selectedMap = MapState.getInitValue(),
+            selectedMap = null,
         )
     }
 }
@@ -45,12 +43,10 @@ class DropListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val _selectedMap: MutableStateFlow<MapState> = MutableStateFlow(MapState.getInitValue())
+    private val _selectedMap: MutableStateFlow<String?> =
+        MutableStateFlow(savedStateHandle.toRoute<DropListRoute.MapList>().mapName)
 
-    fun selectMap(map: MapState) = _selectedMap.update { map }
-
-    private val _dropListArgument: MutableStateFlow<String?> = MutableStateFlow(null)
-    val dropListArgument get() = _dropListArgument.asStateFlow()
+    fun selectMap(map: MapState) = _selectedMap.update { map.name }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val dropListUiState: StateFlow<DropListUiState> =
@@ -62,23 +58,23 @@ class DropListViewModel @Inject constructor(
                 )
             }.toImmutableList()
         }.flatMapLatest { maps ->
-            _selectedMap.mapLatest { map ->
-                val monsters =
-                    dropListRepository.getMonsterListFromMap(map.name).map { monsterModelList ->
+            _selectedMap.mapLatest { mapName ->
+                val monsters = mapName?.let {
+                    dropListRepository.getMonsterListFromMap(mapName).map { monsterModelList ->
                         monsterModelList.map { monsterModel ->
                             monsterModel.toMonsterState()
                         }.toImmutableList()
                     }.first()
+                } ?: persistentListOf()
+
+                val selectedMap = maps.find { it.name == mapName }
 
                 DropListUiState(
                     maps = maps,
                     monsters = monsters,
-                    selectedMap = map,
+                    selectedMap = selectedMap,
                 )
             }
-        }.onEach {
-            val mapName = savedStateHandle.toRoute<DropListRoute.MapList>().mapName
-            _dropListArgument.update { mapName }
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),

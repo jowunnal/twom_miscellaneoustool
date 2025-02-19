@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,9 +12,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.core.util.doOnLocaleLanguage
-import com.jinproject.design_compose.component.layout.DefaultLayout
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.HorizontalSpacer
 import com.jinproject.design_compose.component.HorizontalWeightSpacer
@@ -42,6 +38,7 @@ import com.jinproject.design_compose.component.button.DefaultIconButton
 import com.jinproject.design_compose.component.button.clickableAvoidingDuplication
 import com.jinproject.design_compose.component.button.combinedClickableAvoidingDuplication
 import com.jinproject.design_compose.component.image.DefaultPainterImage
+import com.jinproject.design_compose.component.layout.DefaultLayout
 import com.jinproject.design_compose.component.paddingvalues.MiscellanousToolPaddingValues
 import com.jinproject.design_compose.component.text.DescriptionAnnotatedSmallText
 import com.jinproject.design_compose.component.text.DescriptionLargeText
@@ -57,7 +54,7 @@ import java.time.format.TextStyle
 @Composable
 internal fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToDropList: (String) -> Unit,
+    navigateToDropList: (String?) -> Unit,
     navigateToCollection: (Int?) -> Unit,
     navigateToAlarm: () -> Unit,
 ) {
@@ -75,7 +72,7 @@ internal fun HomeScreen(
 private fun HomeScreen(
     uiState: HomeUiState,
     context: Context = LocalContext.current,
-    navigateToDropList: (String) -> Unit,
+    navigateToDropList: (String?) -> Unit,
     navigateToCollection: (Int?) -> Unit,
     navigateToAlarm: () -> Unit,
 ) {
@@ -87,7 +84,7 @@ private fun HomeScreen(
         HomeMenu(
             header = stringResource(id = R.string.home_droplist),
             onClickHeader = {
-                navigateToDropList("")
+                navigateToDropList(null)
             },
         ) {
             LazyRow(
@@ -238,7 +235,7 @@ private fun HomeMenu(
             HorizontalWeightSpacer(float = 1f)
             DefaultIconButton(
                 icon = R.drawable.ic_arrow_right_small,
-                onClick = { onClickHeader() },
+                onClick = onClickHeader,
                 iconSize = 24.dp
             )
         }

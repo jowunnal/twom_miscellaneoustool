@@ -6,7 +6,7 @@ import com.jinproject.features.droplist.state.MapState
 import com.jinproject.features.droplist.state.MonsterState
 import kotlinx.collections.immutable.persistentListOf
 
-class DropListUiStatePreviewParameter: PreviewParameterProvider<DropListUiState> {
+class DropListUiStatePreviewParameter : PreviewParameterProvider<DropListUiState> {
     override val values: Sequence<DropListUiState>
         get() = sequenceOf(
             DropListUiState(

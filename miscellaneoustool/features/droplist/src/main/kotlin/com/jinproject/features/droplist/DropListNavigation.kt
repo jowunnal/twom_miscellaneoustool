@@ -7,9 +7,9 @@ import com.jinproject.features.core.compose.Route
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class DropListRoute: Route {
+sealed class DropListRoute : Route {
     @Serializable
-    data class MapList(val mapName: String?): DropListRoute()
+    data class MapList(val mapName: String?) : DropListRoute()
 }
 
 fun NavGraphBuilder.dropListNavGraph() {

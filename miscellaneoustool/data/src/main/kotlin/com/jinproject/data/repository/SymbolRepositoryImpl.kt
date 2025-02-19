@@ -3,7 +3,7 @@ package com.jinproject.data.repository
 import com.jinproject.data.ChatMessage
 import com.jinproject.data.datasource.cache.CollectionDataStorePreferences
 import com.jinproject.data.datasource.remote.GenerateImageDataSource
-import com.jinproject.data.di.ImageDownloadManager
+import com.jinproject.data.manager.ImageDownloadManager
 import com.jinproject.domain.model.Message
 import com.jinproject.domain.repository.SymbolRepository
 import kotlinx.coroutines.flow.Flow

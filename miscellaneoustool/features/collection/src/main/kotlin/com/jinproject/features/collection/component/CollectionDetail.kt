@@ -19,6 +19,8 @@ import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -77,6 +79,17 @@ internal fun CollectionDetail(
         addAll(collection.items.map { it.price.toString() })
     }
 
+    val calculatedItemPrices by remember {
+        derivedStateOf {
+            prices.mapIndexed { idx, price ->
+                if(price.isNotBlank())
+                    collection.items[idx].count * price.toLong()
+                else
+                    0L
+            }
+        }
+    }
+
     DefaultLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -133,7 +146,7 @@ internal fun CollectionDetail(
                 modifier = Modifier,
             )
             VerticalSpacer(height = 5.dp)
-            collection.items.forEach { item ->
+            collection.items.forEachIndexed { idx, item ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -145,7 +158,7 @@ internal fun CollectionDetail(
                         color = MaterialTheme.colorScheme.surfaceVariant
                     )
                     DescriptionSmallText(
-                        text = "${item.price * item.count} ${stringResource(id = R.string.gold)}",
+                        text = "${calculatedItemPrices[idx]} ${stringResource(id = R.string.gold)}",
                         modifier = Modifier.width(itemWidthDp),
                         color = MaterialTheme.colorScheme.surfaceVariant
                     )
@@ -159,7 +172,7 @@ internal fun CollectionDetail(
                     .padding(start = itemWidthDp, top = 2.dp, bottom = 2.dp)
             ) {
                 DescriptionSmallText(
-                    text = "${collection.items.sumOf { it.price * it.count }} ${stringResource(id = R.string.gold)}",
+                    text = "${calculatedItemPrices.sum()} ${stringResource(id = R.string.gold)}",
                     modifier = Modifier.width(itemWidthDp),
                     color = MaterialTheme.colorScheme.surfaceVariant,
                 )
