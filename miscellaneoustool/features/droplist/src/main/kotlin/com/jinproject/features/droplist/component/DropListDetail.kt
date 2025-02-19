@@ -14,9 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.jinproject.design_compose.component.bar.BackButtonTitleAppBar
 import com.jinproject.design_compose.component.HorizontalDividerItem
 import com.jinproject.design_compose.component.HorizontalSpacer
+import com.jinproject.design_compose.component.bar.BackButtonTitleAppBar
 import com.jinproject.design_compose.component.paddingvalues.MiscellanousToolPaddingValues
 import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
@@ -71,7 +71,6 @@ internal fun DropListDetail(
                 )
             }
         }
-
     }
 }
 
@@ -84,6 +83,6 @@ private fun DropListDetailPreview(
     DropListDetail(
         monsterListState = dropListUiState.monsters,
         onNavigateBack = {},
-        mapName = dropListUiState.selectedMap.name,
+        mapName = dropListUiState.maps.first().name,
     )
 }

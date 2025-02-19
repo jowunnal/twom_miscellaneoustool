@@ -54,11 +54,11 @@ private fun MonsterPreview(
     @PreviewParameter(DropListUiStatePreviewParameter::class)
     dropListUiState: DropListUiState,
 ) = MiscellaneousToolTheme {
-   Column {
-       Monster(
-           modifier = Modifier,
-           imgName = dropListUiState.selectedMap.imgName,
-           header = dropListUiState.selectedMap.name,
-       )
-   }
+    Column {
+        Monster(
+            modifier = Modifier,
+            imgName = dropListUiState.maps.first().imgName,
+            header = dropListUiState.maps.first().name,
+        )
+    }
 }

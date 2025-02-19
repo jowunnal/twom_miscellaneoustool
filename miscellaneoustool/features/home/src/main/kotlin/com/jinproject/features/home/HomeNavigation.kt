@@ -25,7 +25,7 @@ sealed class HomeRoute: Route {
 }
 
 fun NavGraphBuilder.homeNavGraph(
-    navigateToDropList: (String) -> Unit,
+    navigateToDropList: (String?) -> Unit,
     navigateToCollection: (Int?) -> Unit,
     navigateToAlarm: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit,

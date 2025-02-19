@@ -1,5 +1,6 @@
 package com.jinproject.features.droplist
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +14,7 @@ import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaf
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -30,20 +32,16 @@ internal fun MapListScreen(
     viewModel: DropListViewModel = hiltViewModel(),
 ) {
     val dropListUiState by viewModel.dropListUiState.collectAsStateWithLifecycle()
-    val dropListArgument by viewModel.dropListArgument.collectAsStateWithLifecycle()
 
     MapListScreen(
-        dropListArgument = dropListArgument,
         dropListUiState = dropListUiState,
         selectMap = viewModel::selectMap,
-
     )
 }
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 private fun MapListScreen(
-    dropListArgument: String?,
     dropListUiState: DropListUiState,
     selectMap: (MapState) -> Unit,
 ) {
@@ -56,9 +54,9 @@ private fun MapListScreen(
 
     val localAnalyticsLoggingEvent = LocalAnalyticsLoggingEvent.current
 
-    LaunchedEffect(key1 = dropListArgument) {
-        dropListArgument?.let { mapName ->
-            dropListUiState.maps.find { it.name == mapName }?.let { mapState ->
+    LaunchedEffect(key1 = dropListUiState.selectedMap) {
+        if (dropListUiState.selectedMap != null) {
+            dropListUiState.maps.find { it.name == dropListUiState.selectedMap.name }?.let { mapState ->
                 navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, mapState)
             }
         }
@@ -107,7 +105,6 @@ private fun MapListScreenPreview(
     dropListUiState: DropListUiState,
 ) = PreviewMiscellaneousToolTheme {
     MapListScreen(
-        dropListArgument = null,
         dropListUiState = dropListUiState,
         selectMap = {},
     )

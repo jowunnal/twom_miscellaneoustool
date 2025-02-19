@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun BoxWithConstraintsScope.VerticalScrollBar(
     scrollBarState: ScrollBarState,
+    timeScheduler: TimeScheduler,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     density: Density = LocalDensity.current,
     upperScrollAlpha: Float,
@@ -70,7 +71,11 @@ fun BoxWithConstraintsScope.VerticalScrollBar(
                 detectVerticalDragGestures { change, dragAmount ->
                     change.consume()
 
-                    scrollBarState.onScroll(-dragAmount / (maxHeight) * scrollBarState.threshold)
+                    scrollBarState.onScroll(
+                        delta = -dragAmount / (maxHeight) * scrollBarState.threshold,
+                        setTime = timeScheduler::setTime,
+                        cancel = timeScheduler::cancel,
+                    )
 
                     coroutineScope.launch {
                         scrollToItem(dragAmount / (maxHeight) * scrollBarState.threshold)
@@ -98,18 +103,24 @@ fun BoxWithConstraintsScope.VerticalScrollBar(
 
 fun Modifier.addScrollBarNestedScrollConnection(
     scrollBarState: ScrollBarState,
+    setTime: () -> Unit,
+    cancel: () -> Unit,
 ) = this.nestedScroll(
     ScrollBarNestedScrollConnection(
+        setTime = setTime,
+        cancel = cancel,
         onScroll = scrollBarState::onScroll,
     )
 )
 
 class ScrollBarNestedScrollConnection(
-    private val onScroll: (Float) -> Unit,
+    private val setTime: () -> Unit,
+    private val cancel: () -> Unit,
+    private val onScroll: (Float, () -> Unit, () -> Unit) -> Unit,
 ) : NestedScrollConnection {
     override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
 
-        onScroll(available.y)
+        onScroll(available.y, setTime, cancel)
 
         return Offset.Zero
     }
@@ -122,11 +133,11 @@ private fun PreviewVerticalScrollBar() = PreviewMiscellaneousToolTheme {
         VerticalScrollBar(
             scrollBarState = rememberScrollBarState(
                 viewHeight = maxHeight.value,
-                timer = TimeScheduler(rememberCoroutineScope()),
                 isUpperScrollActive = true,
             ).apply {
                 this.changeOffset(maxHeight.value)
             },
+            timeScheduler = TimeScheduler(rememberCoroutineScope()),
             scrollToItem = {},
             upperScrollAlpha = 1f,
         )
