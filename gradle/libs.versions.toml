@@ -48,7 +48,6 @@ protobufPlugin = "0.9.4"
 
 # Gradle Plugin
 gradle-android = { group = "com.android.tools.build", name = "gradle", version.ref = "androidStudioGradlePlugin" }
-gradle-androidx-navigation-safe-args = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navigation" }
 gradle-google-devtools-ksp = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "kotlinKsp" }
 gradle-google-gms-google-services = { module = "com.google.gms:google-services", version.ref = "gmsGoogleServicePlugin" }
 gradle-google-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsPlugin" }

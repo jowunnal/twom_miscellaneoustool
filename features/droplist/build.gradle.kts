@@ -1,6 +1,5 @@
 plugins {
     id("jinProject.android.feature")
-    id("jinProject.android.safeArgs")
 }
 
 android {

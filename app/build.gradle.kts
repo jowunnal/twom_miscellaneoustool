@@ -2,7 +2,6 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
     id("jinProject.android.application")
-    id("jinProject.android.safeArgs")
 }
 
 android {

@@ -10,7 +10,6 @@ dependencies {
     implementation(libs.gradle.google.devtools.ksp)
     implementation(libs.gradle.google.gms.google.services)
     implementation(libs.gradle.google.firebase.crashlytics)
-    implementation(libs.gradle.androidx.navigation.safe.args)
     implementation(libs.gradle.protobuf)
     implementation(libs.gradle.kotlin.serialization)
     implementation(libs.gradle.room)
@@ -49,10 +48,6 @@ gradlePlugin {
         register("androidProtobuf") {
             id = "jinProject.android.protobuf"
             implementationClass = "gradle.plugin.android.AndroidProtobufPlugin"
-        }
-        register("androidNavigationSafeArgs") {
-            id = "jinProject.android.safeArgs"
-            implementationClass = "gradle.plugin.android.AndroidxNavigationSafeArgsPlugin"
         }
         register("androidRoom") {
             id = "jinProject.android.room"
