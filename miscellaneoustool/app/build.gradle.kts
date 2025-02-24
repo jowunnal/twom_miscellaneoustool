@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.jinproject.twomillustratedbook"
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 69
         versionName = "2.4.1"
     }
@@ -33,6 +33,7 @@ android {
             buildConfigField("String","ADMOB_REWARD_ID",getLocalKey("adMob.test.rewardId"))
             buildConfigField("String", "ADMOB_UNIT_ID", getLocalKey("adMob.test.unitId"))
             buildConfigField("Boolean", "IS_DEBUG_MODE", "true")
+            extra.set("alwaysUpdateBuildId", true)
         }
         release {
             isMinifyEnabled = true

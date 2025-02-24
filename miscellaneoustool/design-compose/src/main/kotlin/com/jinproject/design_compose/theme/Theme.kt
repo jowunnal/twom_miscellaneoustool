@@ -109,18 +109,6 @@ fun MiscellaneousToolTheme(
         LightColorPalette
     }
 
-    val view = LocalView.current
-
-    if (!view.isInEditMode && view.context is Activity) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = Color.Transparent.toArgb()
-            window.navigationBarColor = Color.Transparent.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
-            WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = !darkTheme
-        }
-    }
-
     MaterialTheme(
         colorScheme = colors,
         typography = Typography,

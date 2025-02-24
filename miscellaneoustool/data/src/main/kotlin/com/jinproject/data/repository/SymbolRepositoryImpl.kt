@@ -41,10 +41,12 @@ class SymbolRepositoryImpl @Inject constructor(
         )
 
         generateImageDataSource.generateImage(
-            "Can you generate a logo with below detail? " +
-                    "1. ${prompt}. " +
-                    "2. The background color of logo must be white which is 0xFFFFFFFF in hexadecimal color code.  " +
-                    "3. The entire logo must be 12*12 pixels in size and must be optimized to be clear and not blurry. "
+            "Create a simple and minimal symbol based on the following description: " +
+                    "${prompt}.\n And the details are based on following description: " +
+                    "1. The background must be pure white (#FFFFFF, 0xFFFFFFFF in hexadecimal color code).\n" +
+                    "2. Do not include any additional elements such as color palettes, swatches, labels, or extra decorations.\n" +
+                    "3. The logo should be sharp and clear, without unnecessary blurriness or artifacts.\n" +
+                    "4. The image should only contain **the logo itself, without any extra graphical elements."
         )
             ?.let { response ->
                 replaceChat(

@@ -17,6 +17,7 @@ import androidx.compose.foundation.text.input.maxLength
 import androidx.compose.foundation.text.input.placeCursorAtEnd
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -35,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowWidthSizeClass
 import com.jinproject.design_compose.clearFocusIfKeyboardActive
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.VerticalSpacer
@@ -71,8 +73,14 @@ internal fun CollectionDetail(
         horizontal = 12.dp,
         vertical = 16.dp,
     )
-    val itemWidthDp =
-        (configuration.screenWidthDp.dp - padding.calculateHorizontalPadding()) / 2
+    val itemWidthDp = when(currentWindowAdaptiveInfo().windowSizeClass.windowWidthSizeClass) {
+        WindowWidthSizeClass.EXPANDED, WindowWidthSizeClass.MEDIUM ->
+            (configuration.screenWidthDp.dp - padding.calculateHorizontalPadding()) / 4
+
+        else ->
+            (configuration.screenWidthDp.dp - padding.calculateHorizontalPadding()) / 2
+    }
+
     val prices = remember(collection.items) {
         mutableStateListOf<String>()
     }.apply {
