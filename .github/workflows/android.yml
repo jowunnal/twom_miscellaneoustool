@@ -34,6 +34,9 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
 
+    - name: Mock adMob.test.appId
+    - run: echo '${{ secrets.LOCAL_PROPERTIES }}' >> ./local.properties
+
     - name: Clean Bulid
       run: ./gradlew clean
 
