@@ -35,7 +35,7 @@ jobs:
       run: chmod +x ./gradlew
 
     - name: Mock adMob.test.appId
-    - run: echo '${{ secrets.LOCAL_PROPERTIES }}' >> ./local.properties
+      run: echo '${{ secrets.LOCAL_PROPERTIES }}' >> ./local.properties
 
     - name: Clean Bulid
       run: ./gradlew clean
