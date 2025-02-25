@@ -61,7 +61,8 @@ jobs:
       env:
         BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
 
-    - uses: r0adkll/upload-google-play@v1
+    - name: Upload on Google Play
+      uses: r0adkll/upload-google-play@v1
       with:
         serviceAccountJsonPlainText: ${{ SERVICE_ACCOUNT_JSON }}
         packageName: com.jinproject.twomillustratedbook
