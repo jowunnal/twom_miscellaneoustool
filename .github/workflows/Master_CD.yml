@@ -40,7 +40,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: release-artifacts
-        path: app/release
+        path: ./*
         if-no-files-found: error
         
     - name: Setup build tool version variable
