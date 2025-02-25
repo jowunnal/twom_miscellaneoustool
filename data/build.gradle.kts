@@ -24,7 +24,7 @@ android {
     }
 
     defaultConfig {
-        buildConfigField("String","OPENAI_APIKEY",getLocalKey("openAI.apiKey"))
+        buildConfigField("String", "OPENAI_APIKEY", getLocalKey("openAI.apiKey"))
     }
 
     buildFeatures {
@@ -38,7 +38,7 @@ android {
     }
 }
 
-fun getLocalKey(propertyKey:String):String{
+fun getLocalKey(propertyKey: String): String {
     return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 }
 
