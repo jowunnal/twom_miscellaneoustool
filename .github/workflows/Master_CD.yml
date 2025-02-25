@@ -1,0 +1,119 @@
+name: Master CD
+on: 
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: [ "master" ]
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    
+    - uses: actions/checkout@v4
+    
+    - name: set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+      
+    - name: Grant execute permission for gradlew
+      run: chmod +x ./gradlew
+
+    - name: Create Local Properties
+      run: echo '${{ secrets.LOCAL_PROPERTIES }}' >> ./local.properties
+      
+    - name: Create google-services
+      run: echo '${{ secrets.GOOGLE_SERVICES_JSON_DEBUG }}' > ./app/google-services.json
+
+    - name: Extract Version Name
+      run: echo "##[set-output name=version;]v$(echo '${{ github.event.pull_request.title }}' | grep -oP 'release:\s*\K[0-9]+\.[0-9]+\.[0-9]+')"
+      id: extract_version
+      
+    - name: Release App Bundle
+      run: ./gradlew bundleRelease
+
+    - name: Upload Release Bundle to Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-artifacts
+        path: app/build/outputs/bundle/release
+        if-no-files-found: error
+
+    - name: Setup build tool version variable
+      shell: bash
+      run: |
+        BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
+        echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
+        echo Last build tool version is: $BUILD_TOOL_VERSION
+        
+    - name: Sign aab
+      uses: r0adkll/sign-android-release@v1
+      with:
+        releaseDirectory: app/build/outputs/bundle/release
+        signingKeyBase64: ${{ secrets.KEYSTORE_JKS }}
+        alias: ${{ secrets.KEYSTORE_ALIAS }}
+        keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+        keyPassword: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
+      env:
+        BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+
+    - name: Upload on Google Play
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+        packageName: com.jinproject.twomillustratedbook
+        releaseFiles: app/build/outputs/bundle/release/app-release.aab
+        track: production
+        releaseName: ${{ steps.extract_version.outputs.version }}
+        status: completed
+        
+    - name: Create Github Release
+      uses: softprops/action-gh-release@v2.2.1
+      with:
+        tag_name: ${{ steps.extract_version.outputs.version }}
+        release_name: ${{ steps.extract_version.outputs.version }}
+        generate_release_notes: true
+        files: |
+               app/build/outputs/bundle/release/app-release.aab
+
+    - name: Increment versionCode
+      run: |
+          FILE_PATH="app/build.gradle.kts"
+          VERSION_CODE=$(grep -oP 'versionCode\s*=\s*\K\d+' $FILE_PATH)
+          NEW_VERSION_CODE=$((VERSION_CODE + 1))
+          sed -i "s/versionCode = $VERSION_CODE/versionCode = $NEW_VERSION_CODE/" $FILE_PATH
+          echo "Updated versionCode to $NEW_VERSION_CODE"
+          echo "VERSION_CODE=$NEW_VERSION_CODE" >> $GITHUB_ENV
+
+    - name: Extract Version Information
+      run: |
+          TARGET_SDK=$(grep -oP 'targetSdk\s*=\s*\K\d+' app/build.gradle.kts)
+          KOTLIN_VERSION=$(grep -oP 'kotlin\s*=\s*"\K[0-9]+\.[0-9]+\.[0-9]+' gradle/libs.versions.toml)
+          AGP_VERSION=$(grep -oP 'androidStudioGradlePlugin\s*=\s*"\K[0-9]+\.[0-9]+\.[0-9]+' gradle/libs.versions.toml)
+
+          echo "Extracted targetSdk: $TARGET_SDK"
+          echo "Extracted Kotlin version: $KOTLIN_VERSION"
+          echo "Extracted AGP version: $AGP_VERSION"
+          
+          echo "TARGET_SDK=$TARGET_SDK" >> $GITHUB_ENV
+          echo "KOTLIN_VERSION=$KOTLIN_VERSION" >> $GITHUB_ENV
+          echo "AGP_VERSION=$AGP_VERSION" >> $GITHUB_ENV
+
+    - name: Update README.md
+      run: |
+          sed -i "s/PlayStore-v[0-9]\+\.[0-9]\+\.[0-9]\+/PlayStore-v${{ steps.extract_version.outputs.version }}/" README.md
+          sed -i "s/targetSdkVersion-[0-9]\+/targetSdkVersion-$TARGET_SDK/" README.md
+          sed -i "s/Kotlin-[0-9]\+\.[0-9]\+\.[0-9]\+/Kotlin-$KOTLIN_VERSION/" README.md
+          sed -i "s/gradle-[0-9]\+\.[0-9]\+\.[0-9]\+/gradle-$AGP_VERSION/" README.md
+
+    - name: Commit and Push Changes
+      run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add app/build.gradle.kts README.md
+          git commit -m "🔄 Auto-increment versionCode & update README [skip ci]" || echo "No changes to commit"
+          git push
