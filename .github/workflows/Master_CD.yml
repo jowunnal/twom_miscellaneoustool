@@ -40,7 +40,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: release-artifacts
-        path: ./*
+        path: app/build/outputs/bundle/release
         if-no-files-found: error
         
     - name: Setup build tool version variable
@@ -50,10 +50,10 @@ jobs:
         echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
         echo Last build tool version is: $BUILD_TOOL_VERSION
         
-    - name: Sign AAB
+    - name: Sign aab
       uses: r0adkll/sign-android-release@v1
       with:
-        releaseDirectory: app/release
+        releaseDirectory: app/build/outputs/bundle/release
         signingKeyBase64: ${{ secrets.KEYSTORE_JKS }}
         alias: ${{ secrets.KEYSTORE_ALIAS }}
         keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -68,14 +68,14 @@ jobs:
         release_name: ${{ steps.extract_version.outputs.version }}
         generate_release_notes: true
         files: |
-               app/build/outputs/apk/release/app-release.apk
+               app/build/outputs/bundle/release/app-release.aab
 
     - name: Extract Version Information
       id: extract_versions
       run: |
           VERSION_CODE=$(grep -oP 'versionCode\s*=\s*\K\d+' app/build.gradle.kts)
-          KOTLIN_VERSION=$(grep -oP 'kotlin("jvm") version "\K[0-9]+\.[0-9]+\.[0-9]+' build.gradle.kts)
-          AGP_VERSION=$(grep -oP 'classpath\("com.android.tools.build:gradle:\K[0-9]+\.[0-9]+\.[0-9]+' build.gradle.kts)
+          KOTLIN_VERSION=$(grep -oP 'kotlin("jvm") version "\K[0-9]+\.[0-9]+\.[0-9]+' app/build.gradle.kts)
+          AGP_VERSION=$(grep -oP 'classpath\("com.android.tools.build:gradle:\K[0-9]+\.[0-9]+\.[0-9]+' app/build.gradle.kts)
           MIN_SDK=$(grep -oP 'minSdk\s*=\s*\K\d+' app/build.gradle.kts)
           TARGET_SDK=$(grep -oP 'targetSdk\s*=\s*\K\d+' app/build.gradle.kts)
 
