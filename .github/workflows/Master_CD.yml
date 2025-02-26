@@ -32,7 +32,7 @@ jobs:
       run: |
          VERSION=$(git log -1 --pretty=%B | awk '/Release:/ {print $2; exit}')
          echo "Extracted version: $VERSION"
-         echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+         echo "VERSION_NAME=$VERSION" >> $GITHUB_ENV
       id: extract_version
       
     - name: Release App Bundle
@@ -52,12 +52,11 @@ jobs:
         echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
         echo Last build tool version is: $BUILD_TOOL_VERSION
        
-
     - name: Create Github Release
       uses: softprops/action-gh-release@v2.2.1
       with:
-        tag_name: ${{ steps.extract_version.outputs.version }}
-        release_name: ${{ steps.extract_version.outputs.version }}
+        tag_name: $VERSION_NAME
+        release_name: $VERSION_NAME
         generate_release_notes: true
         files: |
                app/build/outputs/bundle/release/app-release.aab
@@ -68,7 +67,6 @@ jobs:
           VERSION_CODE=$(grep -oP 'versionCode\s*=\s*\K\d+' $FILE_PATH)
           NEW_VERSION_CODE=$((VERSION_CODE + 1))
           sed -i "s/versionCode = $VERSION_CODE/versionCode = $NEW_VERSION_CODE/" $FILE_PATH
-          VERSION_NAME="${{ steps.extract_version.outputs.version }}"
           sed -i 's/versionName = "[0-9]\+\.[0-9]\+\.[0-9]\+"/versionName = "'"$VERSION_NAME"'"/' $FILE_PATH
 
      
@@ -92,7 +90,7 @@ jobs:
 
     - name: Update README.md
       run: |
-          sed -i "s/PlayStore-v[0-9]\+\.[0-9]\+\.[0-9]\+/PlayStore-v${{ steps.extract_version.outputs.version }}/" README.md
+          sed -i "s/PlayStore-v[0-9]\+\.[0-9]\+\.[0-9]\+/PlayStore-v$VERSION_NAME/" README.md
           sed -i "s/targetSdkVersion-[0-9]\+/targetSdkVersion-$TARGET_SDK/" README.md
           sed -i "s/Kotlin-[0-9]\+\.[0-9]\+\.[0-9]\+/Kotlin-$KOTLIN_VERSION/" README.md
           sed -i "s/gradle-[0-9]\+\.[0-9]\+\.[0-9]\+/gradle-$AGP_VERSION/" README.md
