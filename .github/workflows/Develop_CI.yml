@@ -32,15 +32,6 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
 
-    - name: Create Local Properties
-      run: echo '${{ secrets.LOCAL_PROPERTIES }}' >> ./local.properties
-
-    - name: Create google-services
-      run: echo '${{ secrets.GOOGLE_SERVICES_JSON_DEBUG }}' > ./app/google-services.json
- 
-    - name: Build with Gradle build   
-      run: ./gradlew build
-
     - name: Run unit test
       run: ./gradlew domain:testdebugUnitTest
 
