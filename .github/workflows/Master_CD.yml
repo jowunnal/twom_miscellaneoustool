@@ -30,9 +30,9 @@ jobs:
 
     - name: Extract Version Name
       run: |
-        VERSION=$(echo '${{ github.event.push.commits[0].message }}' | grep -oP 'Release:\s*\K[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
-        echo "VERSION=$VERSION"  # 디버깅 출력
-        echo "version=v$VERSION" >> "$GITHUB_OUTPUT"
+         VERSION=$(git log -1 --pretty=%B | grep -oP 'Release:\s*\K[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
+         echo "Extracted version: $VERSION"
+         echo "VERSION=v$VERSION" >> $GITHUB_ENV
       id: extract_version
       
     - name: Release App Bundle
@@ -56,8 +56,8 @@ jobs:
     - name: Create Github Release
       uses: softprops/action-gh-release@v2.2.1
       with:
-        tag_name: ${{ steps.extract_version.outputs.version }}
-        release_name: ${{ steps.extract_version.outputs.version }}
+        tag_name: ${{ env.VERSION }}
+        release_name: ${{ env.VERSION }}
         generate_release_notes: true
         files: |
                app/build/outputs/bundle/release/app-release.aab
@@ -68,7 +68,12 @@ jobs:
           VERSION_CODE=$(grep -oP 'versionCode\s*=\s*\K\d+' $FILE_PATH)
           NEW_VERSION_CODE=$((VERSION_CODE + 1))
           sed -i "s/versionCode = $VERSION_CODE/versionCode = $NEW_VERSION_CODE/" $FILE_PATH
+          VERSION_NAME="${{ env.VERSION }}"
+          sed -i 's/versionName = "[0-9]\+\.[0-9]\+\.[0-9]\+"/versionName = "'"$VERSION_NAME"'"/' $FILE_PATH
+
+     
           echo "Updated versionCode to $NEW_VERSION_CODE"
+          echo "Updated versionName to $VERSION_NAME"
           echo "VERSION_CODE=$NEW_VERSION_CODE" >> $GITHUB_ENV
 
     - name: Extract Version Information
@@ -87,7 +92,7 @@ jobs:
 
     - name: Update README.md
       run: |
-          sed -i "s/PlayStore-v[0-9]\+\.[0-9]\+\.[0-9]\+/PlayStore-v${{ steps.extract_version.outputs.version }}/" README.md
+          sed -i "s/PlayStore-v[0-9]\+\.[0-9]\+\.[0-9]\+/PlayStore-v${{ env.VERSION }}/" README.md
           sed -i "s/targetSdkVersion-[0-9]\+/targetSdkVersion-$TARGET_SDK/" README.md
           sed -i "s/Kotlin-[0-9]\+\.[0-9]\+\.[0-9]\+/Kotlin-$KOTLIN_VERSION/" README.md
           sed -i "s/gradle-[0-9]\+\.[0-9]\+\.[0-9]\+/gradle-$AGP_VERSION/" README.md
