@@ -1,8 +1,6 @@
 name: Master CD
 on: 
   push:
-    branches: ["master"]
-  pull_request:
     branches: [ "master" ]
 jobs:
   build:
@@ -30,7 +28,7 @@ jobs:
       run: echo '${{ secrets.GOOGLE_SERVICES_JSON_DEBUG }}' > ./app/google-services.json
 
     - name: Extract Version Name
-      run: echo "##[set-output name=version;]v$(echo '${{ github.event.pull_request.title }}' | grep -oP 'release:\s*\K[0-9]+\.[0-9]+\.[0-9]+')"
+      run: echo "##[set-output name=version;]v$(echo '${{ github.event.pull_request.title }}' | grep -oP 'Release:\s*\K[0-9]+\.[0-9]+\.[0-9]+')"
       id: extract_version
       
     - name: Release App Bundle
@@ -116,4 +114,4 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add app/build.gradle.kts README.md
           git commit -m "🔄 Auto-increment versionCode & update README [skip ci]" || echo "No changes to commit"
-          git push
+          git push origin HEAD:develop
