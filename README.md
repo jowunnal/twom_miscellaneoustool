@@ -55,11 +55,11 @@
 
 ### Module Dependency
 
-<img src="miscellaneoustool/documentation/module_diagram.PNG" />
+<img src="documentation/module_diagram.PNG" />
 
 ### Database Logical Design
 
-<img src="miscellaneoustool/documentation/db_logical_diagram.png" />
+<img src="documentation/db_logical_diagram.png" />
 
 # As-Is / Challenge / To-Be
 

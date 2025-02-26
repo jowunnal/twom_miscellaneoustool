@@ -70,6 +70,7 @@ import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.features.collection.CollectionEvent
 import com.jinproject.features.collection.CollectionUiStatePreviewParameter
 import com.jinproject.features.collection.model.CollectionUiState
+import com.jinproject.features.collection.model.Equipment
 import com.jinproject.features.collection.model.ItemCollection
 import kotlinx.coroutines.flow.collectLatest
 import kotlin.math.min
@@ -126,7 +127,8 @@ internal fun CollectionList(
         ) {
             items(
                 items,
-                key = { collection -> collection.id }) { collection ->
+                key = { collection -> collection.id },
+            ) { collection ->
                 val isSelected =
                     collectionUiState.collectionFilters.find { it.id == collection.id }?.isSelected
                         ?: false
@@ -190,7 +192,12 @@ private fun CollectionItem(
             }
         }
     val item = remember(collection.items) {
-        collection.items.joinToString("\n") { item -> "${item.name} * ${item.count}" }
+        collection.items.joinToString("\n") { item ->
+            val enchant = if(item is Equipment) "(+${item.enchantNumber}) " else ""
+            val count = if(item.count <= 1) "" else "* ${item.count}"
+
+            "${item.name} $enchant $count"
+        }
     }
     val price = remember(collection.items) {
         collection.items.sumOf { it.price * it.count }.toString()
@@ -324,7 +331,7 @@ private fun CollectionItem(
     }
 }
 
-fun Path.fillBounds(strokeWidthPx: Float, maxWidth: Int, maxHeight: Int) {
+private fun Path.fillBounds(strokeWidthPx: Float, maxWidth: Int, maxHeight: Int) {
     val pathSize = getBounds()
     val matrix = Matrix()
 

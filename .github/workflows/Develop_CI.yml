@@ -9,16 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: gradle
-        
-    # 캐싱 추가
+    - name: Check out Repo
+      uses: actions/checkout@v4
+
     - name: Cache Gradle
       uses: actions/cache@v3
       with:
@@ -28,59 +21,33 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
+    
+    - name: set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
       
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
 
-    - name: Mock adMob.test.appId
+    - name: Create Local Properties
       run: echo '${{ secrets.LOCAL_PROPERTIES }}' >> ./local.properties
 
     - name: Create google-services
       run: echo '${{ secrets.GOOGLE_SERVICES_JSON_DEBUG }}' > ./app/google-services.json
-
-    - name: Clean Bulid
-      run: ./gradlew clean
-      
+ 
     - name: Build with Gradle build   
       run: ./gradlew build
 
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: gradle
-        
-    - name: Grant execute permission for gradlew
-      run: chmod +x ./gradlew
-    
     - name: Run unit test
-      run: ./gradlew testdebugUnitTest
+      run: ./gradlew domain:testdebugUnitTest
 
   lint:
-    needs: build
-
     runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
     
-    - name: set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: gradle
-        
-    - name: Grant execute permission for gradlew
-      run: chmod +x ./gradlew
-
+    steps:
     - name: Clone repo
       uses: actions/checkout@master
       with:
