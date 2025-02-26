@@ -31,8 +31,8 @@ jobs:
     - name: Extract Version Name
       run: |
          VERSION=$(git log -1 --pretty=%B | grep -oP 'Release:\s*\K[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
-         echo "Extracted version: $VERSION="
-         echo "version=v$VERSION" >> $GITHUB_OUTPUT
+         echo "Extracted version: $VERSION"
+         echo "version=$VERSION" >> $GITHUB_OUTPUT
       id: extract_version
       
     - name: Release App Bundle
@@ -92,7 +92,7 @@ jobs:
 
     - name: Update README.md
       run: |
-          sed -i "s/PlayStore-v[0-9]\+\.[0-9]\+\.[0-9]\+/PlayStore-${{ steps.extract_version.outputs.version }}/" README.md
+          sed -i "s/PlayStore-v[0-9]\+\.[0-9]\+\.[0-9]\+/PlayStore-v${{ steps.extract_version.outputs.version }}/" README.md
           sed -i "s/targetSdkVersion-[0-9]\+/targetSdkVersion-$TARGET_SDK/" README.md
           sed -i "s/Kotlin-[0-9]\+\.[0-9]\+\.[0-9]\+/Kotlin-$KOTLIN_VERSION/" README.md
           sed -i "s/gradle-[0-9]\+\.[0-9]\+\.[0-9]\+/gradle-$AGP_VERSION/" README.md
