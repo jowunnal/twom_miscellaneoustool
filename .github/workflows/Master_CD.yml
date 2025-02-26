@@ -1,7 +1,8 @@
 name: Master CD
 on: 
   push:
-    branches: [ "master" ]
+    branches:
+           - main
 jobs:
   build:
 
@@ -29,7 +30,7 @@ jobs:
 
     - name: Extract Version Name
       run: |
-        VERSION=$(echo '${{ github.event.pull_request.title }}' | grep -oP 'Release:\s*\K[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
+        VERSION=$(echo '${{ github.event.push.commits[0].message }}' | grep -oP 'Release:\s*\K[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
         echo "VERSION=$VERSION"  # 디버깅 출력
         echo "version=v$VERSION" >> "$GITHUB_OUTPUT"
       id: extract_version
@@ -50,27 +51,7 @@ jobs:
         BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
         echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
         echo Last build tool version is: $BUILD_TOOL_VERSION
-        
-    - name: Sign aab
-      uses: r0adkll/sign-android-release@v1
-      with:
-        releaseDirectory: app/build/outputs/bundle/release
-        signingKeyBase64: ${{ secrets.KEYSTORE_JKS }}
-        alias: ${{ secrets.KEYSTORE_ALIAS }}
-        keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
-        keyPassword: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
-      env:
-        BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
-
-    - name: Upload on Google Play
-      uses: r0adkll/upload-google-play@v1
-      with:
-        serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-        packageName: com.jinproject.twomillustratedbook
-        releaseFiles: app/build/outputs/bundle/release/app-release.aab
-        track: production
-        releaseName: ${{ steps.extract_version.outputs.version }}
-        status: completed
+       
         
     - name: Create Github Release
       uses: softprops/action-gh-release@v2.2.1
