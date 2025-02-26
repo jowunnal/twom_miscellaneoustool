@@ -31,8 +31,9 @@ jobs:
     - name: Extract Version Name
       run: |
          VERSION=$(git log -1 --pretty=%B | grep -oP 'Release:\s*\K[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
-         echo "Extracted version: $VERSION"
-         printf "version=$VERSION" >> "$GITHUB_OUTPUT"
+         CLEANVERSION=$(echo "$VERSION" | tr -d '\n' | tr -d '\r')
+         echo "Extracted version: $CLEANVERSION"
+         echo "version=$CLEANVERSION" >> "$GITHUB_OUTPUT"
       id: extract_version
       
     - name: Release App Bundle
