@@ -52,7 +52,7 @@ jobs:
         echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
         echo Last build tool version is: $BUILD_TOOL_VERSION
        
-        
+
     - name: Create Github Release
       uses: softprops/action-gh-release@v2.2.1
       with:
@@ -68,7 +68,7 @@ jobs:
           VERSION_CODE=$(grep -oP 'versionCode\s*=\s*\K\d+' $FILE_PATH)
           NEW_VERSION_CODE=$((VERSION_CODE + 1))
           sed -i "s/versionCode = $VERSION_CODE/versionCode = $NEW_VERSION_CODE/" $FILE_PATH
-          VERSION_NAME="${{ env.VERSION }}"
+          VERSION_NAME="${{ steps.extract_version.outputs.version }}"
           sed -i 's/versionName = "[0-9]\+\.[0-9]\+\.[0-9]\+"/versionName = "'"$VERSION_NAME"'"/' $FILE_PATH
 
      
