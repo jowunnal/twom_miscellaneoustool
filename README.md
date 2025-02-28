@@ -1,11 +1,11 @@
 <a href="https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook">
-	<img src="https://img.shields.io/badge/PlayStore-v2.4.1-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
+	<img src="https://img.shields.io/badge/PlayStore-v2.4.2-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
 </a>
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.0.10-blue.svg)](https://kotlinlang.org)
 [![AGP](https://img.shields.io/badge/gradle-8.5.0-green.svg)](https://gradle.org/)
 [![minSdkVersion](https://img.shields.io/badge/minSdkVersion-26-red)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
-[![targetSdkVersion](https://img.shields.io/badge/targetSdkVersion-34-orange)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
+[![targetSdkVersion](https://img.shields.io/badge/targetSdkVersion-35-orange)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
 
 자세한 설명은 [깃블로그](https://jowunnal.github.io/categories/#projects "블로그 링크") 에 있습니다.
 
@@ -39,10 +39,10 @@
 | Architecture | Clean Architecture |
 | Design Pattern | MVVM |
 | Android Component | Activity, Service, BroadcastReceiver |
-| Jetpack | Lifecycle, Navigation(Compose), AlarmManager |
+| Jetpack | Lifecycle, Navigation(Compose), AlarmManager, WindowManager |
 | Asynchronous | Kotlinx.Coroutines, Kotlinx.Coroutines.Flow |
 | Dependency Injection | Hilt |
-| Data | Room, DataStore(proto3) |
+| Data | Room, DataStore(proto3), Retrofit2, Okhttp3|
 | Google | InAppPurchase, InAppUpdate, Admob |
 | Firebase | Firebase-Analytics, Firebase-Storage, Firebase-RealtimeDatabase, Firebase-Crashlytics |
 | Unit Test | Junit, Kotest, mockk |
@@ -55,11 +55,11 @@
 
 ### Module Dependency
 
-<img src="miscellaneoustool/documentation/module_diagram.PNG" />
+<img src="documentation/module_diagram.PNG" />
 
 ### Database Logical Design
 
-<img src="miscellaneoustool/documentation/db_logical_diagram.png" />
+<img src="documentation/db_logical_diagram.png" />
 
 # As-Is / Challenge / To-Be
 
@@ -104,7 +104,7 @@
 </details>
 
 <details>
-<summary>데이터들을 개념 및 논리 설계하여 데이터베이스 구축 후 Jetpack Room 이용, DB Migration 대응 및 테스트 작성</summary>
+<summary>앱에 필요한 데이터들을 개념 및 논리 설계하여 릴레이션 생성한 뒤, Jetpack Room 활용 및 DB Migration 대응과 테스트 작성</summary>
 <div markdown="1">
 
 ### As-Is
@@ -163,16 +163,15 @@
 </details>
 
 <details>
-<summary>사용자가 디바이스 내의 선택한 이미지를 12*12 픽셀로 변환 하는 기능 구현</summary>
+<summary>디바이스 내부에 존재하거나, Dalle3 로 생성된 이미지를 12*12 픽셀로 변환 하는 기능 구현</summary>
 <div markdown="1">
 
 ### As-Is
-- 앱 외부의 디바이스 저장 공간에 있는 이미지들을 커스텀 갤러리 화면에 노출한다.
-    - 갤러리의 모든 이미지들은 확대하기 버튼이 함께 노출되며, 클릭시 상세 이미지 화면으로 전환된다.
-    - 100개 단위의 이미지를 페이징 처리하여 **무한 스크롤**로 가져온다.
-    - 갤러리에는 **스크롤 바** 와 "최상단으로 이동하기" 버튼이 있다.
-- 사용자는 임의의 이미지를 클릭하면, "길드 마크 심볼 화면"으로 이동한다.
-- "길드 마크 심볼 화면"에서 이미지의 원본과 함께 12*12 픽셀로 변환된 작은 크기의 미리보기를 제공한다.
+- 이미지 Source
+  - 디바이스 내부이면서, 앱 외부의 저장소에 존재하는 이미지 파일(Content uri)
+  - AI 이미지 생성형 기능을 통해 생성된 이미지의 download url
+  - Firebase-Storage 에 저장된 이미지의 download url
+- 이미지의 원본과 함께 12*12 픽셀로 변환된 작은 크기의 미리보기를 제공한다.
 - 사용자는 미리보기 이미지를 확인하고 변환을 원한다면, 변환하기 버튼을 누른다.
 - 변환을 위해서는 인앱 결제가 실행되며, 결제가 완료 되면 다음 4가지가 노출된다.
     - 이미지의 변환된 12*12 픽셀
@@ -184,22 +183,17 @@
     - 12*12 픽셀로 변환된 작은 형태의 미리보기
 
 ### Challenge
-- 커스텀 갤러리
-  - why?
-    - 안드로이드 14 버전 부터 앱 외부의 저장소로 부터 이미지를 가져오는 권한에 대한 제한이 강화되면서 특별한 사용사례가 아니면 **Photo Picker** 를 사용하는 것이 강제
-    - 하지만 "길드 마크 심볼 생성" 기능은 앱의 핵심 기능이고, 사용자의 접근이 빈번하게 이루어질 수 있으며, 이미지에 대한 변환을 수행하는 기능이 제공되기 때문에 READ_MEDIA_IMAGES 권한 사용 승인
-    - 또한 Dynamic 한 UI Component 를 개발하고자 하는 목적이 있었으므로 **Photo Picker** 대신 **커스텀 갤러리**를 구현하는 방법을 선택
-  - How?
+- 이미지의 비트맵 객체 가져오기
+  - 이미지는 Android#Bitmap 으로 변환하여 처리하며, 내부적으로 12*12 픽셀 형태로 변환하는 등의 **픽셀 처리**가 필요하므로 변경 가능한 **Software 타입의 Bitmap** 객체를 이용
+  - Content Uri
     - **READ_MEDIA_IMAGES** 와 안드로이드 14 버전 이상 이라면 추가로 **READ_MEDIA_VISUAL_USER_SELECTED** 에 대한 권한을 요청
     - 승인된 권한에 맞게 앱 외부의 저장소로 부터 **ContentResolver** 로 가장 최근에 수정된 이미지 순서대로 100개를 가져옴
-    - 갤러리 LazyList 의 한 아이템 view size 에 이미지 개수를 곱하여 **스크롤 바의 위치**를 계산하여 표시
-    - "최상단으로 이동하기" 버튼을 클릭시 **LazyListState#animateScrollToItem** 으로 이동
-    - 버튼과 스크롤바는 **코루틴을 활용한 타이머**로 3초간 스크롤이 발생하지 않으면 자동으로 사라지도록 구현
-- 결제
-  - 인앱 결제는 **gms** 의 **InAppPurchase** 를 이용
+    - 사용자가 선택한 이미지의 contentURI 로 **ImageDecoder#decodeBitmap** 을 이용하여 비트맵 객체를 생성
+  - Http Url
+    - 이미지의 uri 가 "http" 문자로 시작하는지 확인한다.
+    - 해당하는 경우, **Coil#ImageLoader** 로 요청하여 이미지를 가져온 뒤, Software 비트맵 타입으로 캐스팅
 - 12*12 픽셀의 이미지 변환
-  - 사용자가 선택한 이미지의 contentURI 로 **ImageDecoder#decodeBitmap** 을 이용하여 비트맵 객체를 생성
-  - 해당 비트맵을 **Bitmap#createScaledBitmap** 을 이용하여 12*12 픽셀 로 변환
+  - 가져온 비트맵을 **Bitmap#createScaledBitmap** 을 이용하여 12*12 픽셀 로 변환
   - 변환된 비트맵을 **Bitmap#getPixels** 을 이용하여 색상 배열을 추출하고, 색상 정밀도 범위 내에서 비슷한 **색상들을 공통화** 하여 노출
     - 비슷한 색상들을 공통화 하는 이유는 UX를 고려하여 육안으로 구분하기 힘들 정도의 비슷한 색상들이 "색상 팔레트" 에 나뉘어져 존재하는 문제 때문
     - **색상 공통화 알고리즘**
@@ -209,11 +203,52 @@
         - 색상 리스트의 끝까지 없다면, 리스트에 추가
       - 마지막으로 "색상 팔레트" 리스트를 rgb 값 순서대로 정렬하여 반환
 
-
 ### To-Be
 - **Bitmap(래스터)** 과 **Vector(백터)** 이미지 파일 포맷의 종류인 **png, jpg, webp, svg** 에 대한 장단점 및 차이를 알고 적용할 수 있었습니다.
   - 기존의 png 이미지를 구글에서 개발한 webp 이미지로 변환하여 앱의 크기를 경량화 할 수 있었습니다. (R8 활성화와 함께 앱크기 기존 65mb -> 20mb으로 약 70% 개선)
 - **android.graphics.Bitmap** 의 다양한 API 들을 활용하면서 **이미지 처리에 대한 이해**를 넓힐 수 있었습니다.
+
+</div>
+</details>
+
+<details>
+<summary>Compose 로 무한 스크롤 가능하고, 스크롤 바 가 표시되는 등의 다양한 Custom UI Component 개발</summary>
+<div markdown="1">
+
+### As-Is
+- 가져온 이미지 파일들을 커스텀 갤러리 화면에 노출한다.
+- 커스텀 갤러리 컴포넌트
+  - 갤러리의 모든 이미지들은 "확대하기" 버튼이 함께 노출되며, 클릭시 상세 이미지 화면으로 transition된다.
+  - 100개 단위의 이미지를 페이징 처리하여 **무한 스크롤**로 가져온다.
+  - 갤러리에는 **스크롤 바** 와 "최상단으로 이동하기" 버튼이 있다.
+  - 사용자는 임의의 이미지를 클릭하면, "길드 마크 심볼 화면"으로 이동한다.
+
+### Challenge
+- 커스텀 갤러리
+  - why?
+    - 안드로이드 14 버전 부터 앱 외부의 저장소로 부터 이미지를 가져오는 권한에 대한 제한이 강화되면서 특별한 사용사례가 아니면 **Photo Picker** 를 사용하는 것이 강제
+    - 하지만 "길드 마크 심볼 생성" 기능은 앱의 핵심 기능이고, 사용자의 접근이 빈번하게 이루어질 수 있으며, 이미지에 대한 변환을 수행하는 기능이 제공되기 때문에 READ_MEDIA_IMAGES 권한 사용 승인
+    - 또한 Dynamic 한 UI Component 를 개발하고자 하는 목적이 있었으므로 **Photo Picker** 대신 **커스텀 갤러리**를 구현하는 방법을 선택
+  - How?
+    - [Scrollable Layout](https://github.com/jowunnal/twom_miscellaneoustool/blob/master/design-compose/src/main/kotlin/com/jinproject/design_compose/component/lazyList/ScrollableLayout.kt "link") 컴포넌트 구현
+      - LazyList 의 한 아이템에 대한 view height 에 이미지 개수를 곱하여 **스크롤 바의 위치**를 계산하여 표시
+        - 스크롤 바에 Modifier#pointerInput 으로 Drag를 observing 하여, Drag amount 만큼 lazyListState#scrollBy 트리거
+      - "최상단으로 이동하기" 버튼을 클릭시 **LazyListState#animateScrollToItem** 트리거
+      - "최상단으로 이동하기" 버튼과 스크롤바는 **[코루틴을 활용한 타이머](https://github.com/jowunnal/twom_miscellaneoustool/blob/master/design-compose/src/main/kotlin/com/jinproject/design_compose/component/lazyList/TimeScheduler.kt "link")**로 3초간 스크롤이 발생하지 않으면 자동으로 사라지도록 구현
+    - [Scrollable Layout](https://github.com/jowunnal/twom_miscellaneoustool/blob/master/design-compose/src/main/kotlin/com/jinproject/design_compose/component/lazyList/ScrollableLayout.kt "link") 을 활용한 [Gallery](https://github.com/jowunnal/twom_miscellaneoustool/blob/master/features/symbol/src/main/kotlin/com/jinproject/features/symbol/gallery/component/ImageList.kt "link") 컴포넌트 구현
+- 무한 스크롤
+  - User Interaction 은 기본적으로 Root View 에서 최하위 Leaf View 까지 전달된 후, **Leaf View 에서 부터 소비**하고, **소비되지 않은 interaction 을 상위 view 가 소비**할 수 있음
+    - 갤러리 컴포넌트는, Root > Scrollable Layout > LazyList(Gallery) > GalleryItem 구조
+    - 이를 이용하여, LazyList 에서 **소비되지 않은 스크롤**이 발생하면 다음 페이지를 가져옴
+- 갤러리 이미지 페이징
+  - **[restartableStateIn](https://github.com/jowunnal/twom_miscellaneoustool/blob/master/features/core/src/main/kotlin/com/jinproject/features/core/utils/StateFlowUtils.kt "link")** 으로 발행된 변경 불가능한 StateFlow 를 View 에서 구독
+  - inital value 를 방출하지 않기 위해 **SharingCommand#STOP 후 SharingCommand#START** 로 다음페이지 요청
+  - 가져왔던 마지막 이미지의 "수정된 시각"을 **메모리에 캐싱**해 뒀다가, 다음 페이지의 요청이 오면 이용
+
+### To-Be
+- View hierarchy 내에서 User Interaction 이 어떻게 전파되고, 소비되는지에 대한 동작 구조를 이해할 수 있었습니다.
+- Slot API 패턴을 이용하여, 재사용 가능하고, 너무 작지않되 너무 큰 역할을 하지 않는 적절한 구조로 UI Component 를 개발하고 이용하였습니다.
+- 화면 전환에도 스크롤과 같은 상태를 유지하기 위해 rememberSaveable 을 이용하고, 상태를 재사용 및 활용성 vs 결합도 사이의 트레이드 오프를 고려하여 위치시키는 등 최적화 하는 방법들을 학습할 수 있었습니다.
 
 </div>
 </details>
