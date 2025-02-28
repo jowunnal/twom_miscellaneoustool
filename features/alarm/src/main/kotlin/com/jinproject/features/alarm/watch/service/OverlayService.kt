@@ -75,7 +75,8 @@ class OverlayService : LifecycleService() {
                 .build()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-            startForeground(999, notification,
+            startForeground(
+                999, notification,
                 ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
             )
         else
@@ -103,15 +104,17 @@ class OverlayService : LifecycleService() {
                 mView?.findViewById<TextView>(com.jinproject.features.alarm.R.id.tv_currentTimes)?.textSize =
                     overlaySetting.fontSize.toFloat()
 
-                wm.updateViewLayout(
-                    mView,
-                    params.apply {
-                        x = overlaySetting.xPos
-                        y = overlaySetting.yPos
+                if (mView?.windowToken != null && mView?.parent != null)
+                    mView?.let {
+                        wm.updateViewLayout(
+                            mView,
+                            params.apply {
+                                x = overlaySetting.xPos
+                                y = overlaySetting.yPos
+                            }
+                        )
                     }
-                )
-
-            }.flowOn(Dispatchers.Main)
+            }.flowOn(Dispatchers.Main.immediate)
             .launchIn(lifecycleScope)
 
         timerRepository.getTimer().map { timerModels ->
@@ -128,7 +131,7 @@ class OverlayService : LifecycleService() {
                         )
                         "${timerState.bossName} (${hourOfDay}) ${timerState.timeState.getMeridiem()} ${timerState.timeState.getTime12Hour()}:${timerState.timeState.minutes}:${timerState.timeState.seconds}"
                     }
-            }.flowOn(Dispatchers.Main)
+            }.flowOn(Dispatchers.Main.immediate)
             .launchIn(lifecycleScope)
     }
 
