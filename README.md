@@ -7,8 +7,6 @@
 [![minSdkVersion](https://img.shields.io/badge/minSdkVersion-26-red)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
 [![targetSdkVersion](https://img.shields.io/badge/targetSdkVersion-35-orange)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
 
-자세한 설명은 [깃블로그](https://jowunnal.github.io/categories/#projects "블로그 링크") 에 있습니다.
-
 # 앱 소개
 
 글로벌 모바일 게임 ‘아이모’ 의 팬메이드 앱으로써 아이모를 즐기는 유저들이 게임을 할때 필요한 정보들을 보여주고, 몬스터가 재생성(Regeneration) 될 때를 간편하게 알람 설정하는 등 게임을 하는데 유용한 기능들을 제공해주는 앱 입니다.
@@ -46,6 +44,7 @@
 | Google | InAppPurchase, InAppUpdate, Admob |
 | Firebase | Firebase-Analytics, Firebase-Storage, Firebase-RealtimeDatabase, Firebase-Crashlytics |
 | Unit Test | Junit, Kotest, mockk |
+| CI/CD | Github Actions |
 
 # 개발 기간
 
@@ -252,6 +251,42 @@
 
 </div>
 </details>
+
+<details>
+<summary>Github Actions 활용하여 CI/CD 환경 구축 </summary>
+<div markdown="1">
+
+### As-Is
+- 기존 코드를 리펙토링 할 때 마다, 단위테스트가 작성되었을 때 테스트의 실행을 별도로 진행해 주어야 한다.
+- Develop 브랜치에 push 될 때 마다, 지정된 코드 스타일(들여쓰기, 사용되지 않은 import 제거 등)에 맞게 작성되었는지 일일이 확인이 필요하다.
+- 개발이 끝나고 릴리즈를 위해 Master 브랜치에 push 할 때 마다 반복되는 작업들을 일일이 수행해 주어야 한다.
+  - versionCode 를 증가한 뒤, 릴리즈 빌드로 aab 생성
+  - 생성된 aab를 플레이콘솔에 배포
+  - versionName 증가한 뒤, readme 업데이트
+  - 만약, targetSdk, kotlin, AGP, minSdk 등의 버전이 변경되면 readme 업데이트 필요
+  - 새롭게 릴리즈 될 때 마다, Release 노트 작성
+
+### Challenge
+- Develop 브랜치에 CI 환경 구축
+  - 신규 기능이나 코드 작성이 수행되면, Develop 브랜치에 push 해야 하므로, Develop 에 push 할 때 마다 반복되는 작업(lint 검사, 테스트 실행)을 수행하도록 CI 구축
+  - 코드는 항상 IDEA 에서 개발후 빌드로 실행까지 해보기 때문에 CI에서 시간이 오래걸리는 Build 를 실행해줄 필요는 없으므로 필요한 작업들만 실행
+- Master 브랜치에 CD 환경 구축
+  - Master 브랜치에 push 될 때, Release 인지 아니면 다른 이유로 push 된 것인지 1차적으로 검사하기 위해 커밋 메세지를 검사
+  - Release: X.X.X 로 작성된 메세지라면, 다음 작업들을 직렬로 실행
+    - 1. Release Build
+    - 2. Signing
+    - 3. aab upload
+    - 4. 릴리즈 노트 생성
+    - 5. Play Console 에 aab 배포
+    - 6. Readme 업데이트
+  - CI 에서 실행된 테스트나 lint 검사를 다시 할 이유가 없으므로 해당 작업을 실행하지 않음
+
+### To-Be
+- 반복적인 작업들을 자동화하여 개발에 대한 생산성이 증가 되었습니다.
+- 개발 외의 작업들은 자동화 되어 편리성이 증가하고 개발에 더 집중할 수 있게 되었습니다.
+
+</div>
+</details>
  
 # UI
 
@@ -270,3 +305,7 @@ https://github.com/user-attachments/assets/812ede40-702f-4d9f-b6ce-15047ca50a22
 ### 몬스터 알람
 
 https://github.com/user-attachments/assets/7c8a1346-ee18-46ac-a06f-be0dc61d3ca4
+
+# Details
+
+더 자세한 히스토리는 [깃블로그](https://jowunnal.github.io/categories/#projects "블로그 링크") 에 있습니다.
