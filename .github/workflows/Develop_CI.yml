@@ -38,6 +38,9 @@ jobs:
     - name: Run unit test
       run: ./gradlew domain:testdebugUnitTest
 
+    - name: Build on R8
+      run: ./gradlew assembleRelease -Pandroid.enableR8=true -PminifyEnabled=true -PshrinkResources=true
+
   lint:
     runs-on: ubuntu-latest
     
