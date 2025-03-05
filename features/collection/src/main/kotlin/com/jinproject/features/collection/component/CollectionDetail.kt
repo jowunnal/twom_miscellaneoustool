@@ -37,7 +37,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowWidthSizeClass
-import com.jinproject.design_compose.clearFocusIfKeyboardActive
+import com.jinproject.design_compose.utils.clearFocusIfKeyboardActive
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.component.bar.BackButtonRowScopeAppBar

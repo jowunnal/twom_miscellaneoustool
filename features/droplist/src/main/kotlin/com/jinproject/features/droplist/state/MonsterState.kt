@@ -9,7 +9,7 @@ data class MonsterState(
     val level: Int,
     val genTime: Int,
     val imgName: String,
-    val type: com.jinproject.domain.model.MonsterType,
+    val type: MonsterType,
     val items: ImmutableList<String>
 ): Comparable<MonsterState> {
     companion object {
@@ -25,7 +25,10 @@ data class MonsterState(
 
     override fun compareTo(other: MonsterState): Int =
         if(this.type.getPriority() == other.type.getPriority())
-            this.level.compareTo(other.level)
+            if(this.level == other.level)
+                this.name.compareTo(other.name)
+            else
+                this.level.compareTo(other.level)
         else
             this.type.getPriority().compareTo(other.type.getPriority())
 

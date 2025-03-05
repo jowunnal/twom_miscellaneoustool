@@ -14,7 +14,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
+import com.jinproject.design_compose.utils.PreviewMiscellaneousToolTheme
+import com.jinproject.design_ui.R
 
 @Composable
 fun DefaultPainterImage(
@@ -41,7 +42,7 @@ fun DefaultPainterImage(
 @Preview(showBackground = true)
 private fun PreviewDefaultImage() = PreviewMiscellaneousToolTheme {
     DefaultPainterImage(
-        resId = com.jinproject.design_ui.R.drawable.icon_simulator,
+        resId = R.drawable.icon_simulator,
         contentDescription = "",
     )
 }
