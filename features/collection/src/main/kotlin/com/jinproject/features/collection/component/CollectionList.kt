@@ -193,7 +193,7 @@ private fun CollectionItem(
         }
     val item = remember(collection.items) {
         collection.items.joinToString("\n") { item ->
-            val enchant = if(item is Equipment) "(+${item.enchantNumber}) " else ""
+            val enchant = if(item is Equipment && item.enchantNumber > 0) "(+${item.enchantNumber}) " else ""
             val count = if(item.count <= 1) "" else "* ${item.count}"
 
             "${item.name} $enchant $count"
