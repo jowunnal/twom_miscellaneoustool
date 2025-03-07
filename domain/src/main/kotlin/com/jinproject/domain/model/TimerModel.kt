@@ -1,6 +1,5 @@
 package com.jinproject.domain.model
 
-
 data class TimerModel(
     val id: Int,
     val bossName: String,

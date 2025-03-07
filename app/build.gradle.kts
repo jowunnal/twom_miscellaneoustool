@@ -22,8 +22,8 @@ android {
 
     buildTypes {
         debug {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -54,7 +54,8 @@ fun getLocalKey(propertyKey:String):String{
 }
 
 dependencies {
-    implementation(project(":data"))
+    implementation(project(":data:repository"))
+    implementation(project(":data:datasource"))
     implementation(project(":domain"))
     implementation(project(":core"))
     implementation(project(":features:collection"))

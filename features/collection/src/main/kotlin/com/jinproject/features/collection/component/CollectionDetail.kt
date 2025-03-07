@@ -37,7 +37,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowWidthSizeClass
-import com.jinproject.design_compose.clearFocusIfKeyboardActive
+import com.jinproject.design_compose.utils.clearFocusIfKeyboardActive
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.component.bar.BackButtonRowScopeAppBar
@@ -73,7 +73,7 @@ internal fun CollectionDetail(
         horizontal = 12.dp,
         vertical = 16.dp,
     )
-    val itemWidthDp = when(currentWindowAdaptiveInfo().windowSizeClass.windowWidthSizeClass) {
+    val itemWidthDp = when (currentWindowAdaptiveInfo().windowSizeClass.windowWidthSizeClass) {
         WindowWidthSizeClass.EXPANDED, WindowWidthSizeClass.MEDIUM ->
             (configuration.screenWidthDp.dp - padding.calculateHorizontalPadding()) / 4
 
@@ -81,16 +81,14 @@ internal fun CollectionDetail(
             (configuration.screenWidthDp.dp - padding.calculateHorizontalPadding()) / 2
     }
 
-    val prices = remember(collection.items) {
-        mutableStateListOf<String>()
-    }.apply {
-        addAll(collection.items.map { it.price.toString() })
+    val prices = remember(collection.id) {
+        mutableStateListOf<String>(*collection.items.map { it.price.toString() }.toTypedArray())
     }
 
     val calculatedItemPrices by remember {
         derivedStateOf {
             prices.mapIndexed { idx, price ->
-                if(price.isNotBlank())
+                if (price.isNotBlank())
                     collection.items[idx].count * price.toLong()
                 else
                     0L
@@ -161,12 +159,19 @@ internal fun CollectionDetail(
                         .padding(vertical = 4.dp)
                 ) {
                     DescriptionSmallText(
-                        text = "${item.name} * ${item.count}",
+                        text = "${item.name} ${if (item is Equipment && item.enchantNumber > 0) "(+${item.enchantNumber})" else ""} * ${if (item.count > 1) item.count else ""}",
                         modifier = Modifier.width(itemWidthDp),
                         color = MaterialTheme.colorScheme.surfaceVariant
                     )
                     DescriptionSmallText(
-                        text = "${calculatedItemPrices[idx]} ${stringResource(id = R.string.gold)}",
+                        text = "${
+                            kotlin.runCatching { calculatedItemPrices[idx] }
+                                .getOrElse { collection.items[idx].price }
+                        } ${
+                            stringResource(
+                                id = R.string.gold
+                            )
+                        }",
                         modifier = Modifier.width(itemWidthDp),
                         color = MaterialTheme.colorScheme.surfaceVariant
                     )
@@ -231,8 +236,8 @@ internal fun CollectionDetail(
                     dispatchEvent(
                         CollectionEvent.UpdateItemsPrice(newItems)
                     )
-                    onNavigateBack()
                     showSnackBar(SnackBarMessage(headerMessage = applySnackBarMessage))
+                    onNavigateBack()
                 },
             )
         }

@@ -3,7 +3,7 @@
 </a>
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.0.10-blue.svg)](https://kotlinlang.org)
-[![AGP](https://img.shields.io/badge/gradle-8.5.0-green.svg)](https://gradle.org/)
+[![AGP](https://img.shields.io/badge/AGP-8.5.0-green.svg)](https://gradle.org/)
 [![minSdkVersion](https://img.shields.io/badge/minSdkVersion-26-red)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
 [![targetSdkVersion](https://img.shields.io/badge/targetSdkVersion-35-orange)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
 
@@ -279,7 +279,7 @@
     - 4. 릴리즈 노트 생성
     - 5. Play Console 에 aab 배포
     - 6. Readme 업데이트
-  - CI 에서 실행된 테스트나 lint 검사를 다시 할 이유가 없으므로 해당 작업을 실행하지 않음
+  - Develop 브랜치에서 실행된 테스트나 lint 검사를 다시 할 이유가 없으므로 해당 작업을 실행하지 않음
 
 ### To-Be
 - 반복적인 작업들을 자동화하여 개발에 대한 생산성이 증가 되었습니다.

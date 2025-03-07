@@ -5,13 +5,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -22,20 +18,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.android.billingclient.api.ProductDetails
 import com.chargemap.compose.numberpicker.NumberPicker
-import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
+import com.jinproject.design_compose.utils.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.layout.DefaultLayout
-import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.HorizontalSpacer
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.component.bar.BackButtonTitleAppBar
 import com.jinproject.design_compose.component.button.TextButton
 import com.jinproject.design_compose.component.text.DescriptionAnnotatedLargeText
-import com.jinproject.design_compose.component.text.DescriptionLargeText
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.red
 import com.jinproject.design_ui.R
-import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.core.utils.appendBoldText
 

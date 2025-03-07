@@ -35,8 +35,14 @@ jobs:
     - name: Create Local Properties
       run: echo '${{ secrets.LOCAL_PROPERTIES }}' >> ./local.properties
 
+    - name: Create google-services
+      run: echo '${{ secrets.GOOGLE_SERVICES_JSON_DEBUG }}' > ./app/google-services.json
+
     - name: Run unit test
       run: ./gradlew domain:testdebugUnitTest
+
+    - name: Build on R8
+      run: ./gradlew assembleRelease -Pandroid.enableR8=true -PminifyEnabled=true -PshrinkResources=true
 
   lint:
     runs-on: ubuntu-latest

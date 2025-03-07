@@ -51,7 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.billingclient.api.Purchase
-import com.jinproject.design_compose.clearFocusIfKeyboardActive
+import com.jinproject.design_compose.utils.clearFocusIfKeyboardActive
 import com.jinproject.design_compose.component.DialogState
 import com.jinproject.design_compose.component.TextDialog
 import com.jinproject.design_compose.component.bar.BackButtonRowScopeAppBar
@@ -65,7 +65,7 @@ import com.jinproject.design_compose.component.rememberDialogState
 import com.jinproject.design_compose.component.text.ChatTextField
 import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
-import com.jinproject.design_compose.tu
+import com.jinproject.design_compose.utils.tu
 import com.jinproject.features.core.AuthManager
 import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.RealtimeDatabaseManager

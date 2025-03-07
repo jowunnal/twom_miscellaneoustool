@@ -1,6 +1,5 @@
 package com.jinproject.features.droplist
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,13 +13,12 @@ import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaf
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
+import com.jinproject.design_compose.utils.PreviewMiscellaneousToolTheme
 import com.jinproject.features.core.AnalyticsEvent
 import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
 import com.jinproject.features.droplist.component.DropListDetail

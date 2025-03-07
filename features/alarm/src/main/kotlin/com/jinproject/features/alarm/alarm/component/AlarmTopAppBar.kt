@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
+import com.jinproject.design_compose.utils.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.bar.DefaultAppBar
 import com.jinproject.design_ui.R
 

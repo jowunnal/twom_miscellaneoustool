@@ -34,7 +34,7 @@ import com.jinproject.design_compose.component.SubcomposeAsyncImageWithPreview
 import com.jinproject.design_compose.component.pushRefresh.MTProgressIndicatorRotating
 import com.jinproject.design_compose.theme.MiscellaneousToolColor
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
-import com.jinproject.design_compose.tu
+import com.jinproject.design_compose.utils.tu
 import com.jinproject.features.core.utils.toAssetImageUri
 import com.jinproject.features.simulator.EquipmentListPreviewParameters
 import com.jinproject.features.simulator.model.Empty

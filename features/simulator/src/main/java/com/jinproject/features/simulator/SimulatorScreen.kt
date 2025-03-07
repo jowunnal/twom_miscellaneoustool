@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
+import com.jinproject.design_compose.utils.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.layout.DefaultLayout
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.component.paddingvalues.MiscellanousToolPaddingValues

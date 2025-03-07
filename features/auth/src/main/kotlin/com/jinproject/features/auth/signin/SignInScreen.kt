@@ -24,7 +24,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.jinproject.design_compose.clearFocusIfKeyboardActive
+import com.jinproject.design_compose.utils.clearFocusIfKeyboardActive
 import com.jinproject.design_compose.component.HorizontalSpacer
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.component.bar.BackButtonTitleAppBar

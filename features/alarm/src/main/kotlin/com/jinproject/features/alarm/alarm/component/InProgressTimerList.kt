@@ -16,7 +16,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.core.util.doOnLocaleLanguage
-import com.jinproject.design_compose.PreviewMiscellaneousToolTheme
+import com.jinproject.design_compose.utils.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.component.DialogState
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.theme.Typography
