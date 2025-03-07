@@ -292,11 +292,11 @@
 
 ### 몬스터 도감
 
-https://github.com/user-attachments/assets/4d696520-1b30-4461-8b9d-33bf462cd38a
+https://github.com/user-attachments/assets/0580bdba-5d51-4637-a7a9-fd66da3edc02
 
 ### 아이템 도감
 
-https://github.com/user-attachments/assets/a504ef63-807f-44cf-89de-c569d927b852
+https://github.com/user-attachments/assets/a714a720-dd96-4980-907f-415854904280
 
 ### 길드마크 심볼
 
