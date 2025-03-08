@@ -29,7 +29,7 @@ fun MonsDropItem.toItemDataModel() = ItemModel(
     count = 0,
     enchantNumber = 0,
     price = 0,
-    type = "Weapon"
+    type = "miscellaneous"
 )
 
 fun List<MonsDropItem>.toItemDataModelList() = map { it.toItemDataModel() }

@@ -1,7 +1,6 @@
 package com.jinproject.data.repository.model
 
 import com.jinproject.domain.model.ItemType
-import com.jinproject.domain.model.MonsterType
 
 data class ItemModel(
     val name: String,
