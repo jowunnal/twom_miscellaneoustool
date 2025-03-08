@@ -21,7 +21,7 @@ class CacheDropListDataSourceImpl @Inject constructor(
         }
     }
 
-    override fun getMonsterListFromMap(map: String) = dropListDao.getMonsterListFromMap(map)
+    override fun getMonsterListFromMap(map: String): Flow<List<MonsterModel>> = dropListDao.getMonsterListFromMap(map)
         .map { response ->
             response.map { monster ->
                 MonsterModel(
@@ -35,12 +35,12 @@ class CacheDropListDataSourceImpl @Inject constructor(
             }
         }
 
-    override fun getMonsterByType(monsterType: String) =
+    override fun getMonsterByType(monsterType: String): Flow<List<MonsterModel>> =
         dropListDao.getMonsterByType(monsterType).map { response ->
             response.map { monster -> monster.toMonsterModel() }
         }
 
-    override fun getMonsInfo(monsterName: String) =
+    override fun getMonsInfo(monsterName: String): Flow<MonsterModel> =
         dropListDao.getMonsInfo(monsterName).map { monster ->
             monster.toMonsterModel()
         }
