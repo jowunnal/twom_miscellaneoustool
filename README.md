@@ -28,38 +28,6 @@
 - **AI 길드 마크 이미지 생성 기능** : Dalle3 API 를 활용하여, 로그인 한 유저가 최적화된 프롬프트로 길드 마크로 변환할 이미지를 생성할 수 있다.
 - **회원 정보 기능** : 인앱결제가 필요한 AI 길드 마크 이미지 생성 과 길드 마크 변환 기능을 서버로 저장하기 위해 Firebase-Storage 를 이용하고, 유저를 식별하기 위해 Firebase-Authentication 을 이용하여 로그인 및 회원관리를 제공한다.
 
-# Stacks
-
-| Category | Skill Set |
-| ----- | ----- |
-| Language | Kotlin |
-| UI toolkit | Compose |
-| Architecture | Clean Architecture |
-| Design Pattern | MVVM |
-| Android Component | Activity, Service, BroadcastReceiver |
-| Jetpack | Lifecycle, Navigation(Compose), AlarmManager, WindowManager |
-| Asynchronous | Kotlinx.Coroutines, Kotlinx.Coroutines.Flow |
-| Dependency Injection | Hilt |
-| Data | Room, DataStore(proto3), Retrofit2, Okhttp3|
-| Google | InAppPurchase, InAppUpdate, Admob |
-| Firebase | Firebase-Analytics, Firebase-Storage, Firebase-RealtimeDatabase, Firebase-Crashlytics |
-| Unit Test | Junit, Kotest, mockk |
-| CI/CD | Github Actions |
-
-# 개발 기간
-
-**2022.01** ~ **현재진행중**
-
-# Diagram
-
-### Module Dependency
-
-<img src="documentation/module_diagram.PNG" />
-
-### Database Logical Design
-
-<img src="documentation/db_logical_diagram.png" />
-
 # As-Is / Challenge / To-Be
 
 <details>
@@ -287,6 +255,38 @@
 
 </div>
 </details>
+
+# Stacks
+
+| Category | Skill Set |
+| ----- | ----- |
+| Language | Kotlin |
+| UI toolkit | Compose |
+| Architecture | Clean Architecture |
+| Design Pattern | MVVM |
+| Android Component | Activity, Service, BroadcastReceiver |
+| Jetpack | Lifecycle, Navigation(Compose), AlarmManager, WindowManager |
+| Asynchronous | Kotlinx.Coroutines, Kotlinx.Coroutines.Flow |
+| Dependency Injection | Hilt |
+| Data | Room, DataStore(proto3), Retrofit2, Okhttp3|
+| Google | InAppPurchase, InAppUpdate, Admob |
+| Firebase | Firebase-Analytics, Firebase-Storage, Firebase-RealtimeDatabase, Firebase-Crashlytics |
+| Unit Test | Junit, Kotest, mockk |
+| CI/CD | Github Actions |
+
+# 개발 기간
+
+**2022.01** ~ **현재진행중**
+
+# Diagram
+
+### Module Dependency
+
+<img src="documentation/module_diagram.PNG" />
+
+### Database Logical Design
+
+<img src="documentation/db_logical_diagram.png" />
  
 # UI
 
