@@ -241,16 +241,16 @@
 - Master 브랜치에 CD 환경 구축
   - Master 브랜치에 push 될 때, Release 인지 아니면 다른 이유로 push 된 것인지 1차적으로 검사하기 위해 커밋 메세지를 검사
   - Release: X.X.X 로 작성된 메세지라면, 다음 작업들을 직렬로 실행
-    - 1. Release Build
-    - 2. Signing
-    - 3. aab upload
-    - 4. 릴리즈 노트 생성
-    - 5. Play Console 에 aab 배포
+    - 1. Release Build 후 .aab 생성
+    - 2. aab Signing
+    - 3. Play Console 에 aab 배포
+    - 4. aab upload
+    - 5. 릴리즈 노트 생성
     - 6. Readme 업데이트
   - Develop 브랜치에서 실행된 테스트나 lint 검사를 다시 할 이유가 없으므로 해당 작업을 실행하지 않음
 
 ### To-Be
-- 반복적인 작업들을 자동화하여 개발에 대한 생산성이 증가 되었습니다.
+- 반복적인 작업들을 자동화하여 실수를 방지하고, 개발 생산성을 높일 수 있었습니다.
 - 개발 외의 작업들은 자동화 되어 편리성이 증가하고 개발에 더 집중할 수 있게 되었습니다.
 
 </div>

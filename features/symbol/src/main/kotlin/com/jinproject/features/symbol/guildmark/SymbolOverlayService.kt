@@ -268,6 +268,7 @@ class SymbolOverlayService : LifecycleService() {
                 DefaultIconButton(
                     icon = R.drawable.ic_x,
                     onClick = {
+                        wm.removeView(mView)
                         stopSelf()
                     },
                     iconTint = MaterialTheme.colorScheme.surface,
@@ -288,6 +289,11 @@ class SymbolOverlayService : LifecycleService() {
             gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
         }
         wm.addView(mView, params)
+    }
+
+    override fun onDestroy() {
+        mView = null
+        super.onDestroy()
     }
 
     companion object {
