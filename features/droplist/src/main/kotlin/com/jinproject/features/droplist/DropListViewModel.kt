@@ -63,7 +63,7 @@ class DropListViewModel @Inject constructor(
                     dropListRepository.getMonsterListFromMap(mapName).map { monsterModelList ->
                         monsterModelList.map { monsterModel ->
                             monsterModel.toMonsterState()
-                        }.toImmutableList()
+                        }.sorted().toImmutableList()
                     }.first()
                 } ?: persistentListOf()
 

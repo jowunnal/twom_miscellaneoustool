@@ -1,0 +1,100 @@
+package com.jinproject.features.droplist.component
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
+import coil.request.ImageRequest
+import com.jinproject.design_compose.component.SubcomposeAsyncImageWithPreview
+import com.jinproject.design_compose.component.VerticalSpacer
+import com.jinproject.design_compose.component.pushRefresh.MTProgressIndicatorRotating
+import com.jinproject.design_compose.component.text.DescriptionSmallText
+import com.jinproject.design_compose.theme.MiscellaneousToolColor
+import com.jinproject.design_compose.theme.MiscellaneousToolTheme
+import com.jinproject.domain.model.MonsterType
+import com.jinproject.features.core.utils.toAssetImageUri
+import com.jinproject.features.droplist.DropListUiState
+import com.jinproject.features.droplist.DropListUiStatePreviewParameter
+import com.jinproject.features.droplist.state.MonsterState
+
+@Composable
+internal fun ColumnScope.MonsterField(
+    modifier: Modifier = Modifier,
+    imgName: String,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    SubcomposeAsyncImageWithPreview(
+        model = ImageRequest
+            .Builder(LocalContext.current)
+            .data(toAssetImageUri(prefix = "monster", imgName = imgName))
+            .build(),
+        contentDescription = "Image",
+        loading = {
+            MTProgressIndicatorRotating()
+        },
+        contentScale = ContentScale.Fit,
+        modifier = modifier,
+        placeHolderPreview = com.jinproject.design_ui.R.drawable.test,
+    )
+    VerticalSpacer(height = 4.dp)
+    content()
+}
+
+@Composable
+internal fun ColumnScope.Monster(
+    modifier: Modifier = Modifier,
+    monster: MonsterState,
+) {
+    MonsterField(
+        modifier = modifier,
+        imgName = monster.imgName,
+    ) {
+        DescriptionSmallText(
+            text = monster.name,
+            color = when (monster.type) {
+                is MonsterType.Normal -> MaterialTheme.colorScheme.onBackground
+                is MonsterType.Named -> MiscellaneousToolColor.blue.color
+                is MonsterType.Boss -> MiscellaneousToolColor.orange.color
+                is MonsterType.BigBoss -> MiscellaneousToolColor.deepRed.color
+            }
+        )
+    }
+    if (monster.level > 0) {
+        DescriptionSmallText(
+            text = "Lv.${monster.level}",
+            modifier = Modifier.padding(vertical = 4.dp)
+        )
+    }
+    if (monster.type !is MonsterType.Normal)
+        DescriptionSmallText(
+            text = monster.displayGenTime(),
+            modifier = Modifier.padding(vertical = 4.dp)
+        )
+}
+
+@Composable
+@Preview(showBackground = true)
+private fun MonsterPreview(
+    @PreviewParameter(DropListUiStatePreviewParameter::class)
+    dropListUiState: DropListUiState,
+) = MiscellaneousToolTheme {
+    Column(modifier = Modifier
+        .width(100.dp)
+        .height(300.dp)
+        .wrapContentSize()) {
+        Monster(monster = dropListUiState.monsters.first())
+        Monster(monster = dropListUiState.monsters.find { it.type is MonsterType.Boss } ?: dropListUiState.monsters.first())
+        Monster(monster = dropListUiState.monsters.last())
+    }
+}

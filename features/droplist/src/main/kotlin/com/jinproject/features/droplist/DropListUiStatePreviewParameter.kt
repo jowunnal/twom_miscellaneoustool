@@ -108,9 +108,9 @@ class DropListUiStatePreviewParameter : PreviewParameterProvider<DropListUiState
             MonsterState(
                 name = "불도저주니어",
                 level = 5,
-                genTime = 30,
+                genTime = 300,
                 imgName = "bulldozerjr",
-                type = MonsterType.Normal("네임드"),
+                type = MonsterType.Named("네임드"),
                 items = persistentListOf(
                     "주문서D",
                     "무명로브",
@@ -124,9 +124,9 @@ class DropListUiStatePreviewParameter : PreviewParameterProvider<DropListUiState
             MonsterState(
                 name = "불도저",
                 level = 7,
-                genTime = 30,
+                genTime = 1100,
                 imgName = "bulldozer",
-                type = MonsterType.Normal("네임드"),
+                type = MonsterType.Boss("보스"),
                 items = persistentListOf(
                     "주문서D",
                     "무명로브",
@@ -140,9 +140,9 @@ class DropListUiStatePreviewParameter : PreviewParameterProvider<DropListUiState
             MonsterState(
                 name = "불도저형님",
                 level = 8,
-                genTime = 30,
+                genTime = 3900,
                 imgName = "bulldozerbro",
-                type = MonsterType.Normal("네임드"),
+                type = MonsterType.BigBoss("대형 보스"),
                 items = persistentListOf(
                     "주문서D",
                     "무명로브",

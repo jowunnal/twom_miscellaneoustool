@@ -1,0 +1,511 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 6,
+    "identityHash": "48df911761a9f4f6ac5ab1fb84686fa0",
+    "entities": [
+      {
+        "tableName": "Book",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookId` INTEGER NOT NULL, PRIMARY KEY(`bookId`))",
+        "fields": [
+          {
+            "fieldPath": "bookId",
+            "columnName": "bookId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "bookId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Item",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`itemName` TEXT NOT NULL, `itemType` TEXT NOT NULL, `itemPrice` INTEGER NOT NULL, PRIMARY KEY(`itemName`))",
+        "fields": [
+          {
+            "fieldPath": "itemName",
+            "columnName": "itemName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "itemType",
+            "columnName": "itemType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "itemPrice",
+            "columnName": "itemPrice",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "itemName"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "ItemInfo",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`item_name` TEXT NOT NULL, `type` TEXT NOT NULL, `value` REAL NOT NULL, PRIMARY KEY(`item_name`, `type`), FOREIGN KEY(`item_name`) REFERENCES `Item`(`itemName`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "item_name",
+            "columnName": "item_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "item_name",
+            "type"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Item",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "item_name"
+            ],
+            "referencedColumns": [
+              "itemName"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Equipment",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `level` INTEGER NOT NULL, `img_name` TEXT NOT NULL, PRIMARY KEY(`name`), FOREIGN KEY(`name`) REFERENCES `Item`(`itemName`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "level",
+            "columnName": "level",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "img_name",
+            "columnName": "img_name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "name"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Item",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "name"
+            ],
+            "referencedColumns": [
+              "itemName"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Monster",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`monsName` TEXT NOT NULL, `monsLevel` INTEGER NOT NULL, `monsGtime` INTEGER NOT NULL, `monsImgName` TEXT NOT NULL, `monsType` TEXT NOT NULL, PRIMARY KEY(`monsName`))",
+        "fields": [
+          {
+            "fieldPath": "monsName",
+            "columnName": "monsName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "monsLevel",
+            "columnName": "monsLevel",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "monsGtime",
+            "columnName": "monsGtime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "monsImgName",
+            "columnName": "monsImgName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "monsType",
+            "columnName": "monsType",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "monsName"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Maps",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mapName` TEXT NOT NULL, `mapImgName` TEXT NOT NULL, PRIMARY KEY(`mapName`))",
+        "fields": [
+          {
+            "fieldPath": "mapName",
+            "columnName": "mapName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mapImgName",
+            "columnName": "mapImgName",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "mapName"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Stat",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`book_id` INTEGER NOT NULL, `type` TEXT NOT NULL, `value` REAL NOT NULL, PRIMARY KEY(`book_id`, `type`), FOREIGN KEY(`book_id`) REFERENCES `Book`(`bookId`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "book_id",
+            "columnName": "book_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "book_id",
+            "type"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Book",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "book_id"
+            ],
+            "referencedColumns": [
+              "bookId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "MonsDropItem",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mdMonsName` TEXT NOT NULL, `mdItemName` TEXT NOT NULL, PRIMARY KEY(`mdMonsName`, `mdItemName`), FOREIGN KEY(`mdMonsName`) REFERENCES `Monster`(`monsName`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`mdItemName`) REFERENCES `Item`(`itemName`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "mdMonsName",
+            "columnName": "mdMonsName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mdItemName",
+            "columnName": "mdItemName",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "mdMonsName",
+            "mdItemName"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Monster",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "mdMonsName"
+            ],
+            "referencedColumns": [
+              "monsName"
+            ]
+          },
+          {
+            "table": "Item",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "mdItemName"
+            ],
+            "referencedColumns": [
+              "itemName"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "MonsLiveAtMap",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mlMonsName` TEXT NOT NULL, `mlMapName` TEXT NOT NULL, PRIMARY KEY(`mlMonsName`, `mlMapName`), FOREIGN KEY(`mlMonsName`) REFERENCES `Monster`(`monsName`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`mlMapName`) REFERENCES `Maps`(`mapName`) ON UPDATE CASCADE ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "mlMonsName",
+            "columnName": "mlMonsName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mlMapName",
+            "columnName": "mlMapName",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "mlMonsName",
+            "mlMapName"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Monster",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "mlMonsName"
+            ],
+            "referencedColumns": [
+              "monsName"
+            ]
+          },
+          {
+            "table": "Maps",
+            "onDelete": "NO ACTION",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "mlMapName"
+            ],
+            "referencedColumns": [
+              "mapName"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "RegisterItemToBook",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`bookId` INTEGER NOT NULL, `itemName` TEXT NOT NULL, `rlItemCount` INTEGER NOT NULL, `rlItemEnchant` INTEGER NOT NULL, PRIMARY KEY(`bookId`, `itemName`, `rlItemEnchant`), FOREIGN KEY(`bookId`) REFERENCES `Book`(`bookId`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`itemName`) REFERENCES `Item`(`itemName`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "bookId",
+            "columnName": "bookId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "itemName",
+            "columnName": "itemName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rlItemCount",
+            "columnName": "rlItemCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rlItemEnchant",
+            "columnName": "rlItemEnchant",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "bookId",
+            "itemName",
+            "rlItemEnchant"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Book",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "bookId"
+            ],
+            "referencedColumns": [
+              "bookId"
+            ]
+          },
+          {
+            "table": "Item",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "itemName"
+            ],
+            "referencedColumns": [
+              "itemName"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Timer",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`timerId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `day` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `min` INTEGER NOT NULL, `sec` INTEGER NOT NULL, `ota` INTEGER NOT NULL, `timerMonsName` TEXT NOT NULL, FOREIGN KEY(`timerMonsName`) REFERENCES `Monster`(`monsName`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "timerId",
+            "columnName": "timerId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "day",
+            "columnName": "day",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hour",
+            "columnName": "hour",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "min",
+            "columnName": "min",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sec",
+            "columnName": "sec",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ota",
+            "columnName": "ota",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timerMonsName",
+            "columnName": "timerMonsName",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "timerId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_Timer_timerMonsName",
+            "unique": false,
+            "columnNames": [
+              "timerMonsName"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Timer_timerMonsName` ON `${TABLE_NAME}` (`timerMonsName`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Monster",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "timerMonsName"
+            ],
+            "referencedColumns": [
+              "monsName"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '48df911761a9f4f6ac5ab1fb84686fa0')"
+    ]
+  }
+}

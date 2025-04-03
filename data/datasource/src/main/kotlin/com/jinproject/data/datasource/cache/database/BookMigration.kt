@@ -241,7 +241,7 @@ internal object BookMigration {
         }
     }
 
-    val MIGRATION_4_5_KOR = object: Migration(4,5) {
+    val MIGRATION_4_5_KOR = object : Migration(4, 5) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.apply {
                 execSQL("update Monster set monsGtime = 604800 where monsName = '플라타니스타'")
@@ -346,7 +346,7 @@ internal object BookMigration {
         }
     }
 
-    val MIGRATION_4_5_ELSE = object: Migration(4,5) {
+    val MIGRATION_4_5_ELSE = object : Migration(4, 5) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.apply {
                 execSQL("update Monster set monsGtime = 604800 where monsName = 'Platanista'")
@@ -447,6 +447,28 @@ internal object BookMigration {
                 execSQL("insert into MonsDropItem values ('Pure Knowledge', 'Seawater of Oblivion')")
                 execSQL("insert into MonsDropItem values ('Pure Knowledge', 'Destroyed Paper')")
                 execSQL("insert into MonsDropItem values ('Pure Knowledge', 'Old Scroll')")
+            }
+        }
+    }
+
+    val MIGRATION_5_6_KOR = object : Migration(5, 6) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.apply {
+                execSQL("update Monster set monsGtime = 259200 where monsName = '세피아'")
+                execSQL("update Monster set monsType = '대형보스' where monsName = '세피아'")
+                execSQL("update Monster set monsType = '보스' where monsName = '빌리어드'")
+                execSQL("update Monster set monsType = '보스' where monsName = '페이쓰'")
+            }
+        }
+    }
+
+    val MIGRATION_5_6_ELSE = object : Migration(5, 6) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.apply {
+                execSQL("update Monster set monsGtime = 259200 where monsName = 'Sephia'")
+                execSQL("update Monster set monsType = 'World Boss' where monsName = 'Sephia'")
+                execSQL("update Monster set monsType = 'Semi Boss' where monsName = 'Billiard'")
+                execSQL("update Monster set monsType = 'Semi Boss' where monsName = 'Faith'")
             }
         }
     }

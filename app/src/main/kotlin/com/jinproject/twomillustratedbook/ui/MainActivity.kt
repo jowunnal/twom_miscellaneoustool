@@ -38,10 +38,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.view.WindowCompat
-import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.BillingClient
@@ -67,8 +64,6 @@ import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.base.CommonDialogFragment
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
-import com.jinproject.features.core.isPurchased
-import com.jinproject.features.core.isPurchasedAndAcknowledged
 import com.jinproject.features.core.toProduct
 import com.jinproject.twomillustratedbook.BuildConfig
 import com.jinproject.twomillustratedbook.BuildConfig.ADMOB_REWARD_ID
@@ -325,8 +320,9 @@ class MainActivity : AppCompatActivity() {
                         modifier = Modifier.fillMaxSize(),
                         backgroundColor = MaterialTheme.colorScheme.background,
                         snackbarHost = {
-                            SnackBarHostCustom(headerMessage = snackBarHostState.currentSnackbarData?.message
-                                ?: "",
+                            SnackBarHostCustom(
+                                headerMessage = snackBarHostState.currentSnackbarData?.message
+                                    ?: "",
                                 contentMessage = snackBarHostState.currentSnackbarData?.actionLabel
                                     ?: "",
                                 snackBarHostState = snackBarHostState,
