@@ -3,6 +3,7 @@ package com.jinproject.design_compose.component.button
 import android.os.SystemClock
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.Indication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -26,8 +26,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.jinproject.design_compose.utils.PreviewMiscellaneousToolTheme
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
+import com.jinproject.design_compose.utils.PreviewMiscellaneousToolTheme
 import com.jinproject.design_ui.R
 
 @Composable
@@ -57,10 +57,10 @@ fun DefaultIconButton(
         backgroundColor = backgroundTint,
         contentPaddingValues = PaddingValues(horizontal = 0.dp, vertical = 0.dp),
     ) {
-        Icon(
-            painter = painterResource(id = icon),
+        Image(
+            painter = painterResource(icon),
             contentDescription = "Default Icon Button",
-            tint = iconColor
+            colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(iconColor)
         )
     }
 }
