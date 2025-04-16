@@ -19,7 +19,6 @@ internal class AndroidApplicationPlugin : Plugin<Project> {
 
         androidExtension.apply {
             defaultConfig {
-                testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 vectorDrawables {
                     useSupportLibrary = true
                 }

@@ -53,5 +53,9 @@ gradlePlugin {
             id = "jinProject.android.room"
             implementationClass = "gradle.plugin.android.AndroidRoomPlugin"
         }
+        register("kotlinLibrary") {
+            id = "jinProject.kotlin.library"
+            implementationClass = "gradle.plugin.kotlin.KotlinLibraryPlugin"
+        }
     }
 }
