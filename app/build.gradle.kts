@@ -56,8 +56,6 @@ fun getLocalKey(propertyKey:String):String{
 dependencies {
     implementation(project(":data:repository"))
     implementation(project(":data:datasource"))
-    implementation(project(":domain"))
-    implementation(project(":core"))
     implementation(project(":features:collection"))
     implementation(project(":features:droplist"))
     implementation(project(":features:alarm"))
@@ -65,7 +63,6 @@ dependencies {
     implementation(project(":features:symbol"))
     implementation(project(":features:simulator"))
     implementation(project(":design-compose"))
-    implementation(project(":design-ui"))
     implementation(project(":features:home"))
     implementation(project(":features:auth"))
     implementation(project(":features:info"))

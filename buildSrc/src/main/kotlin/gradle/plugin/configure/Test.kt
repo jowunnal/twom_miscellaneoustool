@@ -3,14 +3,11 @@ package gradle.plugin.configure
 import com.android.build.api.dsl.LibraryExtension
 import gradle.plugin.extension.getVersionCatalog
 import org.gradle.api.Project
-import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.withType
 
 @Suppress("UnstableApiUsage")
-internal fun Project.configureTest() {
-
+internal fun Project.configureAndroidTest() {
     extensions.configure<LibraryExtension> {
         defaultConfig {
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -21,10 +18,6 @@ internal fun Project.configureTest() {
                 it.useJUnitPlatform()
             }
         }
-    }
-
-    tasks.withType<Test>().configureEach {
-        useJUnitPlatform()
     }
 
     val libs = getVersionCatalog()

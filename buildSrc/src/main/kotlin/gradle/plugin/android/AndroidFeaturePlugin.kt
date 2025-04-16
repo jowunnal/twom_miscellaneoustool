@@ -1,6 +1,6 @@
 package gradle.plugin.android
 
-import gradle.plugin.configure.configureTest
+import gradle.plugin.configure.configureAndroidTest
 import gradle.plugin.extension.getVersionCatalog
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -15,7 +15,7 @@ internal class AndroidFeaturePlugin : Plugin<Project> {
             apply("jinProject.android.compose")
         }
 
-        configureTest()
+        configureAndroidTest()
 
         val libs = getVersionCatalog()
         dependencies {
