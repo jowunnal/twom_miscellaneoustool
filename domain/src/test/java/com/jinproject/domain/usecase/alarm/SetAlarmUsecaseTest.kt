@@ -1,14 +1,14 @@
 package com.jinproject.domain.usecase.alarm
 
-import com.jinproject.core.util.day
-import com.jinproject.core.util.hour
-import com.jinproject.core.util.minute
-import com.jinproject.core.util.second
+import com.jinproject.domain.day
+import com.jinproject.domain.hour
+import com.jinproject.domain.minute
 import com.jinproject.domain.model.MonsterModel
 import com.jinproject.domain.model.MonsterType
 import com.jinproject.domain.model.TimerModel
 import com.jinproject.domain.repository.DropListRepository
 import com.jinproject.domain.repository.TimerRepository
+import com.jinproject.domain.second
 import com.jinproject.domain.usecase.timer.Interval
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.Matcher
@@ -62,9 +62,11 @@ class SetAlarmUsecaseTest : BehaviorSpec() {
 
                     and("이전에 등록한 알람이 있었을 때") {
                         every { timerRepository.getTimer() } returns flow {
-                            emit(listOf(
-                                TimerModel.getInitValue()
-                            ))
+                            emit(
+                                listOf(
+                                    TimerModel.getInitValue()
+                                )
+                            )
                         }
 
                         `when`("알람을 설정 하면") {
@@ -178,7 +180,10 @@ class SetAlarmUsecaseTest : BehaviorSpec() {
     private fun alarmMatch(monsAlarmModel: SetAlarmUsecase.MonsterAlarmModel) = Matcher.compose(
         isValueMatchAnswer(monsAlarmModel.code, 1) to SetAlarmUsecase.MonsterAlarmModel::code,
         isValueMatchAnswer(monsAlarmModel.gtime, 900) to SetAlarmUsecase.MonsterAlarmModel::gtime,
-        isValueMatchAnswer(monsAlarmModel.img, "bulldozer") to SetAlarmUsecase.MonsterAlarmModel::img,
+        isValueMatchAnswer(
+            monsAlarmModel.img,
+            "bulldozer"
+        ) to SetAlarmUsecase.MonsterAlarmModel::img,
         isValueMatchAnswer(monsAlarmModel.name, "불도저") to SetAlarmUsecase.MonsterAlarmModel::name,
         isValueMatchAnswer(monsAlarmModel.nextGtime) to SetAlarmUsecase.MonsterAlarmModel::nextGtime
     )

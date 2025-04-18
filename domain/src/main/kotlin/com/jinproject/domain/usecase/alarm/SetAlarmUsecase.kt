@@ -1,9 +1,5 @@
 package com.jinproject.domain.usecase.alarm
 
-import com.jinproject.core.util.day
-import com.jinproject.core.util.hour
-import com.jinproject.core.util.minute
-import com.jinproject.core.util.second
 import com.jinproject.domain.model.TimerModel
 import com.jinproject.domain.repository.DropListRepository
 import com.jinproject.domain.repository.TimerRepository
@@ -22,6 +18,31 @@ class SetAlarmUsecase @Inject constructor(
         val gtime: Int,
         val nextGtime: Long
     )
+
+    var Calendar.day
+        get() = get(Calendar.DAY_OF_WEEK)
+        set(value) {
+            set(Calendar.DAY_OF_WEEK, value)
+        }
+
+    var Calendar.hour
+        get() = get(Calendar.HOUR_OF_DAY)
+        set(value) {
+            set(Calendar.HOUR_OF_DAY, value)
+        }
+
+    var Calendar.minute
+        get() = get(Calendar.MINUTE)
+        set(value) {
+            set(Calendar.MINUTE, value)
+        }
+
+    var Calendar.second
+        get() = get(Calendar.SECOND)
+        set(value) {
+            set(Calendar.SECOND, value)
+        }
+
     operator fun invoke(
         monsterName: String,
         monsDiedHour: Int,
