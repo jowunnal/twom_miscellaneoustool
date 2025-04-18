@@ -1,13 +1,12 @@
 package com.jinproject.data.repository.datasource
 
-import com.jinproject.data.repository.datasource.base.CacheDataStoreDataSource
 import com.jinproject.data.repository.model.AlarmStoredBoss
 import com.jinproject.data.repository.model.Interval
 import com.jinproject.data.repository.model.OverlaySetting
 import com.jinproject.data.repository.model.Timer
 import kotlinx.coroutines.flow.Flow
 
-interface CacheTimerDataSource<T> : CacheDataStoreDataSource<T> {
+interface CacheTimerDataSource {
     fun getOverlaySetting(): Flow<OverlaySetting>
     fun getInterval(): Flow<Interval>
     fun getAlarmStoredBoss(): Flow<AlarmStoredBoss>

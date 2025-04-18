@@ -1,6 +1,5 @@
 package com.jinproject.data.repository.repo
 
-import com.jinproject.data.CollectionPreferences
 import com.jinproject.data.repository.datasource.CacheCollectionDataSource
 import com.jinproject.domain.model.CollectionModel
 import com.jinproject.domain.model.ItemModel
@@ -12,7 +11,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class CollectionRepositoryImpl @Inject constructor(
-    private val cacheCollectionDataSource: CacheCollectionDataSource<CollectionPreferences>
+    private val cacheCollectionDataSource: CacheCollectionDataSource
 ) : CollectionRepository {
 
     override fun getCollectionList(): Flow<List<CollectionModel>> =

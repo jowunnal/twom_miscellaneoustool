@@ -1,6 +1,5 @@
 package com.jinproject.data.repository.repo
 
-import com.jinproject.data.CollectionPreferences
 import com.jinproject.data.repository.datasource.CacheCollectionDataSource
 import com.jinproject.data.repository.datasource.RemoteGenerateImageDataSource
 import com.jinproject.data.repository.datasource.RemoteImageDownloadManager
@@ -12,7 +11,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SymbolRepositoryImpl @Inject constructor(
-    private val cacheCollectionDataStorePreferences: CacheCollectionDataSource<CollectionPreferences>,
+    private val cacheCollectionDataStorePreferences: CacheCollectionDataSource,
     private val remoteGenerateImageDataSource: RemoteGenerateImageDataSource,
     private val imageDownloadManager: RemoteImageDownloadManager,
 ) : SymbolRepository {

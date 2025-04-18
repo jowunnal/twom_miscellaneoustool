@@ -14,5 +14,4 @@ dependencies {
     implementation(project(":core"))
 
     implementation(libs.coroutines.core)
-    api(libs.datastore)
 }

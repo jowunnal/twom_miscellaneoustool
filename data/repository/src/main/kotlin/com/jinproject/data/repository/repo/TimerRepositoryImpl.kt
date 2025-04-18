@@ -1,6 +1,5 @@
 package com.jinproject.data.repository.repo
 
-import com.jinproject.core.TimerPreferences
 import com.jinproject.data.repository.datasource.CacheTimerDataSource
 import com.jinproject.data.repository.model.toDomainModel
 import com.jinproject.data.repository.model.toTimerModel
@@ -14,7 +13,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class TimerRepositoryImpl @Inject constructor(
-    private val cacheTimerDataSource: CacheTimerDataSource<TimerPreferences>
+    private val cacheTimerDataSource: CacheTimerDataSource
 ) : TimerRepository {
 
     override fun getOverlaySetting(): Flow<OverlaySetting> =
