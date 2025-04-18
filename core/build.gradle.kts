@@ -1,6 +1,5 @@
 plugins {
     id("jinProject.android.library")
-    id("jinProject.android.protobuf")
 }
 
 android {
@@ -8,5 +7,4 @@ android {
 }
 
 dependencies {
-    implementation(libs.datastore)
 }
