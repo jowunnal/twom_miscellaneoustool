@@ -2,7 +2,11 @@ package com.jinproject.features.simulator.model
 
 import android.content.Context
 import com.jinproject.core.util.doOnLocaleLanguage
-import com.jinproject.domain.model.Stat
+import com.jinproject.domain.entity.item.ArmorScroll
+import com.jinproject.domain.entity.item.EnchantableEquipment
+import com.jinproject.domain.entity.item.GradeScroll
+import com.jinproject.domain.entity.item.Item
+import com.jinproject.domain.entity.item.WeaponScroll
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -43,7 +47,7 @@ internal data class Weapon(
 
     internal fun getDamageRangeEnchanted(context: Context): IntRange {
         val isMagicianWeapon =
-            options.any { option -> option.name == Stat.STATINT || option.name == Stat.MP }
+            options.any { option -> option.name == "STATINT" || option.name == "MP" || option.name == "마나" || option.name == "지능" }
 
         val addition = if (!isMagicianWeapon) {
             11 * enchantNumber + (11 * (enchantNumber - 6)).coerceAtLeast(0)
@@ -76,12 +80,15 @@ internal data class Weapon(
     }
 
     companion object {
+        const val SPEED = "speed"
+        const val MAXDAMAGE = "MaxDamage"
+        const val MINDAMAGE = "MinDamage"
         fun getInitValues(uuid: String) = Weapon(
             name = "버닝 블레이드",
             level = 46,
             options = listOf(
-                ItemOption(name = Stat.HR, value = 8.0f),
-                ItemOption(name = Stat.CRI, value = 2.0f)
+                ItemOption(name = "명중", value = 8.0f),
+                ItemOption(name = "크리티컬", value = 2.0f)
             ),
             damage = 10..70,
             speed = 1.2f,
@@ -90,4 +97,50 @@ internal data class Weapon(
             uuid = uuid,
         )
     }
+
+    override fun toDomainModel(uuid: String?): EnchantableEquipment =
+        com.jinproject.domain.entity.item.Weapon(
+            stats = options.toMap(),
+            limitedLevel = level,
+            name = name,
+            price = 0,
+            type = com.jinproject.domain.entity.item.ItemType.NORMAL,
+            speed = speed.toInt(),
+            damageRange = damage,
+            uuid = uuid ?: this.uuid
+        ).apply {
+            enchantNumber = this@Weapon.enchantNumber
+        }
 }
+
+fun Item.transImageName(): String =
+    when (this) {
+        is com.jinproject.domain.entity.item.Equipment ->
+            when (name) {
+                "버닝블레이드", "Burning Blade" -> "burning_blade"
+                "페일노트", "Fail-Not" -> "fail_not"
+                "파괴의홀", "Hole of Destruction" -> "hole_of_destruction"
+                "임페리얼보우", "Imperial Bow" -> "imperial_bow"
+                "인퀴지션", "Inquisition" -> "inquisition"
+                "소울이터", "Soul Eater" -> "soul_eater"
+                else -> ""
+            }
+
+        is WeaponScroll -> when (grade) {
+            GradeScroll.Grade.S -> "weapon_s"
+            GradeScroll.Grade.A -> "weapon_a"
+            GradeScroll.Grade.B -> "weapon_b"
+            GradeScroll.Grade.C -> "weapon_c"
+            GradeScroll.Grade.D -> "weapon_d"
+        }
+
+        is ArmorScroll -> when (grade) {
+            GradeScroll.Grade.S -> "armor_s"
+            GradeScroll.Grade.A -> "armor_a"
+            GradeScroll.Grade.B -> "armor_b"
+            GradeScroll.Grade.C -> "armor_c"
+            GradeScroll.Grade.D -> "armor_d"
+        }
+
+        else -> ""
+    }

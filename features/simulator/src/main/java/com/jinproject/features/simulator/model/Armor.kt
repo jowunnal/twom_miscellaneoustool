@@ -1,6 +1,6 @@
 package com.jinproject.features.simulator.model
 
-import com.jinproject.domain.model.Stat
+import com.jinproject.domain.entity.item.EnchantableEquipment
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -27,11 +27,12 @@ internal data class Armor(
     }
 
     companion object {
+        const val ARMOR = "armor"
         fun getInitValues(uuid: String) = Armor(
             name = "세계수가지갑옷",
             level = 44,
             options = listOf(
-                ItemOption(name = Stat.HP, value = 28.0f),
+                ItemOption(name = "체력", value = 28.0f),
             ),
             armor = 14,
             enchantNumber = 0,
@@ -39,4 +40,17 @@ internal data class Armor(
             uuid = uuid,
         )
     }
+
+    override fun toDomainModel(uuid: String?): EnchantableEquipment =
+        com.jinproject.domain.entity.item.Armor(
+            stats = options.toMap(),
+            limitedLevel = level,
+            name = name,
+            price = 0,
+            type = com.jinproject.domain.entity.item.ItemType.NORMAL,
+            armor = armor,
+            uuid = uuid ?: this.uuid
+        ).apply {
+            enchantNumber = this@Armor.enchantNumber
+        }
 }

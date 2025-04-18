@@ -32,7 +32,6 @@ import com.jinproject.design_compose.theme.MiscellaneousToolColor
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.features.simulator.SimulatorStatePreviewParameters
 import com.jinproject.features.simulator.model.Empty
-import com.jinproject.features.simulator.model.Equipment
 import com.jinproject.features.simulator.model.SimulatorState
 import com.jinproject.features.simulator.model.formatter
 import kotlinx.serialization.encodeToString
@@ -45,7 +44,6 @@ internal fun ItemList(
     itemPadding: PaddingValues,
     itemSizeDp: Dp,
     simulatorState: SimulatorState,
-    selectedEquipment: Equipment,
     setIsEquipmentDragging: (Boolean) -> Unit,
     showBottomSheet: () -> Unit,
 ) {
@@ -67,7 +65,7 @@ internal fun ItemList(
                     item = item,
                     modifier = Modifier
                         .then(
-                            if (!selectedEquipment.uuid.contentEquals(item.uuid))
+                            if (!simulatorState.selectedItem.uuid.contentEquals(item.uuid))
                                 Modifier.dragAndDropSource {
                                     detectTapGestures(onPress = {
                                         startTransfer(
@@ -82,7 +80,7 @@ internal fun ItemList(
                                 }
                             else Modifier
                         )
-                        .alpha(if (selectedEquipment.uuid.contentEquals(item.uuid)) 0.3f else 1f)
+                        .alpha(if (simulatorState.selectedItem.uuid.contentEquals(item.uuid)) 0.3f else 1f)
                 )
             }
         }
@@ -121,7 +119,6 @@ private fun PreviewItemList(
             itemPadding = PaddingValues(itemPadding),
             itemSizeDp = itemWidthDp,
             simulatorState = simulatorState,
-            selectedEquipment = Empty(),
             setIsEquipmentDragging = {},
             showBottomSheet = {},
         )
@@ -150,7 +147,6 @@ private fun PreviewItemListSelected(
             itemPadding = PaddingValues(itemPadding),
             itemSizeDp = itemWidthDp,
             simulatorState = simulatorState,
-            selectedEquipment = Empty(),
             setIsEquipmentDragging = {},
             showBottomSheet = {},
         )

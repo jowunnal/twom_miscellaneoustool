@@ -18,7 +18,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.component.text.DescriptionMediumText
@@ -65,17 +64,14 @@ internal fun ItemDetail(
             is Weapon -> {
                 val enchantedDamage = equipment.getDamageRangeEnchanted(context)
 
-                val damageText = "${stringResource(id = com.jinproject.design_ui.R.string.item_detail_attack)} ${enchantedDamage.first}-${enchantedDamage.last}"
-                val speedText = "${stringResource(id = com.jinproject.design_ui.R.string.item_detail_speed)} ${equipment.speed}"
+                val damageText =
+                    "${stringResource(id = com.jinproject.design_ui.R.string.item_detail_attack)} ${enchantedDamage.first}-${enchantedDamage.last}"
+                val speedText =
+                    "${stringResource(id = com.jinproject.design_ui.R.string.item_detail_speed)} ${equipment.speed}"
                 val optionsText = equipment.options.filter { option ->
                     option.value.toInt() != 0
                 }.joinToString("\n") { option ->
-                    "${
-                        context.doOnLocaleLanguage(
-                            onKo = option.name.displayName,
-                            onElse = option.name.displayOtherLanguage
-                        )
-                    } ${option.value.toInt()}"
+                    "${option.name} ${option.value.toInt()}"
                 }
 
                 "$damageText\n$speedText\n$optionsText"
