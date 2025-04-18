@@ -37,7 +37,7 @@ retrofit2 = "2.9.0"
 room = "2.6.1"
 
 # plugin
-androidStudioGradlePlugin = "8.5.0"
+androidStudioGradlePlugin = "8.6.0"
 gmsGoogleServicePlugin = "4.4.2"
 firebaseCrashlyticsPlugin = "2.9.9"
 kotlin = "2.0.10"

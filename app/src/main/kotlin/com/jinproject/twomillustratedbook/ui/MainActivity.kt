@@ -13,14 +13,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.SnackbarHostState
 import androidx.compose.material3.LocalTonalElevationEnabled
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.NavigationRailItemDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemColors
@@ -134,7 +133,6 @@ class MainActivity : AppCompatActivity() {
             enableEdgeToEdge()
 
         super.onCreate(savedInstanceState)
-
         firebaseAnalytics = Firebase.analytics
 
         setContent {
@@ -318,12 +316,12 @@ class MainActivity : AppCompatActivity() {
 
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
-                        backgroundColor = MaterialTheme.colorScheme.background,
+                        // backgroundColor = MaterialTheme.colorScheme.background,
                         snackbarHost = {
                             SnackBarHostCustom(
-                                headerMessage = snackBarHostState.currentSnackbarData?.message
+                                headerMessage = snackBarHostState.currentSnackbarData?.visuals?.message
                                     ?: "",
-                                contentMessage = snackBarHostState.currentSnackbarData?.actionLabel
+                                contentMessage = snackBarHostState.currentSnackbarData?.visuals?.actionLabel
                                     ?: "",
                                 snackBarHostState = snackBarHostState,
                                 disMissSnackBar = { snackBarHostState.currentSnackbarData?.dismiss() })
