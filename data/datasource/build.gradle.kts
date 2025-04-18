@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.coroutines.core)
 
     implementation(libs.bundles.square)
+    implementation(libs.datastore)
 }
 
 androidComponents {

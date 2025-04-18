@@ -16,11 +16,3 @@ data class Equipment(
     val level: Int,
     val img_name: String,
 )
-
-fun Equipment.toEquipmentDataModel() = com.jinproject.data.repository.model.Equipment(
-    name = name,
-    level = level,
-    img_name = img_name,
-)
-
-fun List<Equipment>.toEquipmentsDataModel() = map { it.toEquipmentDataModel() }

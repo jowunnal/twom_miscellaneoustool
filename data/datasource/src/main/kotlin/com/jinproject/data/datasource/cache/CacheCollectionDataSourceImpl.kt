@@ -16,11 +16,11 @@ import java.io.IOException
 import javax.inject.Inject
 
 class CacheCollectionDataSourceImpl @Inject constructor(
-    override val prefs: DataStore<CollectionPreferences>,
+    val prefs: DataStore<CollectionPreferences>,
     private val collectionDao: CollectionDao,
-) : CacheCollectionDataSource<CollectionPreferences> {
+) : CacheCollectionDataSource {
 
-    override val data: Flow<CollectionPreferences> = prefs.data
+    val data: Flow<CollectionPreferences> = prefs.data
         .catch { exception ->
             if (exception is IOException) {
                 emit(CollectionPreferences.getDefaultInstance())

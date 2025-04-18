@@ -2,18 +2,41 @@ package com.jinproject.data.datasource.cache.database.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import androidx.room.RewriteQueriesToDropUnusedColumns
-import com.jinproject.data.datasource.cache.database.entity.Equipment
+import androidx.room.Transaction
 import com.jinproject.data.datasource.cache.database.entity.ItemInfo
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SimulatorDao {
 
-    @RewriteQueriesToDropUnusedColumns
-    @Query("select * from Equipment inner join ItemInfo on ItemInfo.item_name = Equipment.name where ItemInfo.item_name like:itemName")
-    fun getItemInfo(itemName: String): Flow<Map<Equipment, List<ItemInfo>>>
+    @Transaction
+    @Query(
+        """
+        select * 
+        from Item 
+        inner join ItemInfo on ItemInfo.item_name = Item.itemName
+        inner join Equipment on Item.itemName = Equipment.name
+        where Item.itemName = :itemName
+    """
+    )
+    fun getItemInfo(itemName: String): Flow<Map<ItemWithEquipmentInfo, List<ItemInfo>>>
 
-    @Query("select DISTINCT name, level, img_name from ItemInfo inner join Equipment on ItemInfo.item_name = Equipment.name")
-    fun getAvailableItem(): Flow<List<Equipment>>
+    @Transaction
+    @Query(
+        """
+        select * 
+        from Item 
+        inner join ItemInfo on ItemInfo.item_name = Item.itemName
+        inner join Equipment on Item.itemName = Equipment.name
+    """
+    )
+    fun getItemInfos(): Flow<Map<ItemWithEquipmentInfo, List<ItemInfo>>>
 }
+
+data class ItemWithEquipmentInfo(
+    val itemName: String,
+    val itemType: String,
+    val itemPrice: Long,
+    val level: Int,
+    val img_name: String
+)

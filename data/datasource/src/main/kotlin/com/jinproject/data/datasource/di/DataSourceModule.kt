@@ -1,8 +1,5 @@
 package com.jinproject.data.datasource.di
 
-import com.jinproject.core.TimerPreferences
-import com.jinproject.data.CollectionPreferences
-import com.jinproject.data.SimulatorPreferences
 import com.jinproject.data.datasource.cache.CacheCollectionDataSourceImpl
 import com.jinproject.data.datasource.cache.CacheDropListDataSourceImpl
 import com.jinproject.data.datasource.cache.CacheSimulatorDataSourceImpl
@@ -27,15 +24,15 @@ abstract class DataSourceModule {
 
     @Singleton
     @Binds
-    abstract fun bindsCacheSimulatorDataSource(cacheSimulatorDataSourceImpl: CacheSimulatorDataSourceImpl): CacheSimulatorDataSource<SimulatorPreferences>
+    abstract fun bindsCacheSimulatorDataSource(cacheSimulatorDataSourceImpl: CacheSimulatorDataSourceImpl): CacheSimulatorDataSource
 
     @Singleton
     @Binds
-    abstract fun bindsCacheCollectionDataSource(cacheCollectionDataSourceImpl: CacheCollectionDataSourceImpl): CacheCollectionDataSource<CollectionPreferences>
+    abstract fun bindsCacheCollectionDataSource(cacheCollectionDataSourceImpl: CacheCollectionDataSourceImpl): CacheCollectionDataSource
 
     @Singleton
     @Binds
-    abstract fun bindsCacheTimerDataSource(cacheTimerDataSourceImpl: CacheTimerDataSourceImpl): CacheTimerDataSource<TimerPreferences>
+    abstract fun bindsCacheTimerDataSource(cacheTimerDataSourceImpl: CacheTimerDataSourceImpl): CacheTimerDataSource
 
     @Singleton
     @Binds

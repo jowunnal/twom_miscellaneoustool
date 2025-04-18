@@ -10,10 +10,8 @@ import com.jinproject.data.datasource.cache.datastore.serializer.CollectionPrefe
 import com.jinproject.data.datasource.cache.datastore.serializer.SimulatorPreferencesSerializer
 import com.jinproject.data.datasource.cache.datastore.serializer.TimerPreferencesSerializer
 
-private const val DATA_STORE_FILE_NAME = "timer_prefs.pb"
-
 internal val Context.timerPreferencesStore: DataStore<TimerPreferences> by dataStore(
-    fileName = DATA_STORE_FILE_NAME,
+    fileName = "timer_prefs.pb",
     serializer = TimerPreferencesSerializer
 )
 

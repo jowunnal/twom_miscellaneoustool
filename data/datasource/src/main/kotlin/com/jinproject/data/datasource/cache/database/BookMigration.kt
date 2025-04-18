@@ -450,7 +450,6 @@ internal object BookMigration {
             }
         }
     }
-
     val MIGRATION_5_6_KOR = object : Migration(5, 6) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.apply {
@@ -458,6 +457,46 @@ internal object BookMigration {
                 execSQL("update Monster set monsType = '대형보스' where monsName = '세피아'")
                 execSQL("update Monster set monsType = '보스' where monsName = '빌리어드'")
                 execSQL("update Monster set monsType = '보스' where monsName = '페이쓰'")
+
+                execSQL("update ItemInfo set type = '명중' where type = 'HR'")
+                execSQL("update ItemInfo set type = '크리티컬' where type = 'CRI'")
+                execSQL("update ItemInfo set type = '민첩' where type = 'STATDEX'")
+                execSQL("update ItemInfo set type = '이동속도' where type = 'MOVE'")
+                execSQL("update ItemInfo set type = '지능' where type = 'STATINT'")
+                execSQL("update ItemInfo set type = '마나재생' where type = 'MPREGEN'")
+                execSQL("update ItemInfo set type = '속도' where type = 'SPEED'")
+                execSQL("update ItemInfo set type = '최소데미지' where type = 'MINDAMAGE'")
+                execSQL("update ItemInfo set type = '최대데미지' where type = 'MAXDAMAGE'")
+                execSQL("update ItemInfo set type = '힘' where type = 'STATSTR'")
+                execSQL("update ItemInfo set type = '마나' where type = 'MP'")
+
+                execSQL("update Stat set type = '체력' where type = 'HP'")
+                execSQL("update Stat set type = '마나' where type = 'MP'")
+                execSQL("update Stat set type = '체력%' where type = 'HPPER'")
+                execSQL("update Stat set type = '마나%' where type = 'MPPER'")
+                execSQL("update Stat set type = '체력재생' where type = 'HPREGEN'")
+                execSQL("update Stat set type = '마나재생' where type = 'MPREGEN'")
+                execSQL("update Stat set type = '명중' where type = 'HR'")
+                execSQL("update Stat set type = '지능' where type = 'STATINT'")
+                execSQL("update Stat set type = '민첩' where type = 'STATDEX'")
+                execSQL("update Stat set type = '힘' where type = 'STATSTR'")
+                execSQL("update Stat set type = '크리티컬저항%' where type = 'CRITRESISTPER'")
+                execSQL("update Stat set type = '이동속도' where type = 'MOVE'")
+                execSQL("update Stat set type = '방어력' where type = 'ARMOR'")
+                execSQL("update Stat set type = 'pve데미지' where type = 'PVEDMG'")
+                execSQL("update Stat set type = 'pvp데미지' where type = 'PVPDMG'")
+                execSQL("update Stat set type = 'pvp데미지%' where type = 'PVPDMGPER'")
+                execSQL("update Stat set type = 'pve데미지%' where type = 'PVEDMGPER'")
+                execSQL("update Stat set type = 'pve데미지감소' where type = 'PVEDMGDOWN'")
+                execSQL("update Stat set type = 'pve데미지감소%' where type = 'PVEDMGDOWNPER'")
+                execSQL("update Stat set type = 'pvp데미지감소' where type = 'PVPDMGDOWN'")
+                execSQL("update Stat set type = 'pvp데미지감소%' where type = 'PVPDMGDOWNPER'")
+                execSQL("update Stat set type = '골드드랍률' where type = 'GOLDDROP'")
+                execSQL("update Stat set type = '아이템드랍률' where type = 'ITEMDROP'")
+                execSQL("update Stat set type = '보스데미지%' where type = 'BOSSDMGPER'")
+                execSQL("update Stat set type = '크티리컬데미지감소' where type = 'CRITDMGDOWN'")
+                execSQL("update Stat set type = '크리티컬데미지감소%' where type = 'CRITDMGDOWNPER'")
+                execSQL("update Stat set type = '회피' where type = 'MISS'")
             }
         }
     }
@@ -469,7 +508,48 @@ internal object BookMigration {
                 execSQL("update Monster set monsType = 'World Boss' where monsName = 'Sephia'")
                 execSQL("update Monster set monsType = 'Semi Boss' where monsName = 'Billiard'")
                 execSQL("update Monster set monsType = 'Semi Boss' where monsName = 'Faith'")
+
+                execSQL("update ItemInfo set type = 'Hr' where type = 'HR'")
+                execSQL("update ItemInfo set type = 'Cri' where type = 'CRI'")
+                execSQL("update ItemInfo set type = 'Dex' where type = 'STATDEX'")
+                execSQL("update ItemInfo set type = 'Move' where type = 'MOVE'")
+                execSQL("update ItemInfo set type = 'Int' where type = 'STATINT'")
+                execSQL("update ItemInfo set type = 'MpRegen' where type = 'MPREGEN'")
+                execSQL("update ItemInfo set type = 'Speed' where type = 'SPEED'")
+                execSQL("update ItemInfo set type = 'MinDamage' where type = 'MINDAMAGE'")
+                execSQL("update ItemInfo set type = 'MaxDamage' where type = 'MAXDAMAGE'")
+                execSQL("update ItemInfo set type = 'Str' where type = 'STATSTR'")
+                execSQL("update ItemInfo set type = 'Mp' where type = 'MP'")
+
+                execSQL("update Stat set type = 'Hp' where type = 'HP'")
+                execSQL("update Stat set type = 'Mp' where type = 'MP'")
+                execSQL("update Stat set type = 'HpPer' where type = 'HPPER'")
+                execSQL("update Stat set type = 'MpPer' where type = 'MPPER'")
+                execSQL("update Stat set type = 'HpRegen' where type = 'HPREGEN'")
+                execSQL("update Stat set type = 'MpRegen' where type = 'MPREGEN'")
+                execSQL("update Stat set type = 'Hr' where type = 'HR'")
+                execSQL("update Stat set type = 'Int' where type = 'STATINT'")
+                execSQL("update Stat set type = 'Dex' where type = 'STATDEX'")
+                execSQL("update Stat set type = 'Str' where type = 'STATSTR'")
+                execSQL("update Stat set type = 'CriResistPer' where type = 'CRITRESISTPER'")
+                execSQL("update Stat set type = 'Move' where type = 'MOVE'")
+                execSQL("update Stat set type = 'Armor' where type = 'ARMOR'")
+                execSQL("update Stat set type = 'PveDmg' where type = 'PVEDMG'")
+                execSQL("update Stat set type = 'PvpDmg' where type = 'PVPDMG'")
+                execSQL("update Stat set type = 'PvpDmgPer' where type = 'PVPDMGPER'")
+                execSQL("update Stat set type = 'PveDmgPer' where type = 'PVEDMGPER'")
+                execSQL("update Stat set type = 'PveDmgDown' where type = 'PVEDMGDOWN'")
+                execSQL("update Stat set type = 'PveDmgDownPer' where type = 'PVEDMGDOWNPER'")
+                execSQL("update Stat set type = 'PvpDmgDown' where type = 'PVPDMGDOWN'")
+                execSQL("update Stat set type = 'PvpDmgDownPer' where type = 'PVPDMGDOWNPER'")
+                execSQL("update Stat set type = 'GoldDrop' where type = 'GOLDDROP'")
+                execSQL("update Stat set type = 'ItemDrop' where type = 'ITEMDROP'")
+                execSQL("update Stat set type = 'BossDmgPer' where type = 'BOSSDMGPER'")
+                execSQL("update Stat set type = 'CriDmgDown' where type = 'CRITDMGDOWN'")
+                execSQL("update Stat set type = 'CriDmgDownPer' where type = 'CRITDMGDOWNPER'")
+                execSQL("update Stat set type = 'Evade' where type = 'MISS'")
             }
         }
     }
+
 }

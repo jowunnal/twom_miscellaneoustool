@@ -19,11 +19,11 @@ import java.io.IOException
 import javax.inject.Inject
 
 class CacheTimerDataSourceImpl @Inject constructor(
-    override val prefs: DataStore<TimerPreferences>,
+    private val prefs: DataStore<TimerPreferences>,
     private val timerDao: TimerDao,
-) : CacheTimerDataSource<TimerPreferences> {
+) : CacheTimerDataSource {
 
-    override val data: Flow<TimerPreferences> = prefs.data
+    val data: Flow<TimerPreferences> = prefs.data
         .catch { exception ->
             if (exception is IOException) {
                 emit(TimerPreferences.getDefaultInstance())
