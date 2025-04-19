@@ -12,7 +12,7 @@ abstract class Equipment : Item() {
     abstract val type: ItemType
 }
 
-abstract class EnchantableEquipment: Equipment(), Enchant {
+abstract class EnchantableEquipment : Equipment(), Enchant {
     abstract val uuid: String
 }
 
@@ -23,6 +23,7 @@ data class Weapon(
     override val price: Long,
     override val type: ItemType,
     override val uuid: String,
+    override val imageName: String,
     val speed: Int,
     val damageRange: IntRange,
 ) : EnchantableEquipment() {
@@ -56,6 +57,7 @@ data class Armor(
     override val price: Long,
     override val type: ItemType,
     override val uuid: String,
+    override val imageName: String,
     val armor: Int,
 ) : EnchantableEquipment() {
 
@@ -88,10 +90,11 @@ data class Accessory(
     override val price: Long,
     override val type: ItemType,
     override val uuid: String,
+    override val imageName: String,
     val armor: Int,
 ) : EnchantableEquipment() {
 
-    var enchantScrollType: StatEnchantScrollType? = null
+    private var enchantScrollType: StatEnchantScrollType? = null
 
     override var enchantNumber: Int = 0
 
@@ -99,8 +102,7 @@ data class Accessory(
         return if (scroll is StatScroll) {
             enchantScrollType = scroll.stat
             true
-        }
-        else
+        } else
             false
     }
 
@@ -117,7 +119,7 @@ data class Accessory(
      * @exception IllegalArgumentException 강화 주문서가 등록되지 않은 경우
      */
     override fun enchant(): Equipment? {
-        if(enchantScrollType == null)
+        if (enchantScrollType == null)
             throw IllegalArgumentException("강화 주문서가 등록되지 않았습니다.")
 
         return if (process()) this.apply { increaseEnchantNumber() } else null
@@ -130,4 +132,5 @@ data class Costume(
     override val name: String,
     override val price: Long,
     override val type: ItemType,
+    override val imageName: String,
 ) : Equipment()

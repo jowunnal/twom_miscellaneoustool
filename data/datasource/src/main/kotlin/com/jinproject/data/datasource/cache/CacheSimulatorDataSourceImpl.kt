@@ -1,20 +1,21 @@
 package com.jinproject.data.datasource.cache
 
-import android.util.Log
 import androidx.datastore.core.DataStore
 import com.jinproject.core.util.runIf
 import com.jinproject.data.SimulatorPreferences
 import com.jinproject.data.datasource.cache.database.dao.SimulatorDao
-import com.jinproject.data.datasource.cache.mapper.toEquipment
-import com.jinproject.data.datasource.cache.mapper.toEquipments
+import com.jinproject.data.datasource.cache.mapper.toEquipmentEntities
+import com.jinproject.data.datasource.cache.mapper.toEquipmentEntity
+import com.jinproject.data.datasource.cache.mapper.toEquipmentProtoList
 import com.jinproject.data.datasource.cache.mapper.toItemInfo
 import com.jinproject.data.repository.datasource.CacheSimulatorDataSource
 import com.jinproject.data.repository.model.Equipment
+import com.jinproject.data.repository.model.EquipmentEntity
+import com.jinproject.data.repository.model.EquipmentInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import java.io.IOException
 import javax.inject.Inject
 
@@ -32,21 +33,21 @@ class CacheSimulatorDataSourceImpl @Inject constructor(
             }
         }
 
-    override fun getItemInfo(itemName: String): Flow<Equipment> =
+    override fun getItemInfo(itemName: String): Flow<EquipmentEntity> =
         simulatorDao.getItemInfo(itemName).map { itemInfo ->
             val entry = itemInfo.entries.first()
 
-            entry.toEquipment()
+            entry.toEquipmentEntity()
         }
 
-    override fun getItemInfos(): Flow<List<Equipment>> =
+    override fun getItemInfos(): Flow<List<EquipmentEntity>> =
         simulatorDao.getItemInfos().map { itemWithInfosList ->
-            itemWithInfosList.toEquipments()
+            itemWithInfosList.toEquipmentEntities()
         }
 
-    override fun getOwnedItems(): Flow<List<Equipment>> =
-        data.onEach { Log.d("test", "new OwnedItems has been published") }.map { prefs ->
-            prefs.ownedItemsList.toEquipments()
+    override fun getOwnedItems(): Flow<List<EquipmentInfo>> =
+        data.map { prefs ->
+            prefs.ownedItemsList.toEquipmentProtoList()
         }
 
     override suspend fun addItemOnOwnedItemList(equipment: Equipment) {
@@ -71,7 +72,7 @@ class CacheSimulatorDataSourceImpl @Inject constructor(
         prefs.updateData { prefs ->
             val origin = data.first().ownedItemsList
             val idx = origin.indexOfFirst { owned ->
-                owned.uuid!!.contentEquals(equipment.uuid)
+                owned.uuid!!.contentEquals(equipment.info.uuid)
             }
 
             prefs.toBuilder().runIf(idx != -1) {

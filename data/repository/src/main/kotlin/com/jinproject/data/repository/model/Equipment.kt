@@ -1,14 +1,13 @@
 package com.jinproject.data.repository.model
 
-import com.jinproject.data.repository.model.EquipmentFactory.Companion.ARMOR_ELSE
-import com.jinproject.data.repository.model.EquipmentFactory.Companion.ARMOR_KO
-import com.jinproject.data.repository.model.EquipmentFactory.Companion.MAX_DAMAGE_ELSE
-import com.jinproject.data.repository.model.EquipmentFactory.Companion.MAX_DAMAGE_KO
-import com.jinproject.data.repository.model.EquipmentFactory.Companion.MIN_DAMAGE_ELSE
-import com.jinproject.data.repository.model.EquipmentFactory.Companion.MIN_DAMAGE_KO
-import com.jinproject.data.repository.model.EquipmentFactory.Companion.SPEED_ELSE
-import com.jinproject.data.repository.model.EquipmentFactory.Companion.SPEED_KO
-import com.jinproject.data.repository.model.EquipmentFactory.Companion.getEquipmentFactory
+import com.jinproject.data.repository.model.EquipmentDomainFactory.Companion.ARMOR_ELSE
+import com.jinproject.data.repository.model.EquipmentDomainFactory.Companion.ARMOR_KO
+import com.jinproject.data.repository.model.EquipmentDomainFactory.Companion.MAX_DAMAGE_ELSE
+import com.jinproject.data.repository.model.EquipmentDomainFactory.Companion.MAX_DAMAGE_KO
+import com.jinproject.data.repository.model.EquipmentDomainFactory.Companion.MIN_DAMAGE_ELSE
+import com.jinproject.data.repository.model.EquipmentDomainFactory.Companion.MIN_DAMAGE_KO
+import com.jinproject.data.repository.model.EquipmentDomainFactory.Companion.SPEED_ELSE
+import com.jinproject.data.repository.model.EquipmentDomainFactory.Companion.SPEED_KO
 import com.jinproject.domain.entity.item.Accessory
 import com.jinproject.domain.entity.item.Armor
 import com.jinproject.domain.entity.item.Costume
@@ -18,15 +17,80 @@ import com.jinproject.domain.entity.item.Weapon
 import java.util.Locale
 
 data class Equipment(
-    val name: String,
-    val level: Int,
-    val stats: Map<String, Float>,
-    val enchantNumber: Int,
-    val factory: EquipmentFactory,
-    val uuid: String,
-)
+    val info: EquipmentInfo,
+    val data: EquipmentEntity,
+) {
+    fun toDomain(): com.jinproject.domain.entity.item.Equipment {
+        val factory = data.itemType.itemTypeToEquipmentDomainFactory()
 
-abstract class EquipmentFactory {
+        return (factory.create(
+            equipment = this,
+            stats = info.stats.toMutableMap(),
+        ) as EnchantableEquipment).apply {
+            this@apply.enchantNumber = this@Equipment.info.enchantNumber
+        }
+    }
+
+    companion object {
+        fun String.itemTypeToEquipmentDomainFactory(): EquipmentDomainFactory =
+            when (this) {
+                "무기", "weapon" -> WeaponDomainFactory
+                "방어구", "armor" -> ArmorDomainFactory
+                "장신구", "accessories" -> AccessoryDomainFactory
+                "코스튬", "costume" -> ArmorDomainFactory
+                else -> throw IllegalArgumentException("[$this] 는 장비 아이템 타입이 아닙니다.")
+            }
+
+        fun toItemType(equipment: EnchantableEquipment) = when (equipment) {
+            is Weapon -> "무기"
+            is Armor -> "방어구"
+            is Accessory -> "장신구"
+            else -> throw IllegalArgumentException("[$this] 는 강화 가능한 장비 아이템 타입이 아닙니다.")
+        }
+    }
+}
+
+data class EquipmentInfo(
+    val name: String,
+    val uuid: String,
+    val enchantNumber: Int,
+    val stats: Map<String, Float>,
+) {
+    fun toEquipment(equipmentEntity: EquipmentEntity? = null) = Equipment(
+        info = this,
+        data = equipmentEntity ?: EquipmentEntity.getInitValues()
+    )
+
+    companion object {
+        fun getInitValues() = EquipmentInfo(
+            name = "버닝블레이드",
+            uuid = "",
+            enchantNumber = 0,
+            stats = emptyMap(),
+        )
+    }
+}
+
+data class EquipmentEntity(
+    val level: Int,
+    val imageName: String,
+    val itemType: String,
+) {
+    fun toEquipment(equipmentInfo: EquipmentInfo? = null) = Equipment(
+        info = equipmentInfo ?: EquipmentInfo.getInitValues(),
+        data = this,
+    )
+
+    companion object {
+        fun getInitValues() = EquipmentEntity(
+            level = 0,
+            imageName = "burning_blade",
+            itemType = "무기",
+        )
+    }
+}
+
+abstract class EquipmentDomainFactory {
     abstract fun create(
         equipment: Equipment,
         language: String = Locale.getDefault().language,
@@ -34,10 +98,10 @@ abstract class EquipmentFactory {
     ): com.jinproject.domain.entity.item.Equipment
 
     companion object {
-        fun EnchantableEquipment.getEquipmentFactory(): EquipmentFactory = when (this) {
-            is Weapon -> WeaponFactory
-            is Armor -> ArmorFactory
-            is Accessory -> AccessoryFactory
+        fun EnchantableEquipment.getEquipmentFactory(): EquipmentDomainFactory = when (this) {
+            is Weapon -> WeaponDomainFactory
+            is Armor -> ArmorDomainFactory
+            is Accessory -> AccessoryDomainFactory
             else -> throw IllegalArgumentException("Unknown equipment type")
         }
 
@@ -52,7 +116,7 @@ abstract class EquipmentFactory {
     }
 }
 
-object WeaponFactory : EquipmentFactory() {
+object WeaponDomainFactory : EquipmentDomainFactory() {
     override fun create(
         equipment: Equipment,
         language: String,
@@ -79,18 +143,19 @@ object WeaponFactory : EquipmentFactory() {
 
         return Weapon(
             stats = stats,
-            limitedLevel = equipment.level,
-            name = equipment.name,
+            limitedLevel = equipment.data.level,
+            name = equipment.info.name,
             price = 0,
             type = ItemType.NORMAL,
             speed = speed,
             damageRange = minDamage..maxDamage,
-            uuid = equipment.uuid,
+            uuid = equipment.info.uuid,
+            imageName = equipment.data.imageName,
         )
     }
 }
 
-object ArmorFactory : EquipmentFactory() {
+object ArmorDomainFactory : EquipmentDomainFactory() {
     override fun create(
         equipment: Equipment,
         language: String,
@@ -105,17 +170,18 @@ object ArmorFactory : EquipmentFactory() {
 
         return Armor(
             stats = stats,
-            limitedLevel = equipment.level,
-            name = equipment.name,
+            limitedLevel = equipment.data.level,
+            name = equipment.info.name,
             price = 0,
             type = ItemType.NORMAL,
             armor = armor,
-            uuid = equipment.uuid,
+            uuid = equipment.info.uuid,
+            imageName = equipment.data.imageName,
         )
     }
 }
 
-object AccessoryFactory : EquipmentFactory() {
+object AccessoryDomainFactory : EquipmentDomainFactory() {
     override fun create(
         equipment: Equipment,
         language: String,
@@ -129,29 +195,31 @@ object AccessoryFactory : EquipmentFactory() {
         )?.toInt() ?: 0
 
         return Accessory(
-            stats = equipment.stats,
-            limitedLevel = equipment.level,
-            name = equipment.name,
+            stats = equipment.info.stats,
+            limitedLevel = equipment.data.level,
+            name = equipment.info.name,
             price = 0,
             type = ItemType.NORMAL,
             armor = armor,
-            uuid = equipment.uuid,
+            uuid = equipment.info.uuid,
+            imageName = equipment.data.imageName,
         )
     }
 }
 
-object CostumeFactory : EquipmentFactory() {
+object CostumeDomainFactory : EquipmentDomainFactory() {
     override fun create(
         equipment: Equipment,
         language: String,
         stats: MutableMap<String, Float>
     ): com.jinproject.domain.entity.item.Equipment {
         return Costume(
-            stats = equipment.stats,
-            limitedLevel = equipment.level,
-            name = equipment.name,
+            stats = equipment.info.stats,
+            limitedLevel = equipment.data.level,
+            name = equipment.info.name,
             price = 0,
             type = ItemType.NORMAL,
+            imageName = equipment.data.imageName,
         )
     }
 }
@@ -161,64 +229,62 @@ private fun String.onLanguage(ko: String, en: String) = if (this == "ko")
 else
     en
 
-fun Equipment.toItemInfoDomainModel(): com.jinproject.domain.entity.item.Equipment =
-    (factory.create(
-        equipment = this,
-        stats = this.stats.toMutableMap()
-    ) as EnchantableEquipment).apply {
-        this@apply.enchantNumber = this@toItemInfoDomainModel.enchantNumber
-    }
-
-fun List<Equipment>.toItemInfoListDomainModel() = map { it.toItemInfoDomainModel() }
+fun List<EquipmentEntity>.toDomain(): List<com.jinproject.domain.entity.item.Equipment> =
+    map { it.toEquipment().toDomain() }
 
 fun EnchantableEquipment.toEquipmentData() = Equipment(
-    name = name,
-    level = limitedLevel,
-    stats = stats.toMutableMap().apply {
-        val language = Locale.getDefault().language
+    info = EquipmentInfo(
+        name = name,
+        enchantNumber = enchantNumber,
+        uuid = uuid,
+        stats = stats.toMutableMap().apply {
+            val language = Locale.getDefault().language
 
-        when (this@toEquipmentData) {
-            is Weapon -> {
-                put(
-                    language.onLanguage(
-                        ko = SPEED_KO,
-                        en = SPEED_ELSE,
-                    ), speed.toFloat()
-                )
-                put(
-                    language.onLanguage(
-                        ko = MIN_DAMAGE_KO,
-                        en = MIN_DAMAGE_ELSE,
-                    ), damageRange.first.toFloat()
-                )
-                put(
-                    language.onLanguage(
-                        ko = MAX_DAMAGE_KO,
-                        en = MAX_DAMAGE_ELSE
-                    ), damageRange.last.toFloat()
-                )
-            }
+            when (this@toEquipmentData) {
+                is Weapon -> {
+                    put(
+                        language.onLanguage(
+                            ko = SPEED_KO,
+                            en = SPEED_ELSE,
+                        ), speed.toFloat()
+                    )
+                    put(
+                        language.onLanguage(
+                            ko = MIN_DAMAGE_KO,
+                            en = MIN_DAMAGE_ELSE,
+                        ), damageRange.first.toFloat()
+                    )
+                    put(
+                        language.onLanguage(
+                            ko = MAX_DAMAGE_KO,
+                            en = MAX_DAMAGE_ELSE
+                        ), damageRange.last.toFloat()
+                    )
+                }
 
-            is Armor -> {
-                put(
-                    language.onLanguage(
-                        ko = ARMOR_KO,
-                        en = ARMOR_ELSE,
-                    ), armor.toFloat()
-                )
-            }
+                is Armor -> {
+                    put(
+                        language.onLanguage(
+                            ko = ARMOR_KO,
+                            en = ARMOR_ELSE,
+                        ), armor.toFloat()
+                    )
+                }
 
-            is Accessory -> {
-                put(
-                    language.onLanguage(
-                        ko = ARMOR_KO,
-                        en = ARMOR_ELSE,
-                    ), armor.toFloat()
-                )
+                is Accessory -> {
+                    put(
+                        language.onLanguage(
+                            ko = ARMOR_KO,
+                            en = ARMOR_ELSE,
+                        ), armor.toFloat()
+                    )
+                }
             }
-        }
-    },
-    enchantNumber = enchantNumber,
-    factory = getEquipmentFactory(),
-    uuid = uuid,
+        },
+    ),
+    data = EquipmentEntity(
+        level = limitedLevel,
+        itemType = Equipment.toItemType(this),
+        imageName = imageName,
+    ),
 )

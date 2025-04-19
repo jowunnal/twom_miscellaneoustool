@@ -5,7 +5,6 @@ import com.jinproject.domain.entity.item.Equipment
 import kotlinx.coroutines.flow.Flow
 
 interface SimulatorRepository {
-    fun getItemInfo(itemName: String): Flow<Equipment>
     fun getEnchantableItems(): Flow<List<Equipment>>
     fun getOwnedItems(): Flow<List<Equipment>>
     suspend fun addItemOnOwnedItemList(equipment: EnchantableEquipment)

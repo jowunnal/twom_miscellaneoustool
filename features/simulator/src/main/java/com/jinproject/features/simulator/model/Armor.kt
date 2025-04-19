@@ -27,7 +27,6 @@ internal data class Armor(
     }
 
     companion object {
-        const val ARMOR = "armor"
         fun getInitValues(uuid: String) = Armor(
             name = "세계수가지갑옷",
             level = 44,
@@ -49,8 +48,7 @@ internal data class Armor(
             price = 0,
             type = com.jinproject.domain.entity.item.ItemType.NORMAL,
             armor = armor,
-            uuid = uuid ?: this.uuid
-        ).apply {
-            enchantNumber = this@Armor.enchantNumber
-        }
+            uuid = uuid ?: this.uuid,
+            imageName = imgName,
+        )
 }

@@ -17,12 +17,14 @@ data class WeaponScroll(
     override val name: String = "무기 주문서",
     override val price: Long = 0,
     override val grade: Grade,
+    override val imageName: String,
 ) : GradeScroll()
 
 data class ArmorScroll(
     override val name: String = "방어구 주문서",
     override val price: Long = 0,
     override val grade: Grade,
+    override val imageName: String,
 ) : GradeScroll()
 
 enum class StatEnchantScrollType {
@@ -37,4 +39,5 @@ data class StatScroll(
     val stat: StatEnchantScrollType,
     override val name: String = "${stat.name} 주문서",
     override val price: Long = 0,
+    override val imageName: String,
 ) : Scroll()

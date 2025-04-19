@@ -2,50 +2,34 @@ package com.jinproject.data.datasource.cache.mapper
 
 import com.jinproject.data.ItemInfo
 import com.jinproject.data.datasource.cache.database.dao.ItemWithEquipmentInfo
-import com.jinproject.data.datasource.cache.database.entity.associateToStat
-import com.jinproject.data.repository.model.AccessoryFactory
-import com.jinproject.data.repository.model.ArmorFactory
 import com.jinproject.data.repository.model.Equipment
-import com.jinproject.data.repository.model.WeaponFactory
+import com.jinproject.data.repository.model.EquipmentEntity
+import com.jinproject.data.repository.model.EquipmentInfo
 
 fun Equipment.toItemInfo(): ItemInfo = ItemInfo.newBuilder()
-    .setName(name)
-    .setEnchantNumber(enchantNumber)
-    .setUuid(uuid)
-    .putAllOptions(stats)
+    .setName(info.name)
+    .setEnchantNumber(info.enchantNumber)
+    .setUuid(info.uuid)
+    .putAllOptions(info.stats)
     .build()
 
-fun ItemInfo.toEquipment(): Equipment = Equipment(
+fun ItemInfo.toEquipmentProto(): EquipmentInfo = EquipmentInfo(
     name = name,
-    level = 0,
     stats = optionsMap,
     enchantNumber = enchantNumber,
-    factory = WeaponFactory,
     uuid = uuid,
 )
 
-fun List<ItemInfo>.toEquipments(): List<Equipment> = map { it.toEquipment() }
+fun List<ItemInfo>.toEquipmentProtoList(): List<EquipmentInfo> = map { it.toEquipmentProto() }
 
-fun Map<ItemWithEquipmentInfo, List<com.jinproject.data.datasource.cache.database.entity.ItemInfo>>.toEquipments(): List<Equipment> =
+fun Map<ItemWithEquipmentInfo, List<com.jinproject.data.datasource.cache.database.entity.ItemInfo>>.toEquipmentEntities(): List<EquipmentEntity> =
     map { entries ->
-        entries.toEquipment()
+        entries.toEquipmentEntity()
     }
 
-fun Map.Entry<ItemWithEquipmentInfo, List<com.jinproject.data.datasource.cache.database.entity.ItemInfo>>.toEquipment(): Equipment =
-    Equipment(
-        name = key.itemName,
+fun Map.Entry<ItemWithEquipmentInfo, List<com.jinproject.data.datasource.cache.database.entity.ItemInfo>>.toEquipmentEntity(): EquipmentEntity =
+    EquipmentEntity(
         level = key.level,
-        stats = value.associateToStat(),
-        enchantNumber = 0,
-        factory = key.itemType.itemTypeToEquipmentDomainFactory(),
-        uuid = ""
+        itemType = key.itemType,
+        imageName = key.img_name
     )
-
-internal fun String.itemTypeToEquipmentDomainFactory(): com.jinproject.data.repository.model.EquipmentFactory =
-    when (this) {
-        "무기", "weapon" -> WeaponFactory
-        "방어구", "armor" -> ArmorFactory
-        "장신구", "accessories" -> AccessoryFactory
-        "코스튬", "costume" -> ArmorFactory
-        else -> throw IllegalArgumentException("[$this] 는 장비 아이템 타입이 아닙니다.")
-    }

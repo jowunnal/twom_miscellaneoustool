@@ -61,6 +61,10 @@ internal interface EnchantableEquipmentDomainFactory {
     fun toDomainModel(uuid: String? = null): EnchantableEquipment
 }
 
+internal fun Equipment.toDomain(uuid: String? = null) = toDomainModel(uuid).apply {
+    enchantNumber = this@toDomain.enchantNumber
+}
+
 internal fun com.jinproject.domain.entity.item.Equipment.fromDomainModel(uuid: String? = null): Equipment {
     return when (this) {
         is com.jinproject.domain.entity.item.Weapon -> {
@@ -74,7 +78,7 @@ internal fun com.jinproject.domain.entity.item.Equipment.fromDomainModel(uuid: S
                     )
                 }.sorted(),
                 enchantNumber = enchantNumber,
-                imgName = transImageName(),
+                imgName = imageName,
                 damage = damageRange,
                 speed = speed.toFloat(),
                 uuid = uuid ?: this.uuid,
@@ -92,7 +96,7 @@ internal fun com.jinproject.domain.entity.item.Equipment.fromDomainModel(uuid: S
                     )
                 }.sorted(),
                 enchantNumber = enchantNumber,
-                imgName = transImageName(),
+                imgName = imageName,
                 armor = armor,
                 uuid = uuid ?: this.uuid,
             )
@@ -125,6 +129,7 @@ internal data class Empty(
         override val type: com.jinproject.domain.entity.item.ItemType = com.jinproject.domain.entity.item.ItemType.NORMAL,
         override val price: Long = 0,
         override val uuid: String,
+        override val imageName: String = "burning_blade",
     ) : EnchantableEquipment() {
         override fun isAvailableScroll(scroll: Scroll): Boolean {
             return false

@@ -15,7 +15,8 @@ internal sealed class EnchantScroll : Item(), EnchantScrollDomainFactory {
         override val imgName: String = "weapon_s",
     ) : EnchantScroll() {
         override fun toDomainModel(): Scroll = WeaponScroll(
-            grade = GradeScroll.Grade.S
+            grade = GradeScroll.Grade.S,
+            imageName = imgName,
         )
     }
 
@@ -25,7 +26,8 @@ internal sealed class EnchantScroll : Item(), EnchantScrollDomainFactory {
         override val imgName: String = "weapon_a",
     ) : EnchantScroll() {
         override fun toDomainModel(): Scroll = WeaponScroll(
-            grade = GradeScroll.Grade.A
+            grade = GradeScroll.Grade.A,
+            imageName = imgName,
         )
     }
 
@@ -35,7 +37,8 @@ internal sealed class EnchantScroll : Item(), EnchantScrollDomainFactory {
         override val imgName: String = "weapon_b",
     ) : EnchantScroll() {
         override fun toDomainModel(): Scroll = WeaponScroll(
-            grade = GradeScroll.Grade.B
+            grade = GradeScroll.Grade.B,
+            imageName = imgName,
         )
     }
 
@@ -45,7 +48,8 @@ internal sealed class EnchantScroll : Item(), EnchantScrollDomainFactory {
         override val imgName: String = "weapon_c",
     ) : EnchantScroll() {
         override fun toDomainModel(): Scroll = WeaponScroll(
-            grade = GradeScroll.Grade.C
+            grade = GradeScroll.Grade.C,
+            imageName = imgName,
         )
     }
 
@@ -55,7 +59,8 @@ internal sealed class EnchantScroll : Item(), EnchantScrollDomainFactory {
         override val imgName: String = "weapon_d",
     ) : EnchantScroll() {
         override fun toDomainModel(): Scroll = WeaponScroll(
-            grade = GradeScroll.Grade.D
+            grade = GradeScroll.Grade.D,
+            imageName = imgName,
         )
     }
 }

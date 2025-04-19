@@ -12,6 +12,7 @@ import com.jinproject.features.simulator.model.EnchantScroll
 import com.jinproject.features.simulator.model.Equipment
 import com.jinproject.features.simulator.model.SimulatorState
 import com.jinproject.features.simulator.model.fromDomainModel
+import com.jinproject.features.simulator.model.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
@@ -70,7 +71,7 @@ internal class SimulatorViewModel @Inject constructor(
     @OptIn(ExperimentalUuidApi::class)
     fun addEquipmentOnOwnedItemList(equipment: Equipment) {
         viewModelScope.launch {
-            ownedItemsUseCase.add(equipment.toDomainModel(Uuid.random().toString()))
+            ownedItemsUseCase.add(equipment.toDomain(Uuid.random().toString()))
         }
     }
 
@@ -82,14 +83,14 @@ internal class SimulatorViewModel @Inject constructor(
 
     private fun replaceOwnedItem(equipment: Equipment) {
         viewModelScope.launch {
-            ownedItemsUseCase.replace(equipment.toDomainModel())
+            ownedItemsUseCase.replace(equipment.toDomain())
             simulatorState.stopAndStart()
         }
     }
 
     fun enchantEquipment(equipment: Equipment, scroll: EnchantScroll) {
         val enchantedEquipment = enchantEquipmentUseCase(
-            item = equipment.toDomainModel(),
+            item = equipment.toDomain(),
             scroll = scroll.toDomainModel(),
         )?.fromDomainModel()
 
