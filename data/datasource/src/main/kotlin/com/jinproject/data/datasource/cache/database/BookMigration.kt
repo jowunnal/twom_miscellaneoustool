@@ -2,6 +2,8 @@ package com.jinproject.data.datasource.cache.database
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.jinproject.core.util.toEpochMilli
+import java.time.ZonedDateTime
 
 internal object BookMigration {
 
@@ -497,6 +499,14 @@ internal object BookMigration {
                 execSQL("update Stat set type = '크티리컬데미지감소' where type = 'CRITDMGDOWN'")
                 execSQL("update Stat set type = '크리티컬데미지감소%' where type = 'CRITDMGDOWNPER'")
                 execSQL("update Stat set type = '회피' where type = 'MISS'")
+
+
+                execSQL("CREATE TABLE 'Tempor' ('timerId'	INTEGER NOT NULL,'epochMilli'	INTEGER NOT NULL,'ota'	INTEGER NOT NULL,'timerMonsName'	TEXT NOT NULL, PRIMARY KEY('timerId' AUTOINCREMENT), FOREIGN KEY('timerMonsName') REFERENCES 'Monster'('monsName'))")
+                var now = ZonedDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).toEpochMilli()
+                execSQL("insert into Tempor select timerId, $now + day * 86400 + hour * 3600 + min * 60 + sec, ota, timerMonsName from Timer")
+                execSQL("drop table Timer")
+                execSQL("alter table Tempor rename to Timer")
+                execSQL("CREATE INDEX IF NOT EXISTS `index_Timer_timerMonsName` ON `Timer` (`timerMonsName`)")
             }
         }
     }
@@ -548,6 +558,13 @@ internal object BookMigration {
                 execSQL("update Stat set type = 'CriDmgDown' where type = 'CRITDMGDOWN'")
                 execSQL("update Stat set type = 'CriDmgDownPer' where type = 'CRITDMGDOWNPER'")
                 execSQL("update Stat set type = 'Evade' where type = 'MISS'")
+
+                execSQL("CREATE TABLE 'Tempor' ('timerId'	INTEGER NOT NULL,'epochMilli'	INTEGER NOT NULL,'ota'	INTEGER NOT NULL,'timerMonsName'	TEXT NOT NULL, PRIMARY KEY('timerId' AUTOINCREMENT), FOREIGN KEY('timerMonsName') REFERENCES 'Monster'('monsName'))")
+                var now = ZonedDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).toEpochMilli()
+                execSQL("insert into Tempor select timerId, $now + day * 86400 + hour * 3600 + min * 60 + sec, ota, timerMonsName from Timer")
+                execSQL("drop table Timer")
+                execSQL("alter table Tempor rename to Timer")
+                execSQL("CREATE INDEX IF NOT EXISTS `index_Timer_timerMonsName` ON `Timer` (`timerMonsName`)")
             }
         }
     }

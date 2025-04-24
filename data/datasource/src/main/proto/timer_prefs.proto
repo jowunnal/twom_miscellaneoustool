@@ -6,10 +6,9 @@ option java_multiple_files = true;
 message TimerPreferences {
   int32 interval_first_timer_setting = 1;
   int32 interval_second_timer_setting = 2;
-  string recently_selected_boss_classified = 3;
-  string recently_selected_boss_name = 4;
-  repeated string frequently_used_boss_list = 5;
-  int32 font_size = 6;
-  int32 x_pos = 7;
-  int32 y_pos = 8;
+  repeated string frequently_used_boss_list = 3;
+  int32 font_size = 4;
+  int32 x_pos = 5;
+  int32 y_pos = 6;
+  repeated string overlay_boss_list = 7;
 }

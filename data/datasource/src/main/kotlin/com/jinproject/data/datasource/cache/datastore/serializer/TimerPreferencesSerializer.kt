@@ -8,7 +8,13 @@ import java.io.InputStream
 import java.io.OutputStream
 
 internal object TimerPreferencesSerializer: Serializer<TimerPreferences> {
-    override val defaultValue: TimerPreferences = TimerPreferences.getDefaultInstance()
+    override val defaultValue: TimerPreferences = TimerPreferences.newBuilder()
+        .setFontSize(16)
+        .setXPos(100)
+        .setYPos(100)
+        .setIntervalFirstTimerSetting(5)
+        .setIntervalSecondTimerSetting(0)
+        .build()
     override suspend fun readFrom(input: InputStream): TimerPreferences {
         try {
             return TimerPreferences.parseFrom(input)

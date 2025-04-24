@@ -83,7 +83,8 @@ class CacheCollectionDataSourceImpl @Inject constructor(
             CollectionModel(
                 bookId = collectionItem.book.bookId,
                 stat = collectionItem.stats.associate { stat -> stat.type to stat.value },
-                items = collectionItem.items.map { item -> ItemModel(
+                items = collectionItem.items.map { item ->
+                    ItemModel(
                     name = item.item.itemName,
                     count = item.registerItemToBook.rlItemCount,
                     enchantNumber = item.registerItemToBook.rlItemEnchant,

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "48df911761a9f4f6ac5ab1fb84686fa0",
+    "identityHash": "692fc8c1f0da14691c63f678eb5694a7",
     "entities": [
       {
         "tableName": "Book",
@@ -20,9 +20,7 @@
           "columnNames": [
             "bookId"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "Item",
@@ -52,9 +50,7 @@
           "columnNames": [
             "itemName"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "ItemInfo",
@@ -86,7 +82,6 @@
             "type"
           ]
         },
-        "indices": [],
         "foreignKeys": [
           {
             "table": "Item",
@@ -130,7 +125,6 @@
             "name"
           ]
         },
-        "indices": [],
         "foreignKeys": [
           {
             "table": "Item",
@@ -185,9 +179,7 @@
           "columnNames": [
             "monsName"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "Maps",
@@ -211,9 +203,7 @@
           "columnNames": [
             "mapName"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "Stat",
@@ -245,7 +235,6 @@
             "type"
           ]
         },
-        "indices": [],
         "foreignKeys": [
           {
             "table": "Book",
@@ -284,7 +273,6 @@
             "mdItemName"
           ]
         },
-        "indices": [],
         "foreignKeys": [
           {
             "table": "Monster",
@@ -334,7 +322,6 @@
             "mlMapName"
           ]
         },
-        "indices": [],
         "foreignKeys": [
           {
             "table": "Monster",
@@ -397,7 +384,6 @@
             "rlItemEnchant"
           ]
         },
-        "indices": [],
         "foreignKeys": [
           {
             "table": "Book",
@@ -425,7 +411,7 @@
       },
       {
         "tableName": "Timer",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`timerId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `day` INTEGER NOT NULL, `hour` INTEGER NOT NULL, `min` INTEGER NOT NULL, `sec` INTEGER NOT NULL, `ota` INTEGER NOT NULL, `timerMonsName` TEXT NOT NULL, FOREIGN KEY(`timerMonsName`) REFERENCES `Monster`(`monsName`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`timerId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `epochMilli` INTEGER NOT NULL, `ota` INTEGER NOT NULL, `timerMonsName` TEXT NOT NULL, FOREIGN KEY(`timerMonsName`) REFERENCES `Monster`(`monsName`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "timerId",
@@ -434,26 +420,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "day",
-            "columnName": "day",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "hour",
-            "columnName": "hour",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "min",
-            "columnName": "min",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "sec",
-            "columnName": "sec",
+            "fieldPath": "epochMilli",
+            "columnName": "epochMilli",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -502,10 +470,9 @@
         ]
       }
     ],
-    "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '48df911761a9f4f6ac5ab1fb84686fa0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '692fc8c1f0da14691c63f678eb5694a7')"
     ]
   }
 }

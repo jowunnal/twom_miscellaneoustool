@@ -31,5 +31,6 @@ fun Map.Entry<ItemWithEquipmentInfo, List<com.jinproject.data.datasource.cache.d
     EquipmentEntity(
         level = key.level,
         itemType = key.itemType,
-        imageName = key.img_name
+        imageName = key.img_name,
+        price = key.itemPrice,
     )

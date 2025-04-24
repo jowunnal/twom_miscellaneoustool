@@ -19,6 +19,7 @@ android {
     room {
         schemaDirectory("$projectDir/schemas")
     }
+
     sourceSets {
         getByName("androidTest").assets.srcDirs(files("$projectDir/schemas"))
     }
