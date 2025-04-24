@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -36,6 +37,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -316,7 +318,6 @@ class MainActivity : AppCompatActivity() {
 
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
-                        // backgroundColor = MaterialTheme.colorScheme.background,
                         snackbarHost = {
                             SnackBarHostCustom(
                                 headerMessage = snackBarHostState.currentSnackbarData?.visuals?.message
@@ -330,7 +331,11 @@ class MainActivity : AppCompatActivity() {
                         NavigationGraph(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(paddingValues),
+                                .padding(
+                                    bottom = paddingValues.calculateBottomPadding(),
+                                    start = paddingValues.calculateStartPadding(LayoutDirection.Rtl),
+                                    end = paddingValues.calculateStartPadding(LayoutDirection.Rtl),
+                                ),
                             router = router,
                             billingModule = billingModule,
                             showRewardedAd = { onResult ->

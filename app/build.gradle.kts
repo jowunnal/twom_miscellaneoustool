@@ -54,7 +54,6 @@ fun getLocalKey(propertyKey:String):String{
 }
 
 dependencies {
-    implementation(project(":data:repository"))
     implementation(project(":data:datasource"))
     implementation(project(":features:collection"))
     implementation(project(":features:droplist"))

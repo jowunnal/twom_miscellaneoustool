@@ -1,6 +1,7 @@
 package com.jinproject.twomillustratedbook.ui.navigation
 
-import androidx.compose.material.Icon
+
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemColors
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScope
@@ -14,7 +15,6 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import com.jinproject.features.alarm.alarmNavGraph
 import com.jinproject.features.alarm.navigateToAlarmGraph
-import com.jinproject.features.alarm.navigateToGear
 import com.jinproject.features.alarm.navigateToWatch
 import com.jinproject.features.auth.authNavigation
 import com.jinproject.features.auth.navigateAuthRoute
@@ -63,7 +63,6 @@ internal fun NavigationGraph(
         alarmNavGraph(
             billingModule = billingModule,
             showRewardedAd = showRewardedAd,
-            onNavigateToGear = navController::navigateToGear,
             onNavigateToWatch = navController::navigateToWatch,
             showSnackBar = showSnackBar,
             popBackStackIfCan = navController::popBackStackIfCan,
