@@ -1,109 +1,53 @@
 package com.jinproject.domain.usecase.alarm
 
-import com.jinproject.domain.model.TimerModel
 import com.jinproject.domain.repository.DropListRepository
 import com.jinproject.domain.repository.TimerRepository
-import kotlinx.coroutines.flow.zip
-import java.util.Calendar
+import kotlinx.coroutines.flow.first
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
+/**
+ * 몬스터 알람 유즈케이스
+ *
+ * 특정 몬스터의 죽은 시간의 입력
+ */
 class SetAlarmUsecase @Inject constructor(
     private val dropListRepository: DropListRepository,
     private val timerRepository: TimerRepository
 ) {
-    data class MonsterAlarmModel(
-        val code: Int,
-        val img: String,
-        val name: String,
-        val gtime: Int,
-        val nextGtime: Long
+    /**
+     * 몬스터 알람 기능을 위한 필요한 정보들
+     *
+     * @param id: 몬스터 알람 식별자
+     * @param monsterName:  몬스터 이름
+     * @param dateTime: 몬스터 알람이 설정된 DateTime
+     */
+    data class Timer(
+        val id: Int,
+        val monsterName: String,
+        val dateTime: ZonedDateTime,
     )
 
-    var Calendar.day
-        get() = get(Calendar.DAY_OF_WEEK)
-        set(value) {
-            set(Calendar.DAY_OF_WEEK, value)
-        }
-
-    var Calendar.hour
-        get() = get(Calendar.HOUR_OF_DAY)
-        set(value) {
-            set(Calendar.HOUR_OF_DAY, value)
-        }
-
-    var Calendar.minute
-        get() = get(Calendar.MINUTE)
-        set(value) {
-            set(Calendar.MINUTE, value)
-        }
-
-    var Calendar.second
-        get() = get(Calendar.SECOND)
-        set(value) {
-            set(Calendar.SECOND, value)
-        }
-
-    operator fun invoke(
+    /**
+     * @param monsterName : 몬스터 이름
+     * @param deadTime : 몬스터 죽은 시간
+     * @return (다음 재 생성 시간 - 사용자가 설정한 알람 간격) 의 첫번째와 두번째 알람
+     */
+    suspend operator fun invoke(
         monsterName: String,
-        monsDiedHour: Int,
-        monsDiedMin: Int,
-        monsDiedSec: Int,
-        makeAlarm: (Int, Int, MonsterAlarmModel) -> Unit
-    ) =
-        dropListRepository.getMonsInfo(monsterName)
-            .zip(timerRepository.getTimer()) { monsterModel, timerModels ->
-                val genTime = Calendar.getInstance().apply {
-                    hour = monsDiedHour
-                    minute = monsDiedMin
-                    second = monsDiedSec
-                }.timeInMillis + (monsterModel.genTime * 1000).toLong()
+        deadTime: ZonedDateTime,
+    ): List<Timer> {
+        val monsterInfo =
+            dropListRepository.getMonsInfo(monsterName).first()
 
-                val cal = Calendar.getInstance().apply {
-                    timeInMillis = genTime
-                }
+        timerRepository.getAndSetBossTimerList(
+            monsName = monsterName,
+            nextSpawnDateTime = monsterInfo.calculateNextSpawnTime(deadTime),
+        )
 
-                val timer = timerModels.find { timerModel ->
-                    timerModel.bossName == monsterName
-                }
+        val timersByInterval = timerRepository.getTimer(monsName = monsterName).first()
 
-                val code = timer?.id
-                    ?: if (timerModels.isNotEmpty()) timerModels.maxOf { item -> item.id } + 1 else 1
-
-                when (timer) {
-                    is TimerModel -> {
-                        timerRepository.updateTimer(
-                            id = code,
-                            day = cal.day,
-                            hour = cal.hour,
-                            min = cal.minute,
-                            sec = cal.second
-                        )
-                    }
-
-                    null -> {
-                        timerRepository.setTimer(
-                            id = code,
-                            day = com.jinproject.domain.model.WeekModel.findByCode(cal.day)
-                                .getCodeByWeek(),
-                            hour = cal.hour,
-                            min = cal.minute,
-                            sec = cal.second,
-                            bossName = monsterName
-                        )
-                    }
-                }
-                MonsterAlarmModel(
-                    code = code,
-                    img = monsterModel.imgName,
-                    name = monsterName,
-                    gtime = monsterModel.genTime,
-                    nextGtime = genTime
-                )
-            }.zip(timerRepository.getInterval()) { monsterAlarmModel, interval ->
-                makeAlarm(
-                    interval.first,
-                    interval.second,
-                    monsterAlarmModel
-                )
-            }
+        return timersByInterval
+    }
 }

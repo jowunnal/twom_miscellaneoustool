@@ -1,5 +1,7 @@
 package com.jinproject.domain.model
 
+import java.time.LocalDateTime
+
 data class MonsterModel(
     val name: String,
     val level: Int,
