@@ -16,7 +16,6 @@ class AndroidRoomPlugin: Plugin<Project> {
 
         dependencies {
             "implementation"(libs.findLibrary("room.runtime").get())
-            "annotationProcessor"(libs.findLibrary("room.compiler").get())
             "implementation"(libs.findLibrary("room.ktx").get())
             "implementation"(libs.findLibrary("room.common").get())
             "ksp"(libs.findLibrary("room.compiler").get())

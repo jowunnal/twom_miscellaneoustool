@@ -61,6 +61,43 @@ fun HeadlineText(
 }
 
 @Composable
+fun TitleMediumText(
+    modifier: Modifier = Modifier,
+    text: String,
+    color: Color = MaterialTheme.colorScheme.onBackground,
+    textAlign: TextAlign = TextAlign.Start,
+) {
+    DefaultText(
+        modifier = modifier,
+        text = text,
+        style = MaterialTheme.typography.titleMedium,
+        overflow = Ellipsis,
+        color = color,
+        maxLines = Int.MAX_VALUE,
+        textAlign = textAlign,
+    )
+}
+
+
+@Composable
+fun TitleSmallText(
+    modifier: Modifier = Modifier,
+    text: String,
+    color: Color = MaterialTheme.colorScheme.onBackground,
+    textAlign: TextAlign = TextAlign.Start,
+) {
+    DefaultText(
+        modifier = modifier,
+        text = text,
+        style = MaterialTheme.typography.titleSmall,
+        overflow = Ellipsis,
+        color = color,
+        maxLines = Int.MAX_VALUE,
+        textAlign = textAlign,
+    )
+}
+
+@Composable
 fun DescriptionLargeText(
     modifier: Modifier = Modifier,
     text: String,

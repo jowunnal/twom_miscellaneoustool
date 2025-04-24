@@ -118,6 +118,7 @@
     <string name="watch_setting_move_x">Horizontal Axis Move</string>
     <string name="watch_setting_move_y">Vertical Axis Move</string>
     <string name="watch_setting_title">Always see the current time</string>
+    <string name="watch_setting_input_number">Maglagay ng mga numero</string>
 
     <!-- symbol strings -->
     <string name="symbol_gallery_topbar">Gallery</string>

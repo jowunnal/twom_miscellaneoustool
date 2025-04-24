@@ -116,6 +116,7 @@
     <string name="watch_setting_move_x">가로축 이동</string>
     <string name="watch_setting_move_y">세로축 이동</string>
     <string name="watch_setting_title">현재 시간 항상 보기</string>
+    <string name="watch_setting_input_number">숫자 입력</string>
 
     <!-- symbol strings -->
     <string name="symbol_gallery_topbar">갤러리</string>

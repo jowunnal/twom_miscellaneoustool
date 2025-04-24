@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
@@ -122,16 +124,16 @@ fun BackButtonSearchAppBar(
     modifier: Modifier = Modifier,
     textFieldState: TextFieldState,
     onBackClick: () -> Unit,
-    onSearchClick: () -> Unit = {},
 ) {
     BackButtonRowScopeAppBar(
         onBackClick = onBackClick,
     ) {
         HorizontalWeightSpacer(float = 1f)
         SearchTextField(
-            modifier = modifier,
+            modifier = modifier
+                .padding(top = 8.dp, bottom = 8.dp)
+                .shadow(7.dp, RoundedCornerShape(10.dp)),
             textFieldState = textFieldState,
-            onSearchClick = onSearchClick,
         )
     }
 }
@@ -165,6 +167,5 @@ private fun PreviewBackButtonSearchAppBar() =
         BackButtonSearchAppBar(
             textFieldState = textFiledState,
             onBackClick = {},
-            onSearchClick = {},
         )
     }

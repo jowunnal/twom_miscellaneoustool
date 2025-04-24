@@ -1,5 +1,6 @@
 package com.jinproject.design_compose.component.text
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -18,9 +20,12 @@ import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldBuffer
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.delete
 import androidx.compose.foundation.text.input.insert
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,7 +34,8 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -51,32 +57,67 @@ import com.jinproject.design_ui.R
 fun SearchTextField(
     modifier: Modifier = Modifier,
     textFieldState: TextFieldState,
-    onSearchClick: () -> Unit,
+    backgroundColor: Color = MaterialTheme.colorScheme.primary,
+    borderColor: Color = MaterialTheme.colorScheme.surface,
+    textStyle: TextStyle = MaterialTheme.typography.bodySmall.copy(
+        MaterialTheme.colorScheme.contentColorFor(
+            backgroundColor
+        )
+    ),
+    cursorBrush: Brush = SolidColor(MaterialTheme.colorScheme.onPrimary),
+    exitIconVisibility: Boolean = false,
+    changeExitIconVisibility: (Boolean) -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
+    val exitIcon by rememberUpdatedState(exitIconVisibility)
+    val focusRequester = remember {
+        FocusRequester()
+    }
 
     DefaultTextField(
-        modifier = modifier,
+        modifier = modifier
+            .focusRequester(focusRequester)
+            .onFocusChanged { focusState ->
+                if (focusState.hasFocus)
+                    changeExitIconVisibility(true)
+            },
         textFieldState = textFieldState,
-        backgroundColor = MaterialTheme.colorScheme.primary,
-        borderColor = MaterialTheme.colorScheme.surface,
+        backgroundColor = backgroundColor,
+        borderColor = borderColor,
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
-        textStyle = TextStyle(color = MaterialTheme.colorScheme.onPrimary),
-        cursorBrush = SolidColor(MaterialTheme.colorScheme.onPrimary),
+        textStyle = textStyle,
+        cursorBrush = cursorBrush,
         lineLimits = TextFieldLineLimits.SingleLine,
     ) {
-        DefaultIconButton(
-            modifier = Modifier,
-            icon = R.drawable.icon_search,
-            onClick = {
-                onSearchClick()
-                focusManager.clearFocus()
-            },
-            iconSize = 24.dp,
-            iconTint = MaterialTheme.colorScheme.onPrimary,
-            backgroundTint = MaterialTheme.colorScheme.primary,
-            interactionSource = remember { MutableInteractionSource() }
-        )
+        AnimatedContent(exitIcon) { targetState ->
+            if (targetState)
+                DefaultIconButton(
+                    modifier = Modifier,
+                    icon = R.drawable.ic_x,
+                    onClick = {
+                        textFieldState.clearText()
+                        focusManager.clearFocus()
+                        changeExitIconVisibility(false)
+                    },
+                    iconSize = 24.dp,
+                    iconTint = MaterialTheme.colorScheme.contentColorFor(backgroundColor),
+                    backgroundTint = backgroundColor,
+                    interactionSource = remember { MutableInteractionSource() }
+                )
+            else
+                DefaultIconButton(
+                    modifier = Modifier,
+                    icon = R.drawable.icon_search,
+                    onClick = {
+                        focusRequester.requestFocus()
+                        changeExitIconVisibility(true)
+                    },
+                    iconSize = 24.dp,
+                    iconTint = MaterialTheme.colorScheme.contentColorFor(backgroundColor),
+                    backgroundTint = backgroundColor,
+                    interactionSource = remember { MutableInteractionSource() }
+                )
+        }
     }
 }
 
@@ -123,6 +164,7 @@ fun OutlineVerifyTextField(
     headerIcon: @Composable (() -> Unit)? = null,
     hint: String = "",
     enabled: Boolean = true,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
     content: @Composable RowScope.() -> Unit = {},
 ) {
     val error by rememberUpdatedState(newValue = isError && textFieldState.text.isNotBlank())
@@ -131,7 +173,7 @@ fun OutlineVerifyTextField(
         DefaultTextField(
             modifier = Modifier,
             textFieldState = textFieldState,
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+            keyboardOptions = keyboardOptions,
             borderColor = if (error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline,
             textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface),
             cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
@@ -151,6 +193,54 @@ fun OutlineVerifyTextField(
                 color = MaterialTheme.colorScheme.error
             )
     }
+}
+
+@Composable
+fun NumberInputTextField(
+    modifier: Modifier = Modifier,
+    initialValue: String,
+    textFieldState: TextFieldState,
+    outputTransformation: OutputTransformation? = null,
+    inputTransformation: InputTransformation? = null,
+    headerIcon: @Composable (() -> Unit)? = null,
+    hint: String = stringResource(R.string.watch_setting_input_number),
+    enabled: Boolean = true,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+    backgroundColor: Color = MaterialTheme.colorScheme.primary,
+    borderColor: Color = MaterialTheme.colorScheme.surface,
+    textStyle: TextStyle = MaterialTheme.typography.bodySmall.copy(
+        MaterialTheme.colorScheme.contentColorFor(
+            backgroundColor
+        )
+    ),
+    cursorBrush: Brush = SolidColor(MaterialTheme.colorScheme.onPrimary),
+    content: @Composable RowScope.() -> Unit = {},
+) {
+    DefaultTextField(
+        modifier = modifier.onFocusChanged {
+            textFieldState.edit {
+                if (it.hasFocus)
+                    delete(start = 0, end = length)
+                else {
+                    if (length == 0)
+                        insert(0, initialValue)
+                }
+            }
+        },
+        textFieldState = textFieldState,
+        keyboardOptions = keyboardOptions,
+        backgroundColor = backgroundColor,
+        borderColor = borderColor,
+        textStyle = textStyle,
+        cursorBrush = cursorBrush,
+        lineLimits = TextFieldLineLimits.SingleLine,
+        headerIcon = headerIcon,
+        outputTransformation = outputTransformation,
+        inputTransformation = inputTransformation,
+        hint = hint,
+        enabled = enabled,
+        content = content,
+    )
 }
 
 @Composable
@@ -178,8 +268,6 @@ fun DefaultTextField(
 
     BasicTextField(
         modifier = modifier
-            .padding(top = 8.dp, bottom = 8.dp)
-            .shadow(7.dp, RoundedCornerShape(10.dp))
             .background(
                 backgroundColor,
                 RoundedCornerShape(10.dp),
@@ -197,6 +285,7 @@ fun DefaultTextField(
         decorator = { innerTextField ->
             Row(
                 modifier = Modifier
+                    .height(textStyle.lineHeight.value.dp + 36.dp)
                     .padding(vertical = 12.dp, horizontal = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -273,7 +362,6 @@ class TenThousandSeparatorOutputTransformation(
                 insert((((length - n - 1) % 3) + 1) + iterator + n, ",")
             }
         }
-
         suffix()
     }
 }
@@ -291,12 +379,20 @@ class PasswordOutputTransformation(
     }
 }
 
+class NumberInputTransformation(
+    private val maxNumber: Int = 0,
+) : InputTransformation {
+    override fun TextFieldBuffer.transformInput() {
+        if ((originalText.toString().toIntOrNull() ?: 0) > maxNumber)
+            replace(0, length, maxNumber.toString())
+    }
+}
+
 @Composable
 @Preview(showBackground = true)
 private fun PreviewSearchTextField() = MiscellaneousToolTheme {
     SearchTextField(
         textFieldState = rememberTextFieldState(),
-        onSearchClick = {},
     )
 }
 
