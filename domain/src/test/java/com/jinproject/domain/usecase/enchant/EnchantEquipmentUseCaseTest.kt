@@ -5,14 +5,17 @@ import com.jinproject.domain.entity.item.GradeScroll
 import com.jinproject.domain.entity.item.ItemType
 import com.jinproject.domain.entity.item.Weapon
 import com.jinproject.domain.entity.item.WeaponScroll
+import com.jinproject.domain.usecase.repository.FakeSimulatorRepository
 import com.jinproject.domain.usecase.simulator.EnchantEquipmentUseCase
+import com.jinproject.domain.usecase.simulator.OwnedItemsUseCase
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import java.util.UUID
 
 class EnchantEquipmentUseCaseTest : BehaviorSpec() {
-    private val enchantEquipmentUseCase = EnchantEquipmentUseCase()
+    private val repository = FakeSimulatorRepository()
+    private val ownedItemsUseCase = OwnedItemsUseCase(repository)
+    private val enchantEquipmentUseCase = EnchantEquipmentUseCase(ownedItemsUseCase)
 
     init {
         given("5강 버닝블레이드가 있을 때") {
@@ -24,13 +27,14 @@ class EnchantEquipmentUseCaseTest : BehaviorSpec() {
                 type = ItemType.RARE,
                 speed = 10,
                 damageRange = 10..70,
-                uuid = UUID.randomUUID().toString()
+                uuid = "",
+                imageName = "burning_blade"
             ).apply {
                 enchantNumber = 5
             }
 
             `when`("S등급의 무기 주문서로 강화를 한다면") {
-                val weaponS = WeaponScroll(grade = GradeScroll.Grade.S)
+                val weaponS = WeaponScroll(grade = GradeScroll.Grade.S, imageName = "")
                 val enchantResult = enchantEquipmentUseCase.invoke(item = item, scroll = weaponS)
                 then("성공하여 6강이 된다.") {
                     (enchantResult as EnchantableEquipment).enchantNumber shouldBe 6
@@ -38,7 +42,7 @@ class EnchantEquipmentUseCaseTest : BehaviorSpec() {
             }
 
             `when`("A등급의 무기 주문서로 강화를 한다면") {
-                val weaponA = WeaponScroll(grade = GradeScroll.Grade.A)
+                val weaponA = WeaponScroll(grade = GradeScroll.Grade.A, imageName = "")
                 val enchantResult =
                     shouldThrow<EnchantEquipmentUseCase.EnchantFailedException.NotAllowedScroll> {
                         enchantEquipmentUseCase.invoke(item = item, scroll = weaponA)
