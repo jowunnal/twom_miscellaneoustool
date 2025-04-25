@@ -11,6 +11,7 @@ import com.jinproject.domain.usecase.simulator.OwnedItemsUseCase
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.flow.first
 
 class EnchantEquipmentUseCaseTest : BehaviorSpec() {
     private val repository = FakeSimulatorRepository()
@@ -35,9 +36,11 @@ class EnchantEquipmentUseCaseTest : BehaviorSpec() {
 
             `when`("S등급의 무기 주문서로 강화를 한다면") {
                 val weaponS = WeaponScroll(grade = GradeScroll.Grade.S, imageName = "")
-                val enchantResult = enchantEquipmentUseCase.invoke(item = item, scroll = weaponS)
+                enchantEquipmentUseCase.invoke(item = item, scroll = weaponS)
+                val enchantResult = ownedItemsUseCase.getItems().first()
+                    .find { (it as EnchantableEquipment).uuid == item.uuid }
                 then("성공하여 6강이 된다.") {
-                    (enchantResult as EnchantableEquipment).enchantNumber shouldBe 6
+                    (enchantResult as? EnchantableEquipment)?.enchantNumber shouldBe 6
                 }
             }
 
