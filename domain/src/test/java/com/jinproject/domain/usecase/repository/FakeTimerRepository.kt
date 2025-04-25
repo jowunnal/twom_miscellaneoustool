@@ -1,12 +1,11 @@
 package com.jinproject.domain.usecase.repository
 
 import com.jinproject.domain.repository.TimerRepository
-import com.jinproject.domain.usecase.alarm.SetAlarmUsecase
 import com.jinproject.domain.usecase.alarm.ManageTimerSettingUsecase
-import jdk.jfr.internal.OldObjectSample.emit
+import com.jinproject.domain.usecase.alarm.SetAlarmUsecase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 class FakeTimerRepository : TimerRepository {
     var timerSetting: ManageTimerSettingUsecase.TimerSetting =
@@ -23,7 +22,7 @@ class FakeTimerRepository : TimerRepository {
 
     override suspend fun getAndSetBossTimerList(
         monsName: String,
-        nextSpawnDateTime: LocalDateTime
+        nextSpawnDateTime: ZonedDateTime
     ) {
         val idx = timerList.indexOfFirst { it.monsterName == monsName }
 

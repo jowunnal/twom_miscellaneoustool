@@ -1,6 +1,6 @@
 package com.jinproject.data.repository.model
 
-import com.jinproject.domain.model.ItemCollection
+import com.jinproject.domain.entity.ItemCollection
 
 data class CollectionModel(
     val bookId: Int,

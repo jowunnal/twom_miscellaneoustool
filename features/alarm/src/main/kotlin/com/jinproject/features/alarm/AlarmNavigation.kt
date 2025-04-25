@@ -74,6 +74,7 @@ fun NavGraphBuilder.alarmNavGraph(
         ) {
             AlarmSettingScreen(
                 onNavigatePopBackStack = popBackStackIfCan,
+                showSnackBarMessage = showSnackBar,
             )
         }
     }

@@ -1,9 +1,6 @@
 package com.jinproject.features.collection.model
 
-import android.util.Log
 import com.jinproject.domain.entity.item.EnchantableEquipment
-import com.jinproject.domain.model.ItemModel
-import com.jinproject.domain.model.ItemType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -14,14 +11,6 @@ abstract class Item {
     abstract val price: Long
 
     companion object {
-        fun Item.toItemModel() = ItemModel(
-            name = name,
-            count = count,
-            enchantNumber = 0,
-            price = price,
-            type = ItemType.Miscellaneous(name)
-        )
-
         fun fromDomainItem(items: List<com.jinproject.domain.entity.item.Item>): ImmutableList<Item> =
             if (items.isNotEmpty())
                 items.filter {

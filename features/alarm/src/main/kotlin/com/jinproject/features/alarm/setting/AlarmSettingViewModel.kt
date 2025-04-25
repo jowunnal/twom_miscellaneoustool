@@ -4,7 +4,9 @@ import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jinproject.domain.usecase.alarm.ManageTimerSettingUsecase
+import com.jinproject.domain.usecase.alarm.ManageTimerSettingUsecase.ManageTimerSettingException.InvalidIntervalException
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -59,8 +61,13 @@ class AlarmSettingViewModel @Inject constructor(
         yPos: Int? = null,
         firstInterval: Int? = null,
         secondInterval: Int? = null,
+        showSnackBarMessage: () -> Unit,
     ) {
-        viewModelScope.launch {
+        val exceptionHandler = CoroutineExceptionHandler { c, t ->
+            if (t is InvalidIntervalException)
+                showSnackBarMessage()
+        }
+        viewModelScope.launch(exceptionHandler) {
             manageTimerSettingUsecase.updateTimerSetting(
                 timerSetting = ManageTimerSettingUsecase.TimerSetting(
                     fontSize = fontSize,

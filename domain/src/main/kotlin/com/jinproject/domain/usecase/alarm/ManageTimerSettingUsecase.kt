@@ -2,6 +2,7 @@ package com.jinproject.domain.usecase.alarm
 
 import com.jinproject.domain.repository.TimerRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class ManageTimerSettingUsecase @Inject constructor(
@@ -36,15 +37,20 @@ class ManageTimerSettingUsecase @Inject constructor(
         val firstInterval: Int? = null,
         val secondInterval: Int? = null,
     ) {
-        fun verify(): Boolean = if (firstInterval != null && secondInterval != null)
-            firstInterval > secondInterval
-        else
-            false
+        fun verify(origin: TimerInterval): Boolean =
+            if (firstInterval != null && secondInterval == null)
+                firstInterval > origin.secondInterval!!
+            else if (secondInterval != null && firstInterval == null)
+                origin.firstInterval!! > secondInterval
+            else
+                true
     }
 
     suspend fun updateTimerSetting(timerSetting: TimerSetting) {
-        if (timerSetting.interval != null && timerSetting.interval.verify())
-            throw ManageTimerSettingException.InvalidIntervalException("첫번째 타이머 간격[${timerSetting.interval.firstInterval}]은 두번째 타이머 간격[${timerSetting.interval.secondInterval}] 보다 길어야 합니다.")
+        val origin = timerRepository.getTimerSetting().first().interval ?: TimerInterval(5, 0)
+
+        if (timerSetting.interval?.verify(origin) != true)
+            throw ManageTimerSettingException.InvalidIntervalException("첫번째 타이머 간격[${timerSetting.interval?.firstInterval}]은 두번째 타이머 간격[${timerSetting.interval?.secondInterval}] 보다 길어야 합니다.")
 
         timerRepository.updateTimerSetting(timerSetting = timerSetting)
     }

@@ -1,6 +1,6 @@
 package com.jinproject.data.repository.model
 
-import com.jinproject.domain.model.Message
+import com.jinproject.domain.entity.Message
 
 data class ChatMessage(
     val publisher: String,

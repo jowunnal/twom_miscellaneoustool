@@ -1,4 +1,4 @@
-package com.jinproject.domain.model
+package com.jinproject.domain.entity
 
 import com.jinproject.domain.entity.item.Item
 
