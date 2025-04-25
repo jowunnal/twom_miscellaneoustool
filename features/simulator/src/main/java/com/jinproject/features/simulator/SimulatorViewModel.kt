@@ -81,24 +81,12 @@ internal class SimulatorViewModel @Inject constructor(
         }
     }
 
-    private fun replaceOwnedItem(equipment: Equipment) {
-        viewModelScope.launch {
-            ownedItemsUseCase.replace(equipment.toDomain())
-            simulatorState.stopAndStart()
-        }
-    }
-
     fun enchantEquipment(equipment: Equipment, scroll: EnchantScroll) {
-        val enchantedEquipment = enchantEquipmentUseCase(
-            item = equipment.toDomain(),
-            scroll = scroll.toDomainModel(),
-        )?.fromDomainModel()
-
-        enchantedEquipment?.let {
-            replaceOwnedItem(enchantedEquipment)
-        } ?: run {
-            removeItemOnOwnedItemList(equipment.uuid)
+        viewModelScope.launch {
+            enchantEquipmentUseCase(
+                item = equipment.toDomain(),
+                scroll = scroll.toDomainModel(),
+            )
         }
     }
-
 }

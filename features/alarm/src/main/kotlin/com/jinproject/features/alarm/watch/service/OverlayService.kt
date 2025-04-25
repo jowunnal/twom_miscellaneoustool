@@ -17,11 +17,10 @@ import android.widget.TextView
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
-import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.design_ui.R
 import com.jinproject.domain.repository.TimerRepository
-import com.jinproject.domain.usecase.timer.GetOverlaySettingUsecase
-import com.jinproject.features.alarm.alarm.mapper.toTimerState
+import com.jinproject.domain.usecase.alarm.ManageTimerSettingUsecase
+import com.jinproject.features.alarm.alarm.item.TimerState
 import com.jinproject.features.alarm.alarm.utils.createChannel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +31,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import javax.inject.Inject
 
@@ -44,7 +44,7 @@ class OverlayService : LifecycleService() {
     lateinit var timerRepository: TimerRepository
 
     @Inject
-    lateinit var getOverlaySettingUsecase: GetOverlaySettingUsecase
+    lateinit var manageTimerSettingUsecase: ManageTimerSettingUsecase
 
     @SuppressLint("WrongConstant")
     override fun onCreate() {
@@ -96,40 +96,40 @@ class OverlayService : LifecycleService() {
         }
         wm.addView(mView, params)
 
-        getOverlaySettingUsecase()
+        manageTimerSettingUsecase.getTimerSetting()
             .flowOn(Dispatchers.IO)
             .onEach { overlaySetting ->
                 mView?.findViewById<TextView>(com.jinproject.features.alarm.R.id.tv_onOtherApps)?.textSize =
-                    overlaySetting.fontSize.toFloat()
+                    overlaySetting.fontSize?.toFloat() ?: 0f
                 mView?.findViewById<TextView>(com.jinproject.features.alarm.R.id.tv_currentTimes)?.textSize =
-                    overlaySetting.fontSize.toFloat()
+                    overlaySetting.fontSize?.toFloat() ?: 0f
 
                 if (mView?.windowToken != null && mView?.parent != null)
                     mView?.let {
                         wm.updateViewLayout(
                             mView,
                             params.apply {
-                                x = overlaySetting.xPos
-                                y = overlaySetting.yPos
+                                x = overlaySetting.xPos ?: 0
+                                y = overlaySetting.yPos ?: 0
                             }
                         )
                     }
             }.flowOn(Dispatchers.Main.immediate)
             .launchIn(lifecycleScope)
 
-        timerRepository.getTimer().map { timerModels ->
-            timerModels.filter { timerModel ->
-                timerModel.isOverlayOnOrNot
-            }.map { timerModel -> timerModel.toTimerState() }
+        timerRepository.getTimerList(true).map { timerModels ->
+            timerModels.map { timerModel -> TimerState.fromDomain(timerModel) }
         }.flowOn(Dispatchers.IO)
             .onEach { timerStates ->
                 mView?.findViewById<TextView>(com.jinproject.features.alarm.R.id.tv_onOtherApps)?.text =
                     timerStates.joinToString("\n") { timerState ->
-                        val hourOfDay = this@OverlayService.doOnLocaleLanguage(
-                            onKo = timerState.timeState.day.displayOnKo,
-                            onElse = timerState.timeState.day.displayOnElse
-                        )
-                        "${timerState.bossName} (${hourOfDay}) ${timerState.timeState.getMeridiem()} ${timerState.timeState.getTime12Hour()}:${timerState.timeState.minutes}:${timerState.timeState.seconds}"
+                        "${timerState.bossName} ${
+                            timerState.dateTime.format(
+                                DateTimeFormatter.ofPattern(
+                                    "MM.dd (E) a hh:mm:ss"
+                                )
+                            )
+                        }"
                     }
             }.flowOn(Dispatchers.Main.immediate)
             .launchIn(lifecycleScope)

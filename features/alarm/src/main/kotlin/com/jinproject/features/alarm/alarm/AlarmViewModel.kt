@@ -7,58 +7,55 @@ import android.content.Intent
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jinproject.core.util.doOnLocaleLanguage
+import com.jinproject.core.util.toEpochMilli
 import com.jinproject.design_ui.R
+import com.jinproject.domain.usecase.alarm.ManageTimerSettingUsecase
 import com.jinproject.domain.usecase.alarm.SetAlarmUsecase
-import com.jinproject.domain.usecase.timer.GetAlarmStoredBossUsecase
-import com.jinproject.features.alarm.alarm.item.AlarmItem
-import com.jinproject.features.alarm.alarm.item.TimeState
+import com.jinproject.features.alarm.alarm.item.MonsterState
 import com.jinproject.features.alarm.alarm.item.TimerState
-import com.jinproject.features.alarm.alarm.mapper.toTimerState
 import com.jinproject.features.alarm.alarm.receiver.AlarmReceiver
+import com.jinproject.features.alarm.alarm.utils.AlarmItem
 import com.jinproject.features.alarm.alarm.utils.makeAlarm
 import com.jinproject.features.core.base.item.SnackBarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 @Stable
 data class AlarmUiState(
     val timerList: List<TimerState>,
-    val recentlySelectedBossClassified: String,
-    val recentlySelectedBossName: String,
-    val bossNameList: List<String>,
-    val frequentlyUsedBossList: List<String>
+    val monsterList: List<MonsterState>,
+    val frequentlyUsedBossList: List<String>,
 ) {
     companion object {
         fun getInitValue() = AlarmUiState(
             timerList = listOf(TimerState.getInitValue()),
-            recentlySelectedBossClassified = "",
-            recentlySelectedBossName = "",
-            bossNameList = emptyList(),
-            frequentlyUsedBossList = emptyList()
+            monsterList = emptyList(),
+            frequentlyUsedBossList = emptyList(),
         )
     }
 }
 
 @Stable
 data class AlarmBottomSheetUiState(
-    val timeState: TimeState,
+    val zonedDateTime: ZonedDateTime,
     val selectedBossName: String
 ) {
     companion object {
         fun getInitValue() = AlarmBottomSheetUiState(
-            timeState = TimeState.getInitValue(),
-            selectedBossName = ""
+            zonedDateTime = ZonedDateTime.now(),
+            selectedBossName = "",
         )
     }
 }
@@ -69,206 +66,111 @@ class AlarmViewModel @Inject constructor(
     private val timerRepository: com.jinproject.domain.repository.TimerRepository,
     private val dropListRepository: com.jinproject.domain.repository.DropListRepository,
     private val setAlarmUsecase: SetAlarmUsecase,
-    private val getAlarmStoredBossUsecase: GetAlarmStoredBossUsecase
+    private val manageTimerSettingUsecase: ManageTimerSettingUsecase,
 ) : ViewModel() {
 
     private val alarmManager: AlarmManager =
         context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    private val _uiState = MutableStateFlow(AlarmUiState.getInitValue())
-    val uiState get() = _uiState.asStateFlow()
-
-    private val _bottomSheetUiState = MutableStateFlow(AlarmBottomSheetUiState.getInitValue())
-    val bottomSheetUiState get() = _bottomSheetUiState.asStateFlow()
-
-    init {
-        getTimerList()
-        getRecentlySelectedBossInfo()
-    }
-
-    private fun getRecentlySelectedBossInfo() {
-        getAlarmStoredBossUsecase().onEach { alarmStoredBoss ->
-            _uiState.update { state ->
-                state.copy(
-                    recentlySelectedBossClassified = alarmStoredBoss.classified,
-                    recentlySelectedBossName = alarmStoredBoss.name,
-                    frequentlyUsedBossList = alarmStoredBoss.list
-                )
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val uiState: StateFlow<AlarmUiState> =
+        dropListRepository.getBossMonsterList().map { monsterModelList ->
+            monsterModelList.map {
+                MonsterState.fromMonsterDomain(it)
             }
-            val monsterType = kotlin.runCatching {
-                com.jinproject.domain.model.MonsterType.findByBossTypeName(alarmStoredBoss.classified)
-            }.getOrDefault(
-                com.jinproject.domain.model.MonsterType.Normal(
-                    context.doOnLocaleLanguage(
-                        onKo = "일반",
-                        onElse = "Normal"
+        }.flatMapLatest { monsterList ->
+            timerRepository.getTimerList()
+                .combine(manageTimerSettingUsecase.getTimerSetting()) { timers, setting ->
+                    AlarmUiState(
+                        timerList = timers.map { TimerState.fromDomain(it) },
+                        monsterList = monsterList,
+                        frequentlyUsedBossList = setting.frequentlyUsedBossList ?: emptyList()
                     )
-                )
-            )
-            getBossListByType(monsterType)
-        }.launchIn(viewModelScope)
-    }
-
-    fun setRecentlySelectedBossClassified(bossClassified: com.jinproject.domain.model.MonsterType) {
-        viewModelScope.launch(Dispatchers.IO) {
-            timerRepository.setRecentlySelectedBossClassified(bossClassified)
-        }
-    }
-
-    private fun getBossListByType(bossClassified: com.jinproject.domain.model.MonsterType) {
-        dropListRepository.getMonsterByType(bossClassified).onEach { monsterModels ->
-            _uiState.update { state ->
-                state.copy(bossNameList = monsterModels.map { monsterModel ->
-                    monsterModel.name
-                })
-            }
-        }.catch {
-
-        }.launchIn(viewModelScope)
-    }
-
-    fun setRecentlySelectedBossName(bossName: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            timerRepository.setRecentlySelectedBossName(bossName)
-        }
-    }
+                }
+        }.stateIn(
+            scope = viewModelScope,
+            started = WhileSubscribed(5_000),
+            initialValue = AlarmUiState.getInitValue(),
+        )
 
     fun addBossToFrequentlyUsedList(bossName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             if (!uiState.value.frequentlyUsedBossList.contains(bossName))
-                timerRepository.addBossToFrequentlyUsedList(
-                    bossName = bossName
+                manageTimerSettingUsecase.updateTimerSetting(
+                    ManageTimerSettingUsecase.TimerSetting(
+                        frequentlyUsedBossList = uiState.value.frequentlyUsedBossList.toMutableList()
+                            .apply { add(bossName) }
+                    )
                 )
         }
     }
 
-    fun removeBossFromFrequentlyUsedList(
-        bossName: String,
+    fun removeBossFromFrequentlyUsedList(bossName: String) {
+        viewModelScope.launch(context = Dispatchers.IO) {
+            manageTimerSettingUsecase.updateTimerSetting(
+                ManageTimerSettingUsecase.TimerSetting(
+                    frequentlyUsedBossList = uiState.value.frequentlyUsedBossList.filter { it != bossName }
+                )
+            )
+        }
+    }
+
+    fun setAlarm(
+        monsterName: String,
+        deadTime: ZonedDateTime,
         showSnackBar: suspend (SnackBarMessage) -> Unit
     ) {
-        val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            if (throwable is IllegalArgumentException) {
-                viewModelScope.launch {
-                    showSnackBar(
-                        SnackBarMessage(
-                            headerMessage = context.getString(
-                                R.string.message_throw_exceptions
-                            )
-                        )
-                    )
-                }
-            }
-        }
-        viewModelScope.launch(context = Dispatchers.IO + exceptionHandler) {
-            timerRepository.setBossToFrequentlyUsedList(
-                bossList = uiState.value.frequentlyUsedBossList.toMutableList()
-                    .apply { remove(bossName) }
+        viewModelScope.launch(Dispatchers.IO) {
+            val timer = setAlarmUsecase(
+                monsterName = monsterName,
+                deadTime = deadTime,
             )
-        }
-    }
+            val intervals = manageTimerSettingUsecase.getTimerSetting().first().interval
+            val monsterImageName = dropListRepository.getMonsInfo(monsterName).first().imageName
 
-    private fun getTimerList() = timerRepository.getTimer().onEach { timerModels ->
-        _uiState.update { state ->
-            state.copy(timerList = timerModels.map { timerModel ->
-                timerModel.toTimerState()
-            })
-        }
-    }.catch { e ->
-        when (e) {
-            is IllegalStateException -> {
-                _uiState.update { state ->
-                    state.copy(
-                        timerList = listOf(
-                            TimerState(
-                                id = 0,
-                                bossName = "실패",
-                                timeState = TimeState.getInitValue()
-                            )
-                        )
-                    )
-                }
-            }
-        }
-    }.launchIn(viewModelScope)
-
-    fun setHourChanged(hour: Int) = _bottomSheetUiState.update { state ->
-        state.copy(timeState = bottomSheetUiState.value.timeState.copy(hour = hour))
-    }
-
-    fun setMinutesChanged(minutes: Int) = _bottomSheetUiState.update { state ->
-        state.copy(timeState = bottomSheetUiState.value.timeState.copy(minutes = minutes))
-    }
-
-    fun setSecondsChanged(seconds: Int) = _bottomSheetUiState.update { state ->
-        state.copy(timeState = bottomSheetUiState.value.timeState.copy(seconds = seconds))
-    }
-
-    fun setSelectedBossName(bossName: String) = _bottomSheetUiState.update { state ->
-        state.copy(selectedBossName = bossName, timeState = TimeState.getInitValue())
-    }
-
-    fun setAlarm(monsterName: String, showSnackBar: suspend (SnackBarMessage) -> Unit) =
-        setAlarmUsecase.invoke(
-            monsterName = monsterName,
-            monsDiedHour = bottomSheetUiState.value.timeState.hour,
-            monsDiedMin = bottomSheetUiState.value.timeState.minutes,
-            monsDiedSec = bottomSheetUiState.value.timeState.seconds,
-            makeAlarm = { firstInterval, secondInterval, monsterAlarmModel ->
-
-                alarmManager.makeAlarm(
-                    context = context,
-                    nextGenTime = monsterAlarmModel.nextGtime - firstInterval * 60000,
-                    item = AlarmItem(
-                        name = monsterAlarmModel.name,
-                        imgName = monsterAlarmModel.img,
-                        code = monsterAlarmModel.code
-                    ),
-                    intervalFirstTimerSetting = firstInterval,
-                )
-
-                alarmManager.makeAlarm(
-                    context = context,
-                    nextGenTime = monsterAlarmModel.nextGtime - secondInterval * 60000,
-                    item = AlarmItem(
-                        name = monsterAlarmModel.name,
-                        imgName = monsterAlarmModel.img,
-                        code = monsterAlarmModel.code + 300
-                    ),
-                    intervalSecondTimerSetting = secondInterval,
-                )
-            }
-        ).onEach {
-            showSnackBar(
-                SnackBarMessage(
-                    headerMessage = "$monsterName ${
-                        context.getString(
-                            R.string.alarm_setted
-                        )
-                    }"
-                )
-            )
-        }.catch { e ->
-            when (e) {
-                is NoSuchElementException -> {
-                    showSnackBar(
-                        SnackBarMessage(
-                            headerMessage = context.getString(R.string.message_throw_no_such_element),
-                            contentMessage = e.message.toString()
-                        )
+            launch(Dispatchers.Main.immediate) {
+                with(timer[0]) {
+                    alarmManager.makeAlarm(
+                        context = context,
+                        nextGenTime = dateTime.toEpochMilli(),
+                        item = AlarmItem(
+                            name = monsterName,
+                            imgName = monsterImageName,
+                            code = id
+                        ),
+                        intervalFirstTimerSetting = intervals?.firstInterval ?: 0,
                     )
                 }
 
-                else -> showSnackBar(
+                with(timer[1]) {
+                    alarmManager.makeAlarm(
+                        context = context,
+                        nextGenTime = dateTime.toEpochMilli(),
+                        item = AlarmItem(
+                            name = monsterName,
+                            imgName = monsterImageName,
+                            code = id + 300
+                        ),
+                        intervalSecondTimerSetting = intervals?.secondInterval ?: 0,
+                    )
+                }
+
+                showSnackBar(
                     SnackBarMessage(
-                        headerMessage = context.getString(R.string.message_throw_exceptions)
+                        headerMessage = "$monsterName ${
+                            context.getString(
+                                R.string.alarm_setted
+                            )
+                        }"
                     )
                 )
             }
-        }.launchIn(viewModelScope)
+        }
+    }
 
     fun clearAlarm(code: Int, bossName: String) {
-        deleteAlarm(code)
-        deleteAlarm(code + 300)
+        deleteAlarm(code = code)
+        deleteAlarm(code = code + 300)
 
         deleteTimer(bossName)
     }
@@ -286,4 +188,45 @@ class AlarmViewModel @Inject constructor(
 
     private fun deleteTimer(bossName: String) =
         viewModelScope.launch(Dispatchers.IO) { timerRepository.deleteTimer(bossName) }
+
+    fun addOverlayMonster(monsterName: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val overlaidMonsterList =
+                manageTimerSettingUsecase.getTimerSetting().first().overlaidMonsterList
+
+            val new = if (overlaidMonsterList != null) {
+                if (!overlaidMonsterList.contains(monsterName))
+                    overlaidMonsterList.toMutableList()
+                        .apply { add(monsterName) }
+                else
+                    return@launch
+            } else
+                listOf(monsterName)
+
+            manageTimerSettingUsecase.updateTimerSetting(
+                ManageTimerSettingUsecase.TimerSetting(
+                    overlaidMonsterList = new
+                )
+            )
+        }
+    }
+
+    fun removeOverlayMonster(monsterName: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val overlaidMonsterList =
+                manageTimerSettingUsecase.getTimerSetting()
+                    .first().overlaidMonsterList?.toMutableList()
+
+            overlaidMonsterList?.let {
+                manageTimerSettingUsecase.updateTimerSetting(
+                    ManageTimerSettingUsecase.TimerSetting(overlaidMonsterList = it.apply {
+                        remove(
+                            monsterName
+                        )
+                    })
+                )
+            }
+        }
+    }
 }
+

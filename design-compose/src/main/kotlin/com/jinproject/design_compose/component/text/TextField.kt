@@ -199,9 +199,10 @@ fun OutlineVerifyTextField(
 fun NumberInputTextField(
     modifier: Modifier = Modifier,
     initialValue: String,
+    maxNumber: Int,
     textFieldState: TextFieldState,
     outputTransformation: OutputTransformation? = null,
-    inputTransformation: InputTransformation? = null,
+    inputTransformation: InputTransformation? = LimitNumberInputTransformation(maxNumber),
     headerIcon: @Composable (() -> Unit)? = null,
     hint: String = stringResource(R.string.watch_setting_input_number),
     enabled: Boolean = true,
@@ -379,11 +380,16 @@ class PasswordOutputTransformation(
     }
 }
 
-class NumberInputTransformation(
+/**
+ * 숫자만 입력받는 텍스트 필드에서 최대값으로 제한하는 inputTransformation
+ *
+ * @param maxNumber 제한하기 위한 최대값
+ */
+class LimitNumberInputTransformation(
     private val maxNumber: Int = 0,
 ) : InputTransformation {
     override fun TextFieldBuffer.transformInput() {
-        if ((originalText.toString().toIntOrNull() ?: 0) > maxNumber)
+        if ((asCharSequence().toString().toIntOrNull() ?: 0) > maxNumber)
             replace(0, length, maxNumber.toString())
     }
 }

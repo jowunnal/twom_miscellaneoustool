@@ -15,7 +15,7 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import com.jinproject.features.alarm.alarmNavGraph
 import com.jinproject.features.alarm.navigateToAlarmGraph
-import com.jinproject.features.alarm.navigateToWatch
+import com.jinproject.features.alarm.navigateToAlarmSetting
 import com.jinproject.features.auth.authNavigation
 import com.jinproject.features.auth.navigateAuthRoute
 import com.jinproject.features.auth.navigateToAuthGraph
@@ -63,7 +63,7 @@ internal fun NavigationGraph(
         alarmNavGraph(
             billingModule = billingModule,
             showRewardedAd = showRewardedAd,
-            onNavigateToWatch = navController::navigateToWatch,
+            onNavigateToAlarmSetting = navController::navigateToAlarmSetting,
             showSnackBar = showSnackBar,
             popBackStackIfCan = navController::popBackStackIfCan,
         )
