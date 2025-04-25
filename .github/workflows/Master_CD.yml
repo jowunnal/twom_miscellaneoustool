@@ -19,7 +19,11 @@ jobs:
          VERSION=$(git log -1 --pretty=%B | grep -oP 'Release:\s*\K[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
          VERSION=${VERSION:-"unknown"}
          echo "Extracted version: $VERSION"
-         echo "version_name=$VERSION" >> "$GITHUB_OUTPUT"
+         {
+           echo "version_name<<EOF"
+           echo "$VERSION"
+           echo "EOF"
+         } >> "$GITHUB_OUTPUT"
       
 
   build:
