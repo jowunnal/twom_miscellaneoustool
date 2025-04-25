@@ -14,7 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 @ExperimentalCoroutinesApi
 class SetAlarmUsecaseTest : BehaviorSpec() {
@@ -28,7 +28,7 @@ class SetAlarmUsecaseTest : BehaviorSpec() {
     init {
         runTest {
             given("알람 간격이 첫번째 0분, 두번째 5분이고, 0시 0분 0초에 불도저 알람을 설정할 때") {
-                val current = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0)
+                val current = ZonedDateTime.now().withHour(0).withMinute(0).withSecond(0)
                 val monsterInfo = Monster(
                     name = "불도저",
                     level = 7,

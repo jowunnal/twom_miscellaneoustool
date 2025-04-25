@@ -4,7 +4,7 @@ import com.jinproject.data.repository.datasource.CacheSymbolDataSource
 import com.jinproject.data.repository.datasource.RemoteGenerateImageDataSource
 import com.jinproject.data.repository.datasource.RemoteImageDownloadManager
 import com.jinproject.data.repository.model.toChatMessage
-import com.jinproject.domain.model.Message
+import com.jinproject.domain.entity.Message
 import com.jinproject.domain.repository.SymbolRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

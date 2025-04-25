@@ -103,7 +103,7 @@ internal data class Message(
     val downloadState: DownloadState = DownloadState.getDownloadState(data),
 ) {
     fun isWebImage() = data.startsWith("http")
-    fun toDomainMessage() = com.jinproject.domain.model.Message(
+    fun toDomainMessage() = com.jinproject.domain.entity.Message(
         publisher = publisher.name,
         data = data,
         timeStamp = timeStamp,

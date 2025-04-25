@@ -1,7 +1,6 @@
 package com.jinproject.domain.repository
 
-import com.jinproject.domain.model.ItemCollection
-import com.jinproject.domain.model.ItemModel
+import com.jinproject.domain.entity.ItemCollection
 import kotlinx.coroutines.flow.Flow
 
 interface CollectionRepository {
@@ -10,6 +9,6 @@ interface CollectionRepository {
     fun getFilteredCollectionIds(): Flow<List<Int>>
     suspend fun setFilteringCollections(collectionList: List<Int>)
     suspend fun addFilteringCollection(id: Int)
-    suspend fun updateItemPrice(items: List<ItemModel>)
+    suspend fun updateItemPrice(name: String, price: Long)
 
 }

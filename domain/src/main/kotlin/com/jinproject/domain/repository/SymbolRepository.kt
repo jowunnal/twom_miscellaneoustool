@@ -1,6 +1,6 @@
 package com.jinproject.domain.repository
 
-import com.jinproject.domain.model.Message
+import com.jinproject.domain.entity.Message
 import kotlinx.coroutines.flow.Flow
 
 interface SymbolRepository {

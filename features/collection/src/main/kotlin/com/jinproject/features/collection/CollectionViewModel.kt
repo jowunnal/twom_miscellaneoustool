@@ -7,7 +7,6 @@ import androidx.navigation.toRoute
 import com.jinproject.domain.repository.CollectionRepository
 import com.jinproject.features.collection.model.CollectionUiState
 import com.jinproject.features.collection.model.Item
-import com.jinproject.features.collection.model.Item.Companion.toItemModel
 import com.jinproject.features.collection.model.ItemCollection
 import com.jinproject.features.core.utils.mapToImmutableList
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -76,7 +75,9 @@ internal class CollectionViewModel @Inject constructor(
 
     private fun updateItemsPrice(items: List<Item>) {
         viewModelScope.launch {
-            collectionRepository.updateItemPrice(items.map { it.toItemModel() })
+            items.onEach { item ->
+                collectionRepository.updateItemPrice(name = item.name, price = item.price)
+            }
         }
     }
 }

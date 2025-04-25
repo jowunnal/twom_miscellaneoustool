@@ -1,4 +1,4 @@
-package com.jinproject.domain.model
+package com.jinproject.domain.entity
 
 data class Message(
     val publisher: String,

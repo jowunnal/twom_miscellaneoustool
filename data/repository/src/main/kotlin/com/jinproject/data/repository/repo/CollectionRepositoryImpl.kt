@@ -1,8 +1,7 @@
 package com.jinproject.data.repository.repo
 
 import com.jinproject.data.repository.datasource.CacheCollectionDataSource
-import com.jinproject.domain.model.ItemCollection
-import com.jinproject.domain.model.ItemModel
+import com.jinproject.domain.entity.ItemCollection
 import com.jinproject.domain.repository.CollectionRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -29,9 +28,7 @@ class CollectionRepositoryImpl @Inject constructor(
         cacheCollectionDataSource.addFilteringCollection(id)
     }
 
-    override suspend fun updateItemPrice(items: List<ItemModel>) {
-        items.forEach { item ->
-            cacheCollectionDataSource.updateItemPrice(name = item.name, price = item.price)
-        }
+    override suspend fun updateItemPrice(name: String, price: Long) {
+        cacheCollectionDataSource.updateItemPrice(name = name, price = price)
     }
 }
