@@ -75,7 +75,7 @@ internal fun ColumnScope.Monster(
             modifier = Modifier.padding(vertical = 4.dp)
         )
     }
-    if (monster.type !is MonsterType.Normal)
+    if (monster.type !is MonsterType.Normal && monster.genTime != 0)
         DescriptionSmallText(
             text = monster.displayGenTime(),
             modifier = Modifier.padding(vertical = 4.dp)

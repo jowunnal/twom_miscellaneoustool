@@ -2,7 +2,7 @@ package com.jinproject.data.repository.repo
 
 import com.jinproject.data.repository.datasource.CacheTimerDataSource
 import com.jinproject.data.repository.model.TimerSetting
-import com.jinproject.data.repository.model.toDomain
+import com.jinproject.data.repository.model.toTimerDomain
 import com.jinproject.domain.repository.TimerRepository
 import com.jinproject.domain.usecase.alarm.ManageTimerSettingUsecase
 import com.jinproject.domain.usecase.alarm.SetAlarmUsecase
@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.zip
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
@@ -21,7 +20,7 @@ class TimerRepositoryImpl @Inject constructor(
     override fun getTimerList(filterOverlaying: Boolean): Flow<List<SetAlarmUsecase.Timer>> =
         cacheTimerDataSource.getTimerList().map { response ->
             response.filter { if(filterOverlaying) it.ota == 1 else true }.map { timer ->
-                timer.toDomain()
+                timer.toTimerDomain()
             }
         }
 
@@ -70,7 +69,7 @@ class TimerRepositoryImpl @Inject constructor(
                 if (timer == null)
                     emptyList<SetAlarmUsecase.Timer>()
                 else {
-                    val timerDomain = timer.toDomain()
+                    val timerDomain = timer.toTimerDomain()
 
                     listOf(
                         timerDomain

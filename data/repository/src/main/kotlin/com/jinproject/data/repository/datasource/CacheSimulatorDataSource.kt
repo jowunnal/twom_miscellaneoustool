@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CacheSimulatorDataSource {
     fun getItemInfo(itemName: String): Flow<EquipmentEntity>
-    fun getItemInfos(): Flow<List<EquipmentEntity>>
+    fun getItemInfos(): Flow<List<Equipment>>
     fun getOwnedItems(): Flow<List<EquipmentInfo>>
     suspend fun addItemOnOwnedItemList(equipment: Equipment)
     suspend fun removeItemOnOwnedItemList(uuid: String)

@@ -2,7 +2,6 @@ package com.jinproject.data.datasource.cache.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.jinproject.data.repository.model.Equipment
 import com.jinproject.data.repository.model.EquipmentEntity
 import com.jinproject.data.repository.model.EquipmentInfo
 
@@ -12,12 +11,12 @@ data class Item(
     val itemType: String,
     val itemPrice: Long,
 ) {
-    fun toItemData(): com.jinproject.data.repository.model.GetItemDomainFactory =
+    fun toItemData(enchantNumber: Int = 0): com.jinproject.data.repository.model.GetItemDomainFactory =
         when (itemType) {
-            com.jinproject.data.repository.model.Item.MISCELLANEOUS_KO,
-            com.jinproject.data.repository.model.Item.MISCELLANEOUS_EN,
-            com.jinproject.data.repository.model.Item.SKILL_KO,
-            com.jinproject.data.repository.model.Item.SKILL_EN -> com.jinproject.data.repository.model.Item(
+            com.jinproject.data.repository.model.NotEquipmentItem.MISCELLANEOUS_KO,
+            com.jinproject.data.repository.model.NotEquipmentItem.MISCELLANEOUS_EN,
+            com.jinproject.data.repository.model.NotEquipmentItem.SKILL_KO,
+            com.jinproject.data.repository.model.NotEquipmentItem.SKILL_EN -> com.jinproject.data.repository.model.NotEquipmentItem(
                 name = itemName,
                 price = itemPrice,
                 itemType = itemType,
@@ -31,7 +30,7 @@ data class Item(
                 imageName = "",
                 level = 0,
             ).toEquipment(
-                equipmentInfo = EquipmentInfo.getInitValues().copy(name = itemName)
+                equipmentInfo = EquipmentInfo.getInitValues().copy(name = itemName, enchantNumber = enchantNumber)
             )
         }
 }

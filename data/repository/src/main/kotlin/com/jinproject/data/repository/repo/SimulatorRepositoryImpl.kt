@@ -1,7 +1,6 @@
 package com.jinproject.data.repository.repo
 
 import com.jinproject.data.repository.datasource.CacheSimulatorDataSource
-import com.jinproject.data.repository.model.toDomain
 import com.jinproject.data.repository.model.toEquipmentData
 import com.jinproject.domain.entity.item.EnchantableEquipment
 import com.jinproject.domain.entity.item.Equipment
@@ -16,7 +15,7 @@ class SimulatorRepositoryImpl @Inject constructor(
 ) : SimulatorRepository {
     override fun getEnchantableItems(): Flow<List<Equipment>> =
         cacheSimulatorDataSource.getItemInfos().map { equipmentList ->
-            equipmentList.toDomain()
+            equipmentList.map { it.toDomain() }
         }
 
     override fun getOwnedItems(): Flow<List<Equipment>> =

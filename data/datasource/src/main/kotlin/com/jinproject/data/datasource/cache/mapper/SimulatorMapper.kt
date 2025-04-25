@@ -2,6 +2,7 @@ package com.jinproject.data.datasource.cache.mapper
 
 import com.jinproject.data.ItemInfo
 import com.jinproject.data.datasource.cache.database.dao.ItemWithEquipmentInfo
+import com.jinproject.data.datasource.cache.mapper.toEquipmentProto
 import com.jinproject.data.repository.model.Equipment
 import com.jinproject.data.repository.model.EquipmentEntity
 import com.jinproject.data.repository.model.EquipmentInfo
@@ -22,9 +23,16 @@ fun ItemInfo.toEquipmentProto(): EquipmentInfo = EquipmentInfo(
 
 fun List<ItemInfo>.toEquipmentProtoList(): List<EquipmentInfo> = map { it.toEquipmentProto() }
 
-fun Map<ItemWithEquipmentInfo, List<com.jinproject.data.datasource.cache.database.entity.ItemInfo>>.toEquipmentEntities(): List<EquipmentEntity> =
+fun Map<ItemWithEquipmentInfo, List<com.jinproject.data.datasource.cache.database.entity.ItemInfo>>.toEquipmentEntities(): List<Equipment> =
     map { entries ->
-        entries.toEquipmentEntity()
+        entries.toEquipmentEntity().toEquipment(
+            EquipmentInfo(
+                name = entries.key.itemName,
+                uuid = "",
+                enchantNumber = 0,
+                stats = entries.value.associate { it.type to it.value.toFloat() }
+            )
+        )
     }
 
 fun Map.Entry<ItemWithEquipmentInfo, List<com.jinproject.data.datasource.cache.database.entity.ItemInfo>>.toEquipmentEntity(): EquipmentEntity =

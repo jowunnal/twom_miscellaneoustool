@@ -40,7 +40,7 @@ class CacheSimulatorDataSourceImpl @Inject constructor(
             entry.toEquipmentEntity()
         }
 
-    override fun getItemInfos(): Flow<List<EquipmentEntity>> =
+    override fun getItemInfos(): Flow<List<Equipment>> =
         simulatorDao.getItemInfos().map { itemWithInfosList ->
             itemWithInfosList.toEquipmentEntities()
         }

@@ -1,4 +1,4 @@
-package com.jinproject.features.alarm.watch.service
+package com.jinproject.features.alarm.setting.service
 
 import android.content.Context
 import android.graphics.Canvas

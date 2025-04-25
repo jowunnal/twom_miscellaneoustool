@@ -1,4 +1,4 @@
-package com.jinproject.features.alarm.watch.component
+package com.jinproject.features.alarm.setting.component
 
 import android.app.NotificationManager
 import android.content.Context
@@ -25,7 +25,7 @@ import com.jinproject.design_compose.component.SelectionButton
 import com.jinproject.design_compose.theme.Typography
 import com.jinproject.design_compose.utils.PreviewMiscellaneousToolTheme
 import com.jinproject.design_ui.R
-import com.jinproject.features.alarm.watch.service.OverlayService
+import com.jinproject.features.alarm.setting.service.OverlayService
 import com.jinproject.features.core.AnalyticsEvent
 import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
 import com.jinproject.features.core.utils.checkAuthorityDrawOverlays

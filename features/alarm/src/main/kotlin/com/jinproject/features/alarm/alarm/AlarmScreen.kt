@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,8 +32,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -62,6 +65,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlarmScreen(
     billingModule: BillingModule,
@@ -134,6 +138,8 @@ fun AlarmScreen(
 @Composable
 private fun AlarmScreen(
     alarmUiState: AlarmUiState,
+    bottomSheetState: SheetState = rememberModalBottomSheetState(),
+    focusManager: FocusManager = LocalFocusManager.current,
     addBossToFrequentlyUsedList: (String) -> Unit,
     removeBossFromFrequentlyUsedList: (String) -> Unit,
     onStartAlarm: (monsterName: String, deadTime: ZonedDateTime) -> Unit,
@@ -142,7 +148,6 @@ private fun AlarmScreen(
     removeOverlayMonster: (String) -> Unit,
     onNavigateToWatch: () -> Unit,
 ) {
-    val bottomSheetState = rememberModalBottomSheetState()
     var bottomSheetVisibility by remember {
         mutableStateOf(false)
     }
@@ -165,6 +170,10 @@ private fun AlarmScreen(
             else
                 removeOverlayMonster(selectedMonster)
         }
+    }
+
+    var transitionState by remember {
+        mutableStateOf(false)
     }
 
     TextDialog(
@@ -220,6 +229,10 @@ private fun AlarmScreen(
         }
 
     DefaultLayout(
+        modifier = Modifier.clickableAvoidingDuplication {
+            focusManager.clearFocus()
+            transitionState = false
+        },
         topBar = {
             AlarmTopAppBar(
                 onNavigateToOverlaySetting = onNavigateToWatch
@@ -231,72 +244,79 @@ private fun AlarmScreen(
         SharedTransitionLayout {
             SearchBossContent(
                 bossNameList = alarmUiState.monsterList,
+                transitionState = transitionState,
                 sharedTransitionScope = this@SharedTransitionLayout,
                 addBossToFrequentlyUsedList = addBossToFrequentlyUsedList,
+                setTransitionState = { bool -> transitionState = bool }
             )
         }
-        HorizontalDivider()
-        DescriptionLargeText(
-            text = stringResource(id = R.string.watch_title_recently_bosslist),
-            color = MaterialTheme.colorScheme.outline,
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentWidth()
-                .padding(vertical = 16.dp)
-        )
-        FlowRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            maxItemsInEachRow = 3,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalArrangement = Arrangement.Center
-        ) {
-            alarmUiState.frequentlyUsedBossList.forEach { item ->
-                BossSelectionItem(
-                    bossName = item,
-                    onClickBossItem = { bossName ->
-                        selectedMonster = bossName
-                        bottomSheetVisibility = true
-                    },
-                    removeBossFromFrequentlyUsedList = removeBossFromFrequentlyUsedList,
-                    onOpenDialog = { state ->
-                        dialogUiState = state.apply {
-                            changeVisibility(true)
-                        }
-                    },
-                    onCloseDialog = { dialogUiState.changeVisibility(false) }
-                )
+        if (alarmUiState.frequentlyUsedBossList.isNotEmpty()) {
+            HorizontalDivider()
+            DescriptionLargeText(
+                text = stringResource(id = R.string.watch_title_recently_bosslist),
+                color = MaterialTheme.colorScheme.outline,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth()
+                    .padding(vertical = 16.dp)
+            )
+            FlowRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                maxItemsInEachRow = 3,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalArrangement = Arrangement.Center
+            ) {
+                alarmUiState.frequentlyUsedBossList.forEach { item ->
+                    BossSelectionItem(
+                        bossName = item,
+                        onClickBossItem = { bossName ->
+                            selectedMonster = bossName
+                            bottomSheetVisibility = true
+                        },
+                        removeBossFromFrequentlyUsedList = removeBossFromFrequentlyUsedList,
+                        onOpenDialog = { state ->
+                            dialogUiState = state.apply {
+                                changeVisibility(true)
+                            }
+                        },
+                        onCloseDialog = { dialogUiState.changeVisibility(false) }
+                    )
+                }
             }
         }
-        HorizontalDivider()
-        VerticalSpacer(height = 20.dp)
-        DescriptionLargeText(
-            text = stringResource(id = R.string.alarm_present_bosslist),
-            color = MaterialTheme.colorScheme.outline,
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentWidth()
-        )
-        VerticalSpacer(height = 20.dp)
+        if (alarmUiState.timerList.isNotEmpty()) {
+            HorizontalDivider()
+            VerticalSpacer(height = 20.dp)
+            DescriptionLargeText(
+                text = stringResource(id = R.string.alarm_present_bosslist),
+                color = MaterialTheme.colorScheme.outline,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth()
+            )
+            VerticalSpacer(height = 20.dp)
 
-        alarmUiState.timerList.forEach { timer ->
-            key(timer.id) {
-                InProgressTimerItem(
-                    timerState = timer,
-                    onClearAlarm = onClearAlarm,
-                    onOpenDialog = { state ->
-                        dialogUiState = state.apply {
-                            changeVisibility(true)
-                        }
-                    },
-                    onCloseDialog = { dialogUiState.changeVisibility(false) }
-                )
+            alarmUiState.timerList.forEach { timer ->
+                key(timer.id) {
+                    InProgressTimerItem(
+                        timerState = timer,
+                        onClearAlarm = onClearAlarm,
+                        onOpenDialog = { state ->
+                            dialogUiState = state.apply {
+                                changeVisibility(true)
+                            }
+                        },
+                        onCloseDialog = { dialogUiState.changeVisibility(false) }
+                    )
+                }
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 private fun PreviewAlarmScreen(

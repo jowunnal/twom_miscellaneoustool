@@ -11,7 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navDeepLink
 import com.jinproject.features.alarm.alarm.AlarmScreen
-import com.jinproject.features.alarm.watch.AlarmSettingScreen
+import com.jinproject.features.alarm.setting.AlarmSettingScreen
 import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.core.compose.Route

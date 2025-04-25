@@ -268,9 +268,6 @@ class CostumeDomainFactory(
     }
 }
 
-fun List<EquipmentEntity>.toDomain(): List<com.jinproject.domain.entity.item.Equipment> =
-    map { it.toEquipment().toDomain() }
-
 fun EnchantableEquipment.toEquipmentData() = Equipment(
     info = EquipmentInfo(
         name = name,

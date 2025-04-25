@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -31,18 +32,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.request.ImageRequest
 import com.jinproject.design_compose.component.DialogState
 import com.jinproject.design_compose.component.HorizontalDivider
+import com.jinproject.design_compose.component.HorizontalWeightSpacer
 import com.jinproject.design_compose.component.SubcomposeAsyncImageWithPreview
 import com.jinproject.design_compose.component.button.TextCombinedButton
 import com.jinproject.design_compose.component.button.clickableAvoidingDuplication
@@ -66,14 +71,14 @@ import kotlinx.coroutines.flow.filter
 @OptIn(ExperimentalLayoutApi::class, ExperimentalSharedTransitionApi::class, FlowPreview::class)
 @Composable
 fun SearchBossContent(
+    transitionState: Boolean,
+    setTransitionState: (Boolean) -> Unit,
     softwareKeyboardController: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current,
     bossNameList: List<MonsterState>,
     sharedTransitionScope: SharedTransitionScope,
     addBossToFrequentlyUsedList: (String) -> Unit,
 ) {
-    var transitionState by remember {
-        mutableStateOf(false)
-    }
+
     val textFieldState = rememberTextFieldState()
     var searchedBossList: List<MonsterState> by remember {
         mutableStateOf(bossNameList)
@@ -98,7 +103,7 @@ fun SearchBossContent(
                 .padding(bottom = 8.dp)
                 .onFocusChanged {
                     if (it.hasFocus) {
-                        transitionState = true
+                        setTransitionState(true)
                     }
                 }
                 .graphicsLayer {
@@ -121,7 +126,7 @@ fun SearchBossContent(
                     if (!bool) {
                         searchedBossList = emptyList()
                     }
-                    transitionState = bool
+                    setTransitionState(bool)
                 }
             )
             AnimatedVisibility(transitionState) {
@@ -180,6 +185,15 @@ fun SearchBossContent(
                                         MonsterType.Boss -> MiscellaneousToolColor.orange.color
                                         MonsterType.WorldBoss -> MiscellaneousToolColor.deepRed.color
                                     },
+                                )
+                                HorizontalWeightSpacer(1f)
+                                Image(
+                                    imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_right_small),
+                                    contentDescription = "오른쪽 클릭",
+                                    modifier = Modifier.padding(end = 4.dp),
+                                    colorFilter = ColorFilter.tint(
+                                        MaterialTheme.colorScheme.outline
+                                    )
                                 )
                             }
                         }
@@ -246,8 +260,10 @@ private fun PreviewBossSelection(
         SharedTransitionLayout {
             SearchBossContent(
                 bossNameList = alarmUiState.monsterList,
+                transitionState = true,
                 sharedTransitionScope = this@SharedTransitionLayout,
                 addBossToFrequentlyUsedList = {},
+                setTransitionState = {},
             )
         }
     }

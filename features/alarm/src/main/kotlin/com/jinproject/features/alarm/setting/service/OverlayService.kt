@@ -1,4 +1,4 @@
-package com.jinproject.features.alarm.watch.service
+package com.jinproject.features.alarm.setting.service
 
 import android.annotation.SuppressLint
 import android.app.NotificationManager

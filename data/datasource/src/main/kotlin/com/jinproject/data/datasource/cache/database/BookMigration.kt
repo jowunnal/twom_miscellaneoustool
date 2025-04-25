@@ -507,6 +507,9 @@ internal object BookMigration {
                 execSQL("drop table Timer")
                 execSQL("alter table Tempor rename to Timer")
                 execSQL("CREATE INDEX IF NOT EXISTS `index_Timer_timerMonsName` ON `Timer` (`timerMonsName`)")
+
+                execSQL("update Monster set monsGtime = 604800 where monsName = '플라타니스타'")
+                execSQL("update Monster set monsGtime = 259200 where monsName = '일루스트'")
             }
         }
     }
@@ -565,6 +568,8 @@ internal object BookMigration {
                 execSQL("drop table Timer")
                 execSQL("alter table Tempor rename to Timer")
                 execSQL("CREATE INDEX IF NOT EXISTS `index_Timer_timerMonsName` ON `Timer` (`timerMonsName`)")
+
+                execSQL("update Monster set monsGtime = 259200 where monsName = 'Illust'")
             }
         }
     }

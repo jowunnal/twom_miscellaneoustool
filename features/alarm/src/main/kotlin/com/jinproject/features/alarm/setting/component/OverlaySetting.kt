@@ -1,4 +1,4 @@
-package com.jinproject.features.alarm.watch.component
+package com.jinproject.features.alarm.setting.component
 
 import android.content.Context
 import androidx.compose.foundation.background
@@ -30,8 +30,8 @@ import com.jinproject.design_compose.component.text.DescriptionLargeText
 import com.jinproject.design_compose.component.text.NumberInputTextField
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.design_ui.R
-import com.jinproject.features.alarm.watch.SettingUiState
-import com.jinproject.features.alarm.watch.SettingUiStatePreviewParameter
+import com.jinproject.features.alarm.setting.SettingUiState
+import com.jinproject.features.alarm.setting.SettingUiStatePreviewParameter
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce

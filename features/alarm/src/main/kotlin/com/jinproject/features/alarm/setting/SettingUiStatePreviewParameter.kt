@@ -1,4 +1,4 @@
-package com.jinproject.features.alarm.watch
+package com.jinproject.features.alarm.setting
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 

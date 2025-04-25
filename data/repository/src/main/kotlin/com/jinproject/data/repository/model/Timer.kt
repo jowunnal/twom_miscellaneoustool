@@ -1,7 +1,6 @@
 package com.jinproject.data.repository.model
 
 import com.jinproject.domain.usecase.alarm.SetAlarmUsecase
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 data class Timer(
@@ -11,7 +10,7 @@ data class Timer(
     val monsterName: String,
 )
 
-fun Timer.toDomain() = SetAlarmUsecase.Timer(
+fun Timer.toTimerDomain() = SetAlarmUsecase.Timer(
     id = timerId,
     monsterName = monsterName,
     dateTime = dateTime,

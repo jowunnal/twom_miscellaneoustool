@@ -1,4 +1,4 @@
-package com.jinproject.features.alarm.watch
+package com.jinproject.features.alarm.setting
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -20,8 +20,8 @@ import com.jinproject.design_compose.component.bar.BackButtonTitleAppBar
 import com.jinproject.design_compose.component.layout.DefaultLayout
 import com.jinproject.design_compose.utils.PreviewMiscellaneousToolTheme
 import com.jinproject.design_ui.R
-import com.jinproject.features.alarm.watch.component.OverlaySetting
-import com.jinproject.features.alarm.watch.component.TimeStatusSetting
+import com.jinproject.features.alarm.setting.component.OverlaySetting
+import com.jinproject.features.alarm.setting.component.TimeStatusSetting
 
 @Composable
 fun AlarmSettingScreen(
