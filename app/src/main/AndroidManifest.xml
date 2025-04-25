@@ -42,7 +42,7 @@
         </activity>
 
         <service
-            android:name="com.jinproject.features.alarm.watch.service.OverlayService"
+            android:name="com.jinproject.features.alarm.setting.service.OverlayService"
             android:description="@string/현재시간항상보기"
             android:foregroundServiceType="specialUse">
             <property

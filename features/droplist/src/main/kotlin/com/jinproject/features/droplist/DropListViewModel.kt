@@ -54,7 +54,7 @@ class DropListViewModel @Inject constructor(
             mapModelList.map { mapModel ->
                 MapState(
                     name = mapModel.name,
-                    imgName = mapModel.imgName
+                    imgName = mapModel.imageName,
                 )
             }.toImmutableList()
         }.flatMapLatest { maps ->
@@ -63,7 +63,7 @@ class DropListViewModel @Inject constructor(
                     dropListRepository.getMonsterListFromMap(mapName).map { monsterModelList ->
                         monsterModelList.map { monsterModel ->
                             monsterModel.toMonsterState()
-                        }.toImmutableList()
+                        }.sorted().toImmutableList()
                     }.first()
                 } ?: persistentListOf()
 

@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class GenerateImageDataSourceImpl @Inject constructor(
     private val generateImageApi: GenerateImageApi,
-): RemoteGenerateImageDataSource {
+) : RemoteGenerateImageDataSource {
     override suspend fun getGeneratedImageUrl(prompt: String): String? = convertResponseToResult {
         generateImageApi.generateImage(CreateImageRequest(prompt = prompt))
     }?.data?.first()?.url

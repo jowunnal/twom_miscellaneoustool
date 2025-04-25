@@ -4,9 +4,7 @@ plugins {
 
 android {
     namespace = "com.jinproject.features.simulator"
-    compileSdk = 34
+    compileSdk = 35
 }
 
-dependencies {
-
-}
+dependencies {}

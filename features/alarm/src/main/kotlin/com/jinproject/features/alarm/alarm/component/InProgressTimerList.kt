@@ -14,17 +14,24 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.jinproject.core.util.doOnLocaleLanguage
-import com.jinproject.design_compose.utils.PreviewMiscellaneousToolTheme
+import com.jinproject.core.util.to12Hour
+import com.jinproject.core.util.toMeridiem
 import com.jinproject.design_compose.component.DialogState
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.theme.Typography
-import com.jinproject.domain.model.WeekModel
+import com.jinproject.design_compose.utils.PreviewMiscellaneousToolTheme
 import com.jinproject.design_ui.R
-import com.jinproject.features.alarm.alarm.item.TimeState
+import com.jinproject.features.alarm.alarm.AlarmUiState
+import com.jinproject.features.alarm.alarm.AlarmUiStatePreviewParameter
 import com.jinproject.features.alarm.alarm.item.TimerState
 import com.jinproject.features.core.utils.appendBoldText
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.Locale
 
 @Composable
 fun InProgressTimerItem(
@@ -56,17 +63,17 @@ fun InProgressTimerItem(
                     text = timerState.bossName,
                     color = MaterialTheme.colorScheme.onBackground
                 )
-                append(" (")
+                append(" ${timerState.dateTime.format(DateTimeFormatter.ofPattern("MM/dd"))} (")
                 appendBoldText(
-                    text = context.doOnLocaleLanguage(
-                        onKo = timerState.timeState.day.displayOnKo,
-                        onElse = timerState.timeState.day.displayOnElse
+                    text = timerState.dateTime.dayOfWeek.getDisplayName(
+                        TextStyle.SHORT,
+                        Locale.getDefault()
                     ),
                     color = MaterialTheme.colorScheme.onBackground
                 )
-                append(") ${timerState.timeState.getMeridiem()} ")
+                append(") ${timerState.dateTime.toMeridiem()} ")
                 appendBoldText(
-                    text = timerState.timeState.getTime12Hour().toString(),
+                    text = timerState.dateTime.to12Hour().toString(),
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 append(
@@ -78,7 +85,7 @@ fun InProgressTimerItem(
                     } "
                 )
                 appendBoldText(
-                    text = timerState.timeState.minutes.toString(),
+                    text = timerState.dateTime.minute.toString(),
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 append(
@@ -90,7 +97,7 @@ fun InProgressTimerItem(
                     } "
                 )
                 appendBoldText(
-                    text = timerState.timeState.seconds.toString(),
+                    text = timerState.dateTime.second.toString(),
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 append(stringResource(id = R.string.second))
@@ -105,19 +112,13 @@ fun InProgressTimerItem(
 
 @Preview(showBackground = true)
 @Composable
-private fun PreviewInProgressTimerItem() {
+private fun PreviewInProgressTimerItem(
+    @PreviewParameter(AlarmUiStatePreviewParameter::class)
+    alarmUiState: AlarmUiState,
+) {
     PreviewMiscellaneousToolTheme {
         InProgressTimerItem(
-            timerState = TimerState(
-                id = 1,
-                bossName = "보스1",
-                timeState = TimeState(
-                    day = WeekModel.Mon,
-                    hour = 14,
-                    minutes = 22,
-                    seconds = 25
-                )
-            ),
+            timerState = alarmUiState.timerList.first(),
             onClearAlarm = { _, _ -> },
             onOpenDialog = {},
             onCloseDialog = {}
@@ -127,42 +128,14 @@ private fun PreviewInProgressTimerItem() {
 
 @Preview(showBackground = true)
 @Composable
-private fun PreviewInProgressTimerList() {
+private fun PreviewInProgressTimerList(
+    @PreviewParameter(AlarmUiStatePreviewParameter::class)
+    alarmUiState: AlarmUiState
+) {
     PreviewMiscellaneousToolTheme {
         LazyColumn {
             items(
-                items = listOf(
-                    TimerState(
-                        id = 1,
-                        bossName = "보스1",
-                        timeState = TimeState(
-                            day = WeekModel.Mon,
-                            hour = 14,
-                            minutes = 22,
-                            seconds = 25
-                        )
-                    ),
-                    TimerState(
-                        id = 2,
-                        bossName = "보스2",
-                        timeState = TimeState(
-                            day = WeekModel.Mon,
-                            hour = 16,
-                            minutes = 18,
-                            seconds = 33
-                        )
-                    ),
-                    TimerState(
-                        id = 3,
-                        bossName = "보스3",
-                        timeState = TimeState(
-                            day = WeekModel.Mon,
-                            hour = 13,
-                            minutes = 34,
-                            seconds = 49
-                        )
-                    )
-                )
+                items = alarmUiState.timerList
             ) { timerState ->
                 InProgressTimerItem(
                     timerState = timerState,

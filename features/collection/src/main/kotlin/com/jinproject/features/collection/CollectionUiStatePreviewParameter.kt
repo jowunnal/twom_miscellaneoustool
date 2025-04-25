@@ -1,13 +1,13 @@
 package com.jinproject.features.collection
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.jinproject.features.collection.model.CollectionFilter
 import com.jinproject.features.collection.model.CollectionUiState
 import com.jinproject.features.collection.model.Equipment
 import com.jinproject.features.collection.model.ItemCollection
 import com.jinproject.features.collection.model.MiscellaneousItem
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.persistentSetOf
 
 class CollectionUiStatePreviewParameter : PreviewParameterProvider<CollectionUiState> {
     override val values: Sequence<CollectionUiState>
@@ -15,6 +15,7 @@ class CollectionUiStatePreviewParameter : PreviewParameterProvider<CollectionUiS
             CollectionUiState(
                 itemCollections = items,
                 collectionFilters = filters,
+                selectedCollectionId = null,
             )
         )
 
@@ -91,11 +92,6 @@ class CollectionUiStatePreviewParameter : PreviewParameterProvider<CollectionUiS
             ),
         )
 
-        val filters = persistentListOf(
-            CollectionFilter(
-                id = 0,
-                isSelected = true,
-            ),
-        )
+        val filters = persistentSetOf<Int>(0)
     }
 }

@@ -33,81 +33,53 @@ import com.jinproject.design_compose.theme.MiscellaneousToolColor
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.features.core.AnalyticsEvent
 import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
-import com.jinproject.features.simulator.EquipmentListPreviewParameters
-import com.jinproject.features.simulator.model.Armor
+import com.jinproject.features.simulator.SimulatorStatePreviewParameters
 import com.jinproject.features.simulator.model.Empty
 import com.jinproject.features.simulator.model.EnchantScroll
 import com.jinproject.features.simulator.model.Equipment
 import com.jinproject.features.simulator.model.Item
-import com.jinproject.features.simulator.model.Weapon
+import com.jinproject.features.simulator.model.SimulatorState
 import com.jinproject.features.simulator.model.findEnchantScroll
 import com.jinproject.features.simulator.model.formatter
-import com.jinproject.features.simulator.util.enchantEquipment
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.serialization.encodeToString
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun EnchantSpace(
     size: Dp,
-    selectedItem: Equipment,
-    setSelectedEquipment: (Equipment) -> Unit,
-    storeSelectedItem: () -> Unit,
-    removeEquipmentOnOwnedItemListByUUID: (String) -> Unit,
+    simulatorState: SimulatorState,
+    updateSelectedItem: (Equipment) -> Unit,
+    enchantEquipment: (Equipment, EnchantScroll) -> Unit,
 ) {
     val localAnalyticsLoggingEvent = LocalAnalyticsLoggingEvent.current
 
-    val dndTarget = remember(selectedItem) {
+    val dndTarget = remember(simulatorState) {
         object : DragAndDropTarget {
             override fun onDrop(event: DragAndDropEvent): Boolean {
                 val draggedData = event.toAndroidDragEvent().clipData.getItemAt(0).text.toString()
-                val decodedData = formatter.decodeFromString<Item>(draggedData)
 
-                val newItem = if (decodedData is EnchantScroll) {
-                    val enchantStandard = when (selectedItem) {
-                        is Weapon -> 6
-
-                        is Armor -> 4
-
-                        else -> throw IllegalStateException("$selectedItem is not allowed type for Equipment")
-                    }
-                    if (enchantEquipment(
-                            now = selectedItem.enchantNumber,
-                            standard = enchantStandard,
+                when (val decodedData = formatter.decodeFromString<Item>(draggedData)) {
+                    is EnchantScroll -> {
+                        val item =
+                            simulatorState.ownedItems.find { it.uuid == simulatorState.selectedItem.uuid }
+                                ?: simulatorState.selectedItem
+                        enchantEquipment(
+                            item,
+                            decodedData
                         )
-                    ) {
-                        if (selectedItem.enchantNumber >= enchantStandard)
-                            localAnalyticsLoggingEvent(
-                                AnalyticsEvent.SimulatorEnchant(
-                                    itemName = selectedItem.name,
-                                    result = true
-                                )
+
+                        localAnalyticsLoggingEvent(
+                            AnalyticsEvent.SimulatorEnchant(
+                                itemName = simulatorState.selectedItem.name,
+                                result = true
                             )
-
-                        when (selectedItem) {
-                            is Weapon ->
-                                selectedItem.copy(
-                                    enchantNumber = selectedItem.enchantNumber + 1
-                                )
-
-                            is Armor ->
-                                selectedItem.copy(
-                                    enchantNumber = selectedItem.enchantNumber + 1
-                                )
-
-                            else -> throw IllegalStateException("$selectedItem is not allowed type for Equipment")
-                        }
-                    } else {
-                        removeEquipmentOnOwnedItemListByUUID(selectedItem.uuid)
-                        Empty()
+                        )
                     }
-                } else
-                    decodedData as Equipment
 
-                setSelectedEquipment(newItem)
+                    is Equipment -> updateSelectedItem(decodedData)
 
-                if (decodedData is EnchantScroll)
-                    storeSelectedItem()
+                    else -> return false
+                }
 
                 return true
             }
@@ -119,8 +91,8 @@ internal fun EnchantSpace(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         HorizontalWeightSpacer(float = 1f)
-        if (selectedItem !is Empty) {
-            ItemDetail(equipment = selectedItem)
+        if (simulatorState.selectedItem !is Empty) {
+            ItemDetail(equipment = simulatorState.selectedItem)
             HorizontalWeightSpacer(float = 1f)
         }
         ItemSpace(
@@ -131,9 +103,9 @@ internal fun EnchantSpace(
                 }, target = dndTarget
             ),
             size = size,
-            item = selectedItem,
+            item = simulatorState.selectedItem,
         )
-        if (selectedItem !is Empty) {
+        if (simulatorState.selectedItem !is Empty) {
             HorizontalWeightSpacer(float = 1f)
             Image(
                 painter = painterResource(id = com.jinproject.design_ui.R.drawable.ic_arrow_left),
@@ -149,14 +121,14 @@ internal fun EnchantSpace(
                             DragAndDropTransferData(
                                 ClipData.newPlainText(
                                     "data",
-                                    formatter.encodeToString<EnchantScroll>(selectedItem.level.findEnchantScroll())
+                                    formatter.encodeToString<EnchantScroll>(simulatorState.selectedItem.level.findEnchantScroll())
                                 )
                             )
                         )
                     })
                 },
                 size = size,
-                item = selectedItem.level.findEnchantScroll(),
+                item = simulatorState.selectedItem.level.findEnchantScroll(),
             )
         }
         HorizontalWeightSpacer(float = 1f)
@@ -166,8 +138,8 @@ internal fun EnchantSpace(
 @Preview(heightDp = 180)
 @Composable
 private fun PreviewEnchantSpace(
-    @PreviewParameter(EquipmentListPreviewParameters::class)
-    equipments: ImmutableList<Equipment>,
+    @PreviewParameter(SimulatorStatePreviewParameters::class)
+    simulatorState: SimulatorState,
 ) = MiscellaneousToolTheme {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -178,10 +150,9 @@ private fun PreviewEnchantSpace(
     ) {
         EnchantSpace(
             size = 64.dp,
-            selectedItem = equipments.first(),
-            setSelectedEquipment = {},
-            storeSelectedItem = {},
-            removeEquipmentOnOwnedItemListByUUID = {},
+            simulatorState = simulatorState,
+            updateSelectedItem = {},
+            enchantEquipment = { _, _ -> },
         )
     }
 }

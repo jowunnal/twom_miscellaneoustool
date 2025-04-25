@@ -1,10 +1,9 @@
 package com.jinproject.data.repository.repo
 
-import com.jinproject.data.SimulatorPreferences
 import com.jinproject.data.repository.datasource.CacheSimulatorDataSource
-import com.jinproject.data.repository.model.fromDomain
-import com.jinproject.data.repository.model.toItemInfoDomainModel
-import com.jinproject.domain.model.ItemInfo
+import com.jinproject.data.repository.model.toEquipmentData
+import com.jinproject.domain.entity.item.EnchantableEquipment
+import com.jinproject.domain.entity.item.Equipment
 import com.jinproject.domain.repository.SimulatorRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -12,38 +11,25 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SimulatorRepositoryImpl @Inject constructor(
-    private val cacheSimulatorDataSource: CacheSimulatorDataSource<SimulatorPreferences>
+    private val cacheSimulatorDataSource: CacheSimulatorDataSource,
 ) : SimulatorRepository {
-    override fun getItemInfo(itemName: String): Flow<ItemInfo> =
-        cacheSimulatorDataSource.getItemInfo(itemName).map { it.toItemInfoDomainModel() }
-
-    override fun getAvailableItem(): Flow<List<ItemInfo>> =
-        cacheSimulatorDataSource.getAvailableItem().map { equipmentList ->
-            equipmentList.map { equipment ->
-                val itemDetail = cacheSimulatorDataSource.getItemInfo(equipment.name).first()
-                equipment.toItemInfoDomainModel(stat = itemDetail.stat)
-            }
+    override fun getEnchantableItems(): Flow<List<Equipment>> =
+        cacheSimulatorDataSource.getItemInfos().map { equipmentList ->
+            equipmentList.map { it.toDomain() }
         }
 
-    override fun getOwnedItems(): Flow<List<ItemInfo>> =
+    override fun getOwnedItems(): Flow<List<Equipment>> =
         cacheSimulatorDataSource.getOwnedItems().map { items ->
             items.map { item ->
-                val itemDetail = cacheSimulatorDataSource.getItemInfo(item.name).first()
+                val info = cacheSimulatorDataSource.getItemInfo(item.name).first()
 
-                ItemInfo(
-                    name = item.name,
-                    level = itemDetail.level,
-                    stat = item.stat,
-                    imgName = itemDetail.imgName,
-                    enchantNumber = item.enchantNumber,
-                    uuid = item.uuid,
-                )
+                info.toEquipment(item).toDomain()
             }
         }
 
-    override suspend fun addItemOnOwnedItemList(itemInfo: ItemInfo) {
+    override suspend fun addItemOnOwnedItemList(equipment: EnchantableEquipment) {
         cacheSimulatorDataSource.addItemOnOwnedItemList(
-            itemInfo.fromDomain()
+            equipment.toEquipmentData()
         )
     }
 
@@ -51,9 +37,16 @@ class SimulatorRepositoryImpl @Inject constructor(
         cacheSimulatorDataSource.removeItemOnOwnedItemList(uuid)
     }
 
-    override suspend fun replaceOwnedItem(item: ItemInfo) {
+    override suspend fun replaceOwnedItem(equipment: EnchantableEquipment) {
         cacheSimulatorDataSource.replaceOwnedItem(
-            item.fromDomain()
+            equipment.toEquipmentData()
         )
+    }
+
+    override suspend fun updateOwnedItem(items: List<EnchantableEquipment>) {
+        cacheSimulatorDataSource.updateOwnedItems(
+            items.map { item ->
+                item.toEquipmentData()
+            })
     }
 }

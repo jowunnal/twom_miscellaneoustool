@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
+import com.jinproject.design_compose.R
 import com.jinproject.design_compose.component.button.DefaultIconButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -69,16 +70,10 @@ fun ColumnScope.ScrollableLayout(
                     translationY = -50f
                 }
                 .shadow(1.dp, CircleShape),
-            onClick = {
-                coroutineScope.launch {
-                    if (scrollableState is LazyListState)
-                        scrollableState.animateScrollToItem(0)
-                    else if (scrollableState is LazyGridState)
-                        scrollableState.animateScrollToItem(0)
-
-                    scrollBarState.changeOffset(0f)
-                }
-            },
+            scrollableState = scrollableState,
+            scrollBarState = scrollBarState,
+            coroutineScope = coroutineScope,
+            startFromTop = startFromTop,
         )
 
         if (isUpperScrollActive)
@@ -95,12 +90,32 @@ fun ColumnScope.ScrollableLayout(
 
 @Composable
 fun UpperScrollButton(
+    scrollableState: ScrollableState,
+    scrollBarState: ScrollBarState,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
+    startFromTop: Boolean = true,
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
 ) {
     DefaultIconButton(
-        icon = com.jinproject.design_compose.R.drawable.ic_arrow_up_to_start,
-        onClick = onClick,
+        icon = if (startFromTop) R.drawable.ic_arrow_up_to_start else R.drawable.ic_arrow_down_to_end,
+        onClick = {
+            val targetOffset = if(startFromTop) 0f else scrollBarState.threshold
+
+            coroutineScope.launch {
+                when (scrollableState) {
+                    is LazyListState -> {
+                        val targetIndex = if (startFromTop) 0 else scrollableState.layoutInfo.totalItemsCount.minus(1)
+                        scrollableState.animateScrollToItem(targetIndex)
+                        scrollBarState.changeOffset(targetOffset)
+                    }
+                    is LazyGridState -> {
+                        val targetIndex = if (startFromTop) 0 else scrollableState.layoutInfo.totalItemsCount.minus(1)
+                        scrollableState.animateScrollToItem(targetIndex)
+                        scrollBarState.changeOffset(targetOffset)
+                    }
+                }
+            }
+        },
         iconTint = MaterialTheme.colorScheme.onSurface,
         iconSize = 32.dp,
         modifier = modifier,

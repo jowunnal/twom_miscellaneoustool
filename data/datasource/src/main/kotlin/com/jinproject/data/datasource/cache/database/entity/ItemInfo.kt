@@ -16,3 +16,5 @@ data class ItemInfo(
     val type: String,
     val value: Double
 )
+
+fun List<ItemInfo>.associateToStat() = associate { it.type to it.value.toFloat() }

@@ -8,18 +8,30 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TimerDao {
 
-    @Query("insert into Timer(timerId,day,hour,min,sec,ota,timerMonsName) values (:id,:day,:hour,:min,:sec,0,:name)")
-    suspend fun setTimer(id: Int, day: Int, hour: Int, min: Int, sec: Int, name: String)
+    @Query("insert into Timer(timerId,epochMilli,ota,timerMonsName) values (:id,:epochMilli,:isOverlaying,:name)")
+    suspend fun setTimer(
+        id: Int,
+        epochMilli: Long,
+        name: String,
+        isOverlaying: Boolean
+    )
 
-    @Query("select * from Timer order by Timer.day, Timer.hour, Timer.min, Timer.sec")
-    fun getTimer(): Flow<List<Timer>>
+    @Query("select * from Timer order by epochMilli")
+    fun getTimerList(): Flow<List<Timer>>
 
-    @Query("update Timer set day = :day, hour = :hour, min = :min, sec = :sec where timerId like :id")
-    suspend fun updateTimer(id: Int, day: Int, hour: Int, min: Int, sec: Int)
+    @Query("select * from Timer where Timer.timerMonsName like :name")
+    fun getTimer(name: String): Flow<Timer?>
+
+    @Query("update Timer set epochMilli = :epochMilli, ota = :isOverlaying where timerMonsName like :monsName")
+    suspend fun updateTimer(
+        monsName: String,
+        epochMilli: Long,
+        isOverlaying: Boolean
+    )
 
     @Query("delete from Timer where Timer.timerMonsName like :name")
     suspend fun deleteTimer(name: String)
 
-    @Query("update Timer set ota=:ota where timerMonsName like :name")
-    suspend fun setOta(ota: Int, name: String)
+    @Query("update Timer set ota = 1 where timerMonsName like :name")
+    suspend fun setMonsterOverlaid(name: String)
 }

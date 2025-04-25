@@ -1,24 +1,17 @@
 package com.jinproject.data.repository.model
 
-import com.jinproject.domain.model.TimerModel
-import com.jinproject.domain.model.WeekModel
+import com.jinproject.domain.usecase.alarm.SetAlarmUsecase
+import java.time.ZonedDateTime
 
 data class Timer(
     val timerId: Int,
-    val day: Int,
-    val hour: Int,
-    val min: Int,
-    val sec: Int,
+    val dateTime: ZonedDateTime,
     val ota: Int,
-    val timerMonsName: String
+    val monsterName: String,
 )
 
-fun Timer.toTimerModel() = TimerModel(
+fun Timer.toTimerDomain() = SetAlarmUsecase.Timer(
     id = timerId,
-    bossName = timerMonsName,
-    day = WeekModel.findByCode(day),
-    hour = hour,
-    minutes = min,
-    seconds = sec,
-    isOverlayOnOrNot = ota == 1
+    monsterName = monsterName,
+    dateTime = dateTime,
 )

@@ -1,35 +1,24 @@
 package com.jinproject.data.repository.datasource
 
-import com.jinproject.data.repository.datasource.base.CacheDataStoreDataSource
-import com.jinproject.data.repository.model.AlarmStoredBoss
-import com.jinproject.data.repository.model.Interval
-import com.jinproject.data.repository.model.OverlaySetting
 import com.jinproject.data.repository.model.Timer
+import com.jinproject.data.repository.model.TimerSetting
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
-interface CacheTimerDataSource<T> : CacheDataStoreDataSource<T> {
-    fun getOverlaySetting(): Flow<OverlaySetting>
-    fun getInterval(): Flow<Interval>
-    fun getAlarmStoredBoss(): Flow<AlarmStoredBoss>
+interface CacheTimerDataSource {
     suspend fun addBossToFrequentlyUsedList(bossName: String)
-    suspend fun setBossToFrequentlyUsedList(bossList: List<String>)
-    suspend fun setRecentlySelectedBossClassified(bossName: String)
-    suspend fun setRecentlySelectedBossName(bossName: String)
-    suspend fun setIntervalTimerSetting(first: Int, second: Int)
-    suspend fun setTimerSetting(fontSize: Int, xPos: Int, yPos: Int)
-    suspend fun updateTimerInterval(firstIntervalTime: Int, secondIntervalTime: Int)
+    suspend fun updateTimerSetting(timerSetting: TimerSetting)
+    fun getTimerSetting(): Flow<TimerSetting>
 
-    fun getTimer(): Flow<List<Timer>>
+    fun getTimerList(): Flow<List<Timer>>
+    fun getTimer(bossName: String): Flow<Timer?>
     suspend fun setTimer(
         id: Int,
-        day: Int,
-        hour: Int,
-        min: Int,
-        sec: Int,
         bossName: String,
+        deadTime: ZonedDateTime,
     )
 
-    suspend fun updateTimer(id: Int, day: Int, hour: Int, min: Int, sec: Int)
+    suspend fun updateTimer(monsName: String, nextSpawnDateTime: ZonedDateTime)
     suspend fun deleteTimer(bossName: String)
-    suspend fun setOta(ota: Int, bossName: String)
 }

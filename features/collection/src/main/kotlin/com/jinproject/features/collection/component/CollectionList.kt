@@ -30,6 +30,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -73,14 +75,17 @@ import com.jinproject.features.collection.model.CollectionUiState
 import com.jinproject.features.collection.model.Equipment
 import com.jinproject.features.collection.model.ItemCollection
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import java.util.Collections.addAll
 import kotlin.math.min
 
 @Composable
 internal fun CollectionList(
     collectionUiState: CollectionUiState,
     searchCharSequence: CharSequence,
-    isFilterMode: Boolean,
-    triggerFilterMode: (Boolean) -> Unit,
+    isFiltering: Boolean,
+    changeIsFiltering: (Boolean) -> Unit,
     configuration: Configuration = LocalConfiguration.current,
     keyboardController: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current,
     lazyListState: LazyListState = rememberLazyListState(),
@@ -91,23 +96,34 @@ internal fun CollectionList(
     val itemWidth =
         (configuration.screenWidthDp.dp - horizontalPadding * 2 - 24.dp - 48.dp - 25.dp - 20.dp) / 2
 
-    val items by remember(collectionUiState, isFilterMode, searchCharSequence) {
+    val filterBuffer = remember(isFiltering, collectionUiState) {
+        mutableStateListOf<Int>().apply {
+            addAll(collectionUiState.collectionFilters)
+        }
+    }
+
+    val items by remember(isFiltering, searchCharSequence, filterBuffer) {
         derivedStateOf {
             collectionUiState.filterBySearchWord(
-                s = searchCharSequence.toString(),
-                isFilterMode = isFilterMode
+                searchWord = searchCharSequence.toString(),
+                isFiltering = isFiltering,
+                filterBuffer = filterBuffer,
             )
         }
     }
 
     LaunchedEffect(key1 = lazyListState) {
-        snapshotFlow { lazyListState.isScrollInProgress }.collectLatest {
+        snapshotFlow {
+            lazyListState.isScrollInProgress
+        }.filter {
+            it == true
+        }.distinctUntilChanged().collectLatest {
             keyboardController?.hide()
         }
     }
 
-    BackHandler(isFilterMode) {
-        triggerFilterMode(false)
+    BackHandler(!isFiltering) {
+        changeIsFiltering(true)
     }
 
     Box(
@@ -129,19 +145,22 @@ internal fun CollectionList(
                 items,
                 key = { collection -> collection.id },
             ) { collection ->
-                val isSelected =
-                    collectionUiState.collectionFilters.find { it.id == collection.id }?.isSelected
-                        ?: false
+                val isSelected = collection.id in filterBuffer
 
                 CollectionItem(
                     modifier = Modifier.animateItem(),
                     collection = collection,
                     isSelected = isSelected,
                     itemWidth = itemWidth,
-                    isFilterMode = isFilterMode,
-                    triggerFilterMode = triggerFilterMode,
+                    isFiltering = isFiltering,
+                    changeIsFiltering = changeIsFiltering,
                     navigateToDetail = navigateToDetail,
-                    dispatchEvent = dispatchEvent,
+                    onSelectCollectionItem = { id ->
+                        if (id in filterBuffer)
+                            filterBuffer.remove(id)
+                        else
+                            filterBuffer.add(id)
+                    }
                 )
             }
         }
@@ -149,7 +168,7 @@ internal fun CollectionList(
             modifier = Modifier
                 .align(BottomCenter)
                 .padding(bottom = 20.dp),
-            visible = isFilterMode,
+            visible = !isFiltering,
             enter = slideInVertically() + fadeIn(),
             exit = slideOutVertically() + fadeOut(),
         ) {
@@ -157,8 +176,8 @@ internal fun CollectionList(
                 TextButton(
                     text = stringResource(id = com.jinproject.design_ui.R.string.apply_do),
                     onClick = {
-                        dispatchEvent(CollectionEvent.SetFilteredCollection)
-                        triggerFilterMode(false)
+                        dispatchEvent(CollectionEvent.SetFilteringCollectionIdList(filterBuffer))
+                        changeIsFiltering(true)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -177,10 +196,10 @@ private fun CollectionItem(
     collection: ItemCollection,
     isSelected: Boolean,
     itemWidth: Dp,
-    isFilterMode: Boolean,
-    triggerFilterMode: (Boolean) -> Unit,
+    isFiltering: Boolean,
+    changeIsFiltering: (Boolean) -> Unit,
     navigateToDetail: (ItemCollection) -> Unit,
-    dispatchEvent: (CollectionEvent) -> Unit,
+    onSelectCollectionItem: (Int) -> Unit,
 ) {
     val stat =
         remember(collection.stats) {
@@ -193,8 +212,9 @@ private fun CollectionItem(
         }
     val item = remember(collection.items) {
         collection.items.joinToString("\n") { item ->
-            val enchant = if(item is Equipment && item.enchantNumber > 0) "(+${item.enchantNumber}) " else ""
-            val count = if(item.count <= 1) "" else "* ${item.count}"
+            val enchant =
+                if (item is Equipment && item.enchantNumber > 0) "(+${item.enchantNumber}) " else ""
+            val count = if (item.count <= 1) "" else "* ${item.count}"
 
             "${item.name} $enchant $count"
         }
@@ -217,13 +237,13 @@ private fun CollectionItem(
             .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(20.dp))
             .combinedClickableAvoidingDuplication(
                 onClick = {
-                    if (!isFilterMode)
+                    if (isFiltering)
                         navigateToDetail(collection)
                     else
-                        dispatchEvent(CollectionEvent.AddFilteringCollectionId(collection.id))
+                        onSelectCollectionItem(collection.id)
                 },
                 onLongClick = {
-                    triggerFilterMode(!isFilterMode)
+                    changeIsFiltering(!isFiltering)
                 },
             )
             .drawWithCache {
@@ -251,7 +271,7 @@ private fun CollectionItem(
                 onDrawWithContent {
                     drawContent()
 
-                    if (isFilterMode) {
+                    if (!isFiltering) {
                         drawCircle(
                             color = Color.Black,
                             radius = iconSize / 2f + 18f,
@@ -282,7 +302,7 @@ private fun CollectionItem(
             }
             .graphicsLayer {
                 compositingStrategy = CompositingStrategy.ModulateAlpha
-                alpha = if (isSelected && isFilterMode) 0.3f else 1f
+                alpha = if (isSelected && !isFiltering) 0.3f else 1f
             }
             .padding(vertical = 8.dp),
     ) {
@@ -356,8 +376,8 @@ private fun PreviewCollectionList(
     CollectionList(
         collectionUiState = collectionUiState,
         searchCharSequence = "",
-        isFilterMode = false,
-        triggerFilterMode = {},
+        isFiltering = false,
+        changeIsFiltering = {},
         navigateToDetail = {},
         dispatchEvent = {},
     )
@@ -372,8 +392,8 @@ private fun PreviewCollectionListBySearched(
     CollectionList(
         collectionUiState = collectionUiState,
         searchCharSequence = "데미지",
-        isFilterMode = false,
-        triggerFilterMode = {},
+        isFiltering = false,
+        changeIsFiltering = {},
         navigateToDetail = {},
         dispatchEvent = {},
     )

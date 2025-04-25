@@ -81,6 +81,7 @@ private fun HomeScreen(
         contentPaddingValues = MiscellanousToolPaddingValues(horizontal = 12.dp),
         verticalScrollable = true,
     ) {
+        VerticalSpacer(8.dp)
         HomeMenu(
             header = stringResource(id = R.string.home_droplist),
             onClickHeader = {
@@ -162,7 +163,7 @@ private fun HomeScreen(
                                     text = timer.name,
                                     color = MaterialTheme.colorScheme.onBackground
                                 )
-                                append(" (")
+                                append(" ${timer.time.format(DateTimeFormatter.ofPattern("MM/dd"))}  (")
                                 appendBoldText(
                                     text = timer.time.dayOfWeek.getDisplayName(
                                         TextStyle.SHORT,

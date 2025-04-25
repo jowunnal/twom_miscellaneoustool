@@ -10,17 +10,17 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.SnackbarHostState
 import androidx.compose.material3.LocalTonalElevationEnabled
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.NavigationRailItemDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemColors
@@ -37,11 +37,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.view.WindowCompat
-import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.BillingClient
@@ -67,8 +65,6 @@ import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.base.CommonDialogFragment
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
-import com.jinproject.features.core.isPurchased
-import com.jinproject.features.core.isPurchasedAndAcknowledged
 import com.jinproject.features.core.toProduct
 import com.jinproject.twomillustratedbook.BuildConfig
 import com.jinproject.twomillustratedbook.BuildConfig.ADMOB_REWARD_ID
@@ -139,7 +135,6 @@ class MainActivity : AppCompatActivity() {
             enableEdgeToEdge()
 
         super.onCreate(savedInstanceState)
-
         firebaseAnalytics = Firebase.analytics
 
         setContent {
@@ -323,11 +318,11 @@ class MainActivity : AppCompatActivity() {
 
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
-                        backgroundColor = MaterialTheme.colorScheme.background,
                         snackbarHost = {
-                            SnackBarHostCustom(headerMessage = snackBarHostState.currentSnackbarData?.message
-                                ?: "",
-                                contentMessage = snackBarHostState.currentSnackbarData?.actionLabel
+                            SnackBarHostCustom(
+                                headerMessage = snackBarHostState.currentSnackbarData?.visuals?.message
+                                    ?: "",
+                                contentMessage = snackBarHostState.currentSnackbarData?.visuals?.actionLabel
                                     ?: "",
                                 snackBarHostState = snackBarHostState,
                                 disMissSnackBar = { snackBarHostState.currentSnackbarData?.dismiss() })
@@ -336,7 +331,11 @@ class MainActivity : AppCompatActivity() {
                         NavigationGraph(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(paddingValues),
+                                .padding(
+                                    bottom = paddingValues.calculateBottomPadding(),
+                                    start = paddingValues.calculateStartPadding(LayoutDirection.Rtl),
+                                    end = paddingValues.calculateStartPadding(LayoutDirection.Rtl),
+                                ),
                             router = router,
                             billingModule = billingModule,
                             showRewardedAd = { onResult ->

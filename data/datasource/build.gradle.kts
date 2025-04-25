@@ -19,6 +19,7 @@ android {
     room {
         schemaDirectory("$projectDir/schemas")
     }
+
     sourceSets {
         getByName("androidTest").assets.srcDirs(files("$projectDir/schemas"))
     }
@@ -53,6 +54,7 @@ dependencies {
     implementation(libs.coroutines.core)
 
     implementation(libs.bundles.square)
+    implementation(libs.datastore)
 }
 
 androidComponents {

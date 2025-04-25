@@ -2,7 +2,7 @@ package com.jinproject.features.simulator.model
 
 import android.content.Context
 import com.jinproject.core.util.doOnLocaleLanguage
-import com.jinproject.domain.model.Stat
+import com.jinproject.domain.entity.item.EnchantableEquipment
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -43,7 +43,7 @@ internal data class Weapon(
 
     internal fun getDamageRangeEnchanted(context: Context): IntRange {
         val isMagicianWeapon =
-            options.any { option -> option.name == Stat.STATINT || option.name == Stat.MP }
+            options.any { option -> option.name == "Int" || option.name == "Mp" || option.name == "마나" || option.name == "지능" }
 
         val addition = if (!isMagicianWeapon) {
             11 * enchantNumber + (11 * (enchantNumber - 6)).coerceAtLeast(0)
@@ -80,8 +80,8 @@ internal data class Weapon(
             name = "버닝 블레이드",
             level = 46,
             options = listOf(
-                ItemOption(name = Stat.HR, value = 8.0f),
-                ItemOption(name = Stat.CRI, value = 2.0f)
+                ItemOption(name = "명중", value = 8.0f),
+                ItemOption(name = "크리티컬", value = 2.0f)
             ),
             damage = 10..70,
             speed = 1.2f,
@@ -90,4 +90,17 @@ internal data class Weapon(
             uuid = uuid,
         )
     }
+
+    override fun toDomainModel(uuid: String?): EnchantableEquipment =
+        com.jinproject.domain.entity.item.Weapon(
+            stats = options.toMap(),
+            limitedLevel = level,
+            name = name,
+            price = 0,
+            type = com.jinproject.domain.entity.item.ItemType.NORMAL,
+            speed = speed.toInt(),
+            damageRange = damage,
+            uuid = uuid ?: this.uuid,
+            imageName = imgName,
+        )
 }

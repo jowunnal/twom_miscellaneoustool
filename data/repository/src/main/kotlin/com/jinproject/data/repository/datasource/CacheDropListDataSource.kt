@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface CacheDropListDataSource {
     fun getMaps(): Flow<List<MapModel>>
     fun getMonsterListFromMap(map: String): Flow<List<MonsterModel>>
-    fun getMonsterByType(monsterType: String): Flow<List<MonsterModel>>
+    fun getAllMonsterList(): Flow<List<MonsterModel>>
     fun getMonsInfo(monsterName: String): Flow<MonsterModel>
 }

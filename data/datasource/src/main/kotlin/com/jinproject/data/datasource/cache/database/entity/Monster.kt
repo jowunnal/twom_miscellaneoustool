@@ -21,5 +21,3 @@ fun Monster.toMonsterModel() = MonsterModel(
     type = monsType,
     item = emptyList()
 )
-
-fun List<Monster>.toItemModels() = map { item -> item.toMonsterModel() }

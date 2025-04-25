@@ -1,32 +1,56 @@
 package com.jinproject.features.collection.model
 
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.jinproject.core.util.runIf
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.toImmutableList
 
 data class CollectionUiState(
     val itemCollections: ImmutableList<ItemCollection>,
-    val collectionFilters: ImmutableList<CollectionFilter>,
+    val collectionFilters: ImmutableSet<Int>,
+    val selectedCollectionId: Int?,
 ) {
-    private fun filter(isFilterMode: Boolean): ImmutableList<ItemCollection> {
-        val filteredIds = collectionFilters.map { it.id }
-
-        return if (isFilterMode)
+    /**
+     * 아이템 도감 목록에 필터링 목록으로 필터링 한 결과를 반환하는 함수
+     *
+     * @param isFiltering 필터링 유무
+     * @return 필터링된 아이템 도감 목록
+     */
+    private fun filter(
+        isFiltering: Boolean,
+        filterBuffer: SnapshotStateList<Int>,
+    ): ImmutableList<ItemCollection> {
+        return if (!isFiltering)
             itemCollections
         else
             itemCollections.filter { itemCollection ->
-                itemCollection.id !in filteredIds
+                itemCollection.id !in filterBuffer
             }.toImmutableList()
     }
 
-    fun filterBySearchWord(s: String, isFilterMode: Boolean): ImmutableList<ItemCollection> {
-        return filter(isFilterMode).runIf(s.isNotBlank()) {
+    /**
+     * 필터링 목록 과 검색어로 필터링한 아이템 도감 목록을 반환하는 함수
+     *
+     * @param searchWord 검색어
+     * @param isFiltering 필터링 유무
+     * @return 필터링된 아이템 도감 목록
+     */
+    fun filterBySearchWord(
+        searchWord: String,
+        isFiltering: Boolean,
+        filterBuffer: SnapshotStateList<Int>,
+    ): ImmutableList<ItemCollection> {
+        return filter(
+            isFiltering = isFiltering,
+            filterBuffer = filterBuffer,
+        ).runIf(searchWord.isNotBlank()) {
             filter { collection ->
                 collection.items.firstNotNullOfOrNull { item ->
-                    item.name.contains(s, true)
+                    item.name.contains(searchWord, true)
                 } == true ||
                         collection.stats.firstNotNullOfOrNull { stat ->
-                            stat.key.contains(s, true)
+                            stat.key.contains(searchWord, true)
                         } == true
             }.toImmutableList()
         }

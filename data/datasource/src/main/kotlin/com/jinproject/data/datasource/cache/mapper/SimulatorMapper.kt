@@ -1,19 +1,44 @@
 package com.jinproject.data.datasource.cache.mapper
 
 import com.jinproject.data.ItemInfo
+import com.jinproject.data.datasource.cache.database.dao.ItemWithEquipmentInfo
+import com.jinproject.data.datasource.cache.mapper.toEquipmentProto
+import com.jinproject.data.repository.model.Equipment
+import com.jinproject.data.repository.model.EquipmentEntity
+import com.jinproject.data.repository.model.EquipmentInfo
 
-fun ItemInfo.toItemInfoDataModel() = com.jinproject.data.repository.model.ItemInfo(
+fun Equipment.toItemInfo(): ItemInfo = ItemInfo.newBuilder()
+    .setName(info.name)
+    .setEnchantNumber(info.enchantNumber)
+    .setUuid(info.uuid)
+    .putAllOptions(info.stats)
+    .build()
+
+fun ItemInfo.toEquipmentProto(): EquipmentInfo = EquipmentInfo(
     name = name,
-    uuid = uuid,
+    stats = optionsMap,
     enchantNumber = enchantNumber,
-    stat = optionsMap,
+    uuid = uuid,
 )
 
-fun List<ItemInfo>.toItemInfosDataModel() = map { it.toItemInfoDataModel() }
+fun List<ItemInfo>.toEquipmentProtoList(): List<EquipmentInfo> = map { it.toEquipmentProto() }
 
-fun com.jinproject.data.repository.model.ItemInfo.toItemInfo(): ItemInfo = ItemInfo.newBuilder().apply {
-    name = this@toItemInfo.name
-    uuid = this@toItemInfo.uuid
-    enchantNumber = this@toItemInfo.enchantNumber
-    putAllOptions(this@toItemInfo.stat)
-}.build()
+fun Map<ItemWithEquipmentInfo, List<com.jinproject.data.datasource.cache.database.entity.ItemInfo>>.toEquipmentEntities(): List<Equipment> =
+    map { entries ->
+        entries.toEquipmentEntity().toEquipment(
+            EquipmentInfo(
+                name = entries.key.itemName,
+                uuid = "",
+                enchantNumber = 0,
+                stats = entries.value.associate { it.type to it.value.toFloat() }
+            )
+        )
+    }
+
+fun Map.Entry<ItemWithEquipmentInfo, List<com.jinproject.data.datasource.cache.database.entity.ItemInfo>>.toEquipmentEntity(): EquipmentEntity =
+    EquipmentEntity(
+        level = key.level,
+        itemType = key.itemType,
+        imageName = key.img_name,
+        price = key.itemPrice,
+    )

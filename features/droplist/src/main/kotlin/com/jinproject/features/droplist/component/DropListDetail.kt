@@ -57,9 +57,7 @@ internal fun DropListDetail(
                     ) {
                         Monster(
                             modifier = Modifier.size(80.dp),
-                            imgName = monster.imgName,
-                            header = monster.name,
-                            tail = monster.level.toString(),
+                            monster = monster,
                         )
                     }
                     HorizontalSpacer(width = 30.dp)

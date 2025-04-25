@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
+import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.features.droplist.DropListUiState
 import com.jinproject.features.droplist.DropListUiStatePreviewParameter
@@ -86,12 +87,14 @@ fun DropListMonster(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        Monster(
+        MonsterField(
             modifier = Modifier
                 .height(65.dp)
                 .width(itemWidth),
             imgName = mapState.imgName,
-            header = mapState.name,
+            content = {
+                DescriptionSmallText(text = mapState.name,)
+            }
         )
     }
 }

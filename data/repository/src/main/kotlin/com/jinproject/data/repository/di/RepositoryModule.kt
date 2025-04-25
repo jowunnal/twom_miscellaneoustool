@@ -1,11 +1,6 @@
 package com.jinproject.data.repository.di
 
-import com.jinproject.data.SimulatorPreferences
-import com.jinproject.data.repository.repo.CollectionRepositoryImpl
-import com.jinproject.data.repository.repo.DropListRepositoryImpl
 import com.jinproject.data.repository.repo.SimulatorRepositoryImpl
-import com.jinproject.data.repository.repo.SymbolRepositoryImpl
-import com.jinproject.data.repository.repo.TimerRepositoryImpl
 import com.jinproject.domain.repository.CollectionRepository
 import com.jinproject.domain.repository.DropListRepository
 import com.jinproject.domain.repository.SimulatorRepository
@@ -19,11 +14,10 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule{
-
+abstract class RepositoryModule {
     @Singleton
     @Binds
-    abstract fun bindDropListRepository (dropListRepositoryImpl: com.jinproject.data.repository.repo.DropListRepositoryImpl) : DropListRepository
+    abstract fun bindDropListRepository(dropListRepositoryImpl: com.jinproject.data.repository.repo.DropListRepositoryImpl): DropListRepository
 
     @Singleton
     @Binds
@@ -31,14 +25,13 @@ abstract class RepositoryModule{
 
     @Singleton
     @Binds
-    abstract fun bindTimerRepository(timerRepositoryImpl: com.jinproject.data.repository.repo.TimerRepositoryImpl) : TimerRepository
+    abstract fun bindTimerRepository(timerRepositoryImpl: com.jinproject.data.repository.repo.TimerRepositoryImpl): TimerRepository
 
     @Singleton
     @Binds
-    abstract fun bindSimulatorRepository(simulatorRepositoryImpl: SimulatorRepositoryImpl) : SimulatorRepository
+    abstract fun bindSimulatorRepository(simulatorRepositoryImpl: SimulatorRepositoryImpl): SimulatorRepository
 
     @Singleton
     @Binds
     abstract fun bindSymbolRepo(symbolRepositoryImpl: com.jinproject.data.repository.repo.SymbolRepositoryImpl): SymbolRepository
-
 }

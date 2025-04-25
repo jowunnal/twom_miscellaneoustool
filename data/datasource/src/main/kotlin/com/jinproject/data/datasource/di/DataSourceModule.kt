@@ -1,17 +1,16 @@
 package com.jinproject.data.datasource.di
 
-import com.jinproject.core.TimerPreferences
-import com.jinproject.data.CollectionPreferences
-import com.jinproject.data.SimulatorPreferences
 import com.jinproject.data.datasource.cache.CacheCollectionDataSourceImpl
 import com.jinproject.data.datasource.cache.CacheDropListDataSourceImpl
 import com.jinproject.data.datasource.cache.CacheSimulatorDataSourceImpl
+import com.jinproject.data.datasource.cache.CacheSymbolDataSourceImpl
 import com.jinproject.data.datasource.cache.CacheTimerDataSourceImpl
 import com.jinproject.data.datasource.remote.GenerateImageDataSourceImpl
 import com.jinproject.data.datasource.remote.RemoteImageDownloadManagerImpl
 import com.jinproject.data.repository.datasource.CacheCollectionDataSource
 import com.jinproject.data.repository.datasource.CacheDropListDataSource
 import com.jinproject.data.repository.datasource.CacheSimulatorDataSource
+import com.jinproject.data.repository.datasource.CacheSymbolDataSource
 import com.jinproject.data.repository.datasource.CacheTimerDataSource
 import com.jinproject.data.repository.datasource.RemoteGenerateImageDataSource
 import com.jinproject.data.repository.datasource.RemoteImageDownloadManager
@@ -27,15 +26,15 @@ abstract class DataSourceModule {
 
     @Singleton
     @Binds
-    abstract fun bindsCacheSimulatorDataSource(cacheSimulatorDataSourceImpl: CacheSimulatorDataSourceImpl): CacheSimulatorDataSource<SimulatorPreferences>
+    abstract fun bindsCacheSimulatorDataSource(cacheSimulatorDataSourceImpl: CacheSimulatorDataSourceImpl): CacheSimulatorDataSource
 
     @Singleton
     @Binds
-    abstract fun bindsCacheCollectionDataSource(cacheCollectionDataSourceImpl: CacheCollectionDataSourceImpl): CacheCollectionDataSource<CollectionPreferences>
+    abstract fun bindsCacheCollectionDataSource(cacheCollectionDataSourceImpl: CacheCollectionDataSourceImpl): CacheCollectionDataSource
 
     @Singleton
     @Binds
-    abstract fun bindsCacheTimerDataSource(cacheTimerDataSourceImpl: CacheTimerDataSourceImpl): CacheTimerDataSource<TimerPreferences>
+    abstract fun bindsCacheTimerDataSource(cacheTimerDataSourceImpl: CacheTimerDataSourceImpl): CacheTimerDataSource
 
     @Singleton
     @Binds
@@ -48,4 +47,8 @@ abstract class DataSourceModule {
     @Singleton
     @Binds
     abstract fun bindsCacheDropListDataSource(dropListDataSourceImpl: CacheDropListDataSourceImpl): CacheDropListDataSource
+
+    @Singleton
+    @Binds
+    abstract fun bindsCacheSymbolDataSource(symbolDataSourceImpl: CacheSymbolDataSourceImpl): CacheSymbolDataSource
 }

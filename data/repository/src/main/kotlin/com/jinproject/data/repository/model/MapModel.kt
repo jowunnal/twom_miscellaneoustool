@@ -1,13 +1,15 @@
 package com.jinproject.data.repository.model
 
+import com.jinproject.domain.entity.TwomMap
+
 data class MapModel(
     val name: String,
     val imgName: String
 )
 
-fun MapModel.toDomainModel() = com.jinproject.domain.model.MapModel(
+fun MapModel.toDomainModel() = TwomMap(
     name = name,
-    imgName = imgName
+    imageName = imgName
 )
 
-fun List<MapModel>.toDomainModel() = map { it.toDomainModel() }
+fun List<MapModel>.toDomainModelList() = map { it.toDomainModel() }

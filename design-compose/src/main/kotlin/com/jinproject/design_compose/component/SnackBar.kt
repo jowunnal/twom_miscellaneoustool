@@ -8,21 +8,21 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Snackbar
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jinproject.design_compose.theme.Typography
 import com.jinproject.design_compose.utils.PreviewMiscellaneousToolTheme
 import com.jinproject.design_ui.R
-import com.jinproject.design_compose.theme.Typography
 
 @Composable
 fun SnackBarHostCustom(
@@ -31,7 +31,7 @@ fun SnackBarHostCustom(
     snackBarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     disMissSnackBar: () -> Unit
-){
+) {
     Column {
         SnackbarHost(
             hostState = snackBarHostState,
@@ -53,15 +53,15 @@ private fun SnackBarCustom(
     headerMessage: String,
     contentMessage: String,
     disMissSnackBar: () -> Unit
-){
+) {
     Snackbar(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .height(78.dp),
-        backgroundColor = MaterialTheme.colorScheme.primary,
+        containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onPrimary,
         shape = RoundedCornerShape(8.dp),
-        action =  {
+        action = {
             Column(
                 modifier = Modifier
                     .fillMaxHeight(),
@@ -92,7 +92,7 @@ private fun SnackBarCustom(
                 text = headerMessage,
                 style = Typography.bodyLarge
             )
-            if(contentMessage.isNotBlank()){
+            if (contentMessage.isNotBlank()) {
                 VerticalSpacer(height = 4.dp)
                 Text(
                     text = contentMessage,
@@ -105,7 +105,7 @@ private fun SnackBarCustom(
 
 @Preview
 @Composable
-private fun PreviewSnackBarCustom1(){
+private fun PreviewSnackBarCustom1() {
     PreviewMiscellaneousToolTheme {
         SnackBarCustom(
             headerMessage = "헤더메세지는 이렇게 보입니다.",
@@ -117,7 +117,7 @@ private fun PreviewSnackBarCustom1(){
 
 @Preview
 @Composable
-private fun PreviewSnackBarCustom2(){
+private fun PreviewSnackBarCustom2() {
     PreviewMiscellaneousToolTheme {
         SnackBarCustom(
             headerMessage = "컨텐트메세지가 없다면 이렇게 보입니다.",
