@@ -1,7 +1,11 @@
 package com.jinproject.features.collection.model
 
+import com.jinproject.domain.entity.item.EnchantableEquipment
 import com.jinproject.domain.model.ItemModel
 import com.jinproject.domain.model.ItemType
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 abstract class Item {
     abstract val name: String
@@ -16,6 +20,37 @@ abstract class Item {
             price = price,
             type = ItemType.Miscellaneous(name)
         )
+
+        fun fromDomainItem(items: List<com.jinproject.domain.entity.item.Item>): ImmutableList<Item> =
+            if (items.isNotEmpty())
+                items.groupBy { it::class }.entries.map { itemEntry ->
+                    val items = itemEntry.value
+
+                    when (itemEntry.key) {
+                        EnchantableEquipment::class -> {
+                            val weapons = items.filterIsInstance<EnchantableEquipment>().first()
+
+                            Equipment(
+                                name = weapons.name,
+                                count = items.size,
+                                enchantNumber = weapons.enchantNumber,
+                                price = weapons.price,
+                            )
+                        }
+
+                        else -> {
+                            val miscellaneousItems = items.first()
+
+                            MiscellaneousItem(
+                                name = miscellaneousItems.name,
+                                count = items.size,
+                                price = miscellaneousItems.price,
+                            )
+                        }
+                    }
+                }.toImmutableList()
+            else
+                persistentListOf()
     }
 }
 
@@ -24,10 +59,10 @@ data class Equipment(
     override val count: Int,
     val enchantNumber: Int,
     override val price: Long,
-): Item()
+) : Item()
 
 data class MiscellaneousItem(
     override val name: String,
     override val count: Int,
     override val price: Long,
-): Item()
+) : Item()

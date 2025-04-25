@@ -4,15 +4,7 @@ import com.jinproject.domain.entity.item.Item
 import com.jinproject.domain.entity.item.Miscellaneous
 import com.jinproject.domain.entity.item.Skill
 
-data class ItemModel(
-    val name: String,
-    val count: Int,
-    val enchantNumber: Int,
-    val price: Long,
-    val type: String,
-)
-
-class Item(
+class NotEquipmentItem(
     val itemType: String,
     val name: String,
     val price: Long,
@@ -35,26 +27,26 @@ class Item(
 }
 
 class MiscellaneousItemDomainFactory(
-    private val item: com.jinproject.data.repository.model.Item
+    private val notEquipmentItem: NotEquipmentItem
 ) : ItemDomainFactory() {
     override fun create(): Item {
         return Miscellaneous(
-            name = item.name,
-            price = item.price,
-            imageName = item.imageName,
+            name = notEquipmentItem.name,
+            price = notEquipmentItem.price,
+            imageName = notEquipmentItem.imageName,
         )
     }
 }
 
 class SkillItemDomainFactory(
-    private val item: com.jinproject.data.repository.model.Item,
+    private val notEquipmentItem: NotEquipmentItem,
     private val limitedLevel: Int,
 ) : ItemDomainFactory() {
     override fun create(): Item {
         return Skill(
-            name = item.name,
-            price = item.price,
-            imageName = item.imageName,
+            name = notEquipmentItem.name,
+            price = notEquipmentItem.price,
+            imageName = notEquipmentItem.imageName,
             limitedLevel = limitedLevel
         )
     }

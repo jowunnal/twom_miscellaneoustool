@@ -2,7 +2,6 @@ package com.jinproject.features.collection
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -27,9 +26,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.jinproject.design_compose.component.layout.DefaultLayout
 import com.jinproject.design_compose.component.bar.BackButtonSearchAppBar
-import com.jinproject.design_compose.component.lazyList.ScrollableLayout
+import com.jinproject.design_compose.component.layout.DefaultLayout
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.features.collection.component.CollectionDetail
 import com.jinproject.features.collection.component.CollectionList
@@ -51,11 +49,9 @@ internal fun CollectionScreen(
     onNavigateBack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val collectionArgument by viewModel.collectionArgument.collectAsStateWithLifecycle()
 
     CollectionScreen(
         collectionUiState = uiState,
-        collectionArgument = collectionArgument,
         dispatchEvent = viewModel::dispatchCollectionEvent,
         onNavigateBack = onNavigateBack,
         showSnackBar = showSnackBar,
@@ -67,7 +63,6 @@ internal fun CollectionScreen(
 private fun CollectionScreen(
     collectionUiState: CollectionUiState,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    collectionArgument: Int?,
     dispatchEvent: (CollectionEvent) -> Unit,
     onNavigateBack: () -> Unit,
     showSnackBar: (SnackBarMessage) -> Unit,
@@ -80,17 +75,18 @@ private fun CollectionScreen(
         }
     }
 
-    LaunchedEffect(key1 = collectionArgument) {
-        collectionArgument?.let {
-            collectionUiState.itemCollections.find { it.id == collectionArgument }?.let { item ->
-                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, item)
-            }
+    LaunchedEffect(key1 = collectionUiState.selectedCollectionId) {
+        collectionUiState.selectedCollectionId?.let {
+            collectionUiState.itemCollections.find { it.id == collectionUiState.selectedCollectionId }
+                ?.let { item ->
+                    navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, item)
+                }
         }
     }
 
     val textFiledState = rememberTextFieldState()
-    var isFilterMode by remember {
-        mutableStateOf(false)
+    var isFiltering by remember {
+        mutableStateOf(true)
     }
     val localAnalyticsLoggingEvent = LocalAnalyticsLoggingEvent.current
 
@@ -121,8 +117,8 @@ private fun CollectionScreen(
                         modifier = Modifier.padding(end = 8.dp),
                         textFieldState = textFiledState,
                         onBackClick = {
-                            if (isFilterMode)
-                                isFilterMode = false
+                            if (!isFiltering)
+                                isFiltering = true
                             else
                                 onNavigateBack()
                         },
@@ -132,8 +128,8 @@ private fun CollectionScreen(
                         collectionUiState = collectionUiState,
                         searchCharSequence = textFiledState.text,
                         lazyListState = lazyListState,
-                        isFilterMode = isFilterMode,
-                        triggerFilterMode = { bool -> isFilterMode = bool },
+                        isFiltering = isFiltering,
+                        changeIsFiltering = { bool -> isFiltering = bool },
                         navigateToDetail = { item ->
                             coroutineScope.launch {
                                 navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, item)
@@ -171,7 +167,6 @@ private fun PreviewCollectionScreen(
 ) = MiscellaneousToolTheme {
     CollectionScreen(
         collectionUiState = collectionUiState,
-        collectionArgument = null,
         dispatchEvent = {},
         onNavigateBack = {},
         showSnackBar = {},

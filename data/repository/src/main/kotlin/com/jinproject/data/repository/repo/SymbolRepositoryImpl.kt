@@ -1,6 +1,6 @@
 package com.jinproject.data.repository.repo
 
-import com.jinproject.data.repository.datasource.CacheCollectionDataSource
+import com.jinproject.data.repository.datasource.CacheSymbolDataSource
 import com.jinproject.data.repository.datasource.RemoteGenerateImageDataSource
 import com.jinproject.data.repository.datasource.RemoteImageDownloadManager
 import com.jinproject.data.repository.model.toChatMessage
@@ -11,16 +11,16 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SymbolRepositoryImpl @Inject constructor(
-    private val cacheCollectionDataStorePreferences: CacheCollectionDataSource,
+    private val cacheSymbolDataSource: CacheSymbolDataSource,
     private val remoteGenerateImageDataSource: RemoteGenerateImageDataSource,
     private val imageDownloadManager: RemoteImageDownloadManager,
 ) : SymbolRepository {
     override suspend fun addPaidSymbol(uri: String) {
-        cacheCollectionDataStorePreferences.addPaidSymbol(uri)
+        cacheSymbolDataSource.addPaidSymbol(uri)
     }
 
     override fun getPaidSymbolUris(): Flow<List<String>> =
-        cacheCollectionDataStorePreferences.getPaidSymbolUris()
+        cacheSymbolDataSource.getPaidSymbolUris()
 
 
     override suspend fun generateSymbolImage(prompt: String) {
@@ -60,7 +60,7 @@ class SymbolRepositoryImpl @Inject constructor(
     }
 
     override fun getChatList(): Flow<List<Message>> =
-        cacheCollectionDataStorePreferences.getChatMessage().map { chatMessages ->
+        cacheSymbolDataSource.getChatMessage().map { chatMessages ->
             chatMessages.map { message ->
                 Message(
                     publisher = message.publisher,
@@ -71,11 +71,11 @@ class SymbolRepositoryImpl @Inject constructor(
         }
 
     override suspend fun addChat(message: Message) {
-        cacheCollectionDataStorePreferences.addChat(message.toChatMessage())
+        cacheSymbolDataSource.addChat(message.toChatMessage())
     }
 
     override suspend fun replaceChat(message: Message) {
-        cacheCollectionDataStorePreferences.replaceChatMessage(
+        cacheSymbolDataSource.replaceChatMessage(
             url = message.data,
             timeStamp = message.timeStamp
         )

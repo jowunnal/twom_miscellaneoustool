@@ -6,7 +6,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import com.jinproject.data.datasource.di.OpenAIRetrofitModule
-import com.jinproject.data.repository.datasource.CacheCollectionDataSource
+import com.jinproject.data.repository.datasource.CacheSymbolDataSource
 import com.jinproject.data.repository.datasource.RemoteImageDownloadManager
 import com.jinproject.data.repository.model.HttpException
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -26,7 +26,7 @@ import kotlin.coroutines.resumeWithException
 class RemoteImageDownloadManagerImpl @Inject constructor(
     @OpenAIRetrofitModule.FileDownloadOkHttpClient private val okHttpClient: OkHttpClient,
     @ApplicationContext private val context: Context,
-    private val cacheCollectionDataStorePreferences: CacheCollectionDataSource,
+    private val cacheSymbolDataSource: CacheSymbolDataSource,
 ) : RemoteImageDownloadManager {
     private val resolver = context.contentResolver
 
@@ -119,7 +119,7 @@ class RemoteImageDownloadManagerImpl @Inject constructor(
             resolver.delete(imageUri, null, null)
         }
 
-        cacheCollectionDataStorePreferences.replaceChatMessage(
+        cacheSymbolDataSource.replaceChatMessage(
             url = imageUri.toString(),
             timeStamp = timeStamp,
         )

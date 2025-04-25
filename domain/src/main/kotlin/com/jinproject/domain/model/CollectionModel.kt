@@ -1,7 +1,9 @@
 package com.jinproject.domain.model
 
-data class CollectionModel(
-    val bookId: Int,
-    val stat: Map<Stat, Double>,
-    val items: List<ItemModel>
+import com.jinproject.domain.entity.item.Item
+
+data class ItemCollection(
+    val id: Int,
+    val stats: Map<String, Float>,
+    val requiredItems: List<Item>,
 )
