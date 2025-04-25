@@ -54,7 +54,7 @@ class DropListViewModel @Inject constructor(
             mapModelList.map { mapModel ->
                 MapState(
                     name = mapModel.name,
-                    imgName = mapModel.imgName
+                    imgName = mapModel.imageName,
                 )
             }.toImmutableList()
         }.flatMapLatest { maps ->

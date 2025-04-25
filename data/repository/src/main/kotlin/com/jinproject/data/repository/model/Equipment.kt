@@ -1,5 +1,6 @@
 package com.jinproject.data.repository.model
 
+import com.jinproject.core.util.onLanguage
 import com.jinproject.data.repository.model.EquipmentDomainFactory.Companion.ARMOR_ELSE
 import com.jinproject.data.repository.model.EquipmentDomainFactory.Companion.ARMOR_KO
 import com.jinproject.data.repository.model.EquipmentDomainFactory.Companion.MAX_DAMAGE_ELSE
@@ -14,15 +15,13 @@ import com.jinproject.domain.entity.item.Costume
 import com.jinproject.domain.entity.item.EnchantableEquipment
 import com.jinproject.domain.entity.item.Item
 import com.jinproject.domain.entity.item.ItemType
-import com.jinproject.domain.entity.item.Miscellaneous
-import com.jinproject.domain.entity.item.Skill
 import com.jinproject.domain.entity.item.Weapon
 import java.util.Locale
 
 data class Equipment(
     val info: EquipmentInfo,
     val data: EquipmentEntity,
-): GetProperDomainFactory {
+) : GetItemDomainFactory {
     fun toDomain(): com.jinproject.domain.entity.item.Equipment {
         val factory = getDomainFactory()
 
@@ -33,25 +32,53 @@ data class Equipment(
 
     override fun getDomainFactory(): ItemDomainFactory =
         when (data.itemType) {
-            "무기", "weapon" -> WeaponDomainFactory(stats = info.stats.toMutableMap(), equipment = this)
-            "방어구", "armor" -> ArmorDomainFactory(stats = info.stats.toMutableMap(), equipment = this)
-            "장신구", "accessories" -> AccessoryDomainFactory(stats = info.stats.toMutableMap(), equipment = this)
-            "코스튬", "costume" -> ArmorDomainFactory(stats = info.stats.toMutableMap(), equipment = this)
+            WEAPON_KO, WEAPON_EN -> WeaponDomainFactory(
+                stats = info.stats.toMutableMap(),
+                equipment = this
+            )
+
+            ARMOR_KO, ARMOR_EN -> ArmorDomainFactory(
+                stats = info.stats.toMutableMap(),
+                equipment = this
+            )
+
+            ACCESSORY_KO, ACCESSORY_EN -> AccessoryDomainFactory(
+                stats = info.stats.toMutableMap(),
+                equipment = this
+            )
+
+            COSTUME_KO, COSTUME_EN -> ArmorDomainFactory(
+                stats = info.stats.toMutableMap(),
+                equipment = this
+            )
+
             else -> throw IllegalArgumentException("[$this] 는 장비 아이템 타입이 아닙니다.")
         }
 
     companion object {
-
-        fun toItemType(equipment: EnchantableEquipment) = when (equipment) {
-            is Weapon -> "무기"
-            is Armor -> "방어구"
-            is Accessory -> "장신구"
+        fun toItemType(
+            equipment: com.jinproject.domain.entity.item.Equipment,
+            language: String = Locale.getDefault().language
+        ) = when (equipment) {
+            is Weapon -> language.onLanguage(ko = WEAPON_KO, en = WEAPON_EN)
+            is Armor -> language.onLanguage(ko = ARMOR_KO, en = ARMOR_EN)
+            is Accessory -> language.onLanguage(ko = ACCESSORY_KO, en = ACCESSORY_EN)
+            is Costume -> language.onLanguage(ko = COSTUME_KO, en = COSTUME_EN)
             else -> throw IllegalArgumentException("[$this] 는 강화 가능한 장비 아이템 타입이 아닙니다.")
         }
+
+        const val WEAPON_KO = "무기"
+        const val WEAPON_EN = "weapon"
+        const val ARMOR_KO = "방어구"
+        const val ARMOR_EN = "armor"
+        const val ACCESSORY_KO = "장신구"
+        const val ACCESSORY_EN = "accessories"
+        const val COSTUME_KO = "코스튬"
+        const val COSTUME_EN = "costume"
     }
 }
 
-fun interface GetProperDomainFactory {
+fun interface GetItemDomainFactory {
     fun getDomainFactory(): ItemDomainFactory
 }
 
@@ -240,11 +267,6 @@ class CostumeDomainFactory(
         )
     }
 }
-
-private fun String.onLanguage(ko: String, en: String) = if (this == "ko")
-    ko
-else
-    en
 
 fun List<EquipmentEntity>.toDomain(): List<com.jinproject.domain.entity.item.Equipment> =
     map { it.toEquipment().toDomain() }

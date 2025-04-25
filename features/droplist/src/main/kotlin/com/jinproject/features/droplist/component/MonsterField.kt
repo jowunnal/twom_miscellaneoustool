@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.MaterialTheme
@@ -22,7 +21,7 @@ import com.jinproject.design_compose.component.pushRefresh.MTProgressIndicatorRo
 import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.theme.MiscellaneousToolColor
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
-import com.jinproject.domain.model.MonsterType
+import com.jinproject.domain.entity.MonsterType
 import com.jinproject.features.core.utils.toAssetImageUri
 import com.jinproject.features.droplist.DropListUiState
 import com.jinproject.features.droplist.DropListUiStatePreviewParameter
@@ -66,7 +65,7 @@ internal fun ColumnScope.Monster(
                 is MonsterType.Normal -> MaterialTheme.colorScheme.onBackground
                 is MonsterType.Named -> MiscellaneousToolColor.blue.color
                 is MonsterType.Boss -> MiscellaneousToolColor.orange.color
-                is MonsterType.BigBoss -> MiscellaneousToolColor.deepRed.color
+                is MonsterType.WorldBoss -> MiscellaneousToolColor.deepRed.color
             }
         )
     }

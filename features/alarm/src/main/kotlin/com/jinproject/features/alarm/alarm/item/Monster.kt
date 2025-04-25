@@ -1,7 +1,6 @@
 package com.jinproject.features.alarm.alarm.item
 
 import com.jinproject.domain.entity.Monster
-import com.jinproject.domain.entity.MonsterType
 
 data class MonsterState(
     val name: String,
@@ -38,11 +37,11 @@ enum class MonsterType {
     }
 
     companion object {
-        fun fromDomain(domain: MonsterType) = when (domain) {
-            is MonsterType.Normal -> Normal
-            is MonsterType.Named -> Named
-            is MonsterType.Boss -> Boss
-            is MonsterType.WorldBoss -> WorldBoss
+        fun fromDomain(domain: com.jinproject.domain.entity.MonsterType): MonsterType = when (domain) {
+            is com.jinproject.domain.entity.MonsterType.Normal -> Normal
+            is com.jinproject.domain.entity.MonsterType.Named -> Named
+            is com.jinproject.domain.entity.MonsterType.Boss -> Boss
+            is com.jinproject.domain.entity.MonsterType.WorldBoss -> WorldBoss
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.jinproject.domain.usecase.alarm
 
 import com.jinproject.domain.entity.Monster
-import com.jinproject.domain.entity.MonsterTypes
+import com.jinproject.domain.entity.MonsterType
 import com.jinproject.domain.repository.DropListRepository
 import com.jinproject.domain.repository.TimerRepository
 import com.jinproject.domain.usecase.repository.FakeTimerRepository
@@ -34,7 +34,7 @@ class SetAlarmUsecaseTest : BehaviorSpec() {
                     level = 7,
                     genTime = 900,
                     imageName = "bulldozer",
-                    type = MonsterTypes.Named("bulldozer"),
+                    type = MonsterType.Named("bulldozer"),
                     dropItems = emptyList(),
                     existedMap = emptyList(),
                     hp = 0

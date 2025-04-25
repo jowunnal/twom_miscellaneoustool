@@ -1,10 +1,10 @@
 package com.jinproject.data.repository.repo
 
 import com.jinproject.data.repository.datasource.CacheDropListDataSource
-import com.jinproject.data.repository.model.toDomainModel
+import com.jinproject.data.repository.model.toDomainModelList
 import com.jinproject.data.repository.model.toDomainModels
 import com.jinproject.domain.entity.Monster
-import com.jinproject.domain.model.MapModel
+import com.jinproject.domain.entity.TwomMap
 import com.jinproject.domain.repository.DropListRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -14,10 +14,8 @@ class DropListRepositoryImpl @Inject constructor(
     private val dropListDataSource: CacheDropListDataSource,
 ) : DropListRepository {
 
-    override fun getMaps(): Flow<List<MapModel>> = dropListDataSource.getMaps().map { maps ->
-        maps.map { map ->
-            map.toDomainModel()
-        }
+    override fun getMaps(): Flow<List<TwomMap>> = dropListDataSource.getMaps().map { maps ->
+        maps.toDomainModelList()
     }
 
     override fun getMonsterListFromMap(map: String): Flow<List<Monster>> =

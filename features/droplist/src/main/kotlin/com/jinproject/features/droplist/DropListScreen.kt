@@ -13,6 +13,7 @@ import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaf
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -24,6 +25,8 @@ import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
 import com.jinproject.features.droplist.component.DropListDetail
 import com.jinproject.features.droplist.component.MapListPane
 import com.jinproject.features.droplist.state.MapState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun MapListScreen(
@@ -41,22 +44,24 @@ internal fun MapListScreen(
 @Composable
 private fun MapListScreen(
     dropListUiState: DropListUiState,
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
     selectMap: (MapState) -> Unit,
 ) {
     val lazyGridState = rememberLazyGridState()
     val navigator = rememberListDetailPaneScaffoldNavigator<MapState>()
 
     BackHandler(navigator.canNavigateBack()) {
-        navigator.navigateBack()
+        coroutineScope.launch { navigator.navigateBack() }
     }
 
     val localAnalyticsLoggingEvent = LocalAnalyticsLoggingEvent.current
 
     LaunchedEffect(key1 = dropListUiState.selectedMap) {
         if (dropListUiState.selectedMap != null) {
-            dropListUiState.maps.find { it.name == dropListUiState.selectedMap.name }?.let { mapState ->
-                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, mapState)
-            }
+            dropListUiState.maps.find { it.name == dropListUiState.selectedMap.name }
+                ?.let { mapState ->
+                    navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, mapState)
+                }
         }
 
         localAnalyticsLoggingEvent(AnalyticsEvent.DropListScreen)
@@ -75,19 +80,24 @@ private fun MapListScreen(
                     lazyGridState = lazyGridState,
                     onClickItem = { item ->
                         selectMap(item)
-                        navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, item)
+                        coroutineScope.launch {
+                            navigator.navigateTo(
+                                ListDetailPaneScaffoldRole.Detail,
+                                item
+                            )
+                        }
                     },
                 )
             }
         },
         detailPane = {
             AnimatedPane {
-                navigator.currentDestination?.content?.let { map ->
+                navigator.currentDestination?.contentKey?.let { map ->
                     DropListDetail(
                         mapName = map.name,
                         monsterListState = dropListUiState.monsters,
                         onNavigateBack = {
-                            navigator.navigateBack()
+                            coroutineScope.launch { navigator.navigateBack() }
                         },
                     )
                 }

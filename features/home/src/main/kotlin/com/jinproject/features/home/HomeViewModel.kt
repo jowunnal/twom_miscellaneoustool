@@ -27,8 +27,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.zip
+import java.time.ZoneId
 import java.time.ZonedDateTime
-import java.time.temporal.ChronoField
 import javax.inject.Inject
 
 data class HomeUiState(
@@ -53,63 +53,58 @@ internal class HomeViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<HomeUiState> =
-        collectionRepository.getCollectionList().zip(collectionRepository.getFilteredCollectionIds()) { collectionModels, filteredIds ->
-            collectionModels.filter {
-                it.bookId !in filteredIds
-            }.mapToImmutableList { collectionModel ->
-                ItemCollection(
-                    id = collectionModel.bookId,
-                    stats = collectionModel.stat.putAllToImmutableMap { entry ->
-                        context.doOnLocaleLanguage(
-                            onKo = entry.key.displayName,
-                            onElse = entry.key.displayOtherLanguage
-                        ) to entry.value.toFloat()
-                    },
-                    items = collectionModel.items.mapToImmutableList { item ->
-                        when (item.type) {
-                            is ItemType.Weapon, is ItemType.Armor -> Equipment(
-                                name = item.name,
-                                count = item.count,
-                                enchantNumber = item.enchantNumber,
-                                price = item.price,
-                            )
+        collectionRepository.getCollectionList()
+            .zip(collectionRepository.getFilteredCollectionIds()) { collectionModels, filteredIds ->
+                collectionModels.filter {
+                    it.bookId !in filteredIds
+                }.mapToImmutableList { collectionModel ->
+                    ItemCollection(
+                        id = collectionModel.bookId,
+                        stats = collectionModel.stat.putAllToImmutableMap { entry ->
+                            context.doOnLocaleLanguage(
+                                onKo = entry.key.displayName,
+                                onElse = entry.key.displayOtherLanguage
+                            ) to entry.value.toFloat()
+                        },
+                        items = collectionModel.items.mapToImmutableList { item ->
+                            when (item.type) {
+                                is ItemType.Weapon, is ItemType.Armor -> Equipment(
+                                    name = item.name,
+                                    count = item.count,
+                                    enchantNumber = item.enchantNumber,
+                                    price = item.price,
+                                )
 
-                            is ItemType.Miscellaneous, is ItemType.Accessory, is ItemType.Costume -> MiscellaneousItem(
-                                name = item.name,
-                                count = item.count,
-                                price = item.price,
-                            )
+                                is ItemType.Miscellaneous, is ItemType.Accessory, is ItemType.Costume -> MiscellaneousItem(
+                                    name = item.name,
+                                    count = item.count,
+                                    price = item.price,
+                                )
 
-                            else -> throw IllegalStateException("[${item.type}] 은 아이템 도감에서 허용되지 않는 타입의 아이템 입니다.")
-                        }
-                    },
-                )
-            }
-        }.flatMapLatest { itemCollections ->
-            dropListRepository.getMaps().combine(timerRepository.getTimer()){ mapModelList, timerModels ->
-                HomeUiState(
-                    maps = mapModelList.map { mapModel ->
-                        MapState(
-                            name = mapModel.name,
-                            imgName = mapModel.imgName
-                        )
-                    }.toImmutableList(),
-                    collections = itemCollections,
-                    bossTimer = timerModels.map { timerModel ->
-                        BossTimer(
-                            name = timerModel.bossName,
-                            time = timerModel.run {
-                                ZonedDateTime.now().apply {
-                                    with(ChronoField.DAY_OF_WEEK, day.toDayOfWeek().toLong())
-                                    withHour(hour)
-                                    withMinute(minutes)
-                                    withSecond(seconds)
-                                }
+                                else -> throw IllegalStateException("[${item.type}] 은 아이템 도감에서 허용되지 않는 타입의 아이템 입니다.")
                             }
-                        )
-                    }.toImmutableList(),
-                )
-            }
+                        },
+                    )
+                }
+            }.flatMapLatest { itemCollections ->
+            dropListRepository.getMaps()
+                .combine(timerRepository.getTimerList()) { mapModelList, timerModels ->
+                    HomeUiState(
+                        maps = mapModelList.map { mapModel ->
+                            MapState(
+                                name = mapModel.name,
+                                imgName = mapModel.imageName,
+                            )
+                        }.toImmutableList(),
+                        collections = itemCollections,
+                        bossTimer = timerModels.map { timerModel ->
+                            BossTimer(
+                                name = timerModel.monsterName,
+                                time = timerModel.dateTime,
+                            )
+                        }.toImmutableList(),
+                    )
+                }
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),

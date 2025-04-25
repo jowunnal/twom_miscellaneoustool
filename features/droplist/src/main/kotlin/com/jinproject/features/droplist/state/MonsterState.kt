@@ -1,6 +1,6 @@
 package com.jinproject.features.droplist.state
 
-import com.jinproject.domain.model.MonsterType
+import com.jinproject.domain.entity.MonsterType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import java.util.Locale
@@ -48,7 +48,11 @@ data class MonsterState(
         val isValid =
             { value: Int, postfix: String -> if (value > 0) "$value$postfix" + (if (postfix != secondPostFix) " " else "") else "" }
 
-        return "${isValid(days, dayPostFix)}${isValid(hours, hourPostFix)}${isValid(minutes, minutePostFix)}${isValid(seconds, secondPostFix)}"
+        return "${isValid(days, dayPostFix)}${isValid(hours, hourPostFix)}${
+            isValid(
+                minutes,
+                minutePostFix
+            )
+        }${isValid(seconds, secondPostFix)}"
     }
-
 }

@@ -1,7 +1,7 @@
 package com.jinproject.features.droplist
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.jinproject.domain.model.MonsterType
+import com.jinproject.domain.entity.MonsterType
 import com.jinproject.features.droplist.state.MapState
 import com.jinproject.features.droplist.state.MonsterState
 import kotlinx.collections.immutable.persistentListOf
@@ -142,7 +142,7 @@ class DropListUiStatePreviewParameter : PreviewParameterProvider<DropListUiState
                 level = 8,
                 genTime = 3900,
                 imgName = "bulldozerbro",
-                type = MonsterType.BigBoss("대형 보스"),
+                type = MonsterType.WorldBoss("대형 보스"),
                 items = persistentListOf(
                     "주문서D",
                     "무명로브",

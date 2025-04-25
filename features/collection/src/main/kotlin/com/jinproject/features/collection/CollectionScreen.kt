@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
@@ -36,10 +37,12 @@ import com.jinproject.features.collection.model.CollectionUiState
 import com.jinproject.features.collection.model.ItemCollection
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun CollectionScreen(
@@ -63,6 +66,7 @@ internal fun CollectionScreen(
 @Composable
 private fun CollectionScreen(
     collectionUiState: CollectionUiState,
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
     collectionArgument: Int?,
     dispatchEvent: (CollectionEvent) -> Unit,
     onNavigateBack: () -> Unit,
@@ -71,7 +75,9 @@ private fun CollectionScreen(
     val navigator = rememberListDetailPaneScaffoldNavigator<ItemCollection>()
 
     BackHandler(navigator.canNavigateBack()) {
-        navigator.navigateBack()
+        coroutineScope.launch {
+            navigator.navigateBack()
+        }
     }
 
     LaunchedEffect(key1 = collectionArgument) {
@@ -129,7 +135,9 @@ private fun CollectionScreen(
                         isFilterMode = isFilterMode,
                         triggerFilterMode = { bool -> isFilterMode = bool },
                         navigateToDetail = { item ->
-                            navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, item)
+                            coroutineScope.launch {
+                                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, item)
+                            }
                         },
                         dispatchEvent = dispatchEvent,
                     )
@@ -138,12 +146,14 @@ private fun CollectionScreen(
         },
         detailPane = {
             AnimatedPane {
-                navigator.currentDestination?.content?.let { collection ->
+                navigator.currentDestination?.contentKey?.let { collection ->
                     CollectionDetail(
                         collection = collection,
                         dispatchEvent = dispatchEvent,
                         onNavigateBack = {
-                            navigator.navigateBack()
+                            coroutineScope.launch {
+                                navigator.navigateBack()
+                            }
                         },
                         showSnackBar = showSnackBar,
                     )

@@ -1,12 +1,12 @@
 package com.jinproject.domain.repository
 
 import com.jinproject.domain.entity.Monster
-import com.jinproject.domain.model.MapModel
+import com.jinproject.domain.entity.TwomMap
 import kotlinx.coroutines.flow.Flow
 
 interface DropListRepository {
 
-    fun getMaps(): Flow<List<MapModel>>
+    fun getMaps(): Flow<List<TwomMap>>
     fun getMonsterListFromMap(map: String): Flow<List<Monster>>
 
     /**

@@ -1,7 +1,6 @@
 package com.jinproject.domain.entity
 
 import com.jinproject.domain.entity.item.Item
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 /**
@@ -19,9 +18,9 @@ data class Monster(
     val name: String,
     val level: Int,
     val hp: Int,
-    val type: MonsterTypes,
+    val type: MonsterType,
     val genTime: Int,
-    val existedMap: List<Field>,
+    val existedMap: List<TwomMap>,
     val dropItems: List<Item>,
     val imageName: String,
 ) {
@@ -29,15 +28,15 @@ data class Monster(
         deadTime.plusSeconds(genTime.toLong())
 }
 
-sealed interface MonsterTypes {
+sealed interface MonsterType {
     val name: String
 
-    data class Normal(override val name: String): MonsterTypes
-    data class Named(override val name: String): MonsterTypes
-    data class Boss(override val name: String): MonsterTypes
-    data class WorldBoss(override val name: String): MonsterTypes
+    data class Normal(override val name: String) : MonsterType
+    data class Named(override val name: String) : MonsterType
+    data class Boss(override val name: String) : MonsterType
+    data class WorldBoss(override val name: String) : MonsterType
 
-    fun getPriority() = when(this) {
+    fun getPriority() = when (this) {
         is Normal -> 1
         is Named -> 2
         is Boss -> 3
@@ -45,7 +44,7 @@ sealed interface MonsterTypes {
     }
 
     companion object {
-        fun findByBossTypeName(bossTypeName: String) = when(bossTypeName) {
+        fun findByBossTypeName(bossTypeName: String) = when (bossTypeName) {
             "Normal", "일반" -> Normal(bossTypeName)
             "Mini Boss", "네임드" -> Named(bossTypeName)
             "Semi Boss", "보스" -> Boss(bossTypeName)
@@ -61,7 +60,7 @@ sealed interface MonsterTypes {
  *  1. 맵 이름
  *
  */
-data class Field(
+data class TwomMap(
     val name: String,
     val imageName: String,
 )

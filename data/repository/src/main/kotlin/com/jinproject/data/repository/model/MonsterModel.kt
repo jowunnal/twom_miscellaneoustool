@@ -1,7 +1,7 @@
 package com.jinproject.data.repository.model
 
 import com.jinproject.domain.entity.Monster
-import com.jinproject.domain.entity.MonsterTypes
+import com.jinproject.domain.entity.MonsterType
 
 data class MonsterModel(
     val name: String,
@@ -9,13 +9,13 @@ data class MonsterModel(
     val genTime: Int,
     val imgName: String,
     val type: String,
-    val item: List<Item>
+    val item: List<GetItemDomainFactory>
 ) {
     fun toMonsterDomain() = Monster(
         name = name,
         level = level,
         hp = 0,
-        type = MonsterTypes.findByBossTypeName(type),
+        type = MonsterType.findByBossTypeName(type),
         genTime = genTime,
         existedMap = emptyList(),
         dropItems = item.map { it.getDomainFactory().create() },

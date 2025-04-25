@@ -12,34 +12,31 @@ data class ItemModel(
     val type: String,
 )
 
-data class Item(
+class Item(
+    val itemType: String,
     val name: String,
     val price: Long,
     val imageName: String,
-    val itemType: String,
-): GetProperDomainFactory {
+    val limitedLevel: Int,
+) : GetItemDomainFactory {
     override fun getDomainFactory(): ItemDomainFactory =
-        when(itemType) {
-            "잡탬", "miscellaneous" -> MiscellaneousItemDomainFactory(this)
-            else -> throw IllegalArgumentException("[$this] 는 올바른 아이템 타입이 아닙니다.")
+        when (itemType) {
+            MISCELLANEOUS_KO, MISCELLANEOUS_EN -> MiscellaneousItemDomainFactory(this)
+            SKILL_KO, SKILL_EN -> SkillItemDomainFactory(this, limitedLevel)
+            else -> throw IllegalArgumentException("")
         }
-}
 
-data class Skill(
-    val item: com.jinproject.data.repository.model.Item,
-    val limitedLevel: Int
-): GetProperDomainFactory {
-    override fun getDomainFactory(): ItemDomainFactory =
-        when(item.itemType) {
-            "스킬", "skill" -> SkillItemDomainFactory(item = item, limitedLevel = limitedLevel)
-            else -> throw IllegalArgumentException("[$this] 는 올바른 아이템 타입이 아닙니다.")
-        }
+    companion object {
+        const val MISCELLANEOUS_KO = "잡탬"
+        const val MISCELLANEOUS_EN = "miscellaneous"
+        const val SKILL_KO = "스킬"
+        const val SKILL_EN = "skill"
+    }
 }
-
 
 class MiscellaneousItemDomainFactory(
     private val item: com.jinproject.data.repository.model.Item
-): ItemDomainFactory() {
+) : ItemDomainFactory() {
     override fun create(): Item {
         return Miscellaneous(
             name = item.name,
@@ -52,7 +49,7 @@ class MiscellaneousItemDomainFactory(
 class SkillItemDomainFactory(
     private val item: com.jinproject.data.repository.model.Item,
     private val limitedLevel: Int,
-): ItemDomainFactory() {
+) : ItemDomainFactory() {
     override fun create(): Item {
         return Skill(
             name = item.name,

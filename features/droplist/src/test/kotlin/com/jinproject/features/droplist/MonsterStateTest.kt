@@ -1,6 +1,6 @@
 package com.jinproject.features.droplist
 
-import com.jinproject.domain.model.MonsterType
+import com.jinproject.domain.entity.MonsterType
 import com.jinproject.features.droplist.state.MonsterState
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
