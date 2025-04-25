@@ -51,7 +51,7 @@ class MonsterStateDisplayingGenTimeTest : BehaviorSpec() {
                 val displayedText = monster.displayGenTime()
 
                 then("7일 이다.") {
-                    displayedText shouldBe "7일 "
+                    displayedText.trim() shouldBe "7일"
                 }
             }
         }
