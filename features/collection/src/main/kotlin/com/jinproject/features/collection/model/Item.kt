@@ -1,5 +1,6 @@
 package com.jinproject.features.collection.model
 
+import android.util.Log
 import com.jinproject.domain.entity.item.EnchantableEquipment
 import com.jinproject.domain.model.ItemModel
 import com.jinproject.domain.model.ItemType
@@ -23,32 +24,28 @@ abstract class Item {
 
         fun fromDomainItem(items: List<com.jinproject.domain.entity.item.Item>): ImmutableList<Item> =
             if (items.isNotEmpty())
-                items.groupBy { it::class }.entries.map { itemEntry ->
+                items.filter {
+                    it !is EnchantableEquipment
+                }.groupBy { it::class }.entries.map { itemEntry ->
                     val items = itemEntry.value
 
-                    when (itemEntry.key) {
-                        EnchantableEquipment::class -> {
-                            val weapons = items.filterIsInstance<EnchantableEquipment>().first()
+                    val miscellaneousItems = items.first()
 
-                            Equipment(
-                                name = weapons.name,
-                                count = items.size,
-                                enchantNumber = weapons.enchantNumber,
-                                price = weapons.price,
-                            )
-                        }
-
-                        else -> {
-                            val miscellaneousItems = items.first()
-
-                            MiscellaneousItem(
-                                name = miscellaneousItems.name,
-                                count = items.size,
-                                price = miscellaneousItems.price,
-                            )
-                        }
+                    MiscellaneousItem(
+                        name = miscellaneousItems.name,
+                        count = items.size,
+                        price = miscellaneousItems.price,
+                    )
+                }.plus(
+                    items.filterIsInstance<EnchantableEquipment>().map { item ->
+                        Equipment(
+                            name = item.name,
+                            count = 0,
+                            enchantNumber = item.enchantNumber,
+                            price = item.price,
+                        )
                     }
-                }.toImmutableList()
+                ).toImmutableList()
             else
                 persistentListOf()
     }

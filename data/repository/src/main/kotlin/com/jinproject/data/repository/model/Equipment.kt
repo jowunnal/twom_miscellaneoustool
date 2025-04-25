@@ -198,7 +198,9 @@ class WeaponDomainFactory(
             damageRange = minDamage..maxDamage,
             uuid = equipment.info.uuid,
             imageName = equipment.data.imageName,
-        )
+        ).apply {
+            enchantNumber = equipment.info.enchantNumber
+        }
     }
 }
 
@@ -223,7 +225,9 @@ class ArmorDomainFactory(
             armor = armor,
             uuid = equipment.info.uuid,
             imageName = equipment.data.imageName,
-        )
+        ).apply {
+            enchantNumber = equipment.info.enchantNumber
+        }
     }
 }
 
@@ -248,7 +252,9 @@ class AccessoryDomainFactory(
             armor = armor,
             uuid = equipment.info.uuid,
             imageName = equipment.data.imageName,
-        )
+        ).apply {
+            enchantNumber = equipment.info.enchantNumber
+        }
     }
 }
 

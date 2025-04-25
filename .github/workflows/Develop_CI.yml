@@ -39,7 +39,7 @@ jobs:
       run: echo '${{ secrets.GOOGLE_SERVICES_JSON_DEBUG }}' > ./app/google-services.json
 
     - name: Run unit test
-      run: ./gradlew testDebugUnitTest
+      run: ./gradlew testDebugUnitTest -Duser.language=ko -Duser.country=KR
 
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
