@@ -4,6 +4,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.jinproject.features.alarm.alarm.item.MonsterState
 import com.jinproject.features.alarm.alarm.item.MonsterType
 import com.jinproject.features.alarm.alarm.item.TimerState
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import java.time.ZonedDateTime
 
 class AlarmUiStatePreviewParameter : PreviewParameterProvider<AlarmUiState> {
@@ -52,6 +54,8 @@ class AlarmUiStatePreviewParameter : PreviewParameterProvider<AlarmUiState> {
         ),
     )
 
+    private val overlaidBossList: ImmutableList<String> = persistentListOf("불도저", "은둔자", "바슬라프")
+
     private val frequentlyUsedBossList: List<String> = listOf("불도저", "은둔자", "바슬라프")
 
     override val values: Sequence<AlarmUiState> = sequenceOf(
@@ -59,6 +63,7 @@ class AlarmUiStatePreviewParameter : PreviewParameterProvider<AlarmUiState> {
             timerList = timerList,
             monsterList = monsterList,
             frequentlyUsedBossList = frequentlyUsedBossList,
+            overlaidBossList = overlaidBossList,
         )
     )
 }

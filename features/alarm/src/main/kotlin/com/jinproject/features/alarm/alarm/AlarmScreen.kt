@@ -157,21 +157,6 @@ private fun AlarmScreen(
         mutableStateOf("")
     }
 
-    var checkState by remember {
-        mutableStateOf(false)
-    }
-
-    val hideBottomSheet = remember {
-        {
-            bottomSheetVisibility = false
-
-            if (checkState)
-                addOverlayMonster(selectedMonster)
-            else
-                removeOverlayMonster(selectedMonster)
-        }
-    }
-
     var transitionState by remember {
         mutableStateOf(false)
     }
@@ -184,7 +169,7 @@ private fun AlarmScreen(
     if (bottomSheetVisibility)
         ModalBottomSheet(
             onDismissRequest = {
-                hideBottomSheet()
+                bottomSheetVisibility = false
             },
             sheetState = bottomSheetState,
             shape = RoundedCornerShape(20.dp),
@@ -211,7 +196,7 @@ private fun AlarmScreen(
                             .height(48.dp)
                             .padding(top = 16.dp, end = 16.dp)
                             .clickableAvoidingDuplication {
-                                hideBottomSheet()
+                                bottomSheetVisibility = false
                             }
                     )
                 }
@@ -219,12 +204,16 @@ private fun AlarmScreen(
         ) {
             AlarmBottomSheetContent(
                 selectedBossName = selectedMonster,
+                overlaidBossList = alarmUiState.overlaidBossList,
                 onStartAlarm = onStartAlarm,
-                onCloseBottomSheet = {
-                    hideBottomSheet()
+                onCloseBottomSheet = { checkState ->
+                    bottomSheetVisibility = false
+
+                    if (checkState)
+                        addOverlayMonster(selectedMonster)
+                    else
+                        removeOverlayMonster(selectedMonster)
                 },
-                checkState = checkState,
-                changeCheckState = { bool -> checkState = bool }
             )
         }
 
