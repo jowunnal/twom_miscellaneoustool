@@ -51,10 +51,10 @@ jobs:
       run: echo '${{ secrets.GOOGLE_SERVICES_JSON_DEBUG }}' > ./app/google-services.json
      
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew build -Duser.language=ko -Duser.country=KR
 
     - name: Release App Bundle
-      run: ./gradlew bundleRelease
+      run: ./gradlew bundleRelease -Duser.language=ko -Duser.country=KR
 
     - name: Setup build tool version variable
       shell: bash
