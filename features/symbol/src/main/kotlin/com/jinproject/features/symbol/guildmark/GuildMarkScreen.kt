@@ -136,17 +136,21 @@ private fun GuildMarkScreen(
             initialValue = GuildMarkManager.getInitBitmap(),
             key1 = uri,
         ) {
-            value = if (uri.startsWith("http")) {
-                val requester = ImageRequest.Builder(context).data(uri).build()
-                (ImageLoader(context).newBuilder()
-                    .allowHardware(false)
-                    .build()
-                    .execute(requester).drawable as BitmapDrawable).bitmap
-            } else
-                getBitmapFromContentUri(
+            value = when {
+                uri.startsWith("http") -> {
+                    val requester = ImageRequest.Builder(context).data(uri).build()
+
+                    (ImageLoader(context).newBuilder()
+                        .allowHardware(false)
+                        .build()
+                        .execute(requester).drawable as BitmapDrawable).bitmap
+                }
+
+                else -> getBitmapFromContentUri(
                     context = context,
                     imageUri = uri,
                 )
+            }
         }
 
         val guildMarkManager = rememberGuildMarkManager(bitMap = bitMap, slider = slider)
