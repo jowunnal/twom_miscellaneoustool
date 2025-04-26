@@ -1,9 +1,9 @@
 <a href="https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook">
-	<img src="https://img.shields.io/badge/PlayStore-v2.4.5-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
+	<img src="https://img.shields.io/badge/PlayStore-v2.5.0-4285F4?style=for-the-badge&logo=googleplay&logoColor=white&link=https://play.google.com/store/apps/details?id=com.jinproject.twomillustratedbook" />
 </a>
 
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.0.10-blue.svg)](https://kotlinlang.org)
-[![AGP](https://img.shields.io/badge/AGP-8.5.0-green.svg)](https://gradle.org/)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.1.20-blue.svg)](https://kotlinlang.org)
+[![AGP](https://img.shields.io/badge/AGP-8.6.0-green.svg)](https://gradle.org/)
 [![minSdkVersion](https://img.shields.io/badge/minSdkVersion-26-red)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
 [![targetSdkVersion](https://img.shields.io/badge/targetSdkVersion-35-orange)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
 
