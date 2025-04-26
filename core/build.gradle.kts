@@ -6,5 +6,4 @@ android {
     namespace = "com.jinproject.core"
 }
 
-dependencies {
-}
+dependencies {}
