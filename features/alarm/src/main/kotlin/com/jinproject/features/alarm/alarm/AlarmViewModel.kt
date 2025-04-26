@@ -19,6 +19,9 @@ import com.jinproject.features.alarm.alarm.utils.makeAlarm
 import com.jinproject.features.core.base.item.SnackBarMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
@@ -37,12 +40,14 @@ data class AlarmUiState(
     val timerList: List<TimerState>,
     val monsterList: List<MonsterState>,
     val frequentlyUsedBossList: List<String>,
+    val overlaidBossList: ImmutableList<String>,
 ) {
     companion object {
         fun getInitValue() = AlarmUiState(
             timerList = listOf(TimerState.getInitValue()),
             monsterList = emptyList(),
             frequentlyUsedBossList = emptyList(),
+            overlaidBossList = persistentListOf(),
         )
     }
 }
@@ -84,7 +89,9 @@ class AlarmViewModel @Inject constructor(
                     AlarmUiState(
                         timerList = timers.map { TimerState.fromDomain(it) },
                         monsterList = monsterList,
-                        frequentlyUsedBossList = setting.frequentlyUsedBossList ?: emptyList()
+                        frequentlyUsedBossList = setting.frequentlyUsedBossList ?: emptyList(),
+                        overlaidBossList = setting.overlaidMonsterList?.toImmutableList()
+                            ?: persistentListOf(),
                     )
                 }
         }.stateIn(

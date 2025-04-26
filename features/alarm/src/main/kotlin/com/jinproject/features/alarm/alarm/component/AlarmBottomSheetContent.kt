@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.jinproject.design_compose.component.HorizontalSpacer
@@ -28,23 +29,29 @@ import com.jinproject.design_compose.component.button.TextButton
 import com.jinproject.design_compose.component.text.DescriptionLargeText
 import com.jinproject.design_compose.utils.PreviewMiscellaneousToolTheme
 import com.jinproject.design_ui.R
+import com.jinproject.features.alarm.alarm.AlarmUiState
+import com.jinproject.features.alarm.alarm.AlarmUiStatePreviewParameter
 import com.jinproject.features.core.AnalyticsEvent
 import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
+import kotlinx.collections.immutable.ImmutableList
 import java.time.ZonedDateTime
 
 @Composable
 fun AlarmBottomSheetContent(
     selectedBossName: String,
-    checkState: Boolean,
-    changeCheckState: (Boolean) -> Unit,
+    overlaidBossList: ImmutableList<String>,
     onStartAlarm: (monsterName: String, deadTime: ZonedDateTime) -> Unit,
-    onCloseBottomSheet: () -> Unit
+    onCloseBottomSheet: (Boolean) -> Unit
 ) {
     var deadTime: ZonedDateTime by remember {
         mutableStateOf(ZonedDateTime.now())
     }
 
     val event = LocalAnalyticsLoggingEvent.current
+
+    var checkState by remember {
+        mutableStateOf(selectedBossName in overlaidBossList)
+    }
 
     Column(
         modifier = Modifier
@@ -63,8 +70,8 @@ fun AlarmBottomSheetContent(
             Checkbox(
                 checked = checkState,
                 onCheckedChange = { bool ->
-                    changeCheckState(bool)
-                }
+                    checkState = bool
+                },
             )
             HorizontalWeightSpacer(1f)
         }
@@ -103,7 +110,7 @@ fun AlarmBottomSheetContent(
                         timeStamp = deadTime.toString(),
                     )
                 )
-                onCloseBottomSheet()
+                onCloseBottomSheet(checkState)
             }
         )
 
@@ -148,13 +155,15 @@ private fun NumberPickerDefault(
 
 @Preview(showBackground = true)
 @Composable
-private fun PreviewAlarmBottomSheetContent() =
+private fun PreviewAlarmBottomSheetContent(
+    @PreviewParameter(AlarmUiStatePreviewParameter::class)
+    alarmUiState: AlarmUiState,
+) =
     PreviewMiscellaneousToolTheme {
         AlarmBottomSheetContent(
             selectedBossName = "은둔자",
+            overlaidBossList = alarmUiState.overlaidBossList,
             onStartAlarm = { _, _ -> },
             onCloseBottomSheet = {},
-            checkState = true,
-            changeCheckState = {},
         )
     }

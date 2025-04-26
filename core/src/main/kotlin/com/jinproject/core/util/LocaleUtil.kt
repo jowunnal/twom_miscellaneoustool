@@ -11,7 +11,7 @@ fun <T> Context.doOnLocaleLanguage(onKo: T, onElse: T) =
 
 fun isKorean() = Locale.getDefault().language == "ko"
 
-fun String.onLanguage(ko: String, en: String) = if (this == "ko")
+fun <T> String.onLanguage(ko: T, en: T) = if (this == "ko")
     ko
 else
     en

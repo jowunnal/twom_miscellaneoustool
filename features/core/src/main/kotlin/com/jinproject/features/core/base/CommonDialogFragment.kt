@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.jinproject.features.core.databinding.DialogCommonBinding
+import androidx.core.graphics.drawable.toDrawable
 
 class CommonDialogFragment private constructor(
     private val title: String,
@@ -29,7 +30,7 @@ class CommonDialogFragment private constructor(
         binding = DialogCommonBinding.inflate(layoutInflater)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        requireDialog().window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        requireDialog().window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         return binding.root
     }
 
