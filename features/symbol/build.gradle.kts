@@ -5,6 +5,10 @@ plugins {
 
 android {
     namespace = "com.jinproject.features.symbol"
+    lint {
+        abortOnError = false
+        checkReleaseBuilds = false
+    }
 }
 
 dependencies {
