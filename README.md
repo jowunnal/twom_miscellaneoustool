@@ -347,7 +347,11 @@ https://github.com/user-attachments/assets/812ede40-702f-4d9f-b6ce-15047ca50a22
 
 ### 몬스터 알람
 
-https://github.com/user-attachments/assets/7c8a1346-ee18-46ac-a06f-be0dc61d3ca4
+https://github.com/user-attachments/assets/7190e7da-1dae-4e9a-965c-e4980b3e28c7
+
+### 강화 시뮬레이터
+
+https://github.com/user-attachments/assets/4fb741a0-d136-4470-b28a-d3fa795edb76
 
 # Details
 
