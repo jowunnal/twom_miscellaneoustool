@@ -7,15 +7,27 @@
 [![minSdkVersion](https://img.shields.io/badge/minSdkVersion-26-red)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
 [![targetSdkVersion](https://img.shields.io/badge/targetSdkVersion-35-orange)](https://developer.android.com/distribute/best-practices/develop/target-sdk)
 
+# 개발 기간
+
+**2022.01** ~ **현재진행중**
+
 # 앱 소개
 
 글로벌 모바일 게임 ‘아이모’ 의 팬메이드 앱으로써 아이모를 즐기는 유저들이 게임을 할때 필요한 정보들을 보여주고, 몬스터가 재생성(Regeneration) 될 때를 간편하게 알람 설정하는 등 게임을 하는데 유용한 기능들을 제공해주는 앱 입니다.
 
-지역화(필리핀어, 미국어, 한국어) 되어 글로벌로 출시되었고, 다크테마와 폴더블 디바이스에 최적화 하였으며, 배너 및 리워드광고와 인앱 업데이트, 인앱결제가 포함된 실 서비스를 운영중인 앱 입니다.
+지역화(필리핀어, 미국어, 한국어) 되어 글로벌로 출시되었고, 다크테마와 폴더블 디바이스에 최적화 하였으며, 배너 및 리워드광고와 인앱 업데이트, 인앱결제가 포함된 실 서비스를 2022년 부터 운영중인 앱 입니다.
 
 # Why?
 
-모바일 게임 아이모는 MMORPG 이며, 필드에서 PK 가 가능한 게임 입니다. 게임의 특성상 모든 필드의 보스 몬스터들은 길드 단위로 경쟁하고 있습니다. 여러 유저가 모여 만들어진 길드에서는 과거 “메신저봇R” 을 이용하여 몬스터 재 생성 시간을 자동으로 계산하고 유저들이 모두 볼 수 있도록 채팅방 “공지” 로 설정하고 있었습니다. 하지만 “나는 원숭이다” 사건 이후 카카오에서 카톡봇에 대한 제재 수위를 높이고 업데이트로 원활한 “메신저봇R” 의 이용이 불가 해지면서 대안이 필요해졌고, 몬스터 알람 뿐만 아니라 게임 유저들 에게 더 나은 가치를 제공해 줄 수 있는 안드로이드 앱 개발을 시작하게 되었습니다.
+모바일 게임 아이모는 MMORPG 이며, 필드에서 PK 가 가능한 게임 입니다.  게임의 특성상 모든 필드의 보스 몬스터들은 길드 단위로 경쟁하고 있습니다. 
+
+여러 유저가 모여 만들어진 길드에서는 과거 몬스터의 재 생성 시간을 일부 유저가 직접 계산하여 카카오톡의 단체방에 공지 설정을 했었습니다.
+
+이 때, 계산 과정에서 실수가 발생하여 잘못된 시간으로 착각하게 되는 일이 발생했고 길드 내 갈등을 초래했습니다. 
+
+이후 저는 재발을 방지하기 위해 [“메신저봇R” 을 이용하여 몬스터 재 생성 시간을 자동으로 계산](https://github.com/jowunnal/2021_bossTimeManager_2 "link")하고 유저들이 모두 볼 수 있도록 채팅방 공지 로 설정하여 해결했었습니다. 
+
+하지만, 당시 "메신저봇R" 의 내부적 원인으로 인해 장시간 이용시 먹통이 되는 문제가 있었고, __나는 원숭이다__ 사건 이후 카카오에서 카톡봇에 대한 제재 수위를 높이면서 대안이 필요해 지면서, 몬스터 알람 뿐만 아니라 게임 유저들 에게 __더 나은 가치를 제공해 줄 수 있는 안드로이드 앱 개발을__ 시작하게 되었습니다.
 
 # 주요 기능
 
@@ -27,6 +39,24 @@
 - **강화 시뮬레이터** : 사용자는 랜덤 수치의 스텟을 가진 무기, 방어구 아이템을 획득할 수 있고, Drag-And-Drop 으로 강화할 수 있다.
 - **AI 길드 마크 이미지 생성 기능** : Dalle3 API 를 활용하여, 로그인 한 유저가 최적화된 프롬프트로 길드 마크로 변환할 이미지를 생성할 수 있다.
 - **회원 정보 기능** : 인앱결제가 필요한 AI 길드 마크 이미지 생성 과 길드 마크 변환 기능을 서버로 저장하기 위해 Firebase-Storage 를 이용하고, 유저를 식별하기 위해 Firebase-Authentication 을 이용하여 로그인 및 회원관리를 제공한다.
+
+# Stacks
+
+| Category | Skill Set |
+| ----- | ----- |
+| Language | Kotlin |
+| UI toolkit | Compose |
+| Architecture | Clean Architecture |
+| Design Pattern | MVVM |
+| Android Component | Activity, Service, BroadcastReceiver |
+| Jetpack | Lifecycle, Navigation(Compose), AlarmManager, WindowManager |
+| Asynchronous | Kotlinx.Coroutines, Kotlinx.Coroutines.Flow |
+| Dependency Injection | Hilt |
+| Data | Room, DataStore(proto3), Retrofit2, Okhttp3|
+| Google | InAppPurchase, InAppUpdate, Admob |
+| Firebase | Firebase-Analytics, Firebase-Storage, Firebase-RealtimeDatabase, Firebase-Crashlytics |
+| Unit Test | Junit, Kotest, mockk |
+| CI/CD | Github Actions |
 
 # As-Is / Challenge / To-Be
 
@@ -66,6 +96,41 @@
 - 백그라운드 작업의 실행에 적합한 컴포넌트와 API 를 선택하고, 활용할 수 있게 되었습니다.
 - 백그라운드 작업이 배터리와 사용자 경험에 영향을 줄 수 있고, 이에 따른 구글의 제약 및 대안의 방향과 같은 전반적 안드로이드 생태계에 대해 학습하였습니다.
 - 앱의 핵심 기능에 대해 단위테스트의 중요성을 깨닫았고, 테스트 가능한 코드를 작성하기 위한 의존성 주입과 추상화 전략에 대해 학습했습니다.
+
+</div>
+</details>
+
+<details>
+<summary>Clean Architecture, MVVM, UDF, 단일 상태 관리로의 구조 설계</summary>
+<div markdown="1">
+
+### As-Is
+- 장기간 사용자의 피드백을 기반으로 기능을 확장하고 유지보수 해오는 과정에서 작성한 코드들의 응집도와 결합도 문제로 인해 유지보수를 하기 어려워졌습니다.
+- 사용자가 점진적으로 늘어나고 그에 따라 기능을 확장하는 과정에서, 작동이 되지 않는 버그들이 발생했습니다.
+  - 이를 해결하기 위해 핵심 기능들에 대해 단위테스트를 수행하여 방지 하려고 했습니다.
+  - 하지만, 안드로이드 의존성이 존재하거나 특정 클래스에 다른 클래스가 결합되어 있는 경우 테스트가 어려워지는 문제가 발생했고, 테스트 코드를 작성하기 위해 코드를 수정해야 하는 이유 등으로 인해 테스트 코드 작성에 시간이 오래걸리는 문제가 발생했습니다.
+
+### Challenge
+- MVVM 패턴 적용
+  - MVVM 패턴을 적용하여 __UI 와 비즈니스 로직의 관심사를 분리__ 함으로써 UI 와 데이터 각각의 변경이 서로에게 영향을 주지 않게 만들었습니다.
+    - 비즈니스 로직에 대한 단위테스트의 가능성을 만들어 줄 수 있었습니다.
+    - 가독성을 높일 수 있었고, 장기간 프로젝트를 진행하는 과정에서 오래된 코드를 다시 보아도 빠르게 이해한 뒤 유지보수 할 수 있었습니다.
+  - 사용자의 행위에 의한 데이터의 변경은 __ViewModel 의 함수로 실행__ (캡슐화)되며, 함수의 결과로 인해 변경된 데이터를 UI 가 구독하여 갱신하는 __단방향 데이터 흐름__ 으로 인해 디버깅이 수월해졌습니다.
+  - 하지만 Compose 를 이용하여 선언형 패러다임으로의 전환 후, UI 가 구독중인 상태의 수와 변경에 대한 함수가 많아지면서, 함수의 입력 매개변수의 양이 많아짐으로 인해 유지보수가 어려웠습니다.
+    -  변경 불가능한 __단일 상태__ 를 만들어 UI 가 구독하도록 하고, 이벤트(상태에 대한 변경)를 sealed class 로 관리하여 입력 매개변수의 양을 줄이도록 개선했습니다.
+- Clean Architecture 적용
+  - 이 프로젝트의 목적은 [Why?](https://github.com/jowunnal/twom_miscellaneoustool?tab=readme-ov-file#why "link") 섹터에서 소개한 바와 같이, 아이모 라는 게임내에 존재하는 정보들(몬스터, 맵, 도감)과 이 정보들을 토대로 특정 기능들(알람, 강화시뮬레이션, 길드마크심볼생성)을 제공해 주는 것이 목적입니다.
+  - 모바일 게임 아이모는 피쳐폰 부터 시작하여, 스마트폰 앱으로 약 15년간 운영되어온 게임입니다. 이 게임은 지난 약 15년 동안 몬스터, 캐릭터, 맵, 강화와 같은 __게임의 특성이 변화 없이 유지한 상태로__ 추가적 기능과 UX 개선을 진행해 왔습니다.
+  - 따라서, __불변적 특성(몬스터, 캐릭터, 맵, 강화 등)들을 기반으로 도메인 주도 설계를__ 적용하기 적합했고, 
+  - 안드로이드 뿐만 아니라 KMM 을 이용하여 IOS 와 데스크탑으로의 확장을 염두해두고 있기 때문에 Clean Architecture 에서 가장 중요시되는 __도메인 기반의 의존성 규칙을__ 적용하기에 적합했습니다.
+  - 이에 따라 순수 코틀린으로 작성되는 도메인 모듈을 모바일 게임 아이모의 불변적 특성을 기반으로 설계했고, 플랫폼 의존성을 기반으로 Presentation(Feature) 모듈과 Data(Repository, DataSource) 모듈이 도메인을 의존하도록 구성하였습니다.
+    - Data 모듈의 경우 데이터 입출력은 상대적으로 빈번하게 변경되어 왔기 때문에 DataSource 를 분리한 뒤, 의존성 역전을 이용하여 Repository <- DataSource 구조로 설계했습니다.
+    - 이를 통해 데이터 입출력의 변경은 DataSource 의 변경으로만 영향을 주게 되고, 모듈을 분리함으로써 Repository 모듈의 재빌드를 요구하지 않아 빌드 타임을 개선할 수 있었습니다.
+
+### To-Be
+- 장기간 확장 및 유지보수 되어 프로젝트의 규모가 점점 커지면서 발생했던 __기능을 확장하고 유지보수 하기 어려운__ 문제들을 해결할 수 있었습니다.
+- 구조를 잘 나누고 설계하여 핵심 기능들에 대해 __테스트 가능성__ 을 만들었고, 핵심 기능들에 대한 단위테스트를 수행하여 안정성을 높일 수 있었습니다.
+- 도메인 주도 설계가 필요한 Clean Architecture 에서는 도메인이 재대로 설계되지 않아 변경되는 경우 모든 모듈에 영향을 줄 수 있기 때문에 도메인이 처음부터 잘 설계되는 것이 중요하다는 점을 깨닫았고, 소규모의 프로젝트나 외부에서 비즈니스가 처리된 데이터를 받을 경우 적합하지 않을 수 있다는 점을 알게 되었습니다.
 
 </div>
 </details>
@@ -255,28 +320,6 @@
 
 </div>
 </details>
-
-# Stacks
-
-| Category | Skill Set |
-| ----- | ----- |
-| Language | Kotlin |
-| UI toolkit | Compose |
-| Architecture | Clean Architecture |
-| Design Pattern | MVVM |
-| Android Component | Activity, Service, BroadcastReceiver |
-| Jetpack | Lifecycle, Navigation(Compose), AlarmManager, WindowManager |
-| Asynchronous | Kotlinx.Coroutines, Kotlinx.Coroutines.Flow |
-| Dependency Injection | Hilt |
-| Data | Room, DataStore(proto3), Retrofit2, Okhttp3|
-| Google | InAppPurchase, InAppUpdate, Admob |
-| Firebase | Firebase-Analytics, Firebase-Storage, Firebase-RealtimeDatabase, Firebase-Crashlytics |
-| Unit Test | Junit, Kotest, mockk |
-| CI/CD | Github Actions |
-
-# 개발 기간
-
-**2022.01** ~ **현재진행중**
 
 # Diagram
 
