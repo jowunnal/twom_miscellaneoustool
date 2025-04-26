@@ -49,8 +49,8 @@ class ManageTimerSettingUsecase @Inject constructor(
     suspend fun updateTimerSetting(timerSetting: TimerSetting) {
         val origin = timerRepository.getTimerSetting().first().interval ?: TimerInterval(5, 0)
 
-        if (timerSetting.interval?.verify(origin) != true)
-            throw ManageTimerSettingException.InvalidIntervalException("첫번째 타이머 간격[${timerSetting.interval?.firstInterval}]은 두번째 타이머 간격[${timerSetting.interval?.secondInterval}] 보다 길어야 합니다.")
+        if (timerSetting.interval?.verify(origin) == false)
+            throw ManageTimerSettingException.InvalidIntervalException("첫번째 타이머 간격[${timerSetting.interval.firstInterval}]은 두번째 타이머 간격[${timerSetting.interval.secondInterval}] 보다 길어야 합니다.")
 
         timerRepository.updateTimerSetting(timerSetting = timerSetting)
     }
