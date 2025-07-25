@@ -50,9 +50,6 @@ jobs:
     - name: Create google-services
       run: echo '${{ secrets.GOOGLE_SERVICES_JSON_DEBUG }}' > ./app/google-services.json
      
-    - name: Build with Gradle
-      run: ./gradlew build -Duser.language=ko -Duser.country=KR
-
     - name: Release App Bundle
       run: ./gradlew bundleRelease -Duser.language=ko -Duser.country=KR
 
@@ -73,13 +70,6 @@ jobs:
         keyPassword: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
       env:
         BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
-
-    - name: Upload Release Bundle to Artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: release-artifacts
-        path: app/build/outputs/bundle/release
-        if-no-files-found: error 
 
     - name: Upload on Google Play
       uses: r0adkll/upload-google-play@v1

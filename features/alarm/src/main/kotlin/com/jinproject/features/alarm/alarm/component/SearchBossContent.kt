@@ -62,6 +62,7 @@ import com.jinproject.features.alarm.alarm.AlarmUiStatePreviewParameter
 import com.jinproject.features.alarm.alarm.item.MonsterState
 import com.jinproject.features.alarm.alarm.item.MonsterType
 import com.jinproject.features.core.utils.toAssetImageUri
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -74,7 +75,7 @@ fun SearchBossContent(
     transitionState: Boolean,
     setTransitionState: (Boolean) -> Unit,
     softwareKeyboardController: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current,
-    bossNameList: List<MonsterState>,
+    bossNameList: ImmutableList<MonsterState>,
     sharedTransitionScope: SharedTransitionScope,
     addBossToFrequentlyUsedList: (String) -> Unit,
 ) {
@@ -214,7 +215,7 @@ internal fun BossSelectionItem(
     onCloseDialog: () -> Unit
 ) {
     TextCombinedButton(
-        content = bossName,
+        text = bossName,
         modifier = Modifier
             .padding(vertical = 8.dp),
         onClick = { onClickBossItem(bossName) },

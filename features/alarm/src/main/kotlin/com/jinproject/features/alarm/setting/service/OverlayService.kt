@@ -39,6 +39,7 @@ import javax.inject.Inject
 class OverlayService : LifecycleService() {
     private var mView: View? = null
     private val wm by lazy { getSystemService(WINDOW_SERVICE) as WindowManager }
+    private lateinit var notification: NotificationCompat.Builder
 
     @Inject
     lateinit var timerRepository: TimerRepository
@@ -55,14 +56,14 @@ class OverlayService : LifecycleService() {
         }
         val exitPendingIntent = PendingIntent.getService(
             this,
-            999,
+            NOTIFICATION_ID,
             exitIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createChannel(this)
 
-        val notification =
+        notification =
             NotificationCompat.Builder(applicationContext, "TwomBossAlarm")
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setSmallIcon(R.mipmap.ic_main)
@@ -72,17 +73,8 @@ class OverlayService : LifecycleService() {
                     getString(R.string.turnoff),
                     exitPendingIntent
                 )
-                .build()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-            startForeground(
-                999, notification,
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
-            )
-        else
-            startForeground(999, notification)
-
-        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         mView = inflater.inflate(com.jinproject.features.alarm.R.layout.alarm_tv_onotherapps, null)
 
         val params = WindowManager.LayoutParams(
@@ -144,6 +136,17 @@ class OverlayService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 
+        if (intent != null && ::notification.isInitialized)
+            notification.build().also {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+                    startForeground(
+                        NOTIFICATION_ID, it,
+                        ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
+                    )
+                else
+                    startForeground(NOTIFICATION_ID, it)
+            }
+
         if (intent?.getBooleanExtra("status", false) == true) {
             wm.removeView(mView)
             stopSelf()
@@ -165,5 +168,9 @@ class OverlayService : LifecycleService() {
             mView = null
         }
         super.onDestroy()
+    }
+
+    companion object {
+        const val NOTIFICATION_ID = 999
     }
 }
