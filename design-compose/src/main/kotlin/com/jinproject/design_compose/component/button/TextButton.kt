@@ -1,21 +1,15 @@
 package com.jinproject.design_compose.component.button
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.design_compose.utils.PreviewMiscellaneousToolTheme
-import com.jinproject.design_compose.component.ButtonStatus
-import com.jinproject.design_compose.component.SelectionButton
 import com.jinproject.design_compose.theme.Typography
-import com.jinproject.design_ui.R
 
 @Composable
 fun TextButton(
@@ -44,7 +38,7 @@ fun TextButton(
 
 @Composable
 fun TextCombinedButton(
-    content: String,
+    text: String,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     onLongClick: () -> Unit = {},
@@ -59,7 +53,7 @@ fun TextCombinedButton(
         onDoubleClick = onDoubleClick,
     ) {
         Text(
-            text = content,
+            text = text,
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onPrimary
         )
@@ -80,14 +74,8 @@ private fun PreviewDefaultButton() =
 @Composable
 private fun PreviewSelectionButton() =
     PreviewMiscellaneousToolTheme {
-        SelectionButton(
-            buttonStatus = ButtonStatus.ON,
-            modifier = Modifier
-                .width(200.dp)
-                .height(26.dp),
-            textYes = stringResource(id = R.string.on),
-            textNo = stringResource(id = R.string.off),
-            onClickYes = {},
-            onClickNo = {}
+        TextCombinedButton(
+            text = "버튼",
+            onClick = {}
         )
     }

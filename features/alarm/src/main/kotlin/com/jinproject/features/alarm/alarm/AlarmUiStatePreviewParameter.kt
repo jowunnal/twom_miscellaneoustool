@@ -9,7 +9,7 @@ import kotlinx.collections.immutable.persistentListOf
 import java.time.ZonedDateTime
 
 class AlarmUiStatePreviewParameter : PreviewParameterProvider<AlarmUiState> {
-    private val timerList: List<TimerState> = listOf(
+    private val timerList: ImmutableList<TimerState> = persistentListOf(
         TimerState(
             id = 1,
             bossName = "불도저",
@@ -36,7 +36,7 @@ class AlarmUiStatePreviewParameter : PreviewParameterProvider<AlarmUiState> {
         )
     )
 
-    private val monsterList: List<MonsterState> = listOf(
+    private val monsterList: ImmutableList<MonsterState> = persistentListOf(
         MonsterState(
             name = "불도저",
             type = MonsterType.Named,
@@ -56,7 +56,8 @@ class AlarmUiStatePreviewParameter : PreviewParameterProvider<AlarmUiState> {
 
     private val overlaidBossList: ImmutableList<String> = persistentListOf("불도저", "은둔자", "바슬라프")
 
-    private val frequentlyUsedBossList: List<String> = listOf("불도저", "은둔자", "바슬라프")
+    private val frequentlyUsedBossList: ImmutableList<String> =
+        persistentListOf("불도저", "은둔자", "바슬라프")
 
     override val values: Sequence<AlarmUiState> = sequenceOf(
         AlarmUiState(

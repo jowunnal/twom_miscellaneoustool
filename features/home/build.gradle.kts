@@ -4,7 +4,6 @@ plugins {
 
 android {
     namespace = "com.jinproject.features.home"
-    compileSdk = 34
 }
 
 dependencies {

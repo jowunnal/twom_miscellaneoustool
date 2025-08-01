@@ -42,6 +42,8 @@ class ManageTimerSettingUsecase @Inject constructor(
                 firstInterval > origin.secondInterval!!
             else if (secondInterval != null && firstInterval == null)
                 origin.firstInterval!! > secondInterval
+            else if (firstInterval != null && secondInterval != null)
+                firstInterval > secondInterval
             else
                 true
     }

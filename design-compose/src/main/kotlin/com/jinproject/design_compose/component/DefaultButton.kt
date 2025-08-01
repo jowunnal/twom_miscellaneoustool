@@ -127,8 +127,8 @@ fun SelectionButton(
         VerticalSpacer(height = 6.dp)
         Box(
             modifier = Modifier
-                .height(maxHeight)
-                .width(maxWidth / 2)
+                .height(this@BoxWithConstraints.maxHeight)
+                .width(this@BoxWithConstraints.maxWidth / 2)
                 .padding(3.dp)
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(100.dp))
                 .align(BiasAlignment(indicatorBias, 0f)),

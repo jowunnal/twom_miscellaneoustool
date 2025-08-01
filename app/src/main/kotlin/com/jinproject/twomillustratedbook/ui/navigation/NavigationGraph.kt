@@ -53,9 +53,7 @@ internal fun NavigationGraph(
         homeNavGraph(
             navigateToDropList = navController::navigateToDropList,
             navigateToCollection = navController::navigateToCollectionList,
-            navigateToAlarm = {
-                navController.navigateToAlarmGraph(null)
-            },
+            navigateToAlarm = { navController.navigateToAlarmGraph(null) },
             showSnackBar = showSnackBar,
             popBackStackIfCan = navController::popBackStackIfCan,
         )
@@ -84,8 +82,7 @@ internal fun NavigationGraph(
             navigatePopBackStackToRoute = navController::popBackStackIfCan,
             navigateToGenerateImage = navController::navigateToGenerateImage,
             isPreviousDestinationGenerateImage = {
-                navController.previousBackStackEntry?.destination?.hasRoute(SymbolRoute.GenerateImage::class)
-                    ?: false
+                navController.previousBackStackEntry?.destination?.hasRoute(SymbolRoute.GenerateImage::class) == true
             }
         )
 

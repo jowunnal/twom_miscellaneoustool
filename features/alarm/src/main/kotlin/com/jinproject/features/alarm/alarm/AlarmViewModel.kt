@@ -17,6 +17,7 @@ import com.jinproject.features.alarm.alarm.receiver.AlarmReceiver
 import com.jinproject.features.alarm.alarm.utils.AlarmItem
 import com.jinproject.features.alarm.alarm.utils.makeAlarm
 import com.jinproject.features.core.base.item.SnackBarMessage
+import com.jinproject.features.core.utils.mapToImmutableList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.collections.immutable.ImmutableList
@@ -24,6 +25,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -35,18 +37,17 @@ import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import javax.inject.Inject
 
-@Stable
 data class AlarmUiState(
-    val timerList: List<TimerState>,
-    val monsterList: List<MonsterState>,
-    val frequentlyUsedBossList: List<String>,
+    val timerList: ImmutableList<TimerState>,
+    val monsterList: ImmutableList<MonsterState>,
+    val frequentlyUsedBossList: ImmutableList<String>,
     val overlaidBossList: ImmutableList<String>,
 ) {
     companion object {
         fun getInitValue() = AlarmUiState(
-            timerList = listOf(TimerState.getInitValue()),
-            monsterList = emptyList(),
-            frequentlyUsedBossList = emptyList(),
+            timerList = persistentListOf(TimerState.getInitValue()),
+            monsterList = persistentListOf(),
+            frequentlyUsedBossList = persistentListOf(),
             overlaidBossList = persistentListOf(),
         )
     }
@@ -87,9 +88,10 @@ class AlarmViewModel @Inject constructor(
             timerRepository.getTimerList()
                 .combine(manageTimerSettingUsecase.getTimerSetting()) { timers, setting ->
                     AlarmUiState(
-                        timerList = timers.map { TimerState.fromDomain(it) },
-                        monsterList = monsterList,
-                        frequentlyUsedBossList = setting.frequentlyUsedBossList ?: emptyList(),
+                        timerList = timers.mapToImmutableList { TimerState.fromDomain(it) },
+                        monsterList = monsterList.toImmutableList(),
+                        frequentlyUsedBossList = setting.frequentlyUsedBossList?.toImmutableList()
+                            ?: persistentListOf(),
                         overlaidBossList = setting.overlaidMonsterList?.toImmutableList()
                             ?: persistentListOf(),
                     )
@@ -206,7 +208,9 @@ class AlarmViewModel @Inject constructor(
                     overlaidMonsterList.toMutableList()
                         .apply { add(monsterName) }
                 else
-                    return@launch
+                    return@launch.also {
+                        coroutineContext.cancel()
+                    }
             } else
                 listOf(monsterName)
 

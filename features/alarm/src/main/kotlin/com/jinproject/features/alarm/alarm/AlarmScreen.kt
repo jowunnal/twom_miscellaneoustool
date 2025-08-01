@@ -258,20 +258,22 @@ private fun AlarmScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 alarmUiState.frequentlyUsedBossList.forEach { item ->
-                    BossSelectionItem(
-                        bossName = item,
-                        onClickBossItem = { bossName ->
-                            selectedMonster = bossName
-                            bottomSheetVisibility = true
-                        },
-                        removeBossFromFrequentlyUsedList = removeBossFromFrequentlyUsedList,
-                        onOpenDialog = { state ->
-                            dialogUiState = state.apply {
-                                changeVisibility(true)
-                            }
-                        },
-                        onCloseDialog = { dialogUiState.changeVisibility(false) }
-                    )
+                    key(item) {
+                        BossSelectionItem(
+                            bossName = item,
+                            onClickBossItem = { bossName ->
+                                selectedMonster = bossName
+                                bottomSheetVisibility = true
+                            },
+                            removeBossFromFrequentlyUsedList = removeBossFromFrequentlyUsedList,
+                            onOpenDialog = { state ->
+                                dialogUiState = state.apply {
+                                    changeVisibility(true)
+                                }
+                            },
+                            onCloseDialog = { dialogUiState.changeVisibility(false) }
+                        )
+                    }
                 }
             }
         }

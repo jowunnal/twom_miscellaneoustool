@@ -160,11 +160,13 @@ class MainActivity : AppCompatActivity() {
 
         LaunchedEffect(key1 = snackBarChannel) {
             snackBarChannel.receiveAsFlow().collect { snackBarMessage ->
-                snackBarHostState.showSnackbar(
-                    message = snackBarMessage.headerMessage,
-                    actionLabel = snackBarMessage.contentMessage,
-                    duration = SnackbarDuration.Indefinite,
-                )
+                snackBarHostState.currentSnackbarData?.let {
+                    snackBarHostState.showSnackbar(
+                        message = snackBarMessage.headerMessage,
+                        actionLabel = snackBarMessage.contentMessage,
+                        duration = SnackbarDuration.Indefinite,
+                    )
+                }
             }
         }
 
