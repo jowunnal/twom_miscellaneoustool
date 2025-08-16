@@ -276,14 +276,12 @@
 <div markdown="1">
 
 ### As-Is
-- 기존 코드를 리펙토링 할 때 마다, 단위테스트가 작성되었을 때 테스트의 실행을 별도로 진행해 주어야 한다.
-- Develop 브랜치에 push 될 때 마다, 지정된 코드 스타일(들여쓰기, 사용되지 않은 import 제거 등)에 맞게 작성되었는지 일일이 확인이 필요하다.
+- 기존 코드를 리펙토링 할 때 마다, 단위테스트 실행을 별도로 진행해 주어야 한다.
 - 개발이 끝나고 릴리즈를 위해 Master 브랜치에 push 할 때 마다 반복되는 작업들을 일일이 수행해 주어야 한다.
   - versionCode 를 증가한 뒤, 릴리즈 빌드로 aab 생성
   - 생성된 aab를 플레이콘솔에 배포
-  - versionName 증가한 뒤, readme 업데이트
-  - 만약, targetSdk, kotlin, AGP, minSdk 등의 버전이 변경되면 readme 업데이트 필요
-  - 새롭게 릴리즈 될 때 마다, Release 노트 작성
+  - Release 노트 작성
+  - readme 에 노출되는 버전들 최신화
 
 ### Challenge
 - Develop 브랜치에 CI 환경 구축
@@ -293,9 +291,9 @@
   - Master 브랜치에 push 될 때, Release 인지 아니면 다른 이유로 push 된 것인지 1차적으로 검사하기 위해 커밋 메세지를 검사
   - Release: X.X.X 로 작성된 메세지라면, 다음 작업들을 직렬로 실행
     - 1. Release Build 후 .aab 생성
-    - 2. aab Signing
-    - 3. Play Console 에 aab 배포
-    - 4. aab upload
+    - 2. VersionCode 증가
+    - 3. Release Build, aab Signing
+    - 4. Play Console 에 aab 배포
     - 5. 릴리즈 노트 생성
     - 6. Readme 업데이트
   - Develop 브랜치에서 실행된 테스트나 lint 검사를 다시 할 이유가 없으므로 해당 작업을 실행하지 않음

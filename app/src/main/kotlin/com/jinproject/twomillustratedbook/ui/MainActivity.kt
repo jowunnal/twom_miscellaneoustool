@@ -131,8 +131,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-            enableEdgeToEdge()
+        enableEdgeToEdge()
 
         super.onCreate(savedInstanceState)
         firebaseAnalytics = Firebase.analytics

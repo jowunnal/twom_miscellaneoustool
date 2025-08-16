@@ -148,74 +148,12 @@ private fun MTProgressIndicatorRotatingByParam(
             radius = 10.dp.toPx()
         )
 
-        val path = Path().apply {
-            for (i in 1..(progress * counter).toInt()) {
-                moveTo(
-                    offset.getPoint(ceta = 360.0 / counter * i).x,
-                    offset.getPoint(ceta = 360.0 / counter * i).y
-                )
-                lineTo(
-                    offset.getPoint(ceta = 360.0 / counter * i).x / 2f,
-                    offset.getPoint(ceta = 360.0 / counter * i).y / 2f
-                )
-            }
-        }
+        val path = offset.getProgressPath(
+            counter = counter,
+            endInclusive = (progress * counter).toInt()
+        )
 
         drawPath(path, color = color, style = stroke)
-    }
-}
-
-@Composable
-fun MTProgressIndicatorRotatingWithTextByParam(
-    text: String,
-    progress: Float,
-    modifier: Modifier = Modifier,
-    counter: Int = 8,
-    color: Color = MaterialTheme.colorScheme.onSurface,
-) {
-    val textMeasure = rememberTextMeasurer()
-    val textStyle = MaterialTheme.typography.bodyLarge
-
-    Canvas(modifier = modifier) {
-
-        val stroke = Stroke(
-            width = 4.dp.toPx(),
-        )
-
-        val offset = MTProgressIndicatorOffset(
-            centerOffset = Offset(center.x, center.y),
-            radius = 10.dp.toPx()
-        )
-
-        val path = Path().apply {
-            for (i in 1..(progress * counter).toInt()) {
-                moveTo(
-                    offset.getPoint(ceta = 360.0 / counter * i).x * 4,
-                    offset.getPoint(ceta = 360.0 / counter * i).y * 4
-                )
-                lineTo(
-                    offset.getPoint(ceta = 360.0 / counter * i).x / 0.5f,
-                    offset.getPoint(ceta = 360.0 / counter * i).y / 0.5f
-                )
-            }
-        }
-
-        drawPath(path, color = color, style = stroke)
-
-        val textSize = Size(
-            width = textStyle.fontSize.toPx() * text.length,
-            height = textStyle.lineHeight.toPx()
-        )
-        drawText(
-            textMeasure,
-            text,
-            size = textSize,
-            topLeft = Offset(
-                x = center.x - textStyle.fontSize.toPx() / 2f,
-                y = center.y - textStyle.lineHeight.toPx() / 2,
-            ),
-            style = textStyle
-        )
     }
 }
 
@@ -247,32 +185,17 @@ fun MTProgressIndicatorInfiniteRotating(
             radius = 10.dp.toPx()
         )
 
-        val path = Path().apply {
-            for (i in 1..counter) {
-                moveTo(
-                    offset.getPoint(ceta = 360.0 / counter * i).x,
-                    offset.getPoint(ceta = 360.0 / counter * i).y
-                )
-                lineTo(
-                    offset.getPoint(ceta = 360.0 / counter * i).x / 2f,
-                    offset.getPoint(ceta = 360.0 / counter * i).y / 2f
-                )
-            }
-            close()
-        }
+        val path = offset.getProgressPath(
+            counter = counter,
+            endInclusive = counter
+        )
 
         drawPath(path, color = color, style = stroke, alpha = 0.2f)
 
-        val rotatePath = Path().apply {
-            moveTo(
-                offset.getPoint(ceta = 360.0 / counter).x,
-                offset.getPoint(ceta = 360.0 / counter).y
-            )
-            lineTo(
-                offset.getPoint(ceta = 360.0 / counter).x / 2f,
-                offset.getPoint(ceta = 360.0 / counter).y / 2f
-            )
-        }
+        val rotatePath = offset.getProgressPath(
+            counter = counter,
+            endInclusive = 1
+        )
 
         for (i in 1..4) {
             rotate(degrees = (rotationAnimation.toInt() + i) * (360f / counter)) {
@@ -291,10 +214,25 @@ class MTProgressIndicatorOffset(
     private val centerOffset: Offset,
     private val radius: Float,
 ) {
-    fun getPoint(ceta: Double): Offset {
+    fun getProgressPath(counter: Int, endInclusive: Int) = Path().apply {
+        for (i in 1..endInclusive) {
+            val angle = 360.0 / counter * i
+
+            moveTo(
+                getPoint(ceta = angle).x,
+                getPoint(ceta = angle).y
+            )
+            lineTo(
+                getPoint(ceta = angle).x / 2f,
+                getPoint(ceta = angle).y / 2f
+            )
+        }
+    }
+
+    private fun getPoint(ceta: Double): Offset {
         return Offset(
-            x = centerOffset.x + radius * cos(Math.toRadians(ceta).toFloat()),
-            y = centerOffset.y + radius * sin(Math.toRadians(ceta).toFloat())
+            x = centerOffset.x + radius * cos(Math.toRadians(ceta - 90.0).toFloat()),
+            y = centerOffset.y + radius * sin(Math.toRadians(ceta - 90.0).toFloat())
         )
     }
 }

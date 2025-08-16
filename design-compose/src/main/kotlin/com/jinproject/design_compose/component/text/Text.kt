@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
@@ -46,6 +47,8 @@ fun BottomBarText(
 fun HeadlineText(
     modifier: Modifier = Modifier,
     text: String,
+    fontWeight: FontWeight = FontWeight.Medium,
+    style: TextStyle = MaterialTheme.typography.headlineSmall.copy(fontWeight = fontWeight),
     maxLines: Int = 1,
     color: Color = MaterialTheme.colorScheme.onBackground,
     textAlign: TextAlign = TextAlign.Start,
@@ -53,7 +56,7 @@ fun HeadlineText(
     DefaultText(
         modifier = modifier,
         text = text,
-        style = MaterialTheme.typography.headlineSmall,
+        style = style,
         color = color,
         maxLines = maxLines,
         textAlign = textAlign,
@@ -64,13 +67,15 @@ fun HeadlineText(
 fun TitleMediumText(
     modifier: Modifier = Modifier,
     text: String,
+    fontWeight: FontWeight = FontWeight.Medium,
+    style: TextStyle = MaterialTheme.typography.titleMedium.copy(fontWeight = fontWeight),
     color: Color = MaterialTheme.colorScheme.onBackground,
     textAlign: TextAlign = TextAlign.Start,
 ) {
     DefaultText(
         modifier = modifier,
         text = text,
-        style = MaterialTheme.typography.titleMedium,
+        style = style,
         overflow = Ellipsis,
         color = color,
         maxLines = Int.MAX_VALUE,
@@ -83,13 +88,15 @@ fun TitleMediumText(
 fun TitleSmallText(
     modifier: Modifier = Modifier,
     text: String,
+    fontWeight: FontWeight = FontWeight.Medium,
+    style: TextStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = fontWeight),
     color: Color = MaterialTheme.colorScheme.onBackground,
     textAlign: TextAlign = TextAlign.Start,
 ) {
     DefaultText(
         modifier = modifier,
         text = text,
-        style = MaterialTheme.typography.titleSmall,
+        style = style,
         overflow = Ellipsis,
         color = color,
         maxLines = Int.MAX_VALUE,
@@ -101,13 +108,15 @@ fun TitleSmallText(
 fun DescriptionLargeText(
     modifier: Modifier = Modifier,
     text: String,
+    fontWeight: FontWeight = FontWeight.Medium,
+    style: TextStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = fontWeight),
     color: Color = MaterialTheme.colorScheme.onBackground,
     textAlign: TextAlign = TextAlign.Start,
 ) {
     DefaultText(
         modifier = modifier,
         text = text,
-        style = MaterialTheme.typography.bodyLarge,
+        style = style,
         overflow = Ellipsis,
         color = color,
         maxLines = Int.MAX_VALUE,
@@ -119,15 +128,19 @@ fun DescriptionLargeText(
 fun DescriptionMediumText(
     modifier: Modifier = Modifier,
     text: String,
-    color: Color = MaterialTheme.colorScheme.onBackground
+    fontWeight: FontWeight = FontWeight.Medium,
+    style: TextStyle = MaterialTheme.typography.bodyMedium.copy(fontWeight = fontWeight),
+    color: Color = MaterialTheme.colorScheme.onBackground,
+    textAlign: TextAlign = TextAlign.Start,
 ) {
     DefaultText(
         modifier = modifier,
         text = text,
-        style = MaterialTheme.typography.bodyMedium,
+        style = style,
         overflow = Ellipsis,
         color = color,
         maxLines = Int.MAX_VALUE,
+        textAlign = textAlign,
     )
 }
 
@@ -135,7 +148,8 @@ fun DescriptionMediumText(
 fun DescriptionSmallText(
     modifier: Modifier = Modifier,
     text: String,
-    style: TextStyle = MaterialTheme.typography.bodySmall,
+    fontWeight: FontWeight = FontWeight.Medium,
+    style: TextStyle = MaterialTheme.typography.bodySmall.copy(fontWeight = fontWeight),
     color: Color = MaterialTheme.colorScheme.onBackground,
     textAlign: TextAlign = TextAlign.Start,
 ) {
