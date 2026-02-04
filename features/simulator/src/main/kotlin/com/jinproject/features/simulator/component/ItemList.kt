@@ -71,7 +71,7 @@ internal fun ItemList(
                                         ClipData.newPlainText(
                                             "data", formatter.encodeToString(item)
                                         )
-                                    ).apply {
+                                    ).also {
                                         setIsEquipmentDragging(true)
                                     }
                                 }
