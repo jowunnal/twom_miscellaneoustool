@@ -60,6 +60,8 @@ jobs:
           echo "VERSION_CODE=$NEW_VERSION_CODE" >> $GITHUB_ENV
      
     - name: Release App Bundle
+      env:
+        GRADLE_OPTS: "-Xmx4g -XX:MaxMetaspaceSize=512m"
       run: ./gradlew bundleRelease -Duser.language=ko -Duser.country=KR
 
     - name: Setup build tool version variable
