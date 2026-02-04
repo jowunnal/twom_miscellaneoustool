@@ -58,10 +58,13 @@ jobs:
           echo "Updated versionCode to $NEW_VERSION_CODE"
           echo "Updated versionName to $VERSION_NAME"
           echo "VERSION_CODE=$NEW_VERSION_CODE" >> $GITHUB_ENV
+
+    - name: Configure Gradle Memory
+      run: |
+        echo "org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError" >> gradle.properties
+        echo "org.gradle.parallel=false" >> gradle.properties
      
     - name: Release App Bundle
-      env:
-        GRADLE_OPTS: "-Xmx4g -XX:MaxMetaspaceSize=512m"
       run: ./gradlew bundleRelease -Duser.language=ko -Duser.country=KR
 
     - name: Setup build tool version variable
