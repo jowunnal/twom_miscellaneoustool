@@ -335,7 +335,7 @@ https://github.com/user-attachments/assets/7190e7da-1dae-4e9a-965c-e4980b3e28c7
 
 ### 강화 시뮬레이터
 
-https://github.com/user-attachments/assets/4fb741a0-d136-4470-b28a-d3fa795edb76
+https://github.com/user-attachments/assets/4fb741a0-d136-4470-b28a-d3fa795edb76 
 
 # Details
 
