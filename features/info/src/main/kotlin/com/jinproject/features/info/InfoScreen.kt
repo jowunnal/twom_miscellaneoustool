@@ -7,12 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.input.clearText
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ExitToApp
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
@@ -23,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.billingclient.api.ProductDetails
@@ -122,7 +117,7 @@ private fun InfoScreen(
         if (LocalInspectionMode.current || infoUiState.isActive) {
             InfoItem(
                 title = stringResource(id = R.string.change_info),
-                imageVector = Icons.Default.AccountCircle,
+                imageVector = ImageVector.vectorResource(R.drawable.ic_account_circle),
                 onClicked = {
                     dialogState = dialogState.getShownDialogState(
                         onPositiveCallback = {
@@ -139,7 +134,7 @@ private fun InfoScreen(
 
             InfoItem(
                 title = stringResource(id = R.string.logout),
-                imageVector = Icons.AutoMirrored.Rounded.ExitToApp,
+                imageVector = ImageVector.vectorResource(R.drawable.ic_exit_to_app),
                 onClicked = {
                     coroutineScope.launch {
                         infoUiState.logOut()
@@ -150,7 +145,7 @@ private fun InfoScreen(
 
             InfoItem(
                 title = stringResource(id = R.string.withdrawal),
-                imageVector = Icons.Default.Close,
+                imageVector = ImageVector.vectorResource(R.drawable.ic_close),
                 onClicked = {
                     dialogState = dialogState.getShownDialogState(
                         onPositiveCallback = {
@@ -166,13 +161,13 @@ private fun InfoScreen(
         } else
             InfoItem(
                 title = stringResource(id = R.string.login),
-                imageVector = Icons.Default.AccountCircle,
+                imageVector = ImageVector.vectorResource(R.drawable.ic_account_circle),
                 onClicked = navigateToAuthGraph,
             )
 
         InfoItem(
             title = stringResource(id = R.string.term),
-            imageVector = Icons.Default.Info,
+            imageVector = ImageVector.vectorResource(R.drawable.ic_info),
             onClicked = {
                 navigateRoute(InfoRoute.Term)
             },
@@ -181,7 +176,7 @@ private fun InfoScreen(
         purchasableProducts.forEach { product ->
             InfoItem(
                 title = "${product.name} ${stringResource(id = R.string.somethingdo)}",
-                imageVector = Icons.Default.ShoppingCart,
+                imageVector = ImageVector.vectorResource(R.drawable.ic_shopping),
                 onClicked = {
                     purchase(product)
                 },

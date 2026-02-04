@@ -3,7 +3,6 @@ package com.jinproject.twomillustratedbook.ui
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -38,7 +37,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -46,10 +44,9 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.Purchase
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -68,6 +65,8 @@ import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
 import com.jinproject.features.core.toProduct
 import com.jinproject.twomillustratedbook.BuildConfig
 import com.jinproject.twomillustratedbook.BuildConfig.ADMOB_REWARD_ID
+import com.jinproject.twomillustratedbook.ui.ads.AdMobManager
+import com.jinproject.twomillustratedbook.ui.ads.BannerAd
 import com.jinproject.twomillustratedbook.ui.navigation.NavigationDefaults
 import com.jinproject.twomillustratedbook.ui.navigation.NavigationGraph
 import com.jinproject.twomillustratedbook.ui.navigation.isBarHasToBeShown
@@ -126,7 +125,7 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private val adMobManager by lazy { AdMobManager(this) }
+    private val adMobManager by lazy { AdMobManager() }
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
@@ -143,7 +142,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         inAppUpdateManager.checkUpdateIsAvailable(launcher = inAppUpdateLauncher)
-        loadRewardedAd()
+        MobileAds.initialize(this) {
+            loadRewardedAd()
+        }
     }
 
     @Composable
@@ -303,18 +304,9 @@ class MainActivity : AppCompatActivity() {
                 Column(
                     modifier = Modifier.addStatusBarPadding()
                 ) {
-                    AndroidView(
+                    BannerAd(
+                        adsVisibility = !isAdViewRemoved,
                         modifier = Modifier.fillMaxWidth(),
-                        factory = { context ->
-                            AdView(context).apply {
-                                setAdSize(AdSize.BANNER)
-                                adUnitId = BuildConfig.ADMOB_UNIT_ID
-                                loadAd(AdRequest.Builder().build())
-                            }
-                        },
-                        update = {
-                            it.visibility = if (isAdViewRemoved) View.GONE else View.VISIBLE
-                        }
                     )
 
                     Scaffold(

@@ -66,17 +66,14 @@ internal fun ItemList(
                     modifier = Modifier
                         .then(
                             if (!simulatorState.selectedItem.uuid.contentEquals(item.uuid))
-                                Modifier.dragAndDropSource {
-                                    detectTapGestures(onPress = {
-                                        startTransfer(
-                                            DragAndDropTransferData(
-                                                ClipData.newPlainText(
-                                                    "data", formatter.encodeToString(item)
-                                                )
-                                            )
+                                Modifier.dragAndDropSource { offset ->
+                                    DragAndDropTransferData(
+                                        ClipData.newPlainText(
+                                            "data", formatter.encodeToString(item)
                                         )
+                                    ).also {
                                         setIsEquipmentDragging(true)
-                                    })
+                                    }
                                 }
                             else Modifier
                         )
