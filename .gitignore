@@ -180,6 +180,11 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+.claude/
+.serena/
+CLAUDE.md
+crawl_items.md
+
 ### AndroidStudio Patch ###
 
 !/gradle/wrapper/gradle-wrapper.jar

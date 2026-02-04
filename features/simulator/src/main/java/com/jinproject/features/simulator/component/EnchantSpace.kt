@@ -115,17 +115,13 @@ internal fun EnchantSpace(
             HorizontalWeightSpacer(float = 1f)
 
             ItemSpace(
-                modifier = Modifier.dragAndDropSource {
-                    detectTapGestures(onPress = {
-                        startTransfer(
-                            DragAndDropTransferData(
-                                ClipData.newPlainText(
-                                    "data",
-                                    formatter.encodeToString<EnchantScroll>(simulatorState.selectedItem.level.findEnchantScroll())
-                                )
-                            )
+                modifier = Modifier.dragAndDropSource { offset ->
+                    DragAndDropTransferData(
+                        ClipData.newPlainText(
+                            "data",
+                            formatter.encodeToString<EnchantScroll>(simulatorState.selectedItem.level.findEnchantScroll())
                         )
-                    })
+                    )
                 },
                 size = size,
                 item = simulatorState.selectedItem.level.findEnchantScroll(),

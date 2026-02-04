@@ -5,9 +5,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -19,7 +16,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.design_compose.component.text.OutlineVerifyTextField
@@ -46,7 +45,7 @@ fun EmailField(
         pattern = pattern,
         headerIcon = {
             Icon(
-                imageVector = Icons.Default.Email,
+                imageVector = ImageVector.vectorResource(R.drawable.ic_email),
                 contentDescription = "Email",
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(4.dp)
@@ -81,7 +80,7 @@ fun PasswordField(
         errorMessage = errorMessage,
         headerIcon = {
             Icon(
-                imageVector = Icons.Default.Lock,
+                imageVector = ImageVector.vectorResource(R.drawable.ic_lock),
                 contentDescription = "Password",
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(4.dp)

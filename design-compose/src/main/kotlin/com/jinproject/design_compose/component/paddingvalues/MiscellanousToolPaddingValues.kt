@@ -17,13 +17,9 @@ import androidx.compose.ui.unit.dp
 
 @Immutable
 data class MiscellanousToolPaddingValues(
-    @Stable
     private val start: Dp = 0.dp,
-    @Stable
     private val top: Dp = 0.dp,
-    @Stable
     private val end: Dp = 0.dp,
-    @Stable
     private val bottom: Dp = 0.dp
 ): PaddingValues {
 

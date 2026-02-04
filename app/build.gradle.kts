@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.jinproject.twomillustratedbook"
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 83
         versionName = "2.5.0"
     }
@@ -71,7 +71,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity.compose)
 
-    implementation(libs.bundles.navigation)
     implementation(libs.hilt.navigation.compose)
 
     implementation(libs.bundles.lifecycle)
