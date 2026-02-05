@@ -74,6 +74,10 @@ object BookDatabaseModule {
             ko = BookMigration.MIGRATION_5_6_KOR,
             en = BookMigration.MIGRATION_5_6_ELSE
         )
+        val migration6to7 = language.onLanguage(
+            ko = BookMigration.MIGRATION_6_7_KOR,
+            en = BookMigration.MIGRATION_6_7_ELSE
+        )
 
         return Room.databaseBuilder(context, BookDatabase::class.java, "BookDatabase")
             .createFromAsset(assetName)
@@ -83,6 +87,7 @@ object BookDatabaseModule {
                 migration3to4,
                 migration4to5,
                 migration5to6,
+                migration6to7
             )
             .build()
     }

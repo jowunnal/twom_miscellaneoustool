@@ -61,8 +61,8 @@ jobs:
 
     - name: Configure Gradle Memory
       run: |
-        echo "org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError" >> gradle.properties
-        echo "org.gradle.parallel=false" >> gradle.properties
+        sed -i 's/-Xmx2048m/-Xmx4g/' gradle.properties
+        cat gradle.properties
      
     - name: Release App Bundle
       run: ./gradlew bundleRelease -Duser.language=ko -Duser.country=KR
