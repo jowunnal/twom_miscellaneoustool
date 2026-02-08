@@ -737,6 +737,15 @@ internal object BookMigration {
                 execSQL("insert into MonsDropItem values ('우르푸스', '혹한의 부츠')")
                 execSQL("insert into MonsDropItem values ('지뢰', '툴레의 부츠')")
 
+                // Equipment 테이블 데이터 추가 (장신구)
+                execSQL("INSERT INTO Equipment (name, level) SELECT itemName, 0 FROM Item WHERE itemType = '장신구'")
+
+                // Equipment 테이블 데이터 추가 (브레이커 장비)
+                execSQL("INSERT INTO Equipment (name, level) SELECT itemName, 0 FROM Item ORDER BY rowid LIMIT 80 OFFSET 773")
+
+                // Equipment 테이블 수호병의손껍질 추가
+                execSQL("INSERT INTO Equipment (name, level) VALUES ('수호병의손껍질', 46)")
+
 
                 // Item 이름 병합 + 외래키 연쇄 업데이트 후 원본 삭제
                 // 가고일날개 -> 가고일의날개 (FK 테이블 먼저 UPDATE, 후에 Item DELETE)
@@ -868,15 +877,6 @@ internal object BookMigration {
 
                 // 수호병의손껍질 itemType 변경: 잡탬 -> 방어구
                 execSQL("UPDATE Item SET itemType = '방어구' WHERE itemName = '수호병의손껍질'")
-
-                // Equipment 테이블 데이터 추가 (장신구)
-                execSQL("INSERT INTO Equipment (name, level) SELECT itemName, 0 FROM Item WHERE itemType = '장신구'")
-
-                // Equipment 테이블 데이터 추가 (브레이커 장비)
-                execSQL("INSERT INTO Equipment (name, level) SELECT itemName, 0 FROM Item ORDER BY rowid LIMIT 80 OFFSET 755")
-
-                // Equipment 테이블 수호병의손껍질 추가
-                execSQL("INSERT INTO Equipment (name, level) VALUES ('수호병의손껍질', 46)")
 
                 // Equipment img_name 업데이트
                 execSQL("UPDATE Item SET img_name='cotton_robe' WHERE itemName='무명로브'")
@@ -1373,6 +1373,12 @@ internal object BookMigration {
                 execSQL("insert into MonsDropItem values ('Urpus', 'Bitter Cold Boots')")
                 execSQL("insert into MonsDropItem values ('Landmine', 'Thule''s Boots')")
 
+                // Equipment 테이블 데이터 추가 (accessories)
+                execSQL("INSERT INTO Equipment (name, level) SELECT itemName, 0 FROM Item WHERE itemType = 'accessories'")
+
+                // Equipment 테이블 데이터 추가 (브레이커 장비)
+                execSQL("INSERT INTO Equipment (name, level) SELECT itemName, 0 FROM Item ORDER BY rowid LIMIT 80 OFFSET 773")
+
                 // Item 이름 병합 + 외래키 연쇄 업데이트 후 원본 삭제
                 // Old box -> Old Box (FK 테이블 먼저 UPDATE, 후에 Item DELETE)
                 execSQL("UPDATE Equipment SET name = 'Old Box' WHERE name = 'Old box'")
@@ -1594,12 +1600,6 @@ internal object BookMigration {
                 execSQL("UPDATE ItemInfo SET item_name = 'Hat of Tranquility' WHERE item_name = 'Cap of Tranquility'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Hat of Tranquility' WHERE mdItemName = 'Cap of Tranquility'")
                 execSQL("DELETE FROM Item WHERE itemName = 'Cap of Tranquility'")
-
-                // Equipment 테이블 데이터 추가 (accessories)
-                execSQL("INSERT INTO Equipment (name, level) SELECT itemName, 0 FROM Item WHERE itemType = 'accessories'")
-
-                // Equipment 테이블 데이터 추가 (브레이커 장비)
-                execSQL("INSERT INTO Equipment (name, level) SELECT itemName, 0 FROM Item ORDER BY rowid LIMIT 80 OFFSET 755")
 
                 // Equipment img_name 업데이트
                 execSQL("UPDATE Item SET img_name='cotton_robe' WHERE itemName='Cotton Robe'")
