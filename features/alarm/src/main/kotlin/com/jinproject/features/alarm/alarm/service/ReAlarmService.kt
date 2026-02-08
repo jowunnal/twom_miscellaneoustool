@@ -59,7 +59,7 @@ class ReAlarmService : LifecycleService() {
             }
 
             val monsterImage = withContext(Dispatchers.IO) {
-                dropListRepository.getMonsInfo(monsterName).first().imageName
+                dropListRepository.getMonster(monsterName).first().imageName
             }
 
             with(timer[0]) {

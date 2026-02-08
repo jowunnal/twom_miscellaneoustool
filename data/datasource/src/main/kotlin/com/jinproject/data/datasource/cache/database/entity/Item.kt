@@ -10,6 +10,7 @@ data class Item(
     @PrimaryKey val itemName: String,
     val itemType: String,
     val itemPrice: Long,
+    val img_name: String,
 ) {
     fun toItemData(enchantNumber: Int = 0): com.jinproject.data.repository.model.GetItemDomainFactory =
         when (itemType) {
@@ -20,14 +21,14 @@ data class Item(
                 name = itemName,
                 price = itemPrice,
                 itemType = itemType,
-                imageName = "",
+                imageName = img_name,
                 limitedLevel = 0,
             )
 
             else -> EquipmentEntity(
                 price = itemPrice,
                 itemType = itemType,
-                imageName = "",
+                imageName = img_name,
                 level = 0,
             ).toEquipment(
                 equipmentInfo = EquipmentInfo.getInitValues().copy(name = itemName, enchantNumber = enchantNumber)

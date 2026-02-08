@@ -2,6 +2,7 @@ package com.jinproject.features.collection.component
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -100,6 +101,7 @@ internal fun CollectionDetail(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .focusable()
             .clearFocusIfKeyboardActive(),
         topBar = {
             BackButtonRowScopeAppBar(

@@ -184,6 +184,8 @@ fabric.properties
 .serena/
 CLAUDE.md
 crawl_items.md
+AGENTS.md
+docs/
 
 ### AndroidStudio Patch ###
 

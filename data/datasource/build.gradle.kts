@@ -11,6 +11,10 @@ plugins {
 android {
     namespace = "com.jinproject.data.datasource"
 
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
     testOptions {
         unitTests.all {
             it.useJUnitPlatform()

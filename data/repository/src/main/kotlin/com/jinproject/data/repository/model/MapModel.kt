@@ -7,9 +7,9 @@ data class MapModel(
     val imgName: String
 )
 
-fun MapModel.toDomainModel() = TwomMap(
+fun MapModel.toTwomMap() = TwomMap(
     name = name,
     imageName = imgName
 )
 
-fun List<MapModel>.toDomainModelList() = map { it.toDomainModel() }
+fun List<MapModel>.toTwomMapList() = map { it.toTwomMap() }

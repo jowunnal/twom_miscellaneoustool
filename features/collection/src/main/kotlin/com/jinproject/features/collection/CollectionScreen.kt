@@ -2,6 +2,7 @@ package com.jinproject.features.collection
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -112,18 +114,21 @@ private fun CollectionScreen(
         value = navigator.scaffoldValue,
         listPane = {
             AnimatedPane {
-                DefaultLayout(topBar = {
-                    BackButtonSearchAppBar(
-                        modifier = Modifier.padding(end = 8.dp),
-                        textFieldState = textFiledState,
-                        onBackClick = {
-                            if (!isFiltering)
-                                isFiltering = true
-                            else
-                                onNavigateBack()
-                        },
-                    )
-                }) {
+                DefaultLayout(
+                    topBar = {
+                        BackButtonSearchAppBar(
+                            modifier = Modifier.padding(end = 8.dp),
+                            textFieldState = textFiledState,
+                            onBackClick = {
+                                if (!isFiltering)
+                                    isFiltering = true
+                                else
+                                    onNavigateBack()
+                            },
+                        )
+                    },
+                    modifier = Modifier.focusable(true),
+                ) {
                     CollectionList(
                         collectionUiState = collectionUiState,
                         searchCharSequence = textFiledState.text,

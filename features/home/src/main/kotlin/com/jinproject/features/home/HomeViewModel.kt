@@ -58,7 +58,7 @@ internal class HomeViewModel @Inject constructor(
                     )
                 }
             }.flatMapLatest { itemCollections ->
-                dropListRepository.getMaps()
+                dropListRepository.getMapList()
                     .combine(timerRepository.getTimerList()) { mapModelList, timerModels ->
                         HomeUiState(
                             maps = mapModelList.map { mapModel ->

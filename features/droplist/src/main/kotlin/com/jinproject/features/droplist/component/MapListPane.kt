@@ -1,11 +1,11 @@
 package com.jinproject.features.droplist.component
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -16,54 +16,43 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.window.core.layout.WindowSizeClass
-import androidx.window.core.layout.WindowWidthSizeClass
 import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.features.droplist.DropListUiState
 import com.jinproject.features.droplist.DropListUiStatePreviewParameter
 import com.jinproject.features.droplist.state.MapState
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun MapListPane(
     mapListState: ImmutableList<MapState>,
     lazyGridState: LazyGridState = rememberLazyGridState(),
-    windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
-    configuration: Configuration = LocalConfiguration.current,
     onClickItem: (MapState) -> Unit,
 ) {
-
-    val itemCount = when (windowSizeClass.windowWidthSizeClass) {
-        WindowWidthSizeClass.EXPANDED -> 6
-        else -> 3
-    }
-    val itemSpaceWidth = 16.dp
-    val itemPadding = 12.dp
-    val itemWidth =
-        (configuration.screenWidthDp.dp - itemSpaceWidth * (itemCount - 1) - itemPadding * 2) / itemCount
+    val itemWidth = 120.dp
 
     LazyVerticalGrid(
+        modifier = Modifier.fillMaxSize(),
         columns = GridCells.Adaptive(itemWidth),
         state = lazyGridState,
-        verticalArrangement = Arrangement.spacedBy(itemSpaceWidth),
-        horizontalArrangement = Arrangement.spacedBy(itemSpaceWidth),
-        contentPadding = PaddingValues(vertical = 16.dp, horizontal = itemPadding)
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(4.dp)
     ) {
         items(mapListState, key = { mapState -> mapState.name }) { mapState ->
             DropListMonster(
                 mapState = mapState,
                 itemWidth = itemWidth,
+                modifier = Modifier.animateItem(),
                 onClickItem = onClickItem,
             )
         }
@@ -74,10 +63,11 @@ internal fun MapListPane(
 fun DropListMonster(
     mapState: MapState,
     itemWidth: Dp,
+    modifier: Modifier = Modifier,
     onClickItem: (MapState) -> Unit,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .shadow(6.dp, RoundedCornerShape(20.dp))
             .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(20.dp))
             .clickable {
@@ -93,7 +83,7 @@ fun DropListMonster(
                 .width(itemWidth),
             imgName = mapState.imgName,
             content = {
-                DescriptionSmallText(text = mapState.name,)
+                DescriptionSmallText(text = mapState.name)
             }
         )
     }
@@ -106,7 +96,7 @@ private fun MapListPanePreview(
     dropListUiState: DropListUiState,
 ) = MiscellaneousToolTheme {
     MapListPane(
-        mapListState = dropListUiState.maps,
+        mapListState = dropListUiState.monstersGroupedByMap.keys.toImmutableList(),
         onClickItem = {},
     )
 }

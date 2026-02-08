@@ -87,7 +87,6 @@ fun SearchBossContent(
 
     LaunchedEffect(bossNameList) {
         snapshotFlow { textFieldState.text }
-            .distinctUntilChanged()
             .debounce(200)
             .filter { it.isNotBlank() }
             .collectLatest { text ->
@@ -125,6 +124,7 @@ fun SearchBossContent(
                 exitIconVisibility = transitionState,
                 changeExitIconVisibility = { bool ->
                     if (!bool) {
+                        textFieldState.edit { replace(0, length, "") }
                         searchedBossList = emptyList()
                     }
                     setTransitionState(bool)
