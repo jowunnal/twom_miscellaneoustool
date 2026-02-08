@@ -13,13 +13,12 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Extract Version Name
-      id: extract_version
+    - name: Extract version
+      id: version
       run: |
-         VERSION=$(git log -1 --pretty=%B | grep -oP 'Release:\s*\K[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
-         VERSION=${VERSION:-"unknown"}
-         echo "Extracted version: $VERSION"
-         echo "version_name=$VERSION" >> "$GITHUB_OUTPUT"
+        VERSION=$(git log -1 --pretty=%B | grep -oP 'Release:\s*\K[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
+        echo "Extracted version: $VERSION"
+        echo "VERSION=$(echo $VERSION | tr -d '\r\n')" >> $GITHUB_OUTPUT
       
 
   build:
