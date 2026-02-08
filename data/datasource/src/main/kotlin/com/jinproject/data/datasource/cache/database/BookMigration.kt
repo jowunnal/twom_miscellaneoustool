@@ -840,120 +840,108 @@ internal object BookMigration {
 
 
                 // Item 이름 병합 + 외래키 연쇄 업데이트 후 원본 삭제
-                // 가고일날개 -> 가고일의날개 (FK 테이블 먼저 UPDATE, 후에 Item DELETE)
-                execSQL("UPDATE Equipment SET name = '가고일의날개' WHERE name = '가고일날개'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '가고일의날개' WHERE itemName = '가고일날개'")
                 execSQL("UPDATE ItemInfo SET item_name = '가고일의날개' WHERE item_name = '가고일날개'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '가고일의날개' WHERE mdItemName = '가고일날개'")
                 execSQL("DELETE FROM Item WHERE itemName = '가고일날개'")
 
                 // 도안:눈꽃줄기모자 -> 도안-눈꽃줄기모자
-                execSQL("UPDATE Equipment SET name = '도안-눈꽃줄기모자' WHERE name = '도안:눈꽃줄기모자'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '도안-눈꽃줄기모자' WHERE itemName = '도안:눈꽃줄기모자'")
                 execSQL("UPDATE ItemInfo SET item_name = '도안-눈꽃줄기모자' WHERE item_name = '도안:눈꽃줄기모자'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '도안-눈꽃줄기모자' WHERE mdItemName = '도안:눈꽃줄기모자'")
                 execSQL("DELETE FROM Item WHERE itemName = '도안:눈꽃줄기모자'")
 
                 // 도안:정령의모자 -> 도안-정령의모자
-                execSQL("UPDATE Equipment SET name = '도안-정령의모자' WHERE name = '도안:정령의모자'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '도안-정령의모자' WHERE itemName = '도안:정령의모자'")
                 execSQL("UPDATE ItemInfo SET item_name = '도안-정령의모자' WHERE item_name = '도안:정령의모자'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '도안-정령의모자' WHERE mdItemName = '도안:정령의모자'")
                 execSQL("DELETE FROM Item WHERE itemName = '도안:정령의모자'")
 
                 // 크라운락실험물약 -> 크라운락실험약병
-                execSQL("UPDATE Equipment SET name = '크라운락실험약병' WHERE name = '크라운락실험물약'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '크라운락실험약병' WHERE itemName = '크라운락실험물약'")
                 execSQL("UPDATE ItemInfo SET item_name = '크라운락실험약병' WHERE item_name = '크라운락실험물약'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '크라운락실험약병' WHERE mdItemName = '크라운락실험물약'")
                 execSQL("DELETE FROM Item WHERE itemName = '크라운락실험물약'")
 
                 // 펫크리스탈 -> 펫 크리스탈
-                execSQL("UPDATE Equipment SET name = '펫 크리스탈' WHERE name = '펫크리스탈'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '펫 크리스탈' WHERE itemName = '펫크리스탈'")
                 execSQL("UPDATE ItemInfo SET item_name = '펫 크리스탈' WHERE item_name = '펫크리스탈'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '펫 크리스탈' WHERE mdItemName = '펫크리스탈'")
                 execSQL("DELETE FROM Item WHERE itemName = '펫크리스탈'")
 
                 // 부서진마법조각 -> 부서진마법석
-                execSQL("UPDATE Equipment SET name = '부서진마법석' WHERE name = '부서진마법조각'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '부서진마법석' WHERE itemName = '부서진마법조각'")
                 execSQL("UPDATE ItemInfo SET item_name = '부서진마법석' WHERE item_name = '부서진마법조각'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '부서진마법석' WHERE mdItemName = '부서진마법조각'")
                 execSQL("DELETE FROM Item WHERE itemName = '부서진마법조각'")
 
                 // 고대의보물 -> 고대의유물
-                execSQL("UPDATE Equipment SET name = '고대의유물' WHERE name = '고대의보물'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '고대의유물' WHERE itemName = '고대의보물'")
                 execSQL("UPDATE ItemInfo SET item_name = '고대의유물' WHERE item_name = '고대의보물'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '고대의유물' WHERE mdItemName = '고대의보물'")
                 execSQL("DELETE FROM Item WHERE itemName = '고대의보물'")
 
                 // 네잎클로버 -> 클로버
-                execSQL("UPDATE Equipment SET name = '클로버' WHERE name = '네잎클로버'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '클로버' WHERE itemName = '네잎클로버'")
                 execSQL("UPDATE ItemInfo SET item_name = '클로버' WHERE item_name = '네잎클로버'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '클로버' WHERE mdItemName = '네잎클로버'")
                 execSQL("DELETE FROM Item WHERE itemName = '네잎클로버'")
 
                 // 타워실드 -> 타워쉴드
-                execSQL("UPDATE Equipment SET name = '타워쉴드' WHERE name = '타워실드'")
+                execSQL("DELETE FROM Equipment WHERE name = '타워실드'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '타워쉴드' WHERE itemName = '타워실드'")
                 execSQL("UPDATE ItemInfo SET item_name = '타워쉴드' WHERE item_name = '타워실드'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '타워쉴드' WHERE mdItemName = '타워실드'")
                 execSQL("DELETE FROM Item WHERE itemName = '타워실드'")
 
                 // 체력단력2 -> 체력단련2
-                execSQL("UPDATE Equipment SET name = '체력단련2' WHERE name = '체력단력2'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '체력단련2' WHERE itemName = '체력단력2'")
                 execSQL("UPDATE ItemInfo SET item_name = '체력단련2' WHERE item_name = '체력단력2'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '체력단련2' WHERE mdItemName = '체력단력2'")
                 execSQL("DELETE FROM Item WHERE itemName = '체력단력2'")
 
                 // 마법사지팡이 -> 마법사의지팡이
-                execSQL("UPDATE Equipment SET name = '마법사의지팡이' WHERE name = '마법사지팡이'")
+                execSQL("DELETE FROM Equipment WHERE name = '마법사지팡이'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '마법사의지팡이' WHERE itemName = '마법사지팡이'")
                 execSQL("UPDATE ItemInfo SET item_name = '마법사의지팡이' WHERE item_name = '마법사지팡이'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '마법사의지팡이' WHERE mdItemName = '마법사지팡이'")
                 execSQL("DELETE FROM Item WHERE itemName = '마법사지팡이'")
 
                 // 족장의지팡이 -> 우파족장지팡이
-                execSQL("UPDATE Equipment SET name = '우파족장지팡이' WHERE name = '족장의지팡이'")
+                execSQL("DELETE FROM Equipment WHERE name = '족장의지팡이'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '우파족장지팡이' WHERE itemName = '족장의지팡이'")
                 execSQL("UPDATE ItemInfo SET item_name = '우파족장지팡이' WHERE item_name = '족장의지팡이'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '우파족장지팡이' WHERE mdItemName = '족장의지팡이'")
                 execSQL("DELETE FROM Item WHERE itemName = '족장의지팡이'")
 
                 // 회색바위투구 -> 회색바위의투구
-                execSQL("UPDATE Equipment SET name = '회색바위의투구' WHERE name = '회색바위투구'")
+                execSQL("DELETE FROM Equipment WHERE name = '회색바위투구'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '회색바위의투구' WHERE itemName = '회색바위투구'")
                 execSQL("UPDATE ItemInfo SET item_name = '회색바위의투구' WHERE item_name = '회색바위투구'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '회색바위의투구' WHERE mdItemName = '회색바위투구'")
                 execSQL("DELETE FROM Item WHERE itemName = '회색바위투구'")
 
                 // 수상한상자 -> 수상한보물
-                execSQL("UPDATE Equipment SET name = '수상한보물' WHERE name = '수상한상자'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '수상한보물' WHERE itemName = '수상한상자'")
                 execSQL("UPDATE ItemInfo SET item_name = '수상한보물' WHERE item_name = '수상한상자'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '수상한보물' WHERE mdItemName = '수상한상자'")
                 execSQL("DELETE FROM Item WHERE itemName = '수상한상자'")
 
                 // 어둠의부츠 -> 어둠의신발
-                execSQL("UPDATE Equipment SET name = '어둠의신발' WHERE name = '어둠의부츠'")
+                execSQL("DELETE FROM Equipment WHERE name = '어둠의부츠'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '어둠의신발' WHERE itemName = '어둠의부츠'")
                 execSQL("UPDATE ItemInfo SET item_name = '어둠의신발' WHERE item_name = '어둠의부츠'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '어둠의신발' WHERE mdItemName = '어둠의부츠'")
                 execSQL("DELETE FROM Item WHERE itemName = '어둠의부츠'")
 
                 // 주술사모자 -> 주술사의모자
-                execSQL("UPDATE Equipment SET name = '주술사의모자' WHERE name = '주술사모자'")
+                execSQL("DELETE FROM Equipment WHERE name = '주술사모자'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '주술사의모자' WHERE itemName = '주술사모자'")
                 execSQL("UPDATE ItemInfo SET item_name = '주술사의모자' WHERE item_name = '주술사모자'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '주술사의모자' WHERE mdItemName = '주술사모자'")
                 execSQL("DELETE FROM Item WHERE itemName = '주술사모자'")
 
                 // 오래된상자 -> 허름한상자
-                execSQL("UPDATE Equipment SET name = '허름한상자' WHERE name = '오래된상자'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '허름한상자' WHERE itemName = '오래된상자'")
                 execSQL("UPDATE ItemInfo SET item_name = '허름한상자' WHERE item_name = '오래된상자'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '허름한상자' WHERE mdItemName = '오래된상자'")
@@ -961,7 +949,6 @@ internal object BookMigration {
 
                 // 현자주기 -> 써지싸이클
                 execSQL("INSERT INTO Item (itemName, itemType, itemPrice, img_name) VALUES ('써지싸이클', '잡탬', 0, ' ')")
-                execSQL("UPDATE Equipment SET name = '써지싸이클' WHERE name = '현자주기'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = '써지싸이클' WHERE itemName = '현자주기'")
                 execSQL("UPDATE ItemInfo SET item_name = '써지싸이클' WHERE item_name = '현자주기'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = '써지싸이클' WHERE mdItemName = '현자주기'")
@@ -1565,14 +1552,13 @@ internal object BookMigration {
 
                 // Item 이름 병합 + 외래키 연쇄 업데이트 후 원본 삭제
                 // Old box -> Old Box (FK 테이블 먼저 UPDATE, 후에 Item DELETE)
-                execSQL("UPDATE Equipment SET name = 'Old Box' WHERE name = 'Old box'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Old Box' WHERE itemName = 'Old box'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Old Box' WHERE item_name = 'Old box'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Old Box' WHERE mdItemName = 'Old box'")
                 execSQL("DELETE FROM Item WHERE itemName = 'Old box'")
 
                 // Dark Boots -> Boots of Darkness
-                execSQL("UPDATE Equipment SET name = 'Boots of Darkness' WHERE name = 'Dark Boots'")
+                execSQL("DELETE FROM Equipment WHERE name = 'Dark Boots'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Boots of Darkness' WHERE itemName = 'Dark Boots'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Boots of Darkness' WHERE item_name = 'Dark Boots'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Boots of Darkness' WHERE mdItemName = 'Dark Boots'")
@@ -1580,14 +1566,13 @@ internal object BookMigration {
 
                 // About Letion 3P -> About Levitation 2P
                 execSQL("INSERT INTO Item VALUES ('About Levitation 2P', 'miscellanous', 0, ' ')")
-                execSQL("UPDATE Equipment SET name = 'About Levitation 2P' WHERE name = 'About Letion 3P'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'About Levitation 2P' WHERE itemName = 'About Letion 3P'")
                 execSQL("UPDATE ItemInfo SET item_name = 'About Levitation 2P' WHERE item_name = 'About Letion 3P'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'About Levitation 2P' WHERE mdItemName = 'About Letion 3P'")
                 execSQL("DELETE FROM Item WHERE itemName = 'About Letion 3P'")
 
                 // Shaman's hat -> Shaman's Hat
-                execSQL("UPDATE Equipment SET name = 'Shaman''s Hat' WHERE name = 'Shaman''s hat'")
+                execSQL("DELETE FROM Equipment WHERE name = 'Shaman''s hat'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Shaman''s Hat' WHERE itemName = 'Shaman''s hat'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Shaman''s Hat' WHERE item_name = 'Shaman''s hat'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Shaman''s Hat' WHERE mdItemName = 'Shaman''s hat'")
@@ -1595,7 +1580,6 @@ internal object BookMigration {
 
                 // volt -> bolt
                 execSQL("insert into Item values ('bolt', 'miscellanous', 0, ' ')")
-                execSQL("UPDATE Equipment SET name = 'bolt' WHERE name = 'volt'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'bolt' WHERE itemName = 'volt'")
                 execSQL("UPDATE ItemInfo SET item_name = 'bolt' WHERE item_name = 'volt'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'bolt' WHERE mdItemName = 'volt'")
@@ -1603,7 +1587,6 @@ internal object BookMigration {
 
                 // Dongeulyu -> Donguryu
                 execSQL("insert into Item values ('Donguryu', 'miscellanous', 0, ' ')")
-                execSQL("UPDATE Equipment SET name = 'Donguryu' WHERE name = 'Dongeulyu'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Donguryu' WHERE itemName = 'Dongeulyu'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Donguryu' WHERE item_name = 'Dongeulyu'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Donguryu' WHERE mdItemName = 'Dongeulyu'")
@@ -1611,7 +1594,6 @@ internal object BookMigration {
 
                 // Black Juno's horn -> Blackjuno's Horn
                 execSQL("insert into Item values ('Blackjuno''s Horn', 'armor', 0, ' ')")
-                execSQL("UPDATE Equipment SET name = 'Blackjuno''s Horn' WHERE name = 'Black Juno''s horn'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Blackjuno''s Horn' WHERE itemName = 'Black Juno''s horn'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Blackjuno''s Horn' WHERE item_name = 'Black Juno''s horn'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Blackjuno''s Horn' WHERE mdItemName = 'Black Juno''s horn'")
@@ -1619,7 +1601,6 @@ internal object BookMigration {
 
                 // Black Skull -> Blackskull
                 execSQL("insert into Item values ('Blackskull', 'armor', 0, ' ')")
-                execSQL("UPDATE Equipment SET name = 'Blackskull' WHERE name = 'Black Skull'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Blackskull' WHERE itemName = 'Black Skull'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Blackskull' WHERE item_name = 'Black Skull'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Blackskull' WHERE mdItemName = 'Black Skull'")
@@ -1627,7 +1608,6 @@ internal object BookMigration {
 
                 // Caligo's hand -> Caligo's Hands
                 execSQL("insert into Item values ('Caligo''s Hands', 'armor', 0, ' ')")
-                execSQL("UPDATE Equipment SET name = 'Caligo''s Hands' WHERE name = 'Caligo''s hand'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Caligo''s Hands' WHERE itemName = 'Caligo''s hand'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Caligo''s Hands' WHERE item_name = 'Caligo''s hand'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Caligo''s Hands' WHERE mdItemName = 'Caligo''s hand'")
@@ -1635,7 +1615,6 @@ internal object BookMigration {
 
                 // Coral powder -> Coral Dust
                 execSQL("insert into Item values ('Coral Dust', 'miscellanous', 0, ' ')")
-                execSQL("UPDATE Equipment SET name = 'Coral Dust' WHERE name = 'Coral powder'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Coral Dust' WHERE itemName = 'Coral powder'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Coral Dust' WHERE item_name = 'Coral powder'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Coral Dust' WHERE mdItemName = 'Coral powder'")
@@ -1643,7 +1622,6 @@ internal object BookMigration {
 
                 // Crown Lock Experiment Bottle -> Crown Rock Experiment Bottle
                 execSQL("insert into Item values ('Crown Rock Experiment Bottle', 'miscellanous', 0, ' ')")
-                execSQL("UPDATE Equipment SET name = 'Crown Rock Experiment Bottle' WHERE name = 'Crown Lock Experiment Bottle'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Crown Rock Experiment Bottle' WHERE itemName = 'Crown Lock Experiment Bottle'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Crown Rock Experiment Bottle' WHERE item_name = 'Crown Lock Experiment Bottle'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Crown Rock Experiment Bottle' WHERE mdItemName = 'Crown Lock Experiment Bottle'")
@@ -1651,7 +1629,6 @@ internal object BookMigration {
 
                 // Woopa-Roopa crystal scale -> Woopa crystal scale
                 execSQL("insert into Item values ('Woopa crystal scale', 'miscellanous', 0, ' ')")
-                execSQL("UPDATE Equipment SET name = 'Woopa crystal scale' WHERE name = 'Woopa-Roopa crystal scale'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Woopa crystal scale' WHERE itemName = 'Woopa-Roopa crystal scale'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Woopa crystal scale' WHERE item_name = 'Woopa-Roopa crystal scale'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Woopa crystal scale' WHERE mdItemName = 'Woopa-Roopa crystal scale'")
@@ -1659,7 +1636,6 @@ internal object BookMigration {
 
                 // Woopa-Roopa Scale -> Woopa Roopa Scale
                 execSQL("insert into Item values ('Woopa Roopa Scale', 'miscellanous', 0, ' ')")
-                execSQL("UPDATE Equipment SET name = 'Woopa Roopa Scale' WHERE name = 'Woopa-Roopa Scale'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Woopa Roopa Scale' WHERE itemName = 'Woopa-Roopa Scale'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Woopa Roopa Scale' WHERE item_name = 'Woopa-Roopa Scale'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Woopa Roopa Scale' WHERE mdItemName = 'Woopa-Roopa Scale'")
@@ -1667,7 +1643,6 @@ internal object BookMigration {
 
                 // Bulldozer's cloak -> Bulldozer cloak
                 execSQL("insert into Item values ('Bulldozer cloak', 'armor', 0, ' ')")
-                execSQL("UPDATE Equipment SET name = 'Bulldozer cloak' WHERE name = 'Bulldozer''s cloak'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Bulldozer cloak' WHERE itemName = 'Bulldozer''s cloak'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Bulldozer cloak' WHERE item_name = 'Bulldozer''s cloak'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Bulldozer cloak' WHERE mdItemName = 'Bulldozer''s cloak'")
@@ -1675,7 +1650,6 @@ internal object BookMigration {
 
                 // Dejoroba's Bow -> Dezoroba's Bow
                 execSQL("insert into Item values ('Dezoroba''s Bow', 'weapon', 0, ' ')")
-                execSQL("UPDATE Equipment SET name = 'Dezoroba''s Bow' WHERE name = 'Dejoroba''s Bow'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Dezoroba''s Bow' WHERE itemName = 'Dejoroba''s Bow'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Dezoroba''s Bow' WHERE item_name = 'Dejoroba''s Bow'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Dezoroba''s Bow' WHERE mdItemName = 'Dejoroba''s Bow'")
@@ -1683,7 +1657,6 @@ internal object BookMigration {
 
                 // Dejoruba's Design -> Dezoruba's Design
                 execSQL("insert into Item values ('Dezoruba''s Design', 'miscellanous', 0, ' ')")
-                execSQL("UPDATE Equipment SET name = 'Dezoruba''s Design' WHERE name = 'Dejoruba''s Design'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Dezoruba''s Design' WHERE itemName = 'Dejoruba''s Design'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Dezoruba''s Design' WHERE item_name = 'Dejoruba''s Design'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Dezoruba''s Design' WHERE mdItemName = 'Dejoruba''s Design'")
