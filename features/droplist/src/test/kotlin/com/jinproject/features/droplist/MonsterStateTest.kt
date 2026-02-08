@@ -12,7 +12,7 @@ class MonsterStateDisplayingGenTimeTest : BehaviorSpec() {
             name = "불도저",
             level = 7,
             genTime = 0,
-            imgName = "bulldozer",
+            imageName = "bulldozer",
             type = MonsterType.Named("bulldozer"),
             items = persistentListOf()
         )

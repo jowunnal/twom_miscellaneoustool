@@ -11,6 +11,7 @@ import com.jinproject.core.util.toEpochMilli
 import com.jinproject.design_ui.R
 import com.jinproject.domain.usecase.alarm.ManageTimerSettingUsecase
 import com.jinproject.domain.usecase.alarm.SetAlarmUsecase
+import com.jinproject.domain.usecase.droplist.GetBossMonsterListUseCase
 import com.jinproject.features.alarm.alarm.item.MonsterState
 import com.jinproject.features.alarm.alarm.item.TimerState
 import com.jinproject.features.alarm.alarm.receiver.AlarmReceiver
@@ -68,11 +69,12 @@ data class AlarmBottomSheetUiState(
 
 @HiltViewModel
 class AlarmViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
     private val timerRepository: com.jinproject.domain.repository.TimerRepository,
     private val dropListRepository: com.jinproject.domain.repository.DropListRepository,
     private val setAlarmUsecase: SetAlarmUsecase,
     private val manageTimerSettingUsecase: ManageTimerSettingUsecase,
+    getBossMonsterListUseCase: GetBossMonsterListUseCase,
 ) : ViewModel() {
 
     private val alarmManager: AlarmManager =
@@ -80,10 +82,8 @@ class AlarmViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<AlarmUiState> =
-        dropListRepository.getBossMonsterList().map { monsterModelList ->
-            monsterModelList.map {
-                MonsterState.fromMonsterDomain(it)
-            }
+        getBossMonsterListUseCase().map { bossMonsterList ->
+            bossMonsterList.map { MonsterState.fromMonsterDomain(it) }
         }.flatMapLatest { monsterList ->
             timerRepository.getTimerList()
                 .combine(manageTimerSettingUsecase.getTimerSetting()) { timers, setting ->
@@ -135,7 +135,7 @@ class AlarmViewModel @Inject constructor(
                 deadTime = deadTime,
             )
             val intervals = manageTimerSettingUsecase.getTimerSetting().first().interval
-            val monsterImageName = dropListRepository.getMonsInfo(monsterName).first().imageName
+            val monsterImageName = dropListRepository.getMonster(monsterName).first().imageName
 
             launch(Dispatchers.Main.immediate) {
                 with(timer[0]) {

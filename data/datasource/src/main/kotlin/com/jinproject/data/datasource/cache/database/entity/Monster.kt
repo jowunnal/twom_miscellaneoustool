@@ -12,12 +12,3 @@ data class Monster(
     val monsImgName: String,
     val monsType: String
 )
-
-fun Monster.toMonsterModel() = MonsterModel(
-    name = monsName,
-    level = monsLevel,
-    genTime = monsGtime,
-    imgName = monsImgName,
-    type = monsType,
-    item = emptyList()
-)

@@ -14,5 +14,4 @@ import androidx.room.PrimaryKey
 data class Equipment(
     @PrimaryKey val name: String,
     val level: Int,
-    val img_name: String,
 )

@@ -76,6 +76,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -159,15 +161,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         LaunchedEffect(key1 = snackBarChannel) {
-            snackBarChannel.receiveAsFlow().collect { snackBarMessage ->
-                snackBarHostState.currentSnackbarData?.let {
+            snackBarChannel.receiveAsFlow()
+                .distinctUntilChanged { old, new -> old.headerMessage == new.headerMessage && old.contentMessage == new.contentMessage }
+                .collectLatest { snackBarMessage ->
+                    snackBarHostState.currentSnackbarData?.dismiss()
                     snackBarHostState.showSnackbar(
                         message = snackBarMessage.headerMessage,
                         actionLabel = snackBarMessage.contentMessage,
                         duration = SnackbarDuration.Indefinite,
                     )
                 }
-            }
         }
 
         val isAdViewRemoved by adMobManager.isAdviewRemoved.collectAsStateWithLifecycle()

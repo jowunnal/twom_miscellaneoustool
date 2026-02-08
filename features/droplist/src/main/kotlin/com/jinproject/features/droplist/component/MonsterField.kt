@@ -57,7 +57,7 @@ internal fun ColumnScope.Monster(
 ) {
     MonsterField(
         modifier = modifier,
-        imgName = monster.imgName,
+        imgName = monster.imageName,
     ) {
         DescriptionSmallText(
             text = monster.name,
@@ -88,12 +88,15 @@ private fun MonsterPreview(
     @PreviewParameter(DropListUiStatePreviewParameter::class)
     dropListUiState: DropListUiState,
 ) = MiscellaneousToolTheme {
-    Column(modifier = Modifier
-        .width(100.dp)
-        .height(300.dp)
-        .wrapContentSize()) {
-        Monster(monster = dropListUiState.monsters.first())
-        Monster(monster = dropListUiState.monsters.find { it.type is MonsterType.Boss } ?: dropListUiState.monsters.first())
-        Monster(monster = dropListUiState.monsters.last())
+    Column(
+        modifier = Modifier
+            .width(100.dp)
+            .height(300.dp)
+            .wrapContentSize()
+    ) {
+        val monsters = dropListUiState.monstersGroupedByMap.entries.first().value
+        Monster(monster = monsters.first())
+        Monster(monster = monsters.find { it.type is MonsterType.Boss } ?: monsters.first())
+        Monster(monster = monsters.last())
     }
 }

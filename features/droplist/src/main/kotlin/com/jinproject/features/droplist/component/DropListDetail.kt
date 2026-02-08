@@ -1,6 +1,8 @@
 package com.jinproject.features.droplist.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,15 +13,21 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import coil.request.ImageRequest
 import com.jinproject.design_compose.component.HorizontalDividerItem
 import com.jinproject.design_compose.component.HorizontalSpacer
+import com.jinproject.design_compose.component.SubcomposeAsyncImageWithPreview
 import com.jinproject.design_compose.component.bar.BackButtonTitleAppBar
 import com.jinproject.design_compose.component.paddingvalues.MiscellanousToolPaddingValues
+import com.jinproject.design_compose.component.pushRefresh.MTProgressIndicatorRotating
 import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
+import com.jinproject.features.core.utils.toAssetImageUri
 import com.jinproject.features.droplist.DropListUiState
 import com.jinproject.features.droplist.DropListUiStatePreviewParameter
 import com.jinproject.features.droplist.state.MonsterState
@@ -61,7 +69,39 @@ internal fun DropListDetail(
                         )
                     }
                     HorizontalSpacer(width = 30.dp)
-                    DescriptionSmallText(text = monster.itemsToSingleLine())
+                    FlowRow(
+                        modifier = Modifier.weight(1f),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        itemVerticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        monster.items.forEachIndexed { idx, item ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                if (item.imageName.isNotBlank())
+                                    SubcomposeAsyncImageWithPreview(
+                                        model = ImageRequest
+                                            .Builder(LocalContext.current)
+                                            .data(
+                                                toAssetImageUri(
+                                                    prefix = item.imagePrefix,
+                                                    imgName = item.imageName
+                                                )
+                                            )
+                                            .build(),
+                                        contentDescription = "Image",
+                                        loading = {
+                                            MTProgressIndicatorRotating()
+                                        },
+                                        contentScale = ContentScale.Fit,
+                                        modifier = Modifier,
+                                        placeHolderPreview = com.jinproject.design_ui.R.drawable.test,
+                                    )
+                                DescriptionSmallText(text = "${item.name}${if (idx != monster.items.lastIndex) "," else ""}")
+                            }
+                        }
+                    }
                 }
                 HorizontalDividerItem(
                     idx = idx,
@@ -78,9 +118,10 @@ private fun DropListDetailPreview(
     @PreviewParameter(DropListUiStatePreviewParameter::class)
     dropListUiState: DropListUiState,
 ) = MiscellaneousToolTheme {
+    val entry = dropListUiState.monstersGroupedByMap.entries.first()
     DropListDetail(
-        monsterListState = dropListUiState.monsters,
+        mapName = entry.key.name,
+        monsterListState = entry.value,
         onNavigateBack = {},
-        mapName = dropListUiState.maps.first().name,
     )
 }

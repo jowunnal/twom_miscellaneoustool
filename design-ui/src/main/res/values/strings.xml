@@ -87,6 +87,9 @@
     <string name="home_collection">Collections</string>
     <string name="home_droplist">DropList</string>
 
+    <!-- droplist strings -->
+    <string name="droplist_search_monster_placeholder">Search monster name</string>
+
     <!-- alarm strings -->
     <string name="alarm_selectboss">Boss Selection</string>
     <string name="alarm_classify_boss">Boss Classified</string>

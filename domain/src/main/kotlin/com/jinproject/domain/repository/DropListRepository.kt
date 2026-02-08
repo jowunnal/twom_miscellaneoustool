@@ -6,13 +6,17 @@ import kotlinx.coroutines.flow.Flow
 
 interface DropListRepository {
 
-    fun getMaps(): Flow<List<TwomMap>>
-    fun getMonsterListFromMap(map: String): Flow<List<Monster>>
+    fun getMapList(): Flow<List<TwomMap>>
 
-    /**
-     * @return 일반 등급을 제외한 몬스터들
-     */
-    fun getBossMonsterList(): Flow<List<Monster>>
-    fun getMonsInfo(monsterName: String): Flow<Monster>
+    /** 기본 정보만 (아이템, 맵 없음) */
+    fun getMonsterList(): Flow<List<Monster>>
 
+    /** 아이템 정보 포함 */
+    fun getMonsterListWithItems(): Flow<List<Monster>>
+
+    /** 아이템 + 맵 정보 모두 포함 */
+    fun getMonsterListComplete(): Flow<List<Monster>>
+
+    /** 기본 정보만 */
+    fun getMonster(name: String): Flow<Monster>
 }

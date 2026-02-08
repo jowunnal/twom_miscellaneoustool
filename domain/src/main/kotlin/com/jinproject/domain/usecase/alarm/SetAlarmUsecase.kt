@@ -39,7 +39,7 @@ class SetAlarmUsecase @Inject constructor(
         deadTime: ZonedDateTime,
     ): List<Timer> {
         val monsterInfo =
-            dropListRepository.getMonsInfo(monsterName).first()
+            dropListRepository.getMonster(monsterName).first()
 
         timerRepository.getAndSetBossTimerList(
             monsName = monsterName,

@@ -47,7 +47,7 @@ class SetAlarmUsecaseTest : BehaviorSpec() {
                         )
                     )
                 )
-                every { dropListRepository.getMonsInfo(any()) } returns flowOf(monsterInfo)
+                every { dropListRepository.getMonster(any()) } returns flowOf(monsterInfo)
 
 
                 `when`("알람을 설정 하면") {
