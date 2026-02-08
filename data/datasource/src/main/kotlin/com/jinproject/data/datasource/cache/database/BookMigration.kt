@@ -1600,14 +1600,14 @@ internal object BookMigration {
                 execSQL("DELETE FROM Item WHERE itemName = 'Black Juno''s horn'")
 
                 // Black Skull -> Blackskull
-                execSQL("insert into Item values ('Blackskull', 'armor', 0, ' ')")
+                execSQL("insert into Item values ('Blackskull', 'miscellanous', 0, ' ')")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Blackskull' WHERE itemName = 'Black Skull'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Blackskull' WHERE item_name = 'Black Skull'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Blackskull' WHERE mdItemName = 'Black Skull'")
                 execSQL("DELETE FROM Item WHERE itemName = 'Black Skull'")
 
                 // Caligo's hand -> Caligo's Hands
-                execSQL("insert into Item values ('Caligo''s Hands', 'armor', 0, ' ')")
+                execSQL("insert into Item values ('Caligo''s Hands', 'miscellanous', 0, ' ')")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Caligo''s Hands' WHERE itemName = 'Caligo''s hand'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Caligo''s Hands' WHERE item_name = 'Caligo''s hand'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Caligo''s Hands' WHERE mdItemName = 'Caligo''s hand'")
@@ -1642,7 +1642,8 @@ internal object BookMigration {
                 execSQL("DELETE FROM Item WHERE itemName = 'Woopa-Roopa Scale'")
 
                 // Bulldozer's cloak -> Bulldozer cloak
-                execSQL("insert into Item values ('Bulldozer cloak', 'armor', 0, ' ')")
+                execSQL("insert into Item values ('Bulldozer cloak', 'accessories', 0, ' ')")
+                execSQL("UPDATE Equipment SET name = 'Bulldozer cloak' WHERE name = 'Bulldozer''s cloak'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Bulldozer cloak' WHERE itemName = 'Bulldozer''s cloak'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Bulldozer cloak' WHERE item_name = 'Bulldozer''s cloak'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Bulldozer cloak' WHERE mdItemName = 'Bulldozer''s cloak'")
@@ -1650,6 +1651,7 @@ internal object BookMigration {
 
                 // Dejoroba's Bow -> Dezoroba's Bow
                 execSQL("insert into Item values ('Dezoroba''s Bow', 'weapon', 0, ' ')")
+                execSQL("UPDATE Equipment SET name = 'Dezoroba''s Bow' WHERE name = 'Dejoroba''s Bow'")
                 execSQL("UPDATE RegisterItemToBook SET itemName = 'Dezoroba''s Bow' WHERE itemName = 'Dejoroba''s Bow'")
                 execSQL("UPDATE ItemInfo SET item_name = 'Dezoroba''s Bow' WHERE item_name = 'Dejoroba''s Bow'")
                 execSQL("UPDATE MonsDropItem SET mdItemName = 'Dezoroba''s Bow' WHERE mdItemName = 'Dejoroba''s Bow'")
