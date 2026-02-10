@@ -36,7 +36,8 @@ import javax.inject.Inject
 data class DropListUiState(
     val monstersGroupedByMap: ImmutableMap<MapState, ImmutableList<MonsterState>>,
 ) {
-    private val allMonsters = monstersGroupedByMap.values.flatten().distinctBy { it.name }.toImmutableList()
+    private val allMonsters =
+        monstersGroupedByMap.values.flatten().distinctBy { it.name }.toImmutableList()
 
     private val allSearchables: ImmutableList<Searchable> =
         (allMonsters + allMonsters.flatMap { it.items }.distinctBy { it.name })
@@ -45,7 +46,8 @@ data class DropListUiState(
 
     private var _searchQuery: String by mutableStateOf("")
     private var _selectedMap: MapState by mutableStateOf<MapState>(MapState.getInitValue())
-    private var selectedMonsters: SnapshotStateSet<MonsterState> = mutableStateSetOf(MonsterState.getInitValue())
+    private var selectedMonsters: SnapshotStateSet<MonsterState> =
+        mutableStateSetOf(MonsterState.getInitValue())
 
     val searchQuery: String by derivedStateOf { _searchQuery }
 
@@ -60,7 +62,7 @@ data class DropListUiState(
     }
 
     val monsterListExistInSelectedMap: Monsters by derivedStateOf {
-        Monsters(monstersGroupedByMap[selectedMap]!!.toImmutableList())
+        Monsters(monstersGroupedByMap[selectedMap]?.toImmutableList() ?: persistentListOf())
     }
 
     val mapListWhereSelectedMonsterLive: Maps by derivedStateOf {
@@ -116,11 +118,13 @@ class DropListViewModel @Inject constructor(
             DropListUiState(
                 monstersGroupedByMap = monsterCompletes.entries.associate { (map, monsters) ->
                     map.toMapState() to monsters.sortedWith { o1, o2 ->
-                        when(val priorityCompared = o1.type.getPriority().compareTo(o2.type.getPriority())) {
+                        when (val priorityCompared =
+                            o1.type.getPriority().compareTo(o2.type.getPriority())) {
                             0 -> when (val levelCompared = o1.level.compareTo(o2.level)) {
                                 0 -> o1.name.compareTo(o2.name)
                                 else -> levelCompared
                             }
+
                             else -> priorityCompared
                         }
                     }.map { it.toMonsterState() }.toImmutableList()

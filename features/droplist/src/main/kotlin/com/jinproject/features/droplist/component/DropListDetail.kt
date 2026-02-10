@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.request.ImageRequest
+import com.jinproject.design_compose.component.CoilBasicImage
 import com.jinproject.design_compose.component.HorizontalDividerItem
 import com.jinproject.design_compose.component.HorizontalSpacer
 import com.jinproject.design_compose.component.SubcomposeAsyncImageWithPreview
@@ -80,23 +81,12 @@ internal fun DropListDetail(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 if (item.imageName.isNotBlank())
-                                    SubcomposeAsyncImageWithPreview(
-                                        model = ImageRequest
-                                            .Builder(LocalContext.current)
-                                            .data(
-                                                toAssetImageUri(
-                                                    prefix = item.imagePrefix,
-                                                    imgName = item.imageName
-                                                )
-                                            )
-                                            .build(),
-                                        contentDescription = "Image",
-                                        loading = {
-                                            MTProgressIndicatorRotating()
-                                        },
-                                        contentScale = ContentScale.Fit,
+                                    CoilBasicImage(
+                                        data = toAssetImageUri(
+                                            prefix = item.imagePrefix,
+                                            imgName = item.imageName
+                                        ),
                                         modifier = Modifier,
-                                        placeHolderPreview = com.jinproject.design_ui.R.drawable.test,
                                     )
                                 DescriptionSmallText(text = "${item.name}${if (idx != monster.items.lastIndex) "," else ""}")
                             }

@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.request.ImageRequest
+import com.jinproject.design_compose.component.CoilBasicImage
 import com.jinproject.design_compose.component.SubcomposeAsyncImageWithPreview
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.component.pushRefresh.MTProgressIndicatorRotating
@@ -33,18 +34,9 @@ internal fun ColumnScope.MonsterField(
     imgName: String,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    SubcomposeAsyncImageWithPreview(
-        model = ImageRequest
-            .Builder(LocalContext.current)
-            .data(toAssetImageUri(prefix = "monster", imgName = imgName))
-            .build(),
-        contentDescription = "Image",
-        loading = {
-            MTProgressIndicatorRotating()
-        },
-        contentScale = ContentScale.Fit,
+    CoilBasicImage(
+        data = toAssetImageUri(prefix = "monster", imgName = imgName),
         modifier = modifier,
-        placeHolderPreview = com.jinproject.design_ui.R.drawable.test,
     )
     VerticalSpacer(height = 4.dp)
     content()

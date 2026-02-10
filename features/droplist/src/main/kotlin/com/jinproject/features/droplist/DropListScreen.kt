@@ -77,7 +77,6 @@ private fun MapListScreen(
 ) {
     val lazyGridState = rememberLazyGridState()
 
-
     BackHandler(navigator.canNavigateBack()) {
         coroutineScope.launch { navigator.navigateBack() }
     }
@@ -136,6 +135,10 @@ private fun MapListScreen(
         detailPane = {
             AnimatedPane {
                 navigator.currentDestination?.contentKey?.let { map ->
+                    BackHandler(true) {
+                        coroutineScope.launch { navigator.navigateBack() }
+                        dropListUiState.updateSelectedMap(MapState.getInitValue())
+                    }
                     DropListDetail(
                         mapName = map.name,
                         monsterListState = dropListUiState.monsterListExistInSelectedMap.monsters,

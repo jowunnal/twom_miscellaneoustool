@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.request.ImageRequest
+import com.jinproject.design_compose.component.CoilBasicImage
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.HorizontalWeightSpacer
 import com.jinproject.design_compose.component.SubcomposeAsyncImageWithPreview
@@ -143,20 +144,14 @@ fun SearchMapContent(
                                     },
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
-                                SubcomposeAsyncImageWithPreview(
-                                    model = ImageRequest
-                                        .Builder(LocalContext.current)
-                                        .data(
-                                            toAssetImageUri(
-                                                prefix = searchable.imagePrefix,
-                                                imgName = searchable.imageName
-                                            )
-                                        )
-                                        .build(),
-                                    contentDescription = "Image",
-                                    loading = {
-                                        MTProgressIndicatorRotating()
-                                    },
+                                CoilBasicImage(
+                                    data = toAssetImageUri(
+                                        prefix = searchable.imagePrefix,
+                                        imgName = searchable.imageName
+                                    ),
+                                    modifier = Modifier
+                                        .padding(horizontal = 12.dp)
+                                        .size(24.dp),
                                     error = {
                                         Image(
                                             imageVector = ImageVector.vectorResource(R.drawable.ic_help),
@@ -164,11 +159,6 @@ fun SearchMapContent(
                                             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surfaceVariant)
                                         )
                                     },
-                                    modifier = Modifier
-                                        .padding(horizontal = 12.dp)
-                                        .size(24.dp),
-                                    contentScale = ContentScale.Fit,
-                                    placeHolderPreview = R.drawable.test,
                                 )
                                 TitleSmallText(
                                     text = searchable.name,
