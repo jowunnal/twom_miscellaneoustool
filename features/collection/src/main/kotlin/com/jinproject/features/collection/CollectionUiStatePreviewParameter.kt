@@ -30,14 +30,16 @@ class CollectionUiStatePreviewParameter : PreviewParameterProvider<CollectionUiS
                 ),
                 items = persistentListOf(
                     MiscellaneousItem(
-                        name = "어둠의파편",
+                        name = "고대코어",
                         count = 180,
                         price = 400000000,
+                        imageName = "ancient_core",
                     ),
                     MiscellaneousItem(
-                        name = "타락한마법석",
+                        name = "고대의 봉",
                         count = 25,
                         price = 1000,
+                        imageName = "ancient_wand",
                     )
                 ),
             ),
@@ -49,9 +51,10 @@ class CollectionUiStatePreviewParameter : PreviewParameterProvider<CollectionUiS
                 ),
                 items = persistentListOf(
                     MiscellaneousItem(
-                        name = "검은진액",
+                        name = "고대코어",
                         count = 300,
                         price = 100,
+                        imageName = "ancient_core",
                     ),
                 ),
             ),
@@ -64,9 +67,10 @@ class CollectionUiStatePreviewParameter : PreviewParameterProvider<CollectionUiS
                 ),
                 items = persistentListOf(
                     MiscellaneousItem(
-                        name = "검은진액",
+                        name = "고대코어",
                         count = 900,
                         price = 100,
+                        imageName = "ancient_core",
                     ),
                 ),
             ),
@@ -78,15 +82,17 @@ class CollectionUiStatePreviewParameter : PreviewParameterProvider<CollectionUiS
                 ),
                 items = persistentListOf(
                     MiscellaneousItem(
-                        name = "어둠의파편",
+                        name = "고대코어",
                         count = 180,
                         price = 400000000,
+                        imageName = "ancient_core",
                     ),
                     Equipment(
-                        name = "무딘숏소드",
+                        name = "고대의 봉",
                         count = 1,
                         enchantNumber = 5,
                         price = 10000,
+                        imageName = "ancient_wand",
                     )
                 ),
             ),

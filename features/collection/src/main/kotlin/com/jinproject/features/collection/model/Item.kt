@@ -9,6 +9,7 @@ abstract class Item {
     abstract val name: String
     abstract val count: Int
     abstract val price: Long
+    abstract val imageName: String
 
     companion object {
         fun fromDomainItem(items: List<com.jinproject.domain.entity.item.Item>): ImmutableList<Item> =
@@ -24,6 +25,7 @@ abstract class Item {
                         name = miscellaneousItems.name,
                         count = items.size,
                         price = miscellaneousItems.price,
+                        imageName = miscellaneousItems.imageName,
                     )
                 }.plus(
                     items.filterIsInstance<EnchantableEquipment>().map { item ->
@@ -32,6 +34,7 @@ abstract class Item {
                             count = 0,
                             enchantNumber = item.enchantNumber,
                             price = item.price,
+                            imageName = item.imageName
                         )
                     }
                 ).toImmutableList()
@@ -45,10 +48,12 @@ data class Equipment(
     override val count: Int,
     val enchantNumber: Int,
     override val price: Long,
+    override val imageName: String,
 ) : Item()
 
 data class MiscellaneousItem(
     override val name: String,
     override val count: Int,
     override val price: Long,
+    override val imageName: String,
 ) : Item()

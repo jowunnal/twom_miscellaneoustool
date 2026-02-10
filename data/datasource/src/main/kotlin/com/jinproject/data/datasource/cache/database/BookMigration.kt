@@ -7,7 +7,7 @@ import java.time.ZonedDateTime
 
 internal object BookMigration {
 
-    val MIGRATION_1_2_KOR = object : Migration(1, 2) {
+    val MIGRATION_1_2_KOR get() = object : Migration(1, 2) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.apply {
                 execSQL("update Monster set monsType = 'Mini Boss' where monsType = 'named'")
@@ -23,7 +23,8 @@ internal object BookMigration {
             }
         }
     }
-    val MIGRATION_1_2_ELSE = object : Migration(1, 2) {
+
+    val MIGRATION_1_2_ELSE get() = object : Migration(1, 2) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.apply {
                 execSQL("update Monster set monsType = 'Mini Boss' where monsType = 'named'")
@@ -40,7 +41,7 @@ internal object BookMigration {
         }
     }
 
-    val MIGRATION_2_3_KOR = object : Migration(2, 3) {
+    val MIGRATION_2_3_KOR get() = object : Migration(2, 3) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.apply {
                 execSQL("insert into Item values ('버닝블레이드', 'weapon', 0)")
@@ -100,7 +101,7 @@ internal object BookMigration {
         }
     }
 
-    val MIGRATION_2_3_ELSE = object : Migration(2, 3) {
+    val MIGRATION_2_3_ELSE get() = object : Migration(2, 3) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.apply {
                 execSQL("insert into Item values ('Burning Blade', 'weapon', 0)")
@@ -160,7 +161,7 @@ internal object BookMigration {
         }
     }
 
-    val MIGRATION_3_4_KOR = object : Migration(3, 4) {
+    val MIGRATION_3_4_KOR get() = object : Migration(3, 4) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.apply {
                 execSQL("alter table RegisterItemToBook rename column rlBookId to bookId")
@@ -188,7 +189,7 @@ internal object BookMigration {
         }
     }
 
-    val MIGRATION_3_4_ELSE = object : Migration(3, 4) {
+    val MIGRATION_3_4_ELSE get() = object : Migration(3, 4) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.apply {
                 execSQL("alter table RegisterItemToBook rename column rlBookId to bookId")
@@ -243,7 +244,7 @@ internal object BookMigration {
         }
     }
 
-    val MIGRATION_4_5_KOR = object : Migration(4, 5) {
+    val MIGRATION_4_5_KOR get() = object : Migration(4, 5) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.apply {
                 execSQL("update Monster set monsGtime = 604800 where monsName = '플라타니스타'")
@@ -348,7 +349,7 @@ internal object BookMigration {
         }
     }
 
-    val MIGRATION_4_5_ELSE = object : Migration(4, 5) {
+    val MIGRATION_4_5_ELSE get() = object : Migration(4, 5) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.apply {
                 execSQL("update Monster set monsGtime = 604800 where monsName = 'Platanista'")
@@ -452,7 +453,7 @@ internal object BookMigration {
             }
         }
     }
-    val MIGRATION_5_6_KOR = object : Migration(5, 6) {
+    val MIGRATION_5_6_KOR get() = object : Migration(5, 6) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.apply {
                 execSQL("update Monster set monsGtime = 259200 where monsName = '세피아'")
@@ -514,7 +515,7 @@ internal object BookMigration {
         }
     }
 
-    val MIGRATION_5_6_ELSE = object : Migration(5, 6) {
+    val MIGRATION_5_6_ELSE get() = object : Migration(5, 6) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.apply {
                 execSQL("update Monster set monsGtime = 259200 where monsName = 'Sephia'")
@@ -574,7 +575,7 @@ internal object BookMigration {
         }
     }
 
-    val MIGRATION_6_7_KOR = object : Migration(6, 7) {
+    val MIGRATION_6_7_KOR get() = object : Migration(6, 7) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.apply {
                 // Item 테이블 마이그레이션 (img_name 컬럼 추가)
@@ -1289,7 +1290,7 @@ internal object BookMigration {
         }
     }
 
-    val MIGRATION_6_7_ELSE = object : Migration(6, 7) {
+    val MIGRATION_6_7_ELSE get() = object : Migration(6, 7) {
         override fun migrate(db: SupportSQLiteDatabase) {
             db.apply {
                 // Item 테이블 마이그레이션 (img_name 컬럼 추가)

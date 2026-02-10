@@ -1,6 +1,7 @@
 package com.jinproject.features.collection.component
 
 import android.content.res.Configuration
+import android.system.Os.stat
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -9,15 +10,19 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -49,24 +54,32 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.PathParser
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.request.ImageRequest
+import com.jinproject.design_compose.component.CoilBasicImage
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.HorizontalSpacer
+import com.jinproject.design_compose.component.SubcomposeAsyncImageWithPreview
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.component.button.TextButton
 import com.jinproject.design_compose.component.button.clickableAvoidingDuplication
 import com.jinproject.design_compose.component.button.combinedClickableAvoidingDuplication
 import com.jinproject.design_compose.component.image.DefaultPainterImage
 import com.jinproject.design_compose.component.paddingvalues.MiscellanousToolPaddingValues
+import com.jinproject.design_compose.component.pushRefresh.MTProgressIndicatorRotating
 import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.features.collection.CollectionEvent
@@ -74,6 +87,9 @@ import com.jinproject.features.collection.CollectionUiStatePreviewParameter
 import com.jinproject.features.collection.model.CollectionUiState
 import com.jinproject.features.collection.model.Equipment
 import com.jinproject.features.collection.model.ItemCollection
+import com.jinproject.features.core.utils.AssetConfig
+import com.jinproject.features.core.utils.getImageDataFromAsset
+import com.jinproject.features.core.utils.toAssetImageUri
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -116,8 +132,8 @@ internal fun CollectionList(
         snapshotFlow {
             lazyListState.isScrollInProgress
         }.filter {
-            it == true
-        }.distinctUntilChanged().collectLatest {
+            it
+        }.collectLatest {
             keyboardController?.hide()
         }
     }
@@ -201,28 +217,6 @@ private fun CollectionItem(
     navigateToDetail: (ItemCollection) -> Unit,
     onSelectCollectionItem: (Int) -> Unit,
 ) {
-    val stat =
-        remember(collection.stats) {
-            collection.stats.entries.joinToString("\n") { entry ->
-                if (entry.key.last() == '%')
-                    "${entry.key.dropLast(1)} ${entry.value}%"
-                else
-                    "${entry.key} ${entry.value}"
-            }
-        }
-    val item = remember(collection.items) {
-        collection.items.joinToString("\n") { item ->
-            val enchant =
-                if (item is Equipment && item.enchantNumber > 0) "(+${item.enchantNumber}) " else ""
-            val count = if (item.count <= 1) "" else "* ${item.count}"
-
-            "${item.name} $enchant $count"
-        }
-    }
-    val price = remember(collection.items) {
-        collection.items.sumOf { it.price * it.count }.toString()
-    }
-
     val animateState by animateFloatAsState(
         targetValue = if (isSelected) 1f else 0f,
         animationSpec = tween(250),
@@ -312,11 +306,36 @@ private fun CollectionItem(
                 .padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val verticalPadding = 10.dp
-            DescriptionSmallText(
-                text = item,
-                modifier = Modifier.width(itemWidth)
-            )
+            FlowRow(
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+                maxItemsInEachRow = 1,
+            ) {
+                collection.items.forEach { item ->
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        if (item.imageName.isNotBlank())
+                            CoilBasicImage(
+                                data = getImageDataFromAsset(
+                                    context = LocalContext.current,
+                                    prefix = AssetConfig.ITEM_PATH_PREFIX,
+                                    imageName = item.imageName
+                                )
+                            )
+                        else
+                            Spacer(Modifier.size(10.dp))
+
+                        val enchant =
+                            if (item is Equipment && item.enchantNumber > 0) "(+${item.enchantNumber}) " else ""
+                        val count = if (item.count <= 1) "" else "* ${item.count}"
+
+                        DescriptionSmallText(
+                            text = "${item.name} $enchant $count",
+                            modifier = Modifier.width(itemWidth)
+                        )
+                    }
+                }
+            }
             HorizontalSpacer(width = 5.dp)
             DefaultPainterImage(
                 resId = com.jinproject.design_ui.R.drawable.ic_arrow_right_long,
@@ -324,10 +343,15 @@ private fun CollectionItem(
             )
             HorizontalSpacer(width = 20.dp)
             DescriptionSmallText(
-                text = stat,
+                text = collection.stats.entries.joinToString("\n") { entry ->
+                    if (entry.key.last() == '%')
+                        "${entry.key.dropLast(1)} ${entry.value}%"
+                    else
+                        "${entry.key} ${entry.value}"
+                },
                 modifier = Modifier
                     .width(itemWidth)
-                    .padding(vertical = verticalPadding)
+                    .padding(vertical = 10.dp)
             )
             HorizontalSpacer(width = 20.dp)
             DefaultPainterImage(
@@ -342,7 +366,7 @@ private fun CollectionItem(
         HorizontalDivider()
         VerticalSpacer(height = 10.dp)
         DescriptionSmallText(
-            text = price + " " + stringResource(id = com.jinproject.design_ui.R.string.gold),
+            text = "${collection.items.sumOf { it.price * it.count }} ${stringResource(id = com.jinproject.design_ui.R.string.gold)}",
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 6.dp, end = 20.dp),

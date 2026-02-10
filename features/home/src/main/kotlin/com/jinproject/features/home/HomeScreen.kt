@@ -4,10 +4,14 @@ import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -30,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.core.util.doOnLocaleLanguage
+import com.jinproject.design_compose.component.CoilBasicImage
 import com.jinproject.design_compose.component.HorizontalDivider
 import com.jinproject.design_compose.component.HorizontalSpacer
 import com.jinproject.design_compose.component.HorizontalWeightSpacer
@@ -45,8 +50,11 @@ import com.jinproject.design_compose.component.text.DescriptionLargeText
 import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.design_ui.R
+import com.jinproject.features.collection.model.Equipment
 import com.jinproject.features.collection.model.ItemCollection
+import com.jinproject.features.core.utils.AssetConfig
 import com.jinproject.features.core.utils.appendBoldText
+import com.jinproject.features.core.utils.getImageDataFromAsset
 import com.jinproject.features.droplist.component.DropListMonster
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
@@ -288,11 +296,38 @@ private fun CollectionItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             val verticalPadding = 10.dp
-            DescriptionSmallText(
-                text = item,
-                modifier = Modifier
-                    .weight(1f),
-            )
+
+            FlowRow(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(2.dp),
+                maxItemsInEachRow = 1,
+            ) {
+                collection.items.forEach { item ->
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        if (item.imageName.isNotBlank())
+                            CoilBasicImage(
+                                data = getImageDataFromAsset(
+                                    context = LocalContext.current,
+                                    prefix = AssetConfig.ITEM_PATH_PREFIX,
+                                    imageName = item.imageName
+                                )
+                            )
+                        else
+                            Spacer(Modifier.size(10.dp))
+
+                        val enchant =
+                            if (item is Equipment && item.enchantNumber > 0) "(+${item.enchantNumber}) " else ""
+                        val count = if (item.count <= 1) "" else "* ${item.count}"
+
+                        DescriptionSmallText(
+                            text = "${item.name} $enchant $count",
+                            modifier = Modifier
+                        )
+                    }
+                }
+            }
             HorizontalSpacer(width = 5.dp)
             DefaultPainterImage(
                 resId = com.jinproject.design_ui.R.drawable.ic_arrow_right_long,

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -48,7 +49,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jinproject.core.util.runIf
-import com.jinproject.design_compose.component.HorizontalSpacer
 import com.jinproject.design_compose.component.button.DefaultIconButton
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.design_ui.R
@@ -65,6 +65,7 @@ fun SearchTextField(
         )
     ),
     cursorBrush: Brush = SolidColor(MaterialTheme.colorScheme.onPrimary),
+    isTailIconFillRemainSpace: Boolean = true,
     exitIconVisibility: Boolean = false,
     changeExitIconVisibility: (Boolean) -> Unit = {},
 ) {
@@ -88,43 +89,46 @@ fun SearchTextField(
         textStyle = textStyle,
         cursorBrush = cursorBrush,
         lineLimits = TextFieldLineLimits.SingleLine,
-    ) {
-        AnimatedContent(exitIcon) { targetState ->
-            if (targetState)
-                DefaultIconButton(
-                    modifier = Modifier,
-                    icon = R.drawable.ic_x,
-                    onClick = {
-                        textFieldState.clearText()
-                        focusManager.clearFocus()
-                        changeExitIconVisibility(false)
-                    },
-                    iconSize = 24.dp,
-                    iconTint = MaterialTheme.colorScheme.contentColorFor(backgroundColor),
-                    backgroundTint = backgroundColor,
-                    interactionSource = remember { MutableInteractionSource() }
-                )
-            else
-                DefaultIconButton(
-                    modifier = Modifier,
-                    icon = R.drawable.icon_search,
-                    onClick = {
-                        focusRequester.requestFocus()
-                        changeExitIconVisibility(true)
-                    },
-                    iconSize = 24.dp,
-                    iconTint = MaterialTheme.colorScheme.contentColorFor(backgroundColor),
-                    backgroundTint = backgroundColor,
-                    interactionSource = remember { MutableInteractionSource() }
-                )
+        isTailIconFillRemainSpace = isTailIconFillRemainSpace,
+        tailIcon = {
+            AnimatedContent(exitIcon) { targetState ->
+                if (targetState)
+                    DefaultIconButton(
+                        modifier = Modifier,
+                        icon = R.drawable.ic_x,
+                        onClick = {
+                            textFieldState.clearText()
+                            focusManager.clearFocus()
+                            changeExitIconVisibility(false)
+                        },
+                        iconSize = 24.dp,
+                        iconTint = MaterialTheme.colorScheme.contentColorFor(backgroundColor),
+                        backgroundTint = backgroundColor,
+                        interactionSource = remember { MutableInteractionSource() }
+                    )
+                else
+                    DefaultIconButton(
+                        modifier = Modifier,
+                        icon = R.drawable.icon_search,
+                        onClick = {
+                            focusRequester.requestFocus()
+                            changeExitIconVisibility(true)
+                        },
+                        iconSize = 24.dp,
+                        iconTint = MaterialTheme.colorScheme.contentColorFor(backgroundColor),
+                        backgroundTint = backgroundColor,
+                        interactionSource = remember { MutableInteractionSource() }
+                    )
+            }
         }
-    }
+    )
 }
 
 @Composable
 fun ChatTextField(
     modifier: Modifier = Modifier,
     textFieldState: TextFieldState,
+    isTailIconFillRemainSpace: Boolean = true,
     onEntered: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
@@ -138,20 +142,22 @@ fun ChatTextField(
         textStyle = TextStyle(color = MaterialTheme.colorScheme.onPrimary),
         cursorBrush = SolidColor(MaterialTheme.colorScheme.onPrimary),
         lineLimits = TextFieldLineLimits.MultiLine(),
-    ) {
-        DefaultIconButton(
-            modifier = Modifier,
-            icon = R.drawable.ic_enter,
-            onClick = {
-                onEntered()
-                focusManager.clearFocus()
-            },
-            iconSize = 24.dp,
-            iconTint = MaterialTheme.colorScheme.onPrimary,
-            backgroundTint = MaterialTheme.colorScheme.primary,
-            interactionSource = remember { MutableInteractionSource() }
-        )
-    }
+        isTailIconFillRemainSpace = isTailIconFillRemainSpace,
+        tailIcon = {
+            DefaultIconButton(
+                modifier = Modifier,
+                icon = R.drawable.ic_enter,
+                onClick = {
+                    onEntered()
+                    focusManager.clearFocus()
+                },
+                iconSize = 24.dp,
+                iconTint = MaterialTheme.colorScheme.onPrimary,
+                backgroundTint = MaterialTheme.colorScheme.primary,
+                interactionSource = remember { MutableInteractionSource() }
+            )
+        }
+    )
 }
 
 @Composable
@@ -258,7 +264,9 @@ fun DefaultTextField(
     outputTransformation: OutputTransformation? = null,
     inputTransformation: InputTransformation? = null,
     lineLimits: TextFieldLineLimits = TextFieldLineLimits.Default,
+    isTailIconFillRemainSpace: Boolean = false,
     headerIcon: (@Composable () -> Unit)? = null,
+    tailIcon: @Composable (() -> Unit)? = null,
     hint: String = stringResource(id = R.string.textfield_hint),
     content: @Composable RowScope.() -> Unit = {},
 ) {
@@ -289,15 +297,13 @@ fun DefaultTextField(
                     .height(textStyle.lineHeight.value.dp + 36.dp)
                     .padding(vertical = 12.dp, horizontal = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 headerIcon?.let {
                     it()
                 }
-                HorizontalSpacer(width = 4.dp)
                 Box(
                     modifier = Modifier
-                        .weight(1f)
                         .padding(end = 8.dp),
                 ) {
                     if (textFieldState.text.isEmpty())
@@ -309,6 +315,11 @@ fun DefaultTextField(
                         )
 
                     innerTextField()
+                }
+
+                tailIcon?.let {
+                    Spacer(Modifier.weight(1f, isTailIconFillRemainSpace))
+                    it()
                 }
 
                 content()
