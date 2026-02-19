@@ -177,7 +177,7 @@ fun OutlineVerifyTextField(
 
     Column(modifier) {
         DefaultTextField(
-            modifier = Modifier,
+            modifier = Modifier.fillMaxWidth(),
             textFieldState = textFieldState,
             keyboardOptions = keyboardOptions,
             borderColor = if (error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline,
@@ -435,6 +435,7 @@ private fun PreviewDefaultTextField() = MiscellaneousToolTheme {
 @Preview(showBackground = true)
 private fun PreviewOutlineVerifyTextField() = MiscellaneousToolTheme {
     OutlineVerifyTextField(
+        modifier = Modifier.fillMaxWidth(),
         textFieldState = rememberTextFieldState("abcd@gmail.com"),
         isError = true,
         errorMessage = "잘못된 비밀번호 양식이에요. 8~16글자까지 입력가능하고 영어,숫자,!@#\$%^&amp;*특수문자만 사용가능해요."

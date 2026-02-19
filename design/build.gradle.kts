@@ -4,11 +4,10 @@ plugins {
 }
 
 android {
-    namespace = "com.jinproject.design_compose"
+    namespace = "com.jinproject.design_ui"
 }
 
 dependencies {
-    implementation(project(":design-ui"))
     implementation(project(":core"))
 
     implementation(libs.bumptech.glide)

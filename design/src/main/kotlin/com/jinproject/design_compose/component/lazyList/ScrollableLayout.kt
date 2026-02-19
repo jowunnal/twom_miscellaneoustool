@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import com.jinproject.design_compose.R
+import com.jinproject.design_ui.R
 import com.jinproject.design_compose.component.button.DefaultIconButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
