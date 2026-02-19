@@ -10,6 +10,8 @@ android {
 dependencies {
     implementation(project(":core"))
 
+    implementation(libs.appcompat)
+    implementation(libs.material)
     implementation(libs.bumptech.glide)
     implementation(libs.coil)
     implementation(libs.airbnb.android.lottie.compose)
