@@ -16,7 +16,7 @@ jobs:
     - name: Extract version
       id: extract_version
       run: |
-        VERSION=$(git log -1 --pretty=%B | grep -oP 'Release:\s*\K[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
+        VERSION=$(git log -1 --pretty=%B | grep -oP -m1 'Release:\s*\K[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
         echo "Extracted version: $VERSION"
         echo "version_name=$(echo $VERSION | tr -d '\r\n')" >> $GITHUB_OUTPUT
       
