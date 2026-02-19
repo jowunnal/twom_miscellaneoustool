@@ -31,7 +31,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jinproject.core.util.doOnLocaleLanguage
 import com.jinproject.design_compose.component.CoilBasicImage
@@ -50,29 +50,41 @@ import com.jinproject.design_compose.component.text.DescriptionLargeText
 import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.design_ui.R
-import com.jinproject.features.collection.model.Equipment
-import com.jinproject.features.collection.model.ItemCollection
 import com.jinproject.features.core.utils.AssetConfig
 import com.jinproject.features.core.utils.appendBoldText
 import com.jinproject.features.core.utils.getImageDataFromAsset
-import com.jinproject.features.droplist.component.DropListMonster
+import com.jinproject.features.alarm.AlarmRoute
+import com.jinproject.features.collection.CollectionRoute
+import com.jinproject.features.core.compose.LocalNavigator
+import com.jinproject.features.droplist.DropListRoute
+import com.jinproject.features.home.component.HomeMapCard
+import com.jinproject.features.home.model.Equipment
+import com.jinproject.features.home.model.ItemCollection
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 
 @Composable
 internal fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToDropList: (String?) -> Unit,
-    navigateToCollection: (Int?) -> Unit,
-    navigateToAlarm: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val navigator = LocalNavigator.current
 
     HomeScreen(
         uiState = uiState,
-        navigateToDropList = navigateToDropList,
-        navigateToCollection = navigateToCollection,
-        navigateToAlarm = navigateToAlarm,
+        navigateToDropList = { mapName ->
+            navigator.navigate(DropListRoute.MapList)
+            if (mapName != null) {
+                navigator.navigate(DropListRoute.MapDetail(mapName))
+            }
+        },
+        navigateToCollection = { id ->
+            navigator.navigate(CollectionRoute.CollectionList)
+            if (id != null) {
+                navigator.navigate(CollectionRoute.CollectionDetail(id))
+            }
+        },
+        navigateToAlarm = { navigator.navigate(AlarmRoute.Alarm) },
     )
 }
 
@@ -107,7 +119,7 @@ private fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(uiState.maps, key = { mapState -> mapState.name }) { mapState ->
-                    DropListMonster(
+                    HomeMapCard(
                         mapState = mapState,
                         itemWidth = 100.dp,
                         onClickItem = { map ->

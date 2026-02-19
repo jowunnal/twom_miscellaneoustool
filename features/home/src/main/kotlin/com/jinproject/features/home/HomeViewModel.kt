@@ -6,10 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.jinproject.domain.repository.CollectionRepository
 import com.jinproject.domain.repository.DropListRepository
 import com.jinproject.domain.repository.TimerRepository
-import com.jinproject.features.collection.model.Item
-import com.jinproject.features.collection.model.ItemCollection
 import com.jinproject.features.core.utils.mapToImmutableList
-import com.jinproject.features.droplist.state.MapState
+import com.jinproject.features.home.model.Item
+import com.jinproject.features.home.model.ItemCollection
+import com.jinproject.features.home.model.MapState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf

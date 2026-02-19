@@ -6,4 +6,6 @@ android {
     namespace = "com.jinproject.features.info"
 }
 
-dependencies {}
+dependencies {
+    implementation(project(":features:auth:api"))
+}
