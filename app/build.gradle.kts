@@ -10,8 +10,8 @@ android {
     defaultConfig {
         applicationId = "com.jinproject.twomillustratedbook"
         targetSdk = 36
-        versionCode = 93
-        versionName = "2.5.2"
+        versionCode = 94
+        versionName = "2.5.3"
     }
 
     buildFeatures {
