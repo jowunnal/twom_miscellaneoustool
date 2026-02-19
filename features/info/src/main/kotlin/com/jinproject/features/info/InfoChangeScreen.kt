@@ -23,23 +23,23 @@ import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.design_ui.R
 import com.jinproject.design_compose.component.text.auth.PasswordField
 import com.jinproject.features.core.AuthManager
-import com.jinproject.features.core.base.item.SnackBarMessage
+import com.jinproject.features.core.compose.LocalNavigator
+import com.jinproject.features.core.compose.LocalShowSnackbar
 import com.jinproject.features.info.state.InfoUiState
 import com.jinproject.features.info.state.rememberInfoUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-internal fun InfoChangeScreen(
-    showSnackBar: (SnackBarMessage) -> Unit,
-    navigatePopBackStack: () -> Unit,
-) {
+internal fun InfoChangeScreen() {
+    val navigator = LocalNavigator.current
+    val showSnackBar = LocalShowSnackbar.current
     val infoUiState =
         rememberInfoUiState(isUserActive = AuthManager.isActive, showSnackBar = showSnackBar)
 
     InfoChangeScreen(
         infoUiState = infoUiState,
-        navigatePopBackStack = navigatePopBackStack,
+        navigatePopBackStack = { navigator.goBack() },
     )
 }
 

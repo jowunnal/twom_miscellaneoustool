@@ -11,15 +11,16 @@ import com.jinproject.design_compose.component.bar.BackButtonTitleAppBar
 import com.jinproject.design_compose.component.layout.DefaultLayout
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.design_ui.R
+import com.jinproject.features.core.compose.LocalNavigator
 
 @Composable
-internal fun TermScreen(
-    navigatePopBackStack: () -> Unit,
-) {
+internal fun TermScreen() {
+    val navigator = LocalNavigator.current
+
     DefaultLayout(
         topBar = {
             BackButtonTitleAppBar(
-                onBackClick = navigatePopBackStack,
+                onBackClick = { navigator.goBack() },
                 title = stringResource(id = R.string.term)
             )
         }
@@ -39,5 +40,5 @@ internal fun TermScreen(
 @Composable
 @Preview
 private fun PreviewTermScreen() = MiscellaneousToolTheme {
-    TermScreen {}
+    TermScreen()
 }

@@ -1,8 +1,16 @@
 package com.jinproject.twomillustratedbook.ui.navigation
 
-
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemColors
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScope
 import androidx.compose.runtime.Composable
@@ -10,103 +18,108 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.compose.NavHost
-import com.jinproject.features.alarm.alarmNavGraph
-import com.jinproject.features.alarm.navigateToAlarmGraph
-import com.jinproject.features.alarm.navigateToAlarmSetting
-import com.jinproject.features.auth.authNavigation
-import com.jinproject.features.auth.navigateAuthRoute
-import com.jinproject.features.auth.navigateToAuthGraph
-import com.jinproject.features.collection.navigateToCollectionList
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.ui.NavDisplay
+import com.jinproject.features.alarm.alarmEntries
+import com.jinproject.features.auth.authEntries
+import com.jinproject.features.collection.collectionEntries
 import com.jinproject.features.core.BillingModule
-import com.jinproject.features.core.base.item.SnackBarMessage
-import com.jinproject.features.core.compose.TopLevelRoute
-import com.jinproject.features.droplist.navigateToDropList
-import com.jinproject.features.home.HomeRoute
-import com.jinproject.features.home.homeNavGraph
-import com.jinproject.features.info.infoNavigation
-import com.jinproject.features.info.navigateInfoRoute
-import com.jinproject.features.simulator.simulatorNavGraph
-import com.jinproject.features.symbol.SymbolRoute
-import com.jinproject.features.symbol.navigateToGenerateImage
-import com.jinproject.features.symbol.popBackStackIfCan
-import com.jinproject.features.symbol.symbolNavGraph
+import com.jinproject.features.core.compose.TopLevelNavItem
+import com.jinproject.features.droplist.dropListEntries
+import com.jinproject.features.home.homeEntries
+import com.jinproject.features.info.infoEntries
+import com.jinproject.features.simulator.simulatorEntries
+import com.jinproject.features.symbol.symbolEntries
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 internal fun NavigationGraph(
     modifier: Modifier = Modifier,
-    router: Router,
+    navigator: AppNavigator,
     billingModule: BillingModule,
     showRewardedAd: (() -> Unit) -> Unit,
-    showSnackBar: (SnackBarMessage) -> Unit,
 ) {
-    val navController = router.navController
+    NavDisplay(
+        backStack = navigator.state.currentBackStack,
+        modifier = modifier,
+        onBack = { navigator.goBack() },
+        entryDecorators = listOf(
+            rememberSaveableStateHolderNavEntryDecorator(),
+            rememberViewModelStoreNavEntryDecorator(),
+        ),
+        sceneStrategy = rememberListDetailSceneStrategy<NavKey>(),
+        entryProvider = entryProvider {
+            homeEntries()
 
-    NavHost(
-        navController = navController,
-        startDestination = HomeRoute.HomeGraph,
-        modifier = modifier
-    ) {
+            alarmEntries(
+                billingModule = billingModule,
+                showRewardedAd = showRewardedAd,
+            )
 
-        homeNavGraph(
-            navigateToDropList = navController::navigateToDropList,
-            navigateToCollection = navController::navigateToCollectionList,
-            navigateToAlarm = { navController.navigateToAlarmGraph(null) },
-            showSnackBar = showSnackBar,
-            popBackStackIfCan = navController::popBackStackIfCan,
-        )
+            symbolEntries(
+                billingModule = billingModule,
+            )
 
-        alarmNavGraph(
-            billingModule = billingModule,
-            showRewardedAd = showRewardedAd,
-            onNavigateToAlarmSetting = navController::navigateToAlarmSetting,
-            showSnackBar = showSnackBar,
-            popBackStackIfCan = navController::popBackStackIfCan,
-        )
+            simulatorEntries()
 
-        symbolNavGraph(
-            billingModule = billingModule,
-            navController = navController,
-            showSnackBar = showSnackBar,
-            navigateToAuthGraph = navController::navigateToAuthGraph,
-        )
+            collectionEntries()
 
-        simulatorNavGraph()
+            dropListEntries()
 
-        authNavigation(
-            navigatePopBackStack = navController::popBackStackIfCan,
-            navigateAuthRoute = navController::navigateAuthRoute,
-            showSnackBar = showSnackBar,
-            navigatePopBackStackToRoute = navController::popBackStackIfCan,
-            navigateToGenerateImage = navController::navigateToGenerateImage,
-            isPreviousDestinationGenerateImage = {
-                navController.previousBackStackEntry?.destination?.hasRoute(SymbolRoute.GenerateImage::class) == true
-            }
-        )
+            authEntries()
 
-        infoNavigation(
-            billingModule = billingModule,
-            showSnackBar = showSnackBar,
-            navigateToAuthGraph = navController::navigateToAuthGraph,
-            navigateInfoRoute = navController::navigateInfoRoute,
-            navigatePopBackStack = navController::popBackStackIfCan
-        )
-    }
+            infoEntries(
+                billingModule = billingModule,
+            )
+        },
+        transitionSpec = {
+            val direction = navigator.state.getTopLevelRouteSlideDirection()
+
+            (slideInHorizontally(initialOffsetX = { direction * it }) +
+                    scaleIn(initialScale = 0.85f) + fadeIn())
+                .togetherWith(
+                    slideOutHorizontally(targetOffsetX = { -direction * it / 3 }) +
+                            scaleOut(targetScale = 0.95f) + fadeOut(targetAlpha = 0.5f)
+                )
+        },
+        popTransitionSpec = {
+            val direction = -navigator.state.getTopLevelRouteSlideDirection()
+
+            (slideInHorizontally(initialOffsetX = { direction * it / 3 }) +
+                    scaleIn(initialScale = 0.95f) + fadeIn(initialAlpha = 0.5f))
+                .togetherWith(
+                    slideOutHorizontally(targetOffsetX = { -direction * it }) +
+                            scaleOut(targetScale = 0.85f) + fadeOut()
+                )
+        },
+        predictivePopTransitionSpec = {
+            val direction = -navigator.state.getTopLevelRouteSlideDirection()
+
+            (slideInHorizontally(initialOffsetX = { direction * it / 3 }) +
+                    scaleIn(initialScale = 0.95f) + fadeIn(initialAlpha = 0.5f))
+                .togetherWith(
+                    slideOutHorizontally(targetOffsetX = { -direction * it }) +
+                            scaleOut(targetScale = 0.85f) + fadeOut()
+                )
+        },
+    )
 }
 
 internal fun NavigationSuiteScope.navigationSuiteItems(
-    currentDestination: NavDestination?,
+    topLevelNavItems: Set<TopLevelNavItem>,
+    currentRoute: NavKey,
     itemColors: NavigationSuiteItemColors,
-    onClick: (TopLevelRoute) -> Unit,
+    onClick: (NavKey) -> Unit,
 ) {
-    TopLevelRoutes.forEach { destination ->
-        val selected = currentDestination.isDestinationInHierarchy(destination)
+    topLevelNavItems.sortedBy { it.order }.forEach { destination ->
+        val selected = currentRoute == destination.route
 
         item(
             selected = selected,
-            onClick = { onClick(destination) },
+            onClick = { onClick(destination.route) },
             icon = {
                 if (!selected)
                     Icon(

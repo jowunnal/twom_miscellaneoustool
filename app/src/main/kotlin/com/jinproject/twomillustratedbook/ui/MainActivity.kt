@@ -38,8 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.Purchase
 import com.google.android.gms.ads.AdError
@@ -62,17 +60,21 @@ import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.base.CommonDialogFragment
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
+import com.jinproject.features.core.compose.LocalNavigator
+import com.jinproject.features.core.compose.LocalShowSnackbar
 import com.jinproject.features.core.toProduct
 import com.jinproject.twomillustratedbook.BuildConfig
 import com.jinproject.twomillustratedbook.BuildConfig.ADMOB_REWARD_ID
 import com.jinproject.twomillustratedbook.ui.ads.AdMobManager
 import com.jinproject.twomillustratedbook.ui.ads.BannerAd
+import com.jinproject.features.core.compose.TopLevelNavItem
 import com.jinproject.twomillustratedbook.ui.navigation.NavigationDefaults
 import com.jinproject.twomillustratedbook.ui.navigation.NavigationGraph
-import com.jinproject.twomillustratedbook.ui.navigation.isBarHasToBeShown
+import com.jinproject.twomillustratedbook.ui.navigation.AppNavigator
 import com.jinproject.twomillustratedbook.ui.navigation.navigationSuiteItems
-import com.jinproject.twomillustratedbook.ui.navigation.rememberRouter
+import com.jinproject.twomillustratedbook.ui.navigation.rememberNavigationState
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -83,6 +85,9 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var topLevelNavItems: Set<@JvmSuppressWildcards TopLevelNavItem>
 
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -151,7 +156,6 @@ class MainActivity : AppCompatActivity() {
 
     @Composable
     private fun Content(
-        navController: NavHostController = rememberNavController(),
         coroutineScope: CoroutineScope = rememberCoroutineScope(),
     ) {
         val snackBarHostState = remember { SnackbarHostState() }
@@ -175,8 +179,10 @@ class MainActivity : AppCompatActivity() {
 
         val isAdViewRemoved by adMobManager.isAdviewRemoved.collectAsStateWithLifecycle()
 
-        val showSnackBar = { snackBarMessage: SnackBarMessage ->
-            snackBarChannel.trySend(snackBarMessage)
+        val showSnackBar: (SnackBarMessage) -> Unit = remember(snackBarChannel) {
+            { snackBarMessage: SnackBarMessage ->
+                snackBarChannel.trySend(snackBarMessage)
+            }
         }
 
         val billingModule = remember {
@@ -268,11 +274,32 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        val router = rememberRouter(navController = navController)
-        val currentDestination by rememberUpdatedState(newValue = router.currentDestination)
+        val navigationState = rememberNavigationState(topLevelNavItems = topLevelNavItems.toSet())
+        val navigator = remember(navigationState) { AppNavigator(navigationState) }
+
+        DisposableEffect(Unit) {
+            val handleIntent: (android.content.Intent) -> Unit = { newIntent ->
+                newIntent.data?.let { uri ->
+                    if (uri.scheme == "jinproject" && uri.host == "twom_miscellanous_tool") {
+                        when (uri.path) {
+                            "/alarm" -> navigator.navigate(com.jinproject.features.alarm.AlarmRoute.Alarm)
+                        }
+                    }
+                }
+            }
+
+            handleIntent(intent)
+
+            val listener = androidx.core.util.Consumer<android.content.Intent> { handleIntent(it) }
+            addOnNewIntentListener(listener)
+
+            onDispose {
+                removeOnNewIntentListener(listener)
+            }
+        }
 
         val layoutType by rememberUpdatedState(
-            newValue = if (!currentDestination.isBarHasToBeShown())
+            newValue = if (!navigationState.isOnTopLevelDestination)
                 NavigationSuiteType.None
             else
                 NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(currentWindowAdaptiveInfo())
@@ -281,14 +308,17 @@ class MainActivity : AppCompatActivity() {
         CompositionLocalProvider(
             LocalTonalElevationEnabled provides false,
             LocalAnalyticsLoggingEvent provides ::loggingAnalyticsEvent,
+            LocalNavigator provides navigator,
+            LocalShowSnackbar provides showSnackBar,
         ) {
             NavigationSuiteScaffold(
                 navigationSuiteItems = {
                     navigationSuiteItems(
-                        currentDestination = currentDestination,
+                        topLevelNavItems = topLevelNavItems.toSet(),
+                        currentRoute = navigationState.topLevelRoute,
                         itemColors = navigationSuiteItemColors,
-                        onClick = { topLevelRoute ->
-                            router.navigateTopLevelDestination(topLevelRoute)
+                        onClick = { route ->
+                            navigator.navigate(route)
                         }
                     )
                 },
@@ -332,13 +362,10 @@ class MainActivity : AppCompatActivity() {
                                     start = paddingValues.calculateStartPadding(LayoutDirection.Rtl),
                                     end = paddingValues.calculateStartPadding(LayoutDirection.Rtl),
                                 ),
-                            router = router,
+                            navigator = navigator,
                             billingModule = billingModule,
                             showRewardedAd = { onResult ->
                                 showRewardedAd(onResult)
-                            },
-                            showSnackBar = { snackBarMessage ->
-                                showSnackBar(snackBarMessage)
                             },
                         )
                     }

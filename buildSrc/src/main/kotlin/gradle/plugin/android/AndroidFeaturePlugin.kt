@@ -21,11 +21,10 @@ internal class AndroidFeaturePlugin : Plugin<Project> {
         dependencies {
             "implementation"(project(":core"))
             "implementation"(project(":domain"))
-            "implementation"(project(":design-compose"))
-            "implementation"(project(":design-ui"))
+            "implementation"(project(":design"))
             "implementation"(project(":features:core"))
 
-            "implementation"(libs.findLibrary("hilt.navigation.compose").get())
+            "implementation"(libs.findBundle("navigation").get())
             "implementation"(libs.findBundle("lifecycle").get())
             "implementation"(libs.findLibrary("kotlinx-collections-immutable").get())
             "implementation"(libs.findLibrary("bumptech.glide").get())

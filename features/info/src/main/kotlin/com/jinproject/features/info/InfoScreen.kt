@@ -33,10 +33,12 @@ import com.jinproject.design_compose.component.text.HeadlineText
 import com.jinproject.design_compose.component.text.auth.PasswordField
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.design_ui.R
+import com.jinproject.features.auth.AuthRoute
 import com.jinproject.features.core.AuthManager
 import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.BillingModule.Product
-import com.jinproject.features.core.base.item.SnackBarMessage
+import com.jinproject.features.core.compose.LocalNavigator
+import com.jinproject.features.core.compose.LocalShowSnackbar
 import com.jinproject.features.info.state.InfoUiState
 import com.jinproject.features.info.state.rememberInfoUiState
 import kotlinx.coroutines.CoroutineScope
@@ -45,10 +47,9 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun InfoScreen(
     billingModule: BillingModule,
-    showSnackBar: (SnackBarMessage) -> Unit,
-    navigateRoute: (InfoRoute) -> Unit,
-    navigateToAuthGraph: () -> Unit,
 ) {
+    val navigator = LocalNavigator.current
+    val showSnackBar = LocalShowSnackbar.current
     val infoUiState = rememberInfoUiState(
         isUserActive = AuthManager.isActive,
         showSnackBar = showSnackBar,
@@ -59,8 +60,8 @@ internal fun InfoScreen(
         infoUiState = infoUiState,
         getPurchasableProducts = billingModule::getPurchasableProducts,
         purchase = billingModule::purchase,
-        navigateRoute = navigateRoute,
-        navigateToAuthGraph = navigateToAuthGraph,
+        navigateRoute = { route -> navigator.navigate(route) },
+        navigateToAuthGraph = { navigator.navigate(AuthRoute.SignIn) },
     )
 
 }

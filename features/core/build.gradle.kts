@@ -13,12 +13,14 @@ android {
 }
 
 dependencies {
-    implementation(project(":design-ui"))
+    implementation(project(":design"))
 
     implementation(libs.appcompat)
     implementation(libs.bumptech.glide)
+    implementation(libs.coil)
     api(libs.bundles.billing)
     implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.androidx.navigation3.runtime)
     api(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     api(libs.firebase.auth)

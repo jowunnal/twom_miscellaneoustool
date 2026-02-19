@@ -55,15 +55,20 @@ fun getLocalKey(propertyKey:String):String{
 
 dependencies {
     implementation(project(":data:datasource"))
-    implementation(project(":features:collection"))
-    implementation(project(":features:droplist"))
-    implementation(project(":features:alarm"))
+    implementation(project(":features:collection:api"))
+    implementation(project(":features:collection:impl"))
+    implementation(project(":features:droplist:api"))
+    implementation(project(":features:droplist:impl"))
+    implementation(project(":features:alarm:api"))
+    implementation(project(":features:alarm:impl"))
     implementation(project(":features:core"))
-    implementation(project(":features:symbol"))
+    implementation(project(":features:symbol:api"))
+    implementation(project(":features:symbol:impl"))
     implementation(project(":features:simulator"))
-    implementation(project(":design-compose"))
+    implementation(project(":design"))
     implementation(project(":features:home"))
-    implementation(project(":features:auth"))
+    implementation(project(":features:auth:api"))
+    implementation(project(":features:auth:impl"))
     implementation(project(":features:info"))
 
     implementation(libs.core.ktx)
@@ -71,9 +76,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity.compose)
 
-    implementation(libs.hilt.navigation.compose)
-
     implementation(libs.bundles.lifecycle)
+    implementation(libs.bundles.navigation)
 
     implementation(libs.bundles.billing)
     implementation(libs.bundles.playInAppUpdate)

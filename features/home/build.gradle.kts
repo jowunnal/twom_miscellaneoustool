@@ -7,6 +7,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":features:collection"))
-    implementation(project(":features:droplist"))
+    implementation(project(":features:alarm:api"))
+    implementation(project(":features:collection:api"))
+    implementation(project(":features:droplist:api"))
 }

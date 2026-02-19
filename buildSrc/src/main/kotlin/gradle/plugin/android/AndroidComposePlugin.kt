@@ -31,7 +31,7 @@ internal class AndroidComposePlugin : Plugin<Project> {
             "implementation"(libs.findBundle("compose").get())
             "debugImplementation"(libs.findLibrary("compose.ui.tooling").get())
 
-            "implementation"(libs.findLibrary("navigation.compose").get())
+            "implementation"(libs.findLibrary("hilt.lifecycle.viewmodel.compose").get())
             "implementation"(libs.findBundle("composeAdaptive").get())
             "implementation"(libs.findLibrary("kotlinx-serialization-json").get())
         }

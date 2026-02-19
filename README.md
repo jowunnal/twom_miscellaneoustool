@@ -248,12 +248,12 @@
     - 하지만 "길드 마크 심볼 생성" 기능은 앱의 핵심 기능이고, 사용자의 접근이 빈번하게 이루어질 수 있으며, 이미지에 대한 변환을 수행하는 기능이 제공되기 때문에 READ_MEDIA_IMAGES 권한 사용 승인
     - 또한 Dynamic 한 UI Component 를 개발하고자 하는 목적이 있었으므로 **Photo Picker** 대신 **커스텀 갤러리**를 구현하는 방법을 선택
   - How?
-    - [Scrollable Layout](https://github.com/jowunnal/twom_miscellaneoustool/blob/master/design-compose/src/main/kotlin/com/jinproject/design_compose/component/lazyList/ScrollableLayout.kt "link") 컴포넌트 구현
+    - [Scrollable Layout](https://github.com/jowunnal/twom_miscellaneoustool/blob/master/design/src/main/kotlin/com/jinproject/design_compose/component/lazyList/ScrollableLayout.kt "link") 컴포넌트 구현
       - LazyList 의 한 아이템에 대한 view height 에 이미지 개수를 곱하여 **스크롤 바의 위치**를 계산하여 표시
         - 스크롤 바에 Modifier#pointerInput 으로 Drag를 observing 하여, Drag amount 만큼 lazyListState#scrollBy 트리거
       - "최상단으로 이동하기" 버튼을 클릭시 **LazyListState#animateScrollToItem** 트리거
-      - "최상단으로 이동하기" 버튼과 스크롤바는 **[코루틴을 활용한 타이머](https://github.com/jowunnal/twom_miscellaneoustool/blob/master/design-compose/src/main/kotlin/com/jinproject/design_compose/component/lazyList/TimeScheduler.kt "link")**로 3초간 스크롤이 발생하지 않으면 자동으로 사라지도록 구현
-    - [Scrollable Layout](https://github.com/jowunnal/twom_miscellaneoustool/blob/master/design-compose/src/main/kotlin/com/jinproject/design_compose/component/lazyList/ScrollableLayout.kt "link") 을 활용한 [Gallery](https://github.com/jowunnal/twom_miscellaneoustool/blob/master/features/symbol/src/main/kotlin/com/jinproject/features/symbol/gallery/component/ImageList.kt "link") 컴포넌트 구현
+      - "최상단으로 이동하기" 버튼과 스크롤바는 **[코루틴을 활용한 타이머](https://github.com/jowunnal/twom_miscellaneoustool/blob/master/design/src/main/kotlin/com/jinproject/design_compose/component/lazyList/TimeScheduler.kt "link")**로 3초간 스크롤이 발생하지 않으면 자동으로 사라지도록 구현
+    - [Scrollable Layout](https://github.com/jowunnal/twom_miscellaneoustool/blob/master/design/src/main/kotlin/com/jinproject/design_compose/component/lazyList/ScrollableLayout.kt "link") 을 활용한 [Gallery](https://github.com/jowunnal/twom_miscellaneoustool/blob/master/features/symbol/src/main/kotlin/com/jinproject/features/symbol/gallery/component/ImageList.kt "link") 컴포넌트 구현
 - 무한 스크롤
   - User Interaction 은 기본적으로 Root View 에서 최하위 Leaf View 까지 전달된 후, **Leaf View 에서 부터 소비**하고, **소비되지 않은 interaction 을 상위 view 가 소비**할 수 있음
     - 갤러리 컴포넌트는, Root > Scrollable Layout > LazyList(Gallery) > GalleryItem 구조
