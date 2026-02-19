@@ -2094,4 +2094,32 @@ internal object BookMigration {
         }
     }
 
+    val MIGRATION_7_8_KOR get() = object: Migration(7,8) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.apply {
+                execSQL("UPDATE Monster SET monsGtime = 1800 WHERE monsImgName = 'swamp_flower'")
+                execSQL("UPDATE Monster SET monsGtime = 1680 WHERE monsImgName = 'rotten_pudding'")
+                execSQL("UPDATE Monster SET monsGtime = 604800, monsType = '대형보스' WHERE monsImgName = 'caligo'")
+                execSQL("UPDATE Monster SET monsGtime = 19980 WHERE monsImgName = 'turtlez'")
+                execSQL("UPDATE Monster SET monsGtime = 3920, monsType = '보스' WHERE monsImgName = 'guardian_imp'")
+                execSQL("UPDATE Monster SET monsType = '네임드' WHERE monsImgName = 'tank'")
+                execSQL("UPDATE Monster SET monsGtime = 3500, monsType = '네임드' WHERE monsImgName = 'landmine'")
+            }
+        }
+    }
+
+    val MIGRATION_7_8_ELSE get() = object: Migration(7,8) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.apply {
+                execSQL("UPDATE Monster SET monsGtime = 1800 WHERE monsImgName = 'swamp_flower'")
+                execSQL("UPDATE Monster SET monsGtime = 1680 WHERE monsImgName = 'rotten_pudding'")
+                execSQL("UPDATE Monster SET monsGtime = 604800, monsType = 'World Boss' WHERE monsImgName = 'caligo'")
+                execSQL("UPDATE Monster SET monsGtime = 19980 WHERE monsImgName = 'turtlez'")
+                execSQL("UPDATE Monster SET monsGtime = 3920, monsType = 'Semi Boss' WHERE monsImgName = 'guardian_imp'")
+                execSQL("UPDATE Monster SET monsType = 'Mini Boss' WHERE monsImgName = 'tank'")
+                execSQL("UPDATE Monster SET monsGtime = 3500, monsType = 'Mini Boss' WHERE monsImgName = 'landmine'")
+            }
+        }
+    }
+
 }
