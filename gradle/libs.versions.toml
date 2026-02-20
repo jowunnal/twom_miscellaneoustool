@@ -17,7 +17,6 @@ dagger = "2.57.1"
 datastore = "1.2.0"
 espresso = "3.5.1"
 firebaseBom = "33.8.0"
-glide = "4.15.1"
 gms-service-ads = "24.9.0"
 hilt = "1.3.0"
 junit = "4.13.2"
@@ -32,7 +31,7 @@ lifecycleViewmodelNav3 = "2.10.0"
 lottie = "6.3.0"
 material = "1.11.0"
 mockk = "1.13.5"
-navigation = "1.1.0-alpha04"
+navigation = "1.0.1"
 okhttp3 = "4.12.0"
 playInApp = "2.1.0"
 protobuf = "3.25.0"
@@ -110,9 +109,6 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 firebase-database = { group = "com.google.firebase", name = "firebase-database" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-storage = { module = "com.google.firebase:firebase-storage" }
-
-# Glide
-bumptech-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 
 # Gms
 google-gms-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "gms-service-ads" }

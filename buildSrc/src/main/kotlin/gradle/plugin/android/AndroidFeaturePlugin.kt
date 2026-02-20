@@ -27,7 +27,6 @@ internal class AndroidFeaturePlugin : Plugin<Project> {
             "implementation"(libs.findBundle("navigation").get())
             "implementation"(libs.findBundle("lifecycle").get())
             "implementation"(libs.findLibrary("kotlinx-collections-immutable").get())
-            "implementation"(libs.findLibrary("bumptech.glide").get())
             "implementation"(libs.findLibrary("coil").get())
         }
     }
