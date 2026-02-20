@@ -309,7 +309,7 @@
 
 ### Module Dependency
 
-<img src="documentation/module_diagram.PNG" />
+<img src="documentation/module_dependency_graph.png" />
 
 ### Database Logical Design
 
