@@ -39,6 +39,10 @@ class BillingModule(
 ) {
     var isReady: Boolean = false
 
+    private val successListener: BillingListener<Purchase> = BillingListener()
+    private val failListener: BillingListener<Int> = BillingListener()
+    private val readyListener: BillingListener<BillingModule> = BillingListener()
+
     private val purChasedUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
         when (billingResult.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
@@ -91,10 +95,6 @@ class BillingModule(
             }
         })
     }
-
-    private val successListener: BillingListener<Purchase> = BillingListener()
-    private val failListener: BillingListener<Int> = BillingListener()
-    private val readyListener: BillingListener<BillingModule> = BillingListener()
 
     /**
      * 결제 플로우 리스너 등록
