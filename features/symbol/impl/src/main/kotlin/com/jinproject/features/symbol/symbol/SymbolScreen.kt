@@ -112,8 +112,9 @@ private fun SymbolScreen(
                         )
                     )
                 }
-            )
+            ) {
                 navigateNextScreen()
+            }
         }
 
     val permissionLauncher =
