@@ -82,14 +82,14 @@ internal fun NavigationGraph(
                     scaleIn(initialScale = 0.85f) + fadeIn())
                 .togetherWith(
                     slideOutHorizontally(targetOffsetX = { -direction * it / 3 }) +
-                            scaleOut(targetScale = 0.95f) + fadeOut(targetAlpha = 0.5f)
+                            scaleOut(targetScale = 0.95f) + fadeOut()
                 )
         },
         popTransitionSpec = {
             val direction = -navigator.state.getTopLevelRouteSlideDirection()
 
             (slideInHorizontally(initialOffsetX = { direction * it / 3 }) +
-                    scaleIn(initialScale = 0.95f) + fadeIn(initialAlpha = 0.5f))
+                    scaleIn(initialScale = 0.95f) + fadeIn())
                 .togetherWith(
                     slideOutHorizontally(targetOffsetX = { -direction * it }) +
                             scaleOut(targetScale = 0.85f) + fadeOut()
@@ -99,7 +99,7 @@ internal fun NavigationGraph(
             val direction = -navigator.state.getTopLevelRouteSlideDirection()
 
             (slideInHorizontally(initialOffsetX = { direction * it / 3 }) +
-                    scaleIn(initialScale = 0.95f) + fadeIn(initialAlpha = 0.5f))
+                    scaleIn(initialScale = 0.95f) + fadeIn())
                 .togetherWith(
                     slideOutHorizontally(targetOffsetX = { -direction * it }) +
                             scaleOut(targetScale = 0.85f) + fadeOut()

@@ -16,7 +16,6 @@ dependencies {
     implementation(project(":design"))
 
     implementation(libs.appcompat)
-    implementation(libs.bumptech.glide)
     implementation(libs.coil)
     api(libs.bundles.billing)
     implementation(libs.kotlinx.collections.immutable)

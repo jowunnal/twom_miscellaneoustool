@@ -81,5 +81,4 @@ dependencies {
 
     implementation(libs.bundles.billing)
     implementation(libs.bundles.playInAppUpdate)
-    implementation(libs.bundles.square)
 }

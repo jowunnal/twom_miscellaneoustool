@@ -7,7 +7,6 @@ import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation3.ListDetailSceneStrategy
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import androidx.navigation3.runtime.metadata
 import androidx.navigation3.ui.NavDisplay
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
