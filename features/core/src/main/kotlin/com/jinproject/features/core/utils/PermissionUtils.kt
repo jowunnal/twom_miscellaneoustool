@@ -7,6 +7,7 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 
 fun checkAuthorityDrawOverlays(
     context: Context,
@@ -15,7 +16,7 @@ fun checkAuthorityDrawOverlays(
     return if (!Settings.canDrawOverlays(context)) {
         val intent = Intent(
             Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-            Uri.parse("package:" + context.packageName)
+            ("package:" + context.packageName).toUri()
         )
         registerForActivityResult(intent)
         false
