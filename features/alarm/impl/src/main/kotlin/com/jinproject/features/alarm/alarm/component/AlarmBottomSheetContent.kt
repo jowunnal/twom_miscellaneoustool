@@ -2,13 +2,18 @@ package com.jinproject.features.alarm.alarm.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,18 +21,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.center
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.chargemap.compose.numberpicker.NumberPicker
 import com.jinproject.design_compose.component.HorizontalSpacer
 import com.jinproject.design_compose.component.HorizontalWeightSpacer
 import com.jinproject.design_compose.component.VerticalSpacer
 import com.jinproject.design_compose.component.button.TextButton
+import com.jinproject.design_compose.component.button.TextIconButton
 import com.jinproject.design_compose.component.text.DescriptionLargeText
 import com.jinproject.design_compose.utils.PreviewMiscellaneousToolTheme
+import com.jinproject.design_compose.utils.tu
 import com.jinproject.design_ui.R
 import com.jinproject.features.alarm.alarm.AlarmUiState
 import com.jinproject.features.alarm.alarm.AlarmUiStatePreviewParameter
@@ -99,9 +118,47 @@ fun AlarmBottomSheetContent(
 
         VerticalSpacer(height = 16.dp)
 
-        TextButton(
+        val textMeasurer = rememberTextMeasurer()
+        val adTextColor = MaterialTheme.colorScheme.onPrimary
+        val textSize = 6.tu
+
+        TextIconButton(
             text = stringResource(id = R.string.start_do),
             modifier = Modifier.fillMaxWidth(),
+            icon = {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_play_rounded),
+                    contentDescription = "Play Ad",
+                    modifier = Modifier.size(24.dp).drawWithContent {
+                        drawContent()
+                        val textLayoutResult = textMeasurer.measure(
+                            text = "AD",
+                            style = TextStyle(
+                                fontSize = textSize,
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
+                            ),
+                        )
+                        drawRoundRect(
+                            color = Color.Red,
+                            size = Size(8.2.dp.toPx(), 6.dp.toPx()),
+                            topLeft = Offset(
+                                x = (textLayoutResult.size.width * 1.8).toFloat() + 1.3.dp.toPx(),
+                                y = size.center.y - textLayoutResult.size.height + 0.5.dp.toPx(),
+                            ),
+                            cornerRadius = CornerRadius(2f, 2f)
+                        )
+                        drawText(
+                            textLayoutResult = textLayoutResult,
+                            topLeft = Offset(
+                                x = (textLayoutResult.size.width * 2).toFloat(),
+                                y = size.center.y - textLayoutResult.size.height,
+                            ),
+                        )
+                    },
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                )
+            },
             onClick = {
                 onStartAlarm(selectedBossName, deadTime)
                 event(
@@ -111,7 +168,7 @@ fun AlarmBottomSheetContent(
                     )
                 )
                 onCloseBottomSheet(checkState)
-            }
+            },
         )
 
     }
