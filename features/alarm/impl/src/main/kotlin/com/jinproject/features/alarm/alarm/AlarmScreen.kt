@@ -63,6 +63,7 @@ import com.jinproject.features.alarm.alarm.component.SearchBossContent
 import com.jinproject.features.core.BillingModule
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.core.compose.LocalNavigator
+import com.jinproject.features.core.compose.LocalShowRewardAd
 import com.jinproject.features.core.compose.LocalShowSnackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -75,23 +76,12 @@ fun AlarmScreen(
     alarmViewModel: AlarmViewModel = hiltViewModel(),
     context: Context = LocalContext.current,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    showRewardedAd: (() -> Unit) -> Unit,
 ) {
     val navigator = LocalNavigator.current
     val showSnackBar = LocalShowSnackbar.current
+    val showRewardedAd = LocalShowRewardAd.current
 
     val alarmUiState: AlarmUiState by alarmViewModel.uiState.collectAsStateWithLifecycle()
-
-    if (alarmUiState.timerList.isNotEmpty()) {
-        if (alarmUiState.timerList.first().bossName == "실패") {
-            showSnackBar(
-                SnackBarMessage(
-                    headerMessage = "데이터를 불러오는데 실패했어요.",
-                    contentMessage = "업데이트가 아닌 삭제후 설치를 진행해주세요."
-                )
-            )
-        }
-    }
 
     AlarmScreen(
         alarmUiState = alarmUiState,

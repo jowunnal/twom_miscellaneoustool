@@ -4,10 +4,6 @@ plugins {
 
 android {
     namespace = "com.jinproject.features.droplist"
-
-    buildFeatures {
-        dataBinding = true
-    }
 }
 
 dependencies {

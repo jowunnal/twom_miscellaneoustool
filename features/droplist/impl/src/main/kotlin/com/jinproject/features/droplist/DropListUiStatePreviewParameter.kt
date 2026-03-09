@@ -19,7 +19,7 @@ class DropListUiStatePreviewParameter : PreviewParameterProvider<DropListUiState
                     ) to monsters
                 )
             ).apply {
-                updateSearchQuery("멧")
+                updateSearchQuery("ㅁ")
             }
         )
 

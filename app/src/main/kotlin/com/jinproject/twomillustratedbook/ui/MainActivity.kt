@@ -1,6 +1,7 @@
 package com.jinproject.twomillustratedbook.ui
 
 import android.Manifest
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -31,12 +32,17 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.Purchase
@@ -45,36 +51,38 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.rewarded.RewardedAd
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.logEvent
 import com.google.firebase.ktx.Firebase
+import com.jinproject.design_compose.component.DialogState
 import com.jinproject.design_compose.component.SnackBarHostCustom
+import com.jinproject.design_compose.component.TextDialog
+import com.jinproject.design_compose.component.getShownDialogState
 import com.jinproject.design_compose.component.paddingvalues.addStatusBarPadding
 import com.jinproject.design_compose.theme.MiscellaneousToolTheme
 import com.jinproject.design_ui.R
 import com.jinproject.features.core.AnalyticsEvent
 import com.jinproject.features.core.BillingModule
-import com.jinproject.features.core.base.CommonDialogFragment
 import com.jinproject.features.core.base.item.SnackBarMessage
 import com.jinproject.features.core.compose.LocalAnalyticsLoggingEvent
 import com.jinproject.features.core.compose.LocalNavigator
+import com.jinproject.features.core.compose.LocalShowRewardAd
 import com.jinproject.features.core.compose.LocalShowSnackbar
+import com.jinproject.features.core.compose.TopLevelNavItem
 import com.jinproject.features.core.toProduct
 import com.jinproject.twomillustratedbook.BuildConfig
 import com.jinproject.twomillustratedbook.BuildConfig.ADMOB_REWARD_ID
 import com.jinproject.twomillustratedbook.ui.ads.AdMobManager
 import com.jinproject.twomillustratedbook.ui.ads.BannerAd
-import com.jinproject.features.core.compose.TopLevelNavItem
+import com.jinproject.twomillustratedbook.ui.navigation.AppNavigator
 import com.jinproject.twomillustratedbook.ui.navigation.NavigationDefaults
 import com.jinproject.twomillustratedbook.ui.navigation.NavigationGraph
-import com.jinproject.twomillustratedbook.ui.navigation.AppNavigator
 import com.jinproject.twomillustratedbook.ui.navigation.navigationSuiteItems
 import com.jinproject.twomillustratedbook.ui.navigation.rememberNavigationState
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -82,6 +90,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -101,36 +110,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private var mRewardedAd: RewardedAd? = null
+    private var mRewardedAd: RewardedInterstitialAd? = null
+
+    private var inAppUpdateManagerRef: InAppUpdateManager? = null
 
     private val inAppUpdateLauncher =
         registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
-            inAppUpdateManager.inAppUpdatingLauncherResult(result)
+            inAppUpdateManagerRef?.inAppUpdatingLauncherResult(result)
         }
-
-    private val inAppUpdateManager by lazy {
-        InAppUpdateManager(
-            activity = this,
-            showDialog = { appUpdateManager, sendMessageIfDenyUpdate ->
-                CommonDialogFragment.show(
-                    fragmentManager = supportFragmentManager,
-                    title = getString(R.string.new_version_message),
-                    message = null,
-                    positiveButtonText = getString(R.string.new_version_positive_button),
-                    negativeButtonText = getString(R.string.new_version_negative_button),
-                    listener = object : CommonDialogFragment.Listener() {
-                        override fun onPositiveButtonClick(value: String) {
-                            appUpdateManager.completeUpdate()
-                        }
-
-                        override fun onNegativeButtonClick() {
-                            sendMessageIfDenyUpdate()
-                        }
-                    },
-                )
-            }
-        )
-    }
 
     private val adMobManager by lazy { AdMobManager() }
 
@@ -148,7 +135,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        inAppUpdateManager.checkUpdateIsAvailable(launcher = inAppUpdateLauncher)
         MobileAds.initialize(this) {
             loadRewardedAd()
         }
@@ -157,6 +143,7 @@ class MainActivity : AppCompatActivity() {
     @Composable
     private fun Content(
         coroutineScope: CoroutineScope = rememberCoroutineScope(),
+        context: Context = LocalContext.current,
     ) {
         val snackBarHostState = remember { SnackbarHostState() }
 
@@ -305,11 +292,57 @@ class MainActivity : AppCompatActivity() {
                 NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(currentWindowAdaptiveInfo())
         )
 
+        val rewardAdBaseState = remember {
+            DialogState(
+                header = context.getString(R.string.dialog_ad_reward_header),
+                content = context.getString(R.string.dialog_ad_reward_content),
+                positiveMessage = context.getString(R.string.dialog_ad_reward_positive),
+                negativeMessage = context.getString(R.string.dialog_ad_reward_negative),
+                onNegativeCallback = {},
+            )
+        }
+
+        val inAppUpdateBaseState = remember {
+            DialogState(
+                header = context.getString(R.string.new_version_message),
+                positiveMessage = context.getString(R.string.new_version_positive_button),
+                negativeMessage = context.getString(R.string.new_version_negative_button),
+                onNegativeCallback = {},
+            )
+        }
+
+        var dialogState by remember { mutableStateOf(DialogState.getInitValue()) }
+
+        val inAppUpdateManager = remember {
+            InAppUpdateManager(
+                activity = this@MainActivity,
+                showDialog = { appUpdateManager, sendMessageIfDenyUpdate ->
+                    dialogState = inAppUpdateBaseState.getShownDialogState(
+                        onPositiveCallback = { appUpdateManager.completeUpdate() },
+                        onNegativeCallback = { sendMessageIfDenyUpdate() },
+                    )
+                },
+            ).also { inAppUpdateManagerRef = it }
+        }
+
+        LaunchedEffect(Unit) {
+            inAppUpdateManager.checkUpdateIsAvailable(inAppUpdateLauncher)
+        }
+
+        LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
+            inAppUpdateManager.checkUpdateIsDownloaded()
+        }
+
         CompositionLocalProvider(
             LocalTonalElevationEnabled provides false,
             LocalAnalyticsLoggingEvent provides ::loggingAnalyticsEvent,
             LocalNavigator provides navigator,
             LocalShowSnackbar provides showSnackBar,
+            LocalShowRewardAd provides { onResult ->
+                dialogState = rewardAdBaseState.getShownDialogState(
+                    onPositiveCallback = { showRewardedAd(onResult) },
+                )
+            },
         ) {
             NavigationSuiteScaffold(
                 navigationSuiteItems = {
@@ -354,6 +387,11 @@ class MainActivity : AppCompatActivity() {
                                 disMissSnackBar = { snackBarHostState.currentSnackbarData?.dismiss() })
                         }
                     ) { paddingValues ->
+                        TextDialog(
+                            dialogState = dialogState,
+                            onDismissRequest = { dialogState.changeVisibility(false) },
+                        )
+
                         NavigationGraph(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -364,9 +402,6 @@ class MainActivity : AppCompatActivity() {
                                 ),
                             navigator = navigator,
                             billingModule = billingModule,
-                            showRewardedAd = { onResult ->
-                                showRewardedAd(onResult)
-                            },
                         )
                     }
                 }
@@ -382,16 +417,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadRewardedAd() {
-        RewardedAd.load(
+        RewardedInterstitialAd.load(
             this,
             ADMOB_REWARD_ID,
             AdRequest.Builder().build(),
-            object : RewardedAdLoadCallback() {
+            object : RewardedInterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     mRewardedAd = null
                 }
 
-                override fun onAdLoaded(rewardedAd: RewardedAd) {
+                override fun onAdLoaded(rewardedAd: RewardedInterstitialAd) {
                     mRewardedAd = rewardedAd
                     mRewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
                         override fun onAdDismissedFullScreenContent() {
@@ -411,20 +446,24 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    private fun showRewardedAd(onResult: () -> Unit, recursiveTimes: Int = 2) {
-        if (recursiveTimes > 0)
-            mRewardedAd?.show(this) {
+    private fun showRewardedAd(onResult: () -> Unit) {
+        if (adMobManager.isAdviewRemoved.value) {
+            onResult()
+            return
+        }
+        mRewardedAd?.show(this) {
+            onResult()
+        } ?: run {
+            loadRewardedAd()
+            mRewardedAd?.show(this@MainActivity) {
                 onResult()
-            } ?: run {
-                loadRewardedAd()
-                showRewardedAd(onResult = onResult, recursiveTimes = recursiveTimes - 1)
-            }
+            } ?: onResult()
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
-        inAppUpdateManager.checkUpdateIsDownloaded()
         requestPermission()
     }
 
