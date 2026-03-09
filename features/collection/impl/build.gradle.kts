@@ -4,10 +4,6 @@ plugins {
 
 android {
     namespace = "com.jinproject.features.collection"
-
-    buildFeatures {
-        dataBinding = true
-    }
 }
 
 dependencies {

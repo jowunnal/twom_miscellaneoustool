@@ -6,16 +6,11 @@ plugins {
 
 android {
     namespace = "com.jinproject.features.core"
-
-    buildFeatures {
-        dataBinding = true
-    }
 }
 
 dependencies {
     implementation(project(":design"))
 
-    implementation(libs.appcompat)
     implementation(libs.coil)
     api(libs.bundles.billing)
     implementation(libs.kotlinx.collections.immutable)

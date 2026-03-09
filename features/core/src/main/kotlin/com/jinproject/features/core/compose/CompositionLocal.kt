@@ -1,5 +1,6 @@
 package com.jinproject.features.core.compose
 
+import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.jinproject.features.core.AnalyticsEvent
 import com.jinproject.features.core.base.item.SnackBarMessage
@@ -17,3 +18,10 @@ val LocalNavigator = staticCompositionLocalOf<Navigator> {
 val LocalShowSnackbar = staticCompositionLocalOf<(SnackBarMessage) -> Unit> {
     error("No ShowSnackbar provided")
 }
+
+val LocalShowRewardAd: ProvidableCompositionLocal<(() -> Unit) -> Unit> =
+    staticCompositionLocalOf {
+        {
+            error("showSnackBar is not initialized")
+        }
+    }

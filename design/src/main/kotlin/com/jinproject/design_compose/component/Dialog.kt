@@ -2,6 +2,7 @@ package com.jinproject.design_compose.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -9,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -27,8 +28,8 @@ import com.jinproject.design_compose.component.text.DescriptionLargeText
 import com.jinproject.design_compose.component.text.DescriptionSmallText
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.blue
 import com.jinproject.design_compose.theme.MiscellaneousToolColor.Companion.red
-import com.jinproject.design_compose.theme.Typography
 import com.jinproject.design_compose.utils.PreviewMiscellaneousToolTheme
+import kotlinx.serialization.Serializable
 
 @Composable
 fun rememberDialogState(dialogState: DialogState = DialogState.getInitValue()) = remember {
@@ -36,6 +37,7 @@ fun rememberDialogState(dialogState: DialogState = DialogState.getInitValue()) =
 }
 
 @Stable
+@Serializable
 data class DialogState(
     val header: String,
     val content: String = "",
@@ -67,12 +69,12 @@ fun DialogState.getShownDialogState(
     onNegativeCallback: (() -> Unit)? = null,
 ): DialogState = copy(
     onPositiveCallback = { state ->
-        onPositiveCallback?.let { it() } ?: this.onPositiveCallback(state)
         state.changeVisibility(false)
+        onPositiveCallback?.invoke() ?: this.onPositiveCallback(state)
     },
     onNegativeCallback = { state ->
-        onNegativeCallback?.let { it() } ?: this.onNegativeCallback(state)
         state.changeVisibility(false)
+        onNegativeCallback?.invoke() ?: this.onNegativeCallback(state)
     },
 ).apply {
     changeVisibility(true)
@@ -158,60 +160,48 @@ private fun DefaultDialogContent(
     onNegativeCallback: (DialogState) -> Unit,
 ) {
     Column(modifier = modifier) {
-        Column(modifier = Modifier.padding(horizontal = 35.dp, vertical = 19.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                DescriptionLargeText(text = dialogState.header)
-            }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 35.dp, vertical = 19.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            DescriptionLargeText(text = dialogState.header)
             VerticalSpacer(height = 12.dp)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                content()
-            }
+            content()
         }
         HorizontalDivider()
         Row(
-            modifier = Modifier.height(44.dp),
-            horizontalArrangement = Arrangement.Center
+            modifier = Modifier.height(IntrinsicSize.Min),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(
+            DescriptionLargeText(
+                text = dialogState.negativeMessage,
+                color = blue.color,
                 modifier = Modifier
                     .padding(
                         horizontal = 21.dp,
                         vertical = 9.dp
                     )
                     .weight(1f)
-                    .clickableAvoidingDuplication { onNegativeCallback(dialogState) }
-            ) {
-                Text(
-                    text = dialogState.negativeMessage,
-                    style = Typography.bodyLarge,
-                    color = blue.color,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-            }
+                    .clickableAvoidingDuplication { onNegativeCallback(dialogState) },
+                textAlign = TextAlign.Center,
+            )
             if (dialogState.positiveMessage.isNotBlank()) {
                 VerticalDivider()
-                Column(
+                DescriptionLargeText(
+                    text = dialogState.positiveMessage,
+                    color = red.color,
                     modifier = Modifier
                         .padding(
                             horizontal = 21.dp,
                             vertical = 9.dp
                         )
                         .weight(1f)
-                        .clickableAvoidingDuplication { onPositiveCallback(dialogState) }
-                ) {
-                    Text(
-                        text = dialogState.positiveMessage,
-                        style = Typography.bodyLarge,
-                        color = red.color,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-                }
+                        .clickableAvoidingDuplication { onPositiveCallback(dialogState) },
+                    textAlign = TextAlign.Center,
+                )
             }
         }
     }

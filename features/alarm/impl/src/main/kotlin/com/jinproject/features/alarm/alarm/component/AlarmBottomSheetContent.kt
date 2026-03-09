@@ -118,47 +118,9 @@ fun AlarmBottomSheetContent(
 
         VerticalSpacer(height = 16.dp)
 
-        val textMeasurer = rememberTextMeasurer()
-        val adTextColor = MaterialTheme.colorScheme.onPrimary
-        val textSize = 6.tu
-
-        TextIconButton(
+        TextButton(
             text = stringResource(id = R.string.start_do),
             modifier = Modifier.fillMaxWidth(),
-            icon = {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_play_rounded),
-                    contentDescription = "Play Ad",
-                    modifier = Modifier.size(24.dp).drawWithContent {
-                        drawContent()
-                        val textLayoutResult = textMeasurer.measure(
-                            text = "AD",
-                            style = TextStyle(
-                                fontSize = textSize,
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold
-                            ),
-                        )
-                        drawRoundRect(
-                            color = Color.Red,
-                            size = Size(8.2.dp.toPx(), 6.dp.toPx()),
-                            topLeft = Offset(
-                                x = (textLayoutResult.size.width * 1.8).toFloat() + 1.3.dp.toPx(),
-                                y = size.center.y - textLayoutResult.size.height + 0.5.dp.toPx(),
-                            ),
-                            cornerRadius = CornerRadius(2f, 2f)
-                        )
-                        drawText(
-                            textLayoutResult = textLayoutResult,
-                            topLeft = Offset(
-                                x = (textLayoutResult.size.width * 2).toFloat(),
-                                y = size.center.y - textLayoutResult.size.height,
-                            ),
-                        )
-                    },
-                    tint = MaterialTheme.colorScheme.onPrimary,
-                )
-            },
             onClick = {
                 onStartAlarm(selectedBossName, deadTime)
                 event(

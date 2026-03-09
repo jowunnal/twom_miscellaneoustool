@@ -16,12 +16,10 @@ internal data object AlarmSetting : AlarmRoute
 
 fun EntryProviderScope<NavKey>.alarmEntries(
     billingModule: BillingModule,
-    showRewardedAd: (() -> Unit) -> Unit,
 ) {
     entry<AlarmRoute.Alarm> {
         AlarmScreen(
             billingModule = billingModule,
-            showRewardedAd = showRewardedAd,
         )
     }
 

@@ -40,7 +40,6 @@ internal fun NavigationGraph(
     modifier: Modifier = Modifier,
     navigator: AppNavigator,
     billingModule: BillingModule,
-    showRewardedAd: (() -> Unit) -> Unit,
 ) {
     NavDisplay(
         backStack = navigator.state.currentBackStack,
@@ -56,7 +55,6 @@ internal fun NavigationGraph(
 
             alarmEntries(
                 billingModule = billingModule,
-                showRewardedAd = showRewardedAd,
             )
 
             symbolEntries(
