@@ -51,8 +51,8 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
-import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.logEvent
@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private var mRewardedAd: RewardedInterstitialAd? = null
+    private var mRewardedAd: RewardedAd? = null
 
     private var inAppUpdateManagerRef: InAppUpdateManager? = null
 
@@ -417,16 +417,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadRewardedAd() {
-        RewardedInterstitialAd.load(
+        RewardedAd.load(
             this,
             ADMOB_REWARD_ID,
             AdRequest.Builder().build(),
-            object : RewardedInterstitialAdLoadCallback() {
+            object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     mRewardedAd = null
                 }
 
-                override fun onAdLoaded(rewardedAd: RewardedInterstitialAd) {
+                override fun onAdLoaded(rewardedAd: RewardedAd) {
                     mRewardedAd = rewardedAd
                     mRewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
                         override fun onAdDismissedFullScreenContent() {
@@ -451,7 +451,7 @@ class MainActivity : AppCompatActivity() {
             onResult()
             return
         }
-        mRewardedAd?.show(this) {
+        mRewardedAd?.show(this) { reward ->
             onResult()
         } ?: run {
             loadRewardedAd()
