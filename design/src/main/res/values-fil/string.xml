@@ -160,7 +160,7 @@
     <!-- activity strings -->
     <string name="authority_alarm_failure">Kung hindi mo inaprubahan ang awtoridad ng alarma, hindi ka makakatanggap ng mga tumpak na alarma.</string>
     <string name="dialog_ad_reward_header">Gusto mo bang manood ng ad?</string>
-    <string name="dialog_ad_reward_content">Manood ng ad para makabuo ng mga subtitle.</string>
+    <string name="dialog_ad_reward_content">Manood ng ad para makabuo ng mga alarm.</string>
     <string name="dialog_ad_reward_positive">Oo, manood ako.</string>
     <string name="dialog_ad_reward_negative">Hindi, ayoko.</string>
 

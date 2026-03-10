@@ -159,7 +159,7 @@
     <!-- activity strings -->
     <string name="authority_alarm_failure">If you do not agree to the notification authority, you cannot use the alarm service.</string>
     <string name="dialog_ad_reward_header">Would you like to watch an ad?</string>
-    <string name="dialog_ad_reward_content">Watch the ad to generate subtitles.</string>
+    <string name="dialog_ad_reward_content">Watch the ad to set an alarm.</string>
     <string name="dialog_ad_reward_positive">Yes, I\'ll watch it.</string>
     <string name="dialog_ad_reward_negative">No, I don\'t want to.</string>
 
